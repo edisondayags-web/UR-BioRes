@@ -9,20 +9,16 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.graphics.layer.rememberGraphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.saltech.urdocs.util.GallerySaver
-import kotlinx.coroutines.launch
 
 /**
  * MVP form para sa Resume. Ang [processedSelfie] ay yung result na galing sa
  * SelfieCaptureScreen (2x2 crop + white background).
- * May "Save to Gallery" na kumukuha ng screenshot ng buong filled-out form
- * (text + 2x2 photo) bilang PNG image, para maipa-print agad ng user.
+ * TODO next session: i-export ang buong form (text + photo) bilang PDF/image
+ * gamit ang PdfDocument o katulad na proper document-rendering approach.
  */
 @Composable
 fun ResumeScreen(
@@ -36,17 +32,11 @@ fun ResumeScreen(
     var education by remember { mutableStateOf("") }
 
     val context = LocalContext.current
-    val scope = rememberCoroutineScope()
-    val graphicsLayer = rememberGraphicsLayer()
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .drawWithContent {
-                graphicsLayer.record { this@drawWithContent.drawContent() }
-                drawLayer(graphicsLayer)
-            }
             .padding(20.dp)
     ) {
         Text("📄 Resume Maker", style = MaterialTheme.typography.titleLarge)
@@ -78,19 +68,20 @@ fun ResumeScreen(
         Spacer(modifier = Modifier.height(20.dp))
         Button(
             onClick = {
-                scope.launch {
-                    val bitmap = graphicsLayer.toImageBitmap().asAndroidBitmap()
-                    val saved = GallerySaver.saveBitmap(context, bitmap, "Resume_${System.currentTimeMillis()}")
+                if (processedSelfie == null) {
+                    Toast.makeText(context, "Kumuha muna ng 2x2 selfie.", Toast.LENGTH_SHORT).show()
+                } else {
+                    val saved = GallerySaver.saveBitmap(context, processedSelfie, "Resume2x2_${System.currentTimeMillis()}")
                     Toast.makeText(
                         context,
-                        if (saved) "Na-save sa Gallery (Pictures/UR Docs)!" else "Hindi na-save, subukan ulit.",
+                        if (saved) "Na-save ang 2x2 photo sa Gallery (Pictures/UR Docs)!" else "Hindi na-save, subukan ulit.",
                         Toast.LENGTH_LONG
                     ).show()
                 }
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("💾 I-save sa Gallery")
+            Text("💾 I-save ang 2x2 Photo sa Gallery")
         }
     }
 }

@@ -48,7 +48,7 @@ android {
 
 dependencies {
     // Compose
-    implementation(platform("androidx.compose:compose-bom:2024.09.02"))
+    implementation(platform("androidx.compose:compose-bom:2024.06.00"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
@@ -76,6 +76,8 @@ dependencies {
 
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.8.1")
+
+    implementation("com.google.guava:guava:31.1-android")
 
     // Testing
     testImplementation("junit:junit:4.13.2")
