@@ -22,6 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.graphics.asImageBitmap
+
 data class BioDataFields(
     val name: String = "",
     val gender: String = "",
@@ -90,14 +91,11 @@ fun BioDataScreen(
                         offset = if (scale <= fitScale) Offset.Zero else offset + pan
                     }
                 }
-                
-       .graphicsLayer(
-        scaleX = scale,
-        scaleY = scale,
-        translationX = offset.x,
-        translationY = offset.y
-    )
-)
+                .graphicsLayer(
+                    scaleX = scale,
+                    scaleY = scale,
+                    translationX = offset.x,
+                    translationY = offset.y
                 )
                 .width(paperWidthDp)
                 .height(paperHeightDp)
@@ -119,12 +117,12 @@ fun BioDataScreen(
                             .border(1.dp, Color.Black)
                     ) {
                         if (processedSelfie != null) {
-    androidx.compose.foundation.Image(
-        bitmap = processedSelfie.asImageBitmap(),
-        contentDescription = "2x2 Photo",
-        modifier = Modifier.fillMaxSize()
-    )
-}
+                            androidx.compose.foundation.Image(
+                                bitmap = processedSelfie.asImageBitmap(),
+                                contentDescription = "2x2 Photo",
+                                modifier = Modifier.fillMaxSize()
+                            )
+                        }
                     }
                 }
 
@@ -231,4 +229,3 @@ private fun TwoCol(
         }
     }
 }
-
