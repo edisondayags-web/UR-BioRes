@@ -105,7 +105,10 @@ fun BioDataScreen(
                 .background(Color.White)
                 .padding(24.dp)
         ) {
-            Column(Modifier.fillMaxSize()) {
+            Column(
+               modifier = Modifier.fillMaxSize(),
+               verticalArrangement = Arrangement.SpaceBetween
+            ) {
 
                 Row(verticalAlignment = Alignment.Top) {
                     Text(
