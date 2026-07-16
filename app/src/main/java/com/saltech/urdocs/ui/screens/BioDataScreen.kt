@@ -13,12 +13,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.graphics.asImageBitmap
@@ -109,6 +112,7 @@ fun BioDataScreen(
                         "BIO-DATA",
                         fontSize = 28.sp,
                         fontWeight = FontWeight.Bold,
+                        color = Color.Black,
                         modifier = Modifier.weight(1f)
                     )
                     Box(
@@ -127,7 +131,7 @@ fun BioDataScreen(
                 }
 
                 Spacer(Modifier.height(10.dp))
-                Text("PERSONAL DATA", fontWeight = FontWeight.Bold, fontSize = 15.sp)
+                Text("PERSONAL DATA", fontWeight = FontWeight.Bold, fontSize = 15.sp, color = Color.Black)
 
                 FieldLine("Name", data.name) { data = data.copy(name = it) }
                 FieldLine("Gender", data.gender) { data = data.copy(gender = it) }
@@ -158,7 +162,7 @@ fun BioDataScreen(
                     "Contact No.", data.emergencyContactNo) { data = data.copy(emergencyContactNo = it) }
 
                 Spacer(Modifier.height(12.dp))
-                Text("EDUCATIONAL BACKGROUND", fontWeight = FontWeight.Bold, fontSize = 15.sp)
+                Text("EDUCATIONAL BACKGROUND", fontWeight = FontWeight.Bold, fontSize = 15.sp, color = Color.Black)
                 TwoCol("Elementary", data.elementary, { data = data.copy(elementary = it) },
                     "Year Graduated", data.elementaryYear) { data = data.copy(elementaryYear = it) }
                 TwoCol("High School", data.highSchool, { data = data.copy(highSchool = it) },
@@ -178,27 +182,77 @@ fun BioDataScreen(
                             "best of my knowledge and belief. I also understand that any " +
                             "misinterpretation will be considered reason for withdrawal of an " +
                             "offer or subsequent dismissal if employed.",
-                        fontSize = 11.sp
+                        fontSize = 11.sp,
+                        color = Color.Black
                     )
+                }
+
+                Spacer(Modifier.height(28.dp))
+
+                // Date / Signature lines — kagaya ng standard PH bio-data template
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        Spacer(
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(end = 20.dp)
+                                .bottomLine()
+                        )
+                        Spacer(Modifier.height(4.dp))
+                        Text(
+                            "Date",
+                            fontSize = 11.sp,
+                            color = Color.Black,
+                            modifier = Modifier.fillMaxWidth(),
+                        )
+                    }
+                    Column(modifier = Modifier.weight(1f)) {
+                        Spacer(
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(start = 20.dp)
+                                .bottomLine()
+                        )
+                        Spacer(Modifier.height(4.dp))
+                        Text(
+                            "Signature",
+                            fontSize = 11.sp,
+                            color = Color.Black,
+                            modifier = Modifier.fillMaxWidth(),
+                        )
+                    }
                 }
             }
         }
     }
 }
 
+// Guhit na linya sa ilalim ng isang element — ginagamit bilang "sulatan" na underline
+// sa mga blangko (field values) at sa Date/Signature sa dulo ng bio-data.
+private fun Modifier.bottomLine(
+    color: Color = Color.Black,
+    thickness: Dp = 1.dp
+): Modifier = this
+    .height(thickness)
+    .drawBehind {
+        drawRect(color = color)
+    }
+
 @Composable
 private fun FieldLine(label: String, value: String, onChange: (String) -> Unit) {
-    Row(
-        modifier = Modifier.fillMaxWidth().padding(top = 7.dp),
-        verticalAlignment = Alignment.Bottom
-    ) {
-        Text("$label: ", fontSize = 12.sp)
-        BasicTextField(
-            value = value,
-            onValueChange = onChange,
-            textStyle = TextStyle(fontSize = 12.sp),
-            modifier = Modifier.weight(1f)
-        )
+    Column(modifier = Modifier.fillMaxWidth().padding(top = 7.dp)) {
+        Row(verticalAlignment = Alignment.Bottom) {
+            Text("$label: ", fontSize = 12.sp, color = Color.Black)
+            BasicTextField(
+                value = value,
+                onValueChange = onChange,
+                textStyle = TextStyle(fontSize = 12.sp, color = Color.Black),
+                cursorBrush = SolidColor(Color.Black),
+                modifier = Modifier.weight(1f)
+            )
+        }
+        Spacer(Modifier.height(2.dp))
+        Spacer(Modifier.fillMaxWidth().bottomLine())
     }
 }
 
@@ -208,24 +262,34 @@ private fun TwoCol(
     label2: String, value2: String, onChange2: (String) -> Unit
 ) {
     Row(modifier = Modifier.fillMaxWidth().padding(top = 7.dp)) {
-        Row(Modifier.weight(1f), verticalAlignment = Alignment.Bottom) {
-            Text("$label1: ", fontSize = 12.sp)
-            BasicTextField(
-                value = value1,
-                onValueChange = onChange1,
-                textStyle = TextStyle(fontSize = 12.sp),
-                modifier = Modifier.weight(1f)
-            )
+        Column(Modifier.weight(1f)) {
+            Row(verticalAlignment = Alignment.Bottom) {
+                Text("$label1: ", fontSize = 12.sp, color = Color.Black)
+                BasicTextField(
+                    value = value1,
+                    onValueChange = onChange1,
+                    textStyle = TextStyle(fontSize = 12.sp, color = Color.Black),
+                    cursorBrush = SolidColor(Color.Black),
+                    modifier = Modifier.weight(1f)
+                )
+            }
+            Spacer(Modifier.height(2.dp))
+            Spacer(Modifier.fillMaxWidth().bottomLine())
         }
         Spacer(Modifier.width(10.dp))
-        Row(Modifier.weight(1f), verticalAlignment = Alignment.Bottom) {
-            Text("$label2: ", fontSize = 12.sp)
-            BasicTextField(
-                value = value2,
-                onValueChange = onChange2,
-                textStyle = TextStyle(fontSize = 12.sp),
-                modifier = Modifier.weight(1f)
-            )
+        Column(Modifier.weight(1f)) {
+            Row(verticalAlignment = Alignment.Bottom) {
+                Text("$label2: ", fontSize = 12.sp, color = Color.Black)
+                BasicTextField(
+                    value = value2,
+                    onValueChange = onChange2,
+                    textStyle = TextStyle(fontSize = 12.sp, color = Color.Black),
+                    cursorBrush = SolidColor(Color.Black),
+                    modifier = Modifier.weight(1f)
+                )
+            }
+            Spacer(Modifier.height(2.dp))
+            Spacer(Modifier.fillMaxWidth().bottomLine())
         }
     }
 }
