@@ -25,8 +25,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.foundation.layout.requiredWidth
-import androidx.compose.foundation.layout.requiredHeight
 
 data class BioDataFields(
     val name: String = "",
@@ -69,8 +67,8 @@ fun BioDataScreen(
 ) {
 
     // laki ng "papel" — pwede dagdagan ang height kung kulang pa sa fields niyo
-    .requiredWidth(paperWidthDp)
-    .requiredHeight(paperHeightDp)
+    val paperWidthDp = 750.dp
+    val paperHeightDp = 1250.dp
 
     var data by remember { mutableStateOf(BioDataFields()) }
     var offset by remember { mutableStateOf(Offset.Zero) }
@@ -102,8 +100,8 @@ fun BioDataScreen(
                     translationX = offset.x,
                     translationY = offset.y
                 )
-                .width(paperWidthDp)
-                .height(paperHeightDp)
+                .requiredWidth(paperWidthDp)
+                .requiredHeight(paperHeightDp)
                 .background(Color.White)
                 .padding(24.dp)
         ) {
