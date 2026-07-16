@@ -18,7 +18,7 @@ import com.saltech.urdocs.util.ResumeData
 import com.saltech.urdocs.util.ResumeStyle
 
 @Composable
-private fun FormField(label: String, value: String, onChange: (String) -> Unit, minLines: Int = 1) {
+private fun FormField(label: String, value: String, minLines: Int = 1, onChange: (String) -> Unit) {
     OutlinedTextField(
         value = value,
         onValueChange = onChange,
