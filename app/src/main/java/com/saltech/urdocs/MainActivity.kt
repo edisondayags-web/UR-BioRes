@@ -44,18 +44,8 @@ class MainActivity : ComponentActivity() {
                     composable(Screen.Home.route) {
                         HomeScreen(onNavigate = { route -> navController.navigate(route) })
                     }
-                    composable(Screen.ResumeChoice.route) {
-                        ResumeChoiceScreen(onChoose = { style ->
-                            navController.navigate(Screen.Resume.createRoute(style))
-                        })
-                    }
-                    composable(
-                        route = Screen.Resume.route,
-                        arguments = listOf(navArgument("style") { type = NavType.StringType })
-                    ) { backStackEntry ->
-                        val style = backStackEntry.arguments?.getString("style") ?: "corporate"
+                    composable(Screen.Resume.route) {
                         ResumeScreen(
-                            style = style,
                             processedSelfie = resumeSelfie,
                             onTakeSelfie = {
                                 pendingSelfieTarget = "resume"

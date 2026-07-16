@@ -27,7 +27,7 @@ fun HomeScreen(
     onNavigate: (String) -> Unit
 ) {
     val items = listOf(
-        HomeMenuItem("📄", "RESUME", "Pang BPO/Office • Professional CV", "resume_choice"),
+        HomeMenuItem("📄", "RESUME", "Pang BPO/Office • Professional CV", "resume"),
         HomeMenuItem("📝", "BIO-DATA", "Pang Jollibee/Store • PH Job Application", "biodata"),
         HomeMenuItem("🏛️", "GOV'T FORMS", "SSS, PAG-IBIG, etc.", "govt_forms"),
         HomeMenuItem("✉️", "LETTERS", "Leave, Excuse, Resign", "letters")

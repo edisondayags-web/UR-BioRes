@@ -2,10 +2,7 @@ package com.saltech.urdocs.navigation
 
 sealed class Screen(val route: String) {
     object Home : Screen("home")
-    object ResumeChoice : Screen("resume_choice")
-    object Resume : Screen("resume/{style}") {
-        fun createRoute(style: String) = "resume/$style"
-    }
+    object Resume : Screen("resume")
     object BioData : Screen("biodata")
     object GovtForms : Screen("govt_forms")
     object Letters : Screen("letters")
