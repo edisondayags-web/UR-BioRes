@@ -20,7 +20,7 @@ import com.saltech.urdocs.util.*
 
 /** Maliit na underline-style field -- itsura ng "Label: ____" sa papel. */
 @Composable
-private fun PaperField(label: String, value: String, onChange: (String) -> Unit, modifier: Modifier = Modifier) {
+private fun PaperField(label: String, value: String, modifier: Modifier = Modifier, onChange: (String) -> Unit) {
     Column(modifier = modifier) {
         if (label.isNotEmpty()) {
             Text(label, color = Color.Black, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.bodyLarge)

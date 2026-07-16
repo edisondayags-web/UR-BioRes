@@ -21,7 +21,7 @@ import com.saltech.urdocs.util.DocumentRenderer
 import com.saltech.urdocs.util.GallerySaver
 
 @Composable
-private fun BField(label: String, value: String, onChange: (String) -> Unit, modifier: Modifier = Modifier) {
+private fun BField(label: String, value: String, modifier: Modifier = Modifier, onChange: (String) -> Unit) {
     Column(modifier = modifier) {
         Text(label, color = Color.Black, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.bodyLarge)
         TextField(
