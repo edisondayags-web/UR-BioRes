@@ -21,7 +21,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
+import androidx.compose.ui.graphics.asImageBitmap
 data class BioDataFields(
     val name: String = "",
     val gender: String = "",
@@ -57,7 +57,10 @@ data class BioDataFields(
 )
 
 @Composable
-fun BioDataScreen() {
+fun BioDataScreen(
+    processedSelfie: android.graphics.Bitmap? = null,
+    onTakeSelfie: () -> Unit = {}
+) {
 
     // laki ng "papel" — pwede dagdagan ang height kung kulang pa sa fields niyo
     val paperWidthDp = 600.dp
@@ -112,7 +115,13 @@ fun BioDataScreen() {
                             .size(90.dp, 110.dp)
                             .border(1.dp, Color.Black)
                     ) {
-                        // TODO: Image(bitmap = photoBitmap, ...) dito pag meron na
+                        if (processedSelfie != null) {
+    androidx.compose.foundation.Image(
+        bitmap = processedSelfie.asImageBitmap(),
+        contentDescription = "2x2 Photo",
+        modifier = Modifier.fillMaxSize()
+    )
+}
                     }
                 }
 
