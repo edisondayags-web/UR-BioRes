@@ -102,7 +102,7 @@ fun BioDataScreen(
                 )
                 .width(paperWidthDp)
                 .height(paperHeightDp)
-                .background(Color.White)
+                .background(Color.Red)
                 .padding(24.dp)
         ) {
             Column(Modifier.fillMaxSize()) {
