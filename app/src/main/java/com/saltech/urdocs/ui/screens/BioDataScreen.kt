@@ -4,27 +4,39 @@ package com.saltech.urdocs.ui.screens
 //        (at parameters, kung meron — navController, viewModel, etc.) ng ORIGINAL
 //        composable niyo, para hindi masira yung tawag mula sa "Pumili ng Gagawin" menu.
 
+import android.content.ContentValues
+import android.graphics.Bitmap
+import android.os.Build
+import android.provider.MediaStore
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.asAndroidBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.layer.rememberGraphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.zIndex
+import kotlinx.coroutines.launch
 
 data class BioDataFields(
     val name: String = "",
@@ -72,9 +84,9 @@ fun BioDataScreen(
 
     var data by remember { mutableStateOf(BioDataFields()) }
     var offset by remember { mutableStateOf(Offset.Zero) }
-
-    // TODO: ikonekta dito yung resulta ng existing 2x2 ML Kit selfie capture niyo
-    // var photoBitmap: android.graphics.Bitmap? by remember { mutableStateOf(null) }
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+    val graphicsLayer = rememberGraphicsLayer()
 
     BoxWithConstraints(
         modifier = Modifier
@@ -104,10 +116,15 @@ fun BioDataScreen(
                 .requiredHeight(paperHeightDp)
                 .background(Color.White)
                 .padding(24.dp)
+                .drawWithContent {
+                    // dito kinukuha yung "litrato" ng buong papel para sa Download button
+                    graphicsLayer.record { this@drawWithContent.drawContent() }
+                    drawLayer(graphicsLayer)
+                }
         ) {
             Column(
-               modifier = Modifier.fillMaxSize(),
-               verticalArrangement = Arrangement.SpaceBetween
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.SpaceBetween
             ) {
 
                 Row(verticalAlignment = Alignment.Top) {
@@ -122,12 +139,20 @@ fun BioDataScreen(
                         modifier = Modifier
                             .size(90.dp, 110.dp)
                             .border(1.dp, Color.Black)
+                            .clickable(enabled = processedSelfie == null) { onTakeSelfie() }
                     ) {
                         if (processedSelfie != null) {
                             androidx.compose.foundation.Image(
                                 bitmap = processedSelfie.asImageBitmap(),
                                 contentDescription = "2x2 Photo",
                                 modifier = Modifier.fillMaxSize()
+                            )
+                        } else {
+                            Text(
+                                "+",
+                                fontSize = 32.sp,
+                                color = Color.Black,
+                                modifier = Modifier.align(Alignment.Center)
                             )
                         }
                     }
@@ -226,6 +251,41 @@ fun BioDataScreen(
                     }
                 }
             }
+        }
+
+        // Download button — laging nakikita sa taas, hindi kasama sa zoom/pan
+        Button(
+            onClick = {
+                coroutineScope.launch {
+                    val bitmap = graphicsLayer.toImageBitmap().asAndroidBitmap()
+                    saveBitmapToGallery(context, bitmap)
+                }
+            },
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(16.dp)
+                .zIndex(10f)
+        ) {
+            Text("Download")
+        }
+    }
+}
+
+// I-se-save yung bitmap sa Photos/Gallery ng phone, sa loob ng "Pictures/URDocs" folder
+private fun saveBitmapToGallery(context: android.content.Context, bitmap: Bitmap) {
+    val filename = "BioData_${System.currentTimeMillis()}.png"
+    val contentValues = ContentValues().apply {
+        put(MediaStore.Images.Media.DISPLAY_NAME, filename)
+        put(MediaStore.Images.Media.MIME_TYPE, "image/png")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/URDocs")
+        }
+    }
+    val resolver = context.contentResolver
+    val uri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+    uri?.let {
+        resolver.openOutputStream(it)?.use { out ->
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
         }
     }
 }
