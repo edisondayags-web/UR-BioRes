@@ -1,225 +1,222 @@
 package com.saltech.urdocs.ui.screens
+// ⚠️ 1) PALITAN itong "package" line ng EXACT package niyo mula sa ORIGINAL Bio-Data file.
+// ⚠️ 2) Yung function name na "BioDataScreen()" sa baba — gawin mong SAME sa pangalan
+//        (at parameters, kung meron — navController, viewModel, etc.) ng ORIGINAL
+//        composable niyo, para hindi masira yung tawag mula sa "Pumili ng Gagawin" menu.
 
-import android.graphics.Bitmap
-import android.widget.Toast
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.graphicsLayer
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.saltech.urdocs.util.BioDataFull
-import com.saltech.urdocs.util.DocumentRenderer
-import com.saltech.urdocs.util.GallerySaver
+import androidx.compose.ui.unit.sp
+
+data class BioDataFields(
+    val name: String = "",
+    val gender: String = "",
+    val dob: String = "",
+    val currentAddress: String = "",
+    val permanentAddress: String = "",
+    val age: String = "",
+    val date: String = "",
+    val occupation: String = "",
+    val telephone: String = "",
+    val civilStatus: String = "",
+    val cellphone: String = "",
+    val placeOfBirth: String = "",
+    val email: String = "",
+    val height: String = "",
+    val citizenship: String = "",
+    val weight: String = "",
+    val religion: String = "",
+    val fathersName: String = "",
+    val fathersOccupation: String = "",
+    val mothersName: String = "",
+    val mothersOccupation: String = "",
+    val language: String = "",
+    val emergencyContact: String = "",
+    val emergencyAddress: String = "",
+    val emergencyContactNo: String = "",
+    val elementary: String = "",
+    val elementaryYear: String = "",
+    val highSchool: String = "",
+    val highSchoolYear: String = "",
+    val college: String = "",
+    val collegeYear: String = ""
+)
 
 @Composable
-private fun BField(label: String, value: String, modifier: Modifier = Modifier, onChange: (String) -> Unit) {
-    Column(modifier = modifier) {
-        Text(label, color = Color.Black, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.bodyLarge)
-        TextField(
-            value = value, onValueChange = onChange,
-            modifier = Modifier.fillMaxWidth(),
-            colors = TextFieldDefaults.colors(
-                focusedContainerColor = Color.White, unfocusedContainerColor = Color.White,
-                focusedTextColor = Color.Black, unfocusedTextColor = Color.Black,
-                focusedIndicatorColor = Color.Black, unfocusedIndicatorColor = Color.Gray
-            ),
-            singleLine = true
+fun BioDataScreen() {
+
+    // laki ng "papel" — pwede dagdagan ang height kung kulang pa sa fields niyo
+    val paperWidthDp = 600.dp
+    val paperHeightDp = 900.dp
+
+    var data by remember { mutableStateOf(BioDataFields()) }
+    var offset by remember { mutableStateOf(Offset.Zero) }
+
+    // TODO: ikonekta dito yung resulta ng existing 2x2 ML Kit selfie capture niyo
+    // var photoBitmap: android.graphics.Bitmap? by remember { mutableStateOf(null) }
+
+    BoxWithConstraints(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFFCFCFCF))
+    ) {
+        // fit-to-screen scale — dito nanggagaling yung "buong bond paper agad lalabas"
+        val fitScale = minOf(maxWidth / paperWidthDp, maxHeight / paperHeightDp)
+        var scale by remember { mutableStateOf(fitScale) }
+
+        Box(
+            modifier = Modifier
+                .align(Alignment.Center)
+                .pointerInput(Unit) {
+                    detectTransformGestures { _, pan, zoom, _ ->
+                        scale = (scale * zoom).coerceIn(fitScale, 4f)
+                        offset = if (scale <= fitScale) Offset.Zero else offset + pan
+                    }
+                }
+                .graphicsLayer(
+                    scaleX = scale,
+                    scaleY = scale,
+                    translationX = offset.x,
+                    translationY = offset.y
+                )
+                .width(paperWidthDp)
+                .height(paperHeightDp)
+                .background(Color.White)
+                .padding(24.dp)
+        ) {
+            Column(Modifier.fillMaxSize()) {
+
+                Row(verticalAlignment = Alignment.Top) {
+                    Text(
+                        "BIO-DATA",
+                        fontSize = 28.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.weight(1f)
+                    )
+                    Box(
+                        modifier = Modifier
+                            .size(90.dp, 110.dp)
+                            .border(1.dp, Color.Black)
+                    ) {
+                        // TODO: Image(bitmap = photoBitmap, ...) dito pag meron na
+                    }
+                }
+
+                Spacer(Modifier.height(10.dp))
+                Text("PERSONAL DATA", fontWeight = FontWeight.Bold, fontSize = 15.sp)
+
+                FieldLine("Name", data.name) { data = data.copy(name = it) }
+                FieldLine("Gender", data.gender) { data = data.copy(gender = it) }
+                FieldLine("Date of Birth", data.dob) { data = data.copy(dob = it) }
+                FieldLine("Current Address", data.currentAddress) { data = data.copy(currentAddress = it) }
+                FieldLine("Permanent Address", data.permanentAddress) { data = data.copy(permanentAddress = it) }
+
+                TwoCol("Age", data.age, { data = data.copy(age = it) },
+                    "Date", data.date) { data = data.copy(date = it) }
+                TwoCol("Occupation", data.occupation, { data = data.copy(occupation = it) },
+                    "Telephone", data.telephone) { data = data.copy(telephone = it) }
+                TwoCol("Civil Status", data.civilStatus, { data = data.copy(civilStatus = it) },
+                    "Cellphone", data.cellphone) { data = data.copy(cellphone = it) }
+                TwoCol("Place of Birth", data.placeOfBirth, { data = data.copy(placeOfBirth = it) },
+                    "Email", data.email) { data = data.copy(email = it) }
+                TwoCol("Height", data.height, { data = data.copy(height = it) },
+                    "Citizenship", data.citizenship) { data = data.copy(citizenship = it) }
+                TwoCol("Weight", data.weight, { data = data.copy(weight = it) },
+                    "Religion", data.religion) { data = data.copy(religion = it) }
+                TwoCol("Father's Name", data.fathersName, { data = data.copy(fathersName = it) },
+                    "Occupation", data.fathersOccupation) { data = data.copy(fathersOccupation = it) }
+                TwoCol("Mother's Name", data.mothersName, { data = data.copy(mothersName = it) },
+                    "Occupation", data.mothersOccupation) { data = data.copy(mothersOccupation = it) }
+
+                FieldLine("Language or dialect spoken", data.language) { data = data.copy(language = it) }
+                FieldLine("Person to be contacted in case of emergency", data.emergencyContact) { data = data.copy(emergencyContact = it) }
+                TwoCol("Address", data.emergencyAddress, { data = data.copy(emergencyAddress = it) },
+                    "Contact No.", data.emergencyContactNo) { data = data.copy(emergencyContactNo = it) }
+
+                Spacer(Modifier.height(12.dp))
+                Text("EDUCATIONAL BACKGROUND", fontWeight = FontWeight.Bold, fontSize = 15.sp)
+                TwoCol("Elementary", data.elementary, { data = data.copy(elementary = it) },
+                    "Year Graduated", data.elementaryYear) { data = data.copy(elementaryYear = it) }
+                TwoCol("High School", data.highSchool, { data = data.copy(highSchool = it) },
+                    "Year Graduated", data.highSchoolYear) { data = data.copy(highSchoolYear = it) }
+                TwoCol("College", data.college, { data = data.copy(college = it) },
+                    "Year Graduated", data.collegeYear) { data = data.copy(collegeYear = it) }
+
+                Spacer(Modifier.height(16.dp))
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .border(1.dp, Color.Black)
+                        .padding(12.dp)
+                ) {
+                    Text(
+                        "I here certify that the above information is true and correct to the " +
+                            "best of my knowledge and belief. I also understand that any " +
+                            "misinterpretation will be considered reason for withdrawal of an " +
+                            "offer or subsequent dismissal if employed.",
+                        fontSize = 11.sp
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun FieldLine(label: String, value: String, onChange: (String) -> Unit) {
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(top = 7.dp),
+        verticalAlignment = Alignment.Bottom
+    ) {
+        Text("$label: ", fontSize = 12.sp)
+        BasicTextField(
+            value = value,
+            onValueChange = onChange,
+            textStyle = TextStyle(fontSize = 12.sp),
+            modifier = Modifier.weight(1f)
         )
     }
 }
 
 @Composable
-private fun SectionLabel(text: String) {
-    Spacer(modifier = Modifier.height(14.dp))
-    Text(text, color = Color.Black, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium)
-    Spacer(modifier = Modifier.height(6.dp))
-}
-
-@Composable
-fun BioDataScreen(
-    processedSelfie: Bitmap? = null,
-    onTakeSelfie: () -> Unit
+private fun TwoCol(
+    label1: String, value1: String, onChange1: (String) -> Unit,
+    label2: String, value2: String, onChange2: (String) -> Unit
 ) {
-    val context = LocalContext.current
-
-    var fullName by remember { mutableStateOf("") }
-    var gender by remember { mutableStateOf("") }
-    var birthDate by remember { mutableStateOf("") }
-    var currentAddress by remember { mutableStateOf("") }
-    var permanentAddress by remember { mutableStateOf("") }
-    var age by remember { mutableStateOf("") }
-    var date by remember { mutableStateOf("") }
-    var occupation by remember { mutableStateOf("") }
-    var telephone by remember { mutableStateOf("") }
-    var civilStatus by remember { mutableStateOf("") }
-    var cellphone by remember { mutableStateOf("") }
-    var placeOfBirth by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var height by remember { mutableStateOf("") }
-    var citizenship by remember { mutableStateOf("Filipino") }
-    var weight by remember { mutableStateOf("") }
-    var religion by remember { mutableStateOf("") }
-    var fatherName by remember { mutableStateOf("") }
-    var fatherOccupation by remember { mutableStateOf("") }
-    var motherName by remember { mutableStateOf("") }
-    var motherOccupation by remember { mutableStateOf("") }
-    var language by remember { mutableStateOf("") }
-    var emergencyContact by remember { mutableStateOf("") }
-    var emergencyAddress by remember { mutableStateOf("") }
-    var emergencyContactNo by remember { mutableStateOf("") }
-    var elementary by remember { mutableStateOf("") }
-    var elementaryYear by remember { mutableStateOf("") }
-    var highSchool by remember { mutableStateOf("") }
-    var highSchoolYear by remember { mutableStateOf("") }
-    var college by remember { mutableStateOf("") }
-    var collegeYear by remember { mutableStateOf("") }
-
-    var previewBitmap by remember { mutableStateOf<Bitmap?>(null) }
-
-    if (previewBitmap != null) {
-        Column(modifier = Modifier.fillMaxSize().background(Color.Black).verticalScroll(rememberScrollState()).padding(16.dp)) {
-            Text("👁️ Preview", style = MaterialTheme.typography.titleLarge)
-            Spacer(modifier = Modifier.height(12.dp))
-            Image(bitmap = previewBitmap!!.asImageBitmap(), contentDescription = "Bio-Data preview", modifier = Modifier.fillMaxWidth())
-            Spacer(modifier = Modifier.height(16.dp))
-            Button(
-                onClick = {
-                    val saved = GallerySaver.saveBitmap(context, previewBitmap!!, "BioData_${System.currentTimeMillis()}")
-                    Toast.makeText(context, if (saved) "Na-save sa Gallery (Pictures/UR Docs)!" else "Hindi na-save, subukan ulit.", Toast.LENGTH_LONG).show()
-                },
-                modifier = Modifier.fillMaxWidth()
-            ) { Text("⬇️ I-download / I-save sa Gallery") }
-            Spacer(modifier = Modifier.height(8.dp))
-            OutlinedButton(onClick = { previewBitmap = null }, modifier = Modifier.fillMaxWidth()) { Text("✏️ Bumalik sa Form") }
+    Row(modifier = Modifier.fillMaxWidth().padding(top = 7.dp)) {
+        Row(Modifier.weight(1f), verticalAlignment = Alignment.Bottom) {
+            Text("$label1: ", fontSize = 12.sp)
+            BasicTextField(
+                value = value1,
+                onValueChange = onChange1,
+                textStyle = TextStyle(fontSize = 12.sp),
+                modifier = Modifier.weight(1f)
+            )
         }
-        return
-    }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-            .verticalScroll(rememberScrollState())
-            .padding(20.dp)
-    ) {
-        Text("BIO-DATA", color = Color.Black, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleLarge)
-        Spacer(modifier = Modifier.height(12.dp))
-
-        Box(modifier = Modifier.size(120.dp).border(2.dp, Color.Black)) {
-            if (processedSelfie != null) {
-                Image(bitmap = processedSelfie.asImageBitmap(), contentDescription = "2x2 Photo", modifier = Modifier.fillMaxSize())
-            } else {
-                Text("2x2 PICTURE", color = Color.Black, modifier = Modifier.padding(8.dp))
-            }
+        Spacer(Modifier.width(10.dp))
+        Row(Modifier.weight(1f), verticalAlignment = Alignment.Bottom) {
+            Text("$label2: ", fontSize = 12.sp)
+            BasicTextField(
+                value = value2,
+                onValueChange = onChange2,
+                textStyle = TextStyle(fontSize = 12.sp),
+                modifier = Modifier.weight(1f)
+            )
         }
-        Spacer(modifier = Modifier.height(8.dp))
-        OutlinedButton(onClick = onTakeSelfie, modifier = Modifier.fillMaxWidth()) {
-            Text(if (processedSelfie == null) "📸 Kumuha ng 2x2 Selfie" else "📸 Palitan ang Selfie")
-        }
-
-        SectionLabel("PERSONAL DATA")
-        BField("Name", fullName) { fullName = it }
-        BField("Gender", gender) { gender = it }
-        BField("Date of Birth", birthDate) { birthDate = it }
-        BField("Current Address", currentAddress) { currentAddress = it }
-        BField("Permanent Address", permanentAddress) { permanentAddress = it }
-        Row {
-            BField("Age", age, modifier = Modifier.weight(1f)) { age = it }
-            Spacer(modifier = Modifier.width(8.dp))
-            BField("Date", date, modifier = Modifier.weight(1f)) { date = it }
-        }
-        Row {
-            BField("Occupation", occupation, modifier = Modifier.weight(1f)) { occupation = it }
-            Spacer(modifier = Modifier.width(8.dp))
-            BField("Telephone", telephone, modifier = Modifier.weight(1f)) { telephone = it }
-        }
-        Row {
-            BField("Civil Status", civilStatus, modifier = Modifier.weight(1f)) { civilStatus = it }
-            Spacer(modifier = Modifier.width(8.dp))
-            BField("Cellphone", cellphone, modifier = Modifier.weight(1f)) { cellphone = it }
-        }
-        Row {
-            BField("Place of Birth", placeOfBirth, modifier = Modifier.weight(1f)) { placeOfBirth = it }
-            Spacer(modifier = Modifier.width(8.dp))
-            BField("Email", email, modifier = Modifier.weight(1f)) { email = it }
-        }
-        Row {
-            BField("Height", height, modifier = Modifier.weight(1f)) { height = it }
-            Spacer(modifier = Modifier.width(8.dp))
-            BField("Citizenship", citizenship, modifier = Modifier.weight(1f)) { citizenship = it }
-        }
-        Row {
-            BField("Weight", weight, modifier = Modifier.weight(1f)) { weight = it }
-            Spacer(modifier = Modifier.width(8.dp))
-            BField("Religion", religion, modifier = Modifier.weight(1f)) { religion = it }
-        }
-        Row {
-            BField("Father's Name", fatherName, modifier = Modifier.weight(1f)) { fatherName = it }
-            Spacer(modifier = Modifier.width(8.dp))
-            BField("Occupation", fatherOccupation, modifier = Modifier.weight(1f)) { fatherOccupation = it }
-        }
-        Row {
-            BField("Mother's Name", motherName, modifier = Modifier.weight(1f)) { motherName = it }
-            Spacer(modifier = Modifier.width(8.dp))
-            BField("Occupation", motherOccupation, modifier = Modifier.weight(1f)) { motherOccupation = it }
-        }
-        BField("Language or Dialect Spoken", language) { language = it }
-        BField("Person to be Contacted (Emergency)", emergencyContact) { emergencyContact = it }
-        Row {
-            BField("Address", emergencyAddress, modifier = Modifier.weight(1f)) { emergencyAddress = it }
-            Spacer(modifier = Modifier.width(8.dp))
-            BField("Contact No.", emergencyContactNo, modifier = Modifier.weight(1f)) { emergencyContactNo = it }
-        }
-
-        SectionLabel("EDUCATIONAL BACKGROUND")
-        Row {
-            BField("Elementary", elementary, modifier = Modifier.weight(1f)) { elementary = it }
-            Spacer(modifier = Modifier.width(8.dp))
-            BField("Year Graduated", elementaryYear, modifier = Modifier.weight(1f)) { elementaryYear = it }
-        }
-        Row {
-            BField("High School", highSchool, modifier = Modifier.weight(1f)) { highSchool = it }
-            Spacer(modifier = Modifier.width(8.dp))
-            BField("Year Graduated", highSchoolYear, modifier = Modifier.weight(1f)) { highSchoolYear = it }
-        }
-        Row {
-            BField("College", college, modifier = Modifier.weight(1f)) { college = it }
-            Spacer(modifier = Modifier.width(8.dp))
-            BField("Year Graduated", collegeYear, modifier = Modifier.weight(1f)) { collegeYear = it }
-        }
-
-        Spacer(modifier = Modifier.height(24.dp))
-        Button(
-            onClick = {
-                if (fullName.isBlank()) {
-                    Toast.makeText(context, "Lagyan muna ng Name.", Toast.LENGTH_SHORT).show()
-                    return@Button
-                }
-                val data = BioDataFull(
-                    fullName = fullName, gender = gender, birthDate = birthDate,
-                    currentAddress = currentAddress, permanentAddress = permanentAddress,
-                    age = age, date = date, occupation = occupation, telephone = telephone,
-                    civilStatus = civilStatus, cellphone = cellphone, placeOfBirth = placeOfBirth,
-                    email = email, height = height, citizenship = citizenship, weight = weight,
-                    religion = religion, fatherName = fatherName, fatherOccupation = fatherOccupation,
-                    motherName = motherName, motherOccupation = motherOccupation, language = language,
-                    emergencyContact = emergencyContact, emergencyAddress = emergencyAddress,
-                    emergencyContactNo = emergencyContactNo, elementary = elementary,
-                    elementaryYear = elementaryYear, highSchool = highSchool,
-                    highSchoolYear = highSchoolYear, college = college, collegeYear = collegeYear
-                )
-                previewBitmap = DocumentRenderer.renderBioData(data, processedSelfie)
-            },
-            modifier = Modifier.fillMaxWidth()
-        ) { Text("✅ Tapos na") }
     }
 }
+
