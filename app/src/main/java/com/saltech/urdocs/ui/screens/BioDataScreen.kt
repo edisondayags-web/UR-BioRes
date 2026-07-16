@@ -90,8 +90,8 @@ fun BioDataScreen(
                         offset = if (scale <= fitScale) Offset.Zero else offset + pan
                     }
                 }
-                .then(
-    Modifier.graphicsLayer(
+                
+       .graphicsLayer(
         scaleX = scale,
         scaleY = scale,
         translationX = offset.x,
