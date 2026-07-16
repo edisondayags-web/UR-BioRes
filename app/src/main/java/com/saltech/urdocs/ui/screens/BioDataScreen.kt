@@ -67,8 +67,8 @@ fun BioDataScreen(
 ) {
 
     // laki ng "papel" — pwede dagdagan ang height kung kulang pa sa fields niyo
-    val paperWidthDp = 750.dp
-    val paperHeightDp = 1250.dp
+    .requiredWidth(paperWidthDp)
+    .requiredHeight(paperHeightDp)
 
     var data by remember { mutableStateOf(BioDataFields()) }
     var offset by remember { mutableStateOf(Offset.Zero) }
@@ -102,7 +102,7 @@ fun BioDataScreen(
                 )
                 .width(paperWidthDp)
                 .height(paperHeightDp)
-                .background(Color.Red)
+                .background(Color.White)
                 .padding(24.dp)
         ) {
             Column(Modifier.fillMaxSize()) {
