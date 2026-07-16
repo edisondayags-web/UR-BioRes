@@ -90,11 +90,14 @@ fun BioDataScreen(
                         offset = if (scale <= fitScale) Offset.Zero else offset + pan
                     }
                 }
-                .graphicsLayer(
-                    scaleX = scale,
-                    scaleY = scale,
-                    translationX = offset.x,
-                    translationY = offset.y
+                .then(
+    Modifier.graphicsLayer(
+        scaleX = scale,
+        scaleY = scale,
+        translationX = offset.x,
+        translationY = offset.y
+    )
+)
                 )
                 .width(paperWidthDp)
                 .height(paperHeightDp)
