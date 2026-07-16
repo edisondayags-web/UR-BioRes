@@ -67,7 +67,7 @@ fun BioDataScreen(
 ) {
 
     // laki ng "papel" — pwede dagdagan ang height kung kulang pa sa fields niyo
-    val paperWidthDp = 600.dp
+    val paperWidthDp = 750.dp
     val paperHeightDp = 1250.dp
 
     var data by remember { mutableStateOf(BioDataFields()) }
