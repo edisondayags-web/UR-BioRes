@@ -6,6 +6,7 @@ package com.saltech.urdocs.ui.screens
 
 import android.content.ContentValues
 import android.graphics.Bitmap
+import android.graphics.Picture
 import android.os.Build
 import android.provider.MediaStore
 import androidx.compose.foundation.background
@@ -20,14 +21,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.drawscope.draw
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.layer.rememberGraphicsLayer
+import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
@@ -35,8 +36,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.zIndex
-import kotlinx.coroutines.launch
 
 data class BioDataFields(
     val name: String = "",
@@ -85,8 +84,7 @@ fun BioDataScreen(
     var data by remember { mutableStateOf(BioDataFields()) }
     var offset by remember { mutableStateOf(Offset.Zero) }
     val context = LocalContext.current
-    val coroutineScope = rememberCoroutineScope()
-    val graphicsLayer = rememberGraphicsLayer()
+    val picture = remember { Picture() }
 
     BoxWithConstraints(
         modifier = Modifier
@@ -116,10 +114,20 @@ fun BioDataScreen(
                 .requiredHeight(paperHeightDp)
                 .background(Color.White)
                 .padding(24.dp)
-                .drawWithContent {
+                .drawWithCache {
                     // dito kinukuha yung "litrato" ng buong papel para sa Download button
-                    graphicsLayer.record { this@drawWithContent.drawContent() }
-                    drawLayer(graphicsLayer)
+                    val width = this.size.width.toInt().coerceAtLeast(1)
+                    val height = this.size.height.toInt().coerceAtLeast(1)
+                    onDrawWithContent {
+                        val pictureCanvas = androidx.compose.ui.graphics.Canvas(
+                            picture.beginRecording(width, height)
+                        )
+                        draw(this, this.layoutDirection, pictureCanvas, this.size) {
+                            this@onDrawWithContent.drawContent()
+                        }
+                        picture.endRecording()
+                        drawIntoCanvas { canvas -> canvas.nativeCanvas.drawPicture(picture) }
+                    }
                 }
         ) {
             Column(
@@ -256,15 +264,19 @@ fun BioDataScreen(
         // Download button — laging nakikita sa taas, hindi kasama sa zoom/pan
         Button(
             onClick = {
-                coroutineScope.launch {
-                    val bitmap = graphicsLayer.toImageBitmap().asAndroidBitmap()
-                    saveBitmapToGallery(context, bitmap)
-                }
+                val bitmap = Bitmap.createBitmap(
+                    picture.width.coerceAtLeast(1),
+                    picture.height.coerceAtLeast(1),
+                    Bitmap.Config.ARGB_8888
+                )
+                val canvas = android.graphics.Canvas(bitmap)
+                canvas.drawColor(android.graphics.Color.WHITE)
+                canvas.drawPicture(picture)
+                saveBitmapToGallery(context, bitmap)
             },
             modifier = Modifier
                 .align(Alignment.TopEnd)
                 .padding(16.dp)
-                .zIndex(10f)
         ) {
             Text("Download")
         }
