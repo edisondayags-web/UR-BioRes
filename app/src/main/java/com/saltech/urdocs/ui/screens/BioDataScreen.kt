@@ -12,6 +12,8 @@ import android.provider.MediaStore
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
@@ -316,6 +318,8 @@ private fun Modifier.bottomLine(
 
 @Composable
 private fun FieldLine(label: String, value: String, onChange: (String) -> Unit) {
+    val interactionSource = remember { MutableInteractionSource() }
+    val isFocused by interactionSource.collectIsFocusedAsState()
     Column(modifier = Modifier.fillMaxWidth().padding(top = 7.dp)) {
         Row(verticalAlignment = Alignment.Bottom) {
             Text("$label: ", fontSize = 12.sp, color = Color.Black)
@@ -324,7 +328,10 @@ private fun FieldLine(label: String, value: String, onChange: (String) -> Unit) 
                 onValueChange = onChange,
                 textStyle = TextStyle(fontSize = 12.sp, color = Color.Black),
                 cursorBrush = SolidColor(Color.Black),
-                modifier = Modifier.weight(1f)
+                interactionSource = interactionSource,
+                modifier = Modifier
+                    .weight(1f)
+                    .background(if (isFocused) Color(0xFFFFF3CD) else Color.Transparent)
             )
         }
         Spacer(Modifier.height(2.dp))
@@ -337,16 +344,23 @@ private fun TwoCol(
     label1: String, value1: String, onChange1: (String) -> Unit,
     label2: String, value2: String, onChange2: (String) -> Unit
 ) {
+    val focus1 = remember { MutableInteractionSource() }
+    val isFocused1 by focus1.collectIsFocusedAsState()
+    val focus2 = remember { MutableInteractionSource() }
+    val isFocused2 by focus2.collectIsFocusedAsState()
     Row(modifier = Modifier.fillMaxWidth().padding(top = 7.dp)) {
         Column(Modifier.weight(1f)) {
             Row(verticalAlignment = Alignment.Bottom) {
                 Text("$label1: ", fontSize = 12.sp, color = Color.Black)
                 BasicTextField(
-                    value = value1,
-                    onValueChange = onChange1,
+                    value = value2,
+                    onValueChange = onChange2,
                     textStyle = TextStyle(fontSize = 12.sp, color = Color.Black),
                     cursorBrush = SolidColor(Color.Black),
-                    modifier = Modifier.weight(1f)
+                    interactionSource = focus2,
+                    modifier = Modifier
+                        .weight(1f)
+                        .background(if (isFocused2) Color(0xFFFFF3CD) else Color.Transparent)
                 )
             }
             Spacer(Modifier.height(2.dp))
