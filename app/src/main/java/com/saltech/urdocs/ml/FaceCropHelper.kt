@@ -51,9 +51,9 @@ object FaceCropHelper {
     private fun cropAroundFace(bitmap: Bitmap, faceBox: Rect): Bitmap {
         // Idagdag ang padding: mas malaki sa taas (headroom), katamtaman sa gilid.
         val faceHeight = faceBox.height()
-        val paddingTop = (faceHeight * 0.9f).toInt()
-        val paddingSides = (faceHeight * 0.7f).toInt()
-        val paddingBottom = (faceHeight * 1.1f).toInt()
+        val paddingTop = (faceHeight * 0.45f).toInt()
+        val paddingSides = (faceHeight * 0.35f).toInt()
+        val paddingBottom = (faceHeight * 0.55f).toInt()
 
         var left = faceBox.left - paddingSides
         var top = faceBox.top - paddingTop
