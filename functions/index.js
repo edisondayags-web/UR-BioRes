@@ -55,3 +55,37 @@ Gumawa ng kumpletong letter, propesyonal ang tono, ready to print/send. Filipino
 
   return { letterText };
 });
+const { onCall } = require("firebase-functions/v2/https");
+const { defineSecret } = require("firebase-functions/params");
+const GEMINI_API_KEY = defineSecret("GEMINI_API_KEY");
+
+exports.enhance2x2Photo = onCall({ secrets: [GEMINI_API_KEY] }, async (request) => {
+  const { imageBase64 } = request.data;
+  if (!imageBase64) throw new Error("Missing imageBase64");
+
+  const prompt = "Enhance this ID photo: studio-quality lighting, clean pure " +
+    "white background, sharp and clear focus on the face. Keep the same " +
+    "person, pose, and framing exactly as-is. Output only the edited image.";
+
+  const res = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent?key=${GEMINI_API_KEY.value()}`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contents: [{ parts: [
+          { text: prompt },
+          { inline_data: { mime_type: "image/jpeg", data: imageBase64 } }
+        ]}]
+      })
+    }
+  );
+
+  const json = await res.json();
+  const parts = json?.candidates?.[0]?.content?.parts ?? [];
+  const imagePart = parts.find((p) => p.inlineData || p.inline_data);
+  const outData = imagePart?.inlineData?.data ?? imagePart?.inline_data?.data;
+  if (!outData) throw new Error("Gemini did not return an image");
+
+  return { imageBase64: outData };
+});
