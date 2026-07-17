@@ -149,24 +149,35 @@ fun BioDataScreen(
                         color = Color.Black,
                         modifier = Modifier.weight(1f)
                     )
-                    Box(
-                        modifier = Modifier
-                            .size(140.dp, 210.dp)
-                            .border(1.dp, Color.Black)
-                            .clickable(enabled = processedSelfie == null) { onTakeSelfie() }
-                    ) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Box(
+                            modifier = Modifier
+                                .size(180.dp, 180.dp)
+                                .border(1.dp, Color.Black)
+                                .clickable(enabled = processedSelfie == null) { onTakeSelfie() }
+                        ) {
+                            if (processedSelfie != null) {
+                                androidx.compose.foundation.Image(
+                                    bitmap = processedSelfie.asImageBitmap(),
+                                    contentDescription = "2x2 Photo",
+                                    modifier = Modifier.fillMaxSize()
+                                )
+                            } else {
+                                Text(
+                                    "+",
+                                    fontSize = 32.sp,
+                                    color = Color.Black,
+                                    modifier = Modifier.align(Alignment.Center)
+                                )
+                            }
+                        }
                         if (processedSelfie != null) {
-                            androidx.compose.foundation.Image(
-                                bitmap = processedSelfie.asImageBitmap(),
-                                contentDescription = "2x2 Photo",
-                                modifier = Modifier.fillMaxSize()
-                            )
-                        } else {
+                            Spacer(Modifier.height(4.dp))
                             Text(
-                                "+",
-                                fontSize = 32.sp,
-                                color = Color.Black,
-                                modifier = Modifier.align(Alignment.Center)
+                                "🔄 Retake",
+                                fontSize = 12.sp,
+                                color = Color.Blue,
+                                modifier = Modifier.clickable { onTakeSelfie() }
                             )
                         }
                     }
