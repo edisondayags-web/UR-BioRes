@@ -87,10 +87,10 @@ fun SelfieCaptureScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Text("Kailangan ng camera permission para makakuha ng selfie.")
+            Text("Need ng Permission ng camera luv.")
             Spacer(modifier = Modifier.height(16.dp))
             Button(onClick = { permissionLauncher.launch(Manifest.permission.CAMERA) }) {
-                Text("Payagan ang Camera")
+                Text("Allow mo lang luv")
             }
             Spacer(modifier = Modifier.height(8.dp))
             OutlinedButton(onClick = onCancel) { Text("Cancel") }
@@ -228,7 +228,7 @@ fun SelfieCaptureScreen(
         }
 
         Text(
-            text = "Ilagay ang buong mukha dito sa loob ng box",
+            text = "I recommended sa labas ka mag picture para clear ang results",
             color = Color.White,
             modifier = Modifier
                 .align(Alignment.TopCenter)
@@ -279,8 +279,8 @@ fun SelfieCaptureScreen(
                 Text(
                     when {
                         countdown != null -> "📸 $countdown..."
-                        isProcessing -> "Pina-process..."
-                        else -> "📸 Kuhanan"
+                        isProcessing -> "Processing! wait..."
+                        else -> "📸 Take"
                     }
                 )
             }
