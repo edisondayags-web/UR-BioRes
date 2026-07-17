@@ -16,18 +16,18 @@ fun ResumeChoiceScreen(onChoose: (String) -> Unit) {
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            "📄 Pumili ng Resume Style",
+            "📄 san dito luv🩵",
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold
         )
         Spacer(modifier = Modifier.height(32.dp))
 
-        Button(onClick = { onChoose("modern") }, modifier = Modifier.fillMaxWidth()) {
-            Text("✨ Modern (CV-style, walang photo box)")
+        Button(onClick = { onChoose("traditional") }, modifier = Modifier.fillMaxWidth()) {
+            Text("📋 Traditional Resume (may 2x2 photo)")
         }
         Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = { onChoose("corporate") }, modifier = Modifier.fillMaxWidth()) {
-            Text("🏢 Corporate (may 2x2 photo box, tradisyunal)")
+        Button(onClick = { onChoose("chronological") }, modifier = Modifier.fillMaxWidth()) {
+            Text("💼 Chronological Resume (walang photo, tech/CV style)")
         }
     }
 }
