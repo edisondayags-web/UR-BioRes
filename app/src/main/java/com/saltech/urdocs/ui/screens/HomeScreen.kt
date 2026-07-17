@@ -58,7 +58,7 @@ fun HomeScreen(
         ) {
             Spacer(modifier = Modifier.height(32.dp))
             Text(
-                text = "← Pili ka ng gusto mo luv❤️🩵",
+                text = "Pili ka ng gusto mo luv🩵",
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold
             )
