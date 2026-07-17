@@ -152,8 +152,9 @@ fun SelfieCaptureScreen(
                             try {
                                 val cropped = FaceCropHelper.cropTo2x2(bitmap)
                                 val whiteBg = BackgroundHelper.replaceWithWhiteBackground(cropped)
+                                val enhanced = try { enhance2x2WithAI(whiteBg) } catch (e: Exception) { whiteBg }
                                 isProcessing = false
-                                onProcessed(whiteBg)
+                                onProcessed(enhanced)
                             } catch (e: Exception) {
                                 isProcessing = false
                                 errorMessage = "Processing error: ${e.javaClass.simpleName}: ${e.message}"
