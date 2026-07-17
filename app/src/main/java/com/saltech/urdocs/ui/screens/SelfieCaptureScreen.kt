@@ -77,6 +77,7 @@ fun SelfieCaptureScreen(
 
     var isProcessing by remember { mutableStateOf(false) }
     var imageCapture by remember { mutableStateOf<ImageCapture?>(null) }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
 
     Box(modifier = Modifier.fillMaxSize()) {
         AndroidView(
@@ -126,13 +127,14 @@ fun SelfieCaptureScreen(
                                         onProcessed(whiteBg)
                                     } catch (e: Exception) {
                                         isProcessing = false
-                                        onProcessed(bitmap)
+                                        errorMessage = "Processing error: ${e.javaClass.simpleName}: ${e.message}"
                                     }
                                 }
                             }
 
                             override fun onError(exception: ImageCaptureException) {
                                 isProcessing = false
+                                errorMessage = "Capture error: ${exception.message}"
                             }
                         }
                     )
@@ -146,6 +148,18 @@ fun SelfieCaptureScreen(
             OutlinedButton(onClick = onCancel, modifier = Modifier.fillMaxWidth()) {
                 Text("Cancel")
             }
+        }
+
+        if (errorMessage != null) {
+            Text(
+                text = errorMessage ?: "",
+                color = androidx.compose.ui.graphics.Color.Red,
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .padding(16.dp)
+                    .background(androidx.compose.ui.graphics.Color.White)
+                    .padding(8.dp)
+            )
         }
     }
 }
