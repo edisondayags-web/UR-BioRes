@@ -9,6 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -32,13 +34,21 @@ fun HomeScreen(
         HomeMenuItem("📝", "BIO-DATA", "Pang Company/Store etc. • PH Job Application", "biodata"),
         HomeMenuItem("🏛️", "GOV'T FORMS", "SSS, PAG-IBIG, etc.", "govt_forms"),
         HomeMenuItem("✉️", "LETTERS", "Leave, Excuse, Resign, etc.", "letters")
+    Box(
+    modifier = Modifier.fillMaxSize()
+) {
+    Image(
+        painter = painterResource(id = drawable.ic_launcher_bg),
+        contentDescription = null,
+        contentScale = ContentScale.Crop,
+        modifier = Modifier.fillMaxSize()
     )
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         Spacer(modifier = Modifier.height(32.dp))
@@ -58,7 +68,7 @@ Text(
     color = UrGray, 
     fontSize = 10.sp,
     modifier = Modifier.padding(bottom = 20.dp)
-)
+       }
     }
 }
 
