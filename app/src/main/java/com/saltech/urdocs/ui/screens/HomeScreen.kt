@@ -1,5 +1,6 @@
 package com.saltech.urdocs.ui.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -14,6 +15,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.saltech.urdocs.R
 import com.saltech.urdocs.ui.theme.UrGray
 import com.saltech.urdocs.ui.theme.UrNeon
 import com.saltech.urdocs.ui.theme.UrPink
@@ -34,41 +36,47 @@ fun HomeScreen(
         HomeMenuItem("📝", "BIO-DATA", "Pang Company/Store etc. • PH Job Application", "biodata"),
         HomeMenuItem("🏛️", "GOV'T FORMS", "SSS, PAG-IBIG, etc.", "govt_forms"),
         HomeMenuItem("✉️", "LETTERS", "Leave, Excuse, Resign, etc.", "letters")
-    Box(
-    modifier = Modifier.fillMaxSize()
-) {
-    Image(
-        painter = painterResource(id = drawable.ic_launcher_bg),
-        contentDescription = null,
-        contentScale = ContentScale.Crop,
-        modifier = Modifier.fillMaxSize()
     )
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceBetween
+    Box(
+        modifier = Modifier.fillMaxSize()
     ) {
-        Spacer(modifier = Modifier.height(32.dp))
-        Text(
-            text = "← Pili kalang ng gusto mo luv💖",
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold
-        )
-        Spacer(modifier = Modifier.height(24.dp))
+        Image(
+    painter = painterResource(id = R.drawable.ic_launcher_bg),
+    contentDescription = null,
+    contentScale = ContentScale.Crop,
+    alpha = 0.15f,
+    modifier = Modifier.fillMaxSize()
+)
 
-        items.forEach { item ->
-            HomeMenuCard(item = item, onClick = { onNavigate(item.route) })
-            Spacer(modifier = Modifier.height(16.dp))
-        }Spacer(modifier = Modifier.height(40.dp))
-Text(
-    text = "DEVELOPER: EDISON SUCLATAN DAYAGUIT", 
-    color = UrGray, 
-    fontSize = 10.sp,
-    modifier = Modifier.padding(bottom = 20.dp)
-       }
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
+            Spacer(modifier = Modifier.height(32.dp))
+            Text(
+                text = "← Pili kalang ng gusto mo luv💖",
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold
+            )
+            Spacer(modifier = Modifier.height(24.dp))
+
+            items.forEach { item ->
+                HomeMenuCard(item = item, onClick = { onNavigate(item.route) })
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+
+            Spacer(modifier = Modifier.height(40.dp))
+            Text(
+                text = "DEVELOPER: EDISON SUCLATAN DAYAGUIT",
+                color = UrGray,
+                fontSize = 10.sp,
+                modifier = Modifier.padding(bottom = 20.dp)
+            )
+        }
     }
 }
 
