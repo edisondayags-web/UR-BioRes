@@ -34,7 +34,7 @@ fun HomeScreen(
     val items = listOf(
         HomeMenuItem("📄", "RESUME", "Pang BPO/Office etc • Professional CV", "resume"),
         HomeMenuItem("📝", "BIO-DATA", "Pang Company/Store etc. • PH Job Application", "biodata"),
-        HomeMenuItem("🏛️", "GOV'T FORMS", "Coming soon", "coming soon" //"SSS, PAG-IBIG, etc.", "govt_forms"), 
+        HomeMenuItem("🏛️", "GOV'T FORMS", "Coming soon", "coming soon"
         HomeMenuItem("✉️", "LETTERS", "Leave, Excuse, Resign, etc.", "letters")
     )
 
