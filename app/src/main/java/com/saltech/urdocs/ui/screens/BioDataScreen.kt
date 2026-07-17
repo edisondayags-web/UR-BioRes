@@ -34,6 +34,8 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.delay
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
@@ -88,6 +90,7 @@ fun BioDataScreen(
     var offset by remember { mutableStateOf(Offset.Zero) }
     val context = LocalContext.current
     val picture = remember { Picture() }
+    val coroutineScope = rememberCoroutineScope()
 
     BoxWithConstraints(
         modifier = Modifier
@@ -267,15 +270,20 @@ fun BioDataScreen(
         // Download button — laging nakikita sa taas, hindi kasama sa zoom/pan
         Button(
             onClick = {
-                val bitmap = Bitmap.createBitmap(
-                    picture.width.coerceAtLeast(1),
-                    picture.height.coerceAtLeast(1),
-                    Bitmap.Config.ARGB_8888
-                )
-                val canvas = android.graphics.Canvas(bitmap)
-                canvas.drawColor(android.graphics.Color.WHITE)
-                canvas.drawPicture(picture)
-                saveBitmapToGallery(context, bitmap)
+                scale = fitScale
+                offset = Offset.Zero
+                coroutineScope.launch {
+                    delay(100)
+                    val bitmap = Bitmap.createBitmap(
+                        picture.width.coerceAtLeast(1),
+                        picture.height.coerceAtLeast(1),
+                        Bitmap.Config.ARGB_8888
+                    )
+                    val canvas = android.graphics.Canvas(bitmap)
+                    canvas.drawColor(android.graphics.Color.WHITE)
+                    canvas.drawPicture(picture)
+                    saveBitmapToGallery(context, bitmap)
+                }
             },
             modifier = Modifier
                 .align(Alignment.TopEnd)
@@ -353,14 +361,14 @@ private fun TwoCol(
             Row(verticalAlignment = Alignment.Bottom) {
                 Text("$label1: ", fontSize = 12.sp, color = Color.Black)
                 BasicTextField(
-                    value = value2,
-                    onValueChange = onChange2,
+                    value = value1,
+                    onValueChange = onChange1,
                     textStyle = TextStyle(fontSize = 12.sp, color = Color.Black),
                     cursorBrush = SolidColor(Color.Black),
-                    interactionSource = focus2,
+                    interactionSource = focus1,
                     modifier = Modifier
                         .weight(1f)
-                        .background(if (isFocused2) Color(0xFFFFF3CD) else Color.Transparent)
+                        .background(if (isFocused1) Color(0xFFFFF3CD) else Color.Transparent)
                 )
             }
             Spacer(Modifier.height(2.dp))
@@ -375,7 +383,33 @@ private fun TwoCol(
                     onValueChange = onChange2,
                     textStyle = TextStyle(fontSize = 12.sp, color = Color.Black),
                     cursorBrush = SolidColor(Color.Black),
-                    modifier = Modifier.weight(1f)
+                    interactionSource = focus2,
+                    modifier = Modifier
+                        .weight(1f)
+                        .background(if (isFocused2) Color(0xFFFFF3CD) else Color.Transparent)
+                )
+            }
+            Spacer(Modifier.height(2.dp))
+            Spacer(Modifier.fillMaxWidth().bottomLine())
+        }
+    }
+}
+            Spacer(Modifier.height(2.dp))
+            Spacer(Modifier.fillMaxWidth().bottomLine())
+        }
+        Spacer(Modifier.width(10.dp))
+        Column(Modifier.weight(1f)) {
+            Row(verticalAlignment = Alignment.Bottom) {
+                Text("$label1: ", fontSize = 12.sp, color = Color.Black)
+                BasicTextField(
+                    value = value1,
+                    onValueChange = onChange1,
+                    textStyle = TextStyle(fontSize = 12.sp, color = Color.Black),
+                    cursorBrush = SolidColor(Color.Black),
+                    interactionSource = focus1,
+                    modifier = Modifier
+                        .weight(1f)
+                        .background(if (isFocused1) Color(0xFFFFF3CD) else Color.Transparent)
                 )
             }
             Spacer(Modifier.height(2.dp))
