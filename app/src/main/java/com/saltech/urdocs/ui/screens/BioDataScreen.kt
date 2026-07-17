@@ -279,6 +279,14 @@ fun BioDataScreen(
                     .clickable { onTakeSelfie() }
             )
        }
+         Text(
+            "Developer: Edison Suclatan Dayaguit",
+            fontSize = 10.sp,
+            color = Color.Gray,
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .padding(top = 4.dp)
+        )
         // Download button — laging nakikita sa taas, hindi kasama sa zoom/pan
         Button(
             onClick = {
