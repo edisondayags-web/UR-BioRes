@@ -171,15 +171,6 @@ fun BioDataScreen(
                                 )
                             }
                         }
-                        if (processedSelfie != null) {
-                            Spacer(Modifier.height(4.dp))
-                            Text(
-                                "🔄 Retake",
-                                fontSize = 12.sp,
-                                color = Color.Blue,
-                                modifier = Modifier.clickable { onTakeSelfie() }
-                            )
-                        }
                     }
                 }
 
@@ -277,7 +268,17 @@ fun BioDataScreen(
                 }
             }
         }
-
+         if (processedSelfie != null) {
+            Text(
+                "🔄 Retake",
+                fontSize = 14.sp,
+                color = Color.Blue,
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .padding(16.dp)
+                    .clickable { onTakeSelfie() }
+            )
+       }
         // Download button — laging nakikita sa taas, hindi kasama sa zoom/pan
         Button(
             onClick = {
