@@ -45,7 +45,7 @@ fun HomeScreen(
     painter = painterResource(id = R.drawable.ic_launcher_bg),
     contentDescription = null,
     contentScale = ContentScale.Crop,
-    alpha = 0.15f,
+    alpha = 0.40f,
     modifier = Modifier.fillMaxSize()
 )
 
@@ -58,7 +58,7 @@ fun HomeScreen(
         ) {
             Spacer(modifier = Modifier.height(32.dp))
             Text(
-                text = "← Pili kalang ng gusto mo luv💖",
+                text = "← Pili ka ng gusto mo luv❤️🩵",
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold
             )
