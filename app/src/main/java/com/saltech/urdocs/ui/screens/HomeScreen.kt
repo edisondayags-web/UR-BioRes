@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.saltech.urdocs.ui.theme.UrGray
 import com.saltech.urdocs.ui.theme.UrNeon
 import com.saltech.urdocs.ui.theme.UrPink
@@ -27,10 +28,10 @@ fun HomeScreen(
     onNavigate: (String) -> Unit
 ) {
     val items = listOf(
-        HomeMenuItem("📄", "RESUME", "Pang BPO/Office • Professional CV", "resume"),
-        HomeMenuItem("📝", "BIO-DATA", "Pang Jollibee/Store • PH Job Application", "biodata"),
+        HomeMenuItem("📄", "RESUME", "Pang BPO/Office etc • Professional CV", "resume"),
+        HomeMenuItem("📝", "BIO-DATA", "Pang Company/Store etc. • PH Job Application", "biodata"),
         HomeMenuItem("🏛️", "GOV'T FORMS", "SSS, PAG-IBIG, etc.", "govt_forms"),
-        HomeMenuItem("✉️", "LETTERS", "Leave, Excuse, Resign", "letters")
+        HomeMenuItem("✉️", "LETTERS", "Leave, Excuse, Resign, etc.", "letters")
     )
 
     Column(
@@ -38,10 +39,11 @@ fun HomeScreen(
             .fillMaxSize()
             .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
+        verticalArrangement = Arrangement.SpaceBetween
     ) {
         Spacer(modifier = Modifier.height(32.dp))
         Text(
-            text = "← Pumili ng Gagawin",
+            text = "← Pili kalang ng gusto mo luv💖",
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold
         )
@@ -50,7 +52,13 @@ fun HomeScreen(
         items.forEach { item ->
             HomeMenuCard(item = item, onClick = { onNavigate(item.route) })
             Spacer(modifier = Modifier.height(16.dp))
-        }
+        }Spacer(modifier = Modifier.height(40.dp))
+Text(
+    text = "DEVELOPER: EDISON SUCLATAN DAYAGUIT", 
+    color = UrGray, 
+    fontSize = 10.sp,
+    modifier = Modifier.padding(bottom = 20.dp)
+)
     }
 }
 
