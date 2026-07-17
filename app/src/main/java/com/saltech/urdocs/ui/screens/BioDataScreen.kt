@@ -391,29 +391,7 @@ private fun TwoCol(
             }
             Spacer(Modifier.height(2.dp))
             Spacer(Modifier.fillMaxWidth().bottomLine())
-        }
-    }
-}
-            Spacer(Modifier.height(2.dp))
-            Spacer(Modifier.fillMaxWidth().bottomLine())
-        }
-        Spacer(Modifier.width(10.dp))
-        Column(Modifier.weight(1f)) {
-            Row(verticalAlignment = Alignment.Bottom) {
-                Text("$label1: ", fontSize = 12.sp, color = Color.Black)
-                BasicTextField(
-                    value = value1,
-                    onValueChange = onChange1,
-                    textStyle = TextStyle(fontSize = 12.sp, color = Color.Black),
-                    cursorBrush = SolidColor(Color.Black),
-                    interactionSource = focus1,
-                    modifier = Modifier
-                        .weight(1f)
-                        .background(if (isFocused1) Color(0xFFFFF3CD) else Color.Transparent)
-                )
             }
-            Spacer(Modifier.height(2.dp))
-            Spacer(Modifier.fillMaxWidth().bottomLine())
         }
     }
-}
+       
