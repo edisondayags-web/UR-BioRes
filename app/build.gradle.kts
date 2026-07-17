@@ -1,3 +1,12 @@
+import java.util.Properties
+import java.io.FileInputStream
+
+val localProps = Properties()
+val localPropsFile = rootProject.file("local.properties")
+if (localPropsFile.exists()) {
+    localProps.load(FileInputStream(localPropsFile))
+}
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -14,6 +23,7 @@ android {
         targetSdk = 34
         versionCode = 2
         versionName = "0.2.0-TEST"
+        buildConfigField("String", "GEMINI_API_KEY", "\"${localProps.getProperty("GEMINI_API_KEY", "")}\"")
     }
 
     buildTypes {
@@ -24,6 +34,7 @@ android {
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 
     composeOptions {
