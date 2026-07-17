@@ -118,10 +118,8 @@ fun BioDataScreen(
                 )
                 .requiredWidth(paperWidthDp)
                 .requiredHeight(paperHeightDp)
-                .background(Color.White)
-                .padding(24.dp)
                 .drawWithCache {
-                    // dito kinukuha yung "litrato" ng buong papel para sa Download button
+                    // dito kinukuha yung "litrato" ng buong papel (kasama ang margin) para sa Download button
                     val width = this.size.width.toInt().coerceAtLeast(1)
                     val height = this.size.height.toInt().coerceAtLeast(1)
                     onDrawWithContent {
@@ -135,6 +133,8 @@ fun BioDataScreen(
                         drawIntoCanvas { canvas -> canvas.nativeCanvas.drawPicture(picture) }
                     }
                 }
+                .background(Color.White)
+                .padding(24.dp)
         ) {
             Column(
                 modifier = Modifier.fillMaxSize(),
@@ -151,7 +151,7 @@ fun BioDataScreen(
                     )
                     Box(
                         modifier = Modifier
-                            .size(90.dp, 110.dp)
+                            .size(140.dp, 210.dp)
                             .border(1.dp, Color.Black)
                             .clickable(enabled = processedSelfie == null) { onTakeSelfie() }
                     ) {
