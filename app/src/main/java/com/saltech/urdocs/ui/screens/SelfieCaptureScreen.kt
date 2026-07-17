@@ -32,6 +32,14 @@ import com.saltech.urdocs.ml.BackgroundHelper
 import com.saltech.urdocs.ml.FaceCropHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import com.saltech.urdocs.BuildConfig
+import org.json.JSONObject
+import java.io.ByteArrayOutputStream
+import java.net.HttpURLConnection
+import java.net.URL
+import android.util.Base64
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 /**
  * Selfie -> 2x2 ID photo pipeline:
@@ -152,7 +160,7 @@ fun SelfieCaptureScreen(
                             try {
                                 val cropped = FaceCropHelper.cropTo2x2(bitmap)
                                 val whiteBg = BackgroundHelper.replaceWithWhiteBackground(cropped)
-                                val enhanced = whiteBg
+                                val enhanced = try { enhance2x2WithAI(whiteBg) } catch (e: Exception) { whiteBg }
                                 isProcessing = false
                                 onProcessed(enhanced)
                             } catch (e: Exception) {
@@ -294,4 +302,62 @@ fun SelfieCaptureScreen(
             )
         }
     }
+}
+
+private suspend fun enhance2x2WithAI(bitmap: Bitmap): Bitmap = withContext(Dispatchers.IO) {
+    val stream = ByteArrayOutputStream()
+    bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+    val base64Image = Base64.encodeToString(stream.toByteArray(), Base64.NO_WRAP)
+
+    val apiKey = BuildConfig.GEMINI_API_KEY
+    val url = URL("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent?key=$apiKey")
+
+    val requestBody = JSONObject().apply {
+        put("contents", org.json.JSONArray().put(
+            JSONObject().apply {
+                put("parts", org.json.JSONArray()
+                    .put(JSONObject().apply {
+                        put("text", "Clean up this ID photo: fix lighting, remove noise/blur, make the background pure clean white, and make it look like a professional studio ID photo. Do NOT change the person's face, facial features, or expression.")
+                    })
+                    .put(JSONObject().apply {
+                        put("inline_data", JSONObject().apply {
+                            put("mime_type", "image/png")
+                            put("data", base64Image)
+                        })
+                    })
+                )
+            }
+        ))
+    }
+
+    val connection = url.openConnection() as HttpURLConnection
+    connection.requestMethod = "POST"
+    connection.setRequestProperty("Content-Type", "application/json")
+    connection.doOutput = true
+    connection.outputStream.use { it.write(requestBody.toString().toByteArray()) }
+
+    val responseCode = connection.responseCode
+    if (responseCode != 200) {
+        throw Exception("Gemini API error: $responseCode")
+    }
+
+    val responseText = connection.inputStream.bufferedReader().use { it.readText() }
+    val json = JSONObject(responseText)
+    val parts = json.getJSONArray("candidates")
+        .getJSONObject(0)
+        .getJSONObject("content")
+        .getJSONArray("parts")
+
+    var resultBitmap: Bitmap? = null
+    for (i in 0 until parts.length()) {
+        val part = parts.getJSONObject(i)
+        if (part.has("inline_data")) {
+            val b64 = part.getJSONObject("inline_data").getString("data")
+            val bytes = Base64.decode(b64, Base64.NO_WRAP)
+            resultBitmap = android.graphics.BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+            break
+        }
+    }
+
+    resultBitmap ?: bitmap
 }
