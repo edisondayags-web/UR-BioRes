@@ -141,7 +141,6 @@ fun ChronologicalResumeScreen() {
                 .background(Color.White)
                 .padding(28.dp)
               ) {
-        )
             Column(modifier = Modifier.fillMaxSize()) {
 
                 // ===== HEADER =====
