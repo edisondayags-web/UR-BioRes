@@ -39,6 +39,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.foundation.Image
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import com.saltech.urdocs.R
 
 data class BioDataFields(
     val name: String = "",
@@ -129,8 +133,13 @@ fun BioDataScreen(
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFCFCFCF))
     ) {
+            Image(
+        painter = painterResource(id = R.drawable.ic_launcher_bg),
+        contentDescription = null,
+        modifier = Modifier.fillMaxSize(),
+        contentScale = ContentScale.Crop
+    )
         val fitScale = minOf(maxWidth / paperWidthDp, maxHeight / paperHeightDp)
         var scale by remember { mutableStateOf(fitScale) }
 
