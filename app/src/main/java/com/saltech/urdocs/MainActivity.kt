@@ -45,13 +45,28 @@ class MainActivity : ComponentActivity() {
                         HomeScreen(onNavigate = { route -> navController.navigate(route) })
                     }
                     composable(Screen.Resume.route) {
-                        ResumeScreen(
+                        ResumeChoiceScreen(
+                            onChoose = { choice ->
+                                if (choice == "traditional") {
+                                    navController.navigate(Screen.ResumeTraditional.route)
+                                } else {
+                                    navController.navigate(Screen.ResumeChronological.route)
+                                }
+                            }
+                        )
+                    }
+                    composable(Screen.ResumeTraditional.route) {
+                        TraditionalResumeScreen(
                             processedSelfie = resumeSelfie,
                             onTakeSelfie = {
                                 pendingSelfieTarget = "resume"
                                 navController.navigate(Screen.SelfieCapture.createRoute("resume"))
-                            }
+                            },
+                            onBack = { navController.popBackStack() }
                         )
+                    }
+                    composable(Screen.ResumeChronological.route) {
+                        ChronologicalResumeScreen()
                     }
                     composable(Screen.BioData.route) {
                         BioDataScreen(
