@@ -81,7 +81,7 @@ class MainActivity : ComponentActivity() {
                         GovtFormsScreen(onNavigate = { route -> navController.navigate(route) })
                     }
                     composable(Screen.Letters.route) {
-                        LettersScreen()
+                        LettersScreen(onNavigate = { route -> navController.navigate(route) })
                     }
                     composable(
                         route = Screen.SelfieCapture.route,
