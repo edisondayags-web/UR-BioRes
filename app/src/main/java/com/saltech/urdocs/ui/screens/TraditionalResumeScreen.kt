@@ -46,6 +46,7 @@ import kotlinx.coroutines.launch
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.layout.ContentScale  
 import com.saltech.urdocs.R
+import androidx.compose.ui.draw.alpha
 
 data class TraditionalResumeFields(
     val fullName: String = "",
