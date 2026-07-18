@@ -22,6 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
@@ -164,6 +165,13 @@ fun TraditionalResumeScreen(
                 .background(Color.White)
                 .padding(28.dp)
         ) {
+
+      Image(  
+          painter = painterResource(id = R.drawable.ic_launcher_bg),  
+    contentDescription = null,  
+    modifier = Modifier.fillMaxSize().scale(1.3f),  
+    contentScale = ContentScale.Crop  
+)
             Column(modifier = Modifier.fillMaxSize()) {
 
                 Text(
