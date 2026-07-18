@@ -100,6 +100,12 @@ fun ChronologicalResumeScreen() {
         modifier = Modifier.fillMaxSize().background(Color(0xFFCFCFCF))
     ) {
         val fitScale = minOf(maxWidth / paperWidthDp, maxHeight / paperHeightDp)
+        Image(
+            painter = painterResource(id = R.drawable.ic_launcher_bg),
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize().alpha(0.15f),
+            contentScale = ContentScale.Crop
+        )
         var scale by remember { mutableStateOf(fitScale) }
 
         Box(
@@ -134,12 +140,7 @@ fun ChronologicalResumeScreen() {
                 .border(1.dp, Color.Black)
                 .background(Color.White)
                 .padding(28.dp)
-        ) {
-            Image(  
-               painter = painterResource(id = R.drawable.ic_launcher_bg),  
-                contentDescription = null,  
-                 modifier = Modifier.fillMaxSize().scale(1.1f).alpha(0.08f),
-                  contentScale = ContentScale.Crop  
+              ) {
         )
             Column(modifier = Modifier.fillMaxSize()) {
 
