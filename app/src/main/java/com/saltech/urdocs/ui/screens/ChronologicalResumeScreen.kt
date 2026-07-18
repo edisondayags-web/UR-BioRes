@@ -39,6 +39,8 @@ import kotlinx.coroutines.launch
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.layout.ContentScale
 import com.saltech.urdocs.R
+import androidx.compose.foundation.Image
+import androidx.compose.ui.draw.scale
 
 /**
  * "Chronological" na Resume -- tech/CV style, walang photo box.
