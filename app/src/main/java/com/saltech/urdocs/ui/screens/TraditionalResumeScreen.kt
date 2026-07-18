@@ -213,13 +213,6 @@ fun TraditionalResumeScreen(
                                 }
                             }
                         }
-                        Spacer(Modifier.height(4.dp))
-                        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                            if (displaySelfie != null) {
-                                Text("🔄 Retake", fontSize = 11.sp, color = Color.Blue, modifier = Modifier.clickable { onTakeSelfie() })
-                            }
-                            Text("🖼 Upload", fontSize = 11.sp, color = Color.Blue, modifier = Modifier.clickable { uploadLauncher.launch("image/*") })
-                        }
                     }
                     Spacer(Modifier.width(20.dp))
                     Column(modifier = Modifier.weight(1f)) {
@@ -329,7 +322,15 @@ fun TraditionalResumeScreen(
                 }
             }
         }
-
+        Row(
+            modifier = Modifier.align(Alignment.TopStart).padding(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            if (displaySelfie != null) {
+                Text("🔄 Retake", fontSize = 14.sp, color = Color.Blue, modifier = Modifier.clickable { onTakeSelfie() })
+            }
+            Text("🖼 Upload", fontSize = 14.sp, color = Color.Blue, modifier = Modifier.clickable { uploadLauncher.launch("image/*") })
+}
         Button(
             onClick = {
                 scale = fitScale
