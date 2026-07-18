@@ -138,7 +138,7 @@ fun ChronologicalResumeScreen() {
             Image(  
                painter = painterResource(id = R.drawable.ic_launcher_bg),  
                 contentDescription = null,  
-                 modifier = Modifier.fillMaxSize().scale(1.3f),  
+                 modifier = Modifier.fillMaxSize().scale(1.1f),  
                   contentScale = ContentScale.Crop  
         )
             Column(modifier = Modifier.fillMaxSize()) {
