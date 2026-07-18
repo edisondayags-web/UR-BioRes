@@ -45,8 +45,8 @@ fun HomeScreen(
     painter = painterResource(id = R.drawable.ic_launcher_bg),
     contentDescription = null,
     contentScale = ContentScale.Crop,
-    alpha = 0.50f,
-    modifier = Modifier.fillMaxSize()
+    alpha = 0.40f,
+    modifier = Modifier.fillMaxSize().scale(1.5f),
 )
 
         Column(
