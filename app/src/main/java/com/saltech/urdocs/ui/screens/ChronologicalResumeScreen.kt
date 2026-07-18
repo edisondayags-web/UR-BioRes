@@ -36,6 +36,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.layout.ContentScale
+import com.saltech.urdocs.R
 
 /**
  * "Chronological" na Resume -- tech/CV style, walang photo box.
@@ -130,6 +133,12 @@ fun ChronologicalResumeScreen() {
                 .background(Color.White)
                 .padding(28.dp)
         ) {
+            Image(  
+               painter = painterResource(id = R.drawable.ic_launcher_bg),  
+                contentDescription = null,  
+                 modifier = Modifier.fillMaxSize().scale(1.3f),  
+                  contentScale = ContentScale.Crop  
+        )
             Column(modifier = Modifier.fillMaxSize()) {
 
                 // ===== HEADER =====
