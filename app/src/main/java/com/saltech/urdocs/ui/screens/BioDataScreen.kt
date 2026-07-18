@@ -137,7 +137,7 @@ fun BioDataScreen(
             Image(
         painter = painterResource(id = R.drawable.ic_launcher_bg),
         contentDescription = null,
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().scale(1.5f),
         contentScale = ContentScale.Crop
     )
         val fitScale = minOf(maxWidth / paperWidthDp, maxHeight / paperHeightDp)
