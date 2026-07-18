@@ -47,7 +47,7 @@ fun HomeScreen(
     contentDescription = null,
     contentScale = ContentScale.Crop,
     alpha = 0.40f,
-    modifier = Modifier.fillMaxSize().scale(1.5f),
+    modifier = Modifier.fillMaxSize().scale(1.3f),
 )
 
         Column(
