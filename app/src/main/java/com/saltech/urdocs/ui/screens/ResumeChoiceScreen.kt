@@ -22,6 +22,7 @@ fun ResumeChoiceScreen(onChoose: (String) -> Unit) {
             painter = painterResource(id = R.drawable.ic_launcher_bg),
             contentDescription = null,
             modifier = Modifier.fillMaxSize().scale(1.1f),
+            Box(modifier = Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.5f)))
             contentScale = ContentScale.Crop
         )
         Column(
