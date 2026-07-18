@@ -5,6 +5,8 @@ import android.graphics.Bitmap
 import android.graphics.Picture
 import android.os.Build
 import android.provider.MediaStore
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -41,14 +43,6 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-/**
- * "Traditional" na Resume -- gaya ng RESUME template na may 2x2 photo box,
- * Objective / Education / Skills / Languages / References sa kaliwa, at
- * Work Experience / Trainings / Certifications sa kanan.
- * Parehong "papel" pattern gaya ng BioDataScreen: pinch-to-zoom, at
- * Download button + Retake ay nasa LABAS ng picture-capture area para
- * hindi sila masali sa na-do-download na larawan.
- */
 data class TraditionalResumeFields(
     val fullName: String = "",
     val phone: String = "",
@@ -89,9 +83,46 @@ fun TraditionalResumeScreen(
     val paperWidthDp = 850.dp
     val paperHeightDp = 1250.dp
 
+    val context = LocalContext.current
     var data by remember { mutableStateOf(TraditionalResumeFields()) }
     var offset by remember { mutableStateOf(Offset.Zero) }
-    val context = LocalContext.current
+
+    // rawSource = pinagmulan ng litrato -- camera (processedSelfie) o Upload.
+    var rawSource by remember { mutableStateOf<Bitmap?>(null) }
+    var displaySelfie by remember { mutableStateOf<Bitmap?>(null) }
+    var isProcessingPhoto by remember { mutableStateOf(false) }
+
+    LaunchedEffect(processedSelfie) {
+        if (processedSelfie != null) rawSource = processedSelfie
+    }
+
+    val uploadLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.GetContent()
+    ) { uri ->
+        if (uri != null) {
+            val loaded = com.saltech.urdocs.util.ImageUtils.loadBitmapFromUri(context, uri)
+            if (loaded != null) rawSource = loaded
+        }
+    }
+
+    LaunchedEffect(rawSource) {
+        val raw = rawSource
+        if (raw != null) {
+            isProcessingPhoto = true
+            val result = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) {
+                try {
+                    val cropped = com.saltech.urdocs.ml.FaceCropHelper.cropTo2x2(raw)
+                    val whiteBg = com.saltech.urdocs.ml.BackgroundHelper.replaceWithWhiteBackground(cropped)
+                    com.saltech.urdocs.ml.SkinSmoothingHelper.studioClean(whiteBg)
+                } catch (e: Exception) {
+                    raw
+                }
+            }
+            displaySelfie = result
+            isProcessingPhoto = false
+        }
+    }
+
     val picture = remember { Picture() }
     val coroutineScope = rememberCoroutineScope()
 
@@ -135,7 +166,6 @@ fun TraditionalResumeScreen(
         ) {
             Column(modifier = Modifier.fillMaxSize()) {
 
-                // ===== HEADER =====
                 Text(
                     "R E S U M E",
                     fontSize = 34.sp,
@@ -154,24 +184,41 @@ fun TraditionalResumeScreen(
                 }
                 Spacer(Modifier.height(18.dp))
 
-                // ===== PHOTO + BASIC INFO =====
                 Row {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Box(
                             modifier = Modifier
                                 .size(140.dp, 175.dp)
                                 .border(1.dp, Color.Black)
-                                .clickable(enabled = processedSelfie == null) { onTakeSelfie() }
+                                .clickable(enabled = displaySelfie == null) { onTakeSelfie() }
                         ) {
-                            if (processedSelfie != null) {
-                                Image(
-                                    bitmap = processedSelfie.asImageBitmap(),
-                                    contentDescription = "2x2 Photo",
-                                    modifier = Modifier.fillMaxSize()
-                                )
-                            } else {
-                                Text("+", fontSize = 32.sp, color = Color.Black, modifier = Modifier.align(Alignment.Center))
+                            when {
+                                isProcessingPhoto -> {
+                                    Text(
+                                        "Processing...",
+                                        fontSize = 9.sp,
+                                        color = Color.Black,
+                                        modifier = Modifier.align(Alignment.Center)
+                                    )
+                                }
+                                displaySelfie != null -> {
+                                    Image(
+                                        bitmap = displaySelfie!!.asImageBitmap(),
+                                        contentDescription = "2x2 Photo",
+                                        modifier = Modifier.fillMaxSize()
+                                    )
+                                }
+                                else -> {
+                                    Text("+", fontSize = 32.sp, color = Color.Black, modifier = Modifier.align(Alignment.Center))
+                                }
                             }
+                        }
+                        Spacer(Modifier.height(4.dp))
+                        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                            if (displaySelfie != null) {
+                                Text("🔄 Retake", fontSize = 11.sp, color = Color.Blue, modifier = Modifier.clickable { onTakeSelfie() })
+                            }
+                            Text("🖼 Upload", fontSize = 11.sp, color = Color.Blue, modifier = Modifier.clickable { uploadLauncher.launch("image/*") })
                         }
                     }
                     Spacer(Modifier.width(20.dp))
@@ -194,9 +241,7 @@ fun TraditionalResumeScreen(
                 Spacer(Modifier.fillMaxWidth().height(2.dp).background(Color.Black))
                 Spacer(Modifier.height(16.dp))
 
-                // ===== TWO COLUMNS =====
                 Row(modifier = Modifier.weight(1f)) {
-                    // LEFT COLUMN
                     Column(modifier = Modifier.weight(1f)) {
                         SectionHeader("👤", "OBJECTIVE")
                         MultiLineField(data.objective, lines = 3) { data = data.copy(objective = it) }
@@ -237,7 +282,6 @@ fun TraditionalResumeScreen(
 
                     Spacer(Modifier.width(24.dp))
 
-                    // RIGHT COLUMN
                     Column(modifier = Modifier.weight(1f)) {
                         SectionHeader("💼", "WORK EXPERIENCE")
                         data.work.forEachIndexed { i, entry ->
@@ -286,20 +330,6 @@ fun TraditionalResumeScreen(
             }
         }
 
-        // Retake -- floating, LABAS ng papel, hindi kasama sa download
-        if (processedSelfie != null) {
-            Text(
-                "🔄 Retake",
-                fontSize = 14.sp,
-                color = Color.Blue,
-                modifier = Modifier
-                    .align(Alignment.TopStart)
-                    .padding(16.dp)
-                    .clickable { onTakeSelfie() }
-            )
-        }
-
-        // Download button -- laging nakikita, hindi kasama sa zoom/pan
         Button(
             onClick = {
                 scale = fitScale
@@ -337,8 +367,6 @@ private fun saveBitmapToGalleryTraditional(context: android.content.Context, bit
         resolver.openOutputStream(it)?.use { out -> bitmap.compress(Bitmap.CompressFormat.PNG, 100, out) }
     }
 }
-
-// ================== Reusable "papel" pieces ==================
 
 private fun Modifier.bottomLine(color: Color = Color.Black, thickness: Dp = 1.dp): Modifier =
     this.height(thickness).drawBehind { drawRect(color = color) }

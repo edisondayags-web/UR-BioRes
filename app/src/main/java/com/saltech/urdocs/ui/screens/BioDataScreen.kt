@@ -1,14 +1,12 @@
 package com.saltech.urdocs.ui.screens
-// ⚠️ 1) PALITAN itong "package" line ng EXACT package niyo mula sa ORIGINAL Bio-Data file.
-// ⚠️ 2) Yung function name na "BioDataScreen()" sa baba — gawin mong SAME sa pangalan
-//        (at parameters, kung meron — navController, viewModel, etc.) ng ORIGINAL
-//        composable niyo, para hindi masira yung tawag mula sa "Pumili ng Gagawin" menu.
 
 import android.content.ContentValues
 import android.graphics.Bitmap
 import android.graphics.Picture
 import android.os.Build
 import android.provider.MediaStore
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -81,14 +79,50 @@ fun BioDataScreen(
     processedSelfie: android.graphics.Bitmap? = null,
     onTakeSelfie: () -> Unit = {}
 ) {
-
-    // laki ng "papel" — pwede dagdagan ang height kung kulang pa sa fields niyo
     val paperWidthDp = 750.dp
     val paperHeightDp = 1250.dp
 
+    val context = LocalContext.current
     var data by remember { mutableStateOf(BioDataFields()) }
     var offset by remember { mutableStateOf(Offset.Zero) }
-    val context = LocalContext.current
+
+    // rawSource = pinagmulan ng litrato -- galing man sa camera (processedSelfie)
+    // o sa Upload (gallery). Kahit alin dito, parehong pipeline ang tatakbo.
+    var rawSource by remember { mutableStateOf<Bitmap?>(null) }
+    var displaySelfie by remember { mutableStateOf<Bitmap?>(null) }
+    var isProcessingPhoto by remember { mutableStateOf(false) }
+
+    LaunchedEffect(processedSelfie) {
+        if (processedSelfie != null) rawSource = processedSelfie
+    }
+
+    val uploadLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.GetContent()
+    ) { uri ->
+        if (uri != null) {
+            val loaded = com.saltech.urdocs.util.ImageUtils.loadBitmapFromUri(context, uri)
+            if (loaded != null) rawSource = loaded
+        }
+    }
+
+    LaunchedEffect(rawSource) {
+        val raw = rawSource
+        if (raw != null) {
+            isProcessingPhoto = true
+            val result = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) {
+                try {
+                    val cropped = com.saltech.urdocs.ml.FaceCropHelper.cropTo2x2(raw)
+                    val whiteBg = com.saltech.urdocs.ml.BackgroundHelper.replaceWithWhiteBackground(cropped)
+                    com.saltech.urdocs.ml.SkinSmoothingHelper.studioClean(whiteBg)
+                } catch (e: Exception) {
+                    raw
+                }
+            }
+            displaySelfie = result
+            isProcessingPhoto = false
+        }
+    }
+
     val picture = remember { Picture() }
     val coroutineScope = rememberCoroutineScope()
 
@@ -97,7 +131,6 @@ fun BioDataScreen(
             .fillMaxSize()
             .background(Color(0xFFCFCFCF))
     ) {
-        // fit-to-screen scale — dito nanggagaling yung "buong bond paper agad lalabas"
         val fitScale = minOf(maxWidth / paperWidthDp, maxHeight / paperHeightDp)
         var scale by remember { mutableStateOf(fitScale) }
 
@@ -119,7 +152,6 @@ fun BioDataScreen(
                 .requiredWidth(paperWidthDp)
                 .requiredHeight(paperHeightDp)
                 .drawWithCache {
-                    // dito kinukuha yung "litrato" ng buong papel (kasama ang margin) para sa Download button
                     val width = this.size.width.toInt().coerceAtLeast(1)
                     val height = this.size.height.toInt().coerceAtLeast(1)
                     onDrawWithContent {
@@ -140,7 +172,6 @@ fun BioDataScreen(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
-
                 Row(verticalAlignment = Alignment.Top) {
                     Text(
                         "BIO-DATA",
@@ -154,21 +185,32 @@ fun BioDataScreen(
                             modifier = Modifier
                                 .size(180.dp, 180.dp)
                                 .border(1.dp, Color.Black)
-                                .clickable(enabled = processedSelfie == null) { onTakeSelfie() }
+                                .clickable(enabled = displaySelfie == null) { onTakeSelfie() }
                         ) {
-                            if (processedSelfie != null) {
-                                androidx.compose.foundation.Image(
-                                    bitmap = processedSelfie.asImageBitmap(),
-                                    contentDescription = "2x2 Photo",
-                                    modifier = Modifier.fillMaxSize()
-                                )
-                            } else {
-                                Text(
-                                    "+",
-                                    fontSize = 32.sp,
-                                    color = Color.Black,
-                                    modifier = Modifier.align(Alignment.Center)
-                                )
+                            when {
+                                isProcessingPhoto -> {
+                                    Text(
+                                        "Processing...",
+                                        fontSize = 10.sp,
+                                        color = Color.Black,
+                                        modifier = Modifier.align(Alignment.Center)
+                                    )
+                                }
+                                displaySelfie != null -> {
+                                    androidx.compose.foundation.Image(
+                                        bitmap = displaySelfie!!.asImageBitmap(),
+                                        contentDescription = "2x2 Photo",
+                                        modifier = Modifier.fillMaxSize()
+                                    )
+                                }
+                                else -> {
+                                    Text(
+                                        "+",
+                                        fontSize = 32.sp,
+                                        color = Color.Black,
+                                        modifier = Modifier.align(Alignment.Center)
+                                    )
+                                }
                             }
                         }
                     }
@@ -233,7 +275,6 @@ fun BioDataScreen(
 
                 Spacer(Modifier.height(28.dp))
 
-                // Date / Signature lines — kagaya ng standard PH bio-data template
                 Row(modifier = Modifier.fillMaxWidth()) {
                     Column(modifier = Modifier.weight(1f)) {
                         Spacer(
@@ -268,18 +309,31 @@ fun BioDataScreen(
                 }
             }
         }
-         if (processedSelfie != null) {
+
+        // Retake + Upload -- floating, LABAS ng papel, hindi kasama sa download.
+        Row(
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            if (displaySelfie != null) {
+                Text(
+                    "🔄 Retake",
+                    fontSize = 14.sp,
+                    color = Color.Blue,
+                    modifier = Modifier.clickable { onTakeSelfie() }
+                )
+            }
             Text(
-                "🔄 Retake",
+                "🖼 Upload",
                 fontSize = 14.sp,
                 color = Color.Blue,
-                modifier = Modifier
-                    .align(Alignment.TopStart)
-                    .padding(16.dp)
-                    .clickable { onTakeSelfie() }
+                modifier = Modifier.clickable { uploadLauncher.launch("image/*") }
             )
-       }
-         Text(
+        }
+
+        Text(
             "Developer: Edison Suclatan Dayaguit",
             fontSize = 10.sp,
             color = Color.Gray,
@@ -287,7 +341,7 @@ fun BioDataScreen(
                 .align(Alignment.TopCenter)
                 .padding(top = 4.dp)
         )
-        // Download button — laging nakikita sa taas, hindi kasama sa zoom/pan
+
         Button(
             onClick = {
                 scale = fitScale
@@ -314,7 +368,6 @@ fun BioDataScreen(
     }
 }
 
-// I-se-save yung bitmap sa Photos/Gallery ng phone, sa loob ng "Pictures/URDocs" folder
 private fun saveBitmapToGallery(context: android.content.Context, bitmap: Bitmap) {
     val filename = "BioData_${System.currentTimeMillis()}.png"
     val contentValues = ContentValues().apply {
@@ -333,8 +386,6 @@ private fun saveBitmapToGallery(context: android.content.Context, bitmap: Bitmap
     }
 }
 
-// Guhit na linya sa ilalim ng isang element — ginagamit bilang "sulatan" na underline
-// sa mga blangko (field values) at sa Date/Signature sa dulo ng bio-data.
 private fun Modifier.bottomLine(
     color: Color = Color.Black,
     thickness: Dp = 1.dp
@@ -411,7 +462,6 @@ private fun TwoCol(
             }
             Spacer(Modifier.height(2.dp))
             Spacer(Modifier.fillMaxWidth().bottomLine())
-            }
         }
     }
-       
+}
