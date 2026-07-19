@@ -83,6 +83,24 @@ class MainActivity : ComponentActivity() {
                     composable(Screen.Letters.route) {
                         LettersScreen(onNavigate = { route -> navController.navigate(route) })
                     }
+                    composable(Screen.Settings.route) {
+                        SettingsScreen(
+                            onBack = { navController.popBackStack() },
+                            onNavigate = { route -> navController.navigate(route) }
+                        )
+                    }
+                    composable(Screen.PrivacyPolicy.route) {
+                        PrivacyPolicyScreen(onBack = { navController.popBackStack() })
+                    }
+                    composable(Screen.TermsConditions.route) {
+                        TermsConditionsScreen(onBack = { navController.popBackStack() })
+                    }
+                    composable(Screen.DataPermissions.route) {
+                        DataPermissionsScreen(onBack = { navController.popBackStack() })
+                    }
+                    composable(Screen.AboutDeveloper.route) {
+                        AboutDeveloperScreen(onBack = { navController.popBackStack() })
+                    }
                     composable(
                         route = Screen.SelfieCapture.route,
                         arguments = listOf(navArgument("returnTo") { type = NavType.StringType })
