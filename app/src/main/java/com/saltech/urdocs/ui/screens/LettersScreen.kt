@@ -65,7 +65,7 @@ fun LettersScreen(
             )
             else -> LettersHubContent(
                 onPremiumTap = { Toast.makeText(context, "Premium -- Coming Soon!", Toast.LENGTH_SHORT).show() },
-                onPopularTap = { keyword -> selectedType = findType(keyword); screenState = "form" },
+                onPopularTap = { keyword -> onNavigate(com.saltech.urdocs.navigation.Screen.LetterAssistant.createRoute(findType(keyword).name)) },
                 onMoreTemplates = { screenState = "all" },
                 onNavigate = onNavigate
             )
