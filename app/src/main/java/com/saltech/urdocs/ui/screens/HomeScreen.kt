@@ -6,6 +6,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,12 +45,26 @@ fun HomeScreen(
         modifier = Modifier.fillMaxSize()
     ) {
         Image(
-    painter = painterResource(id = R.drawable.ic_launcher_bg),
-    contentDescription = null,
-    contentScale = ContentScale.Crop,
-    alpha = 0.60f,
-    modifier = Modifier.fillMaxSize().scale(1.1f),
-)
+            painter = painterResource(id = R.drawable.ic_launcher_bg),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            alpha = 0.60f,
+            modifier = Modifier.fillMaxSize().scale(1.1f),
+        )
+
+        // Gear icon -- malapit sa status bar, palaging nakikita
+        IconButton(
+            onClick = { onNavigate("settings") },
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(top = 24.dp, end = 16.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Default.Settings,
+                contentDescription = "Settings",
+                tint = UrPink
+            )
+        }
 
         Column(
             modifier = Modifier
