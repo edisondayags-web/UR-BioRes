@@ -83,6 +83,18 @@ class MainActivity : ComponentActivity() {
                     composable(Screen.Letters.route) {
                         LettersScreen(onNavigate = { route -> navController.navigate(route) })
                     }
+                    composable(
+    route = Screen.LetterAssistant.route,
+    arguments = listOf(navArgument("letterType") { type = NavType.StringType })
+) { backStackEntry ->
+    val typeArg = backStackEntry.arguments?.getString("letterType") ?: "CUSTOM"
+    val letterType = com.saltech.urdocs.model.LetterType.entries.firstOrNull { it.name == typeArg }
+        ?: com.saltech.urdocs.model.LetterType.CUSTOM
+    LetterAssistantScreen(
+        letterType = letterType,
+        onBack = { navController.popBackStack() }
+    )
+                    }
                     composable(Screen.Settings.route) {
                         SettingsScreen(
                             onBack = { navController.popBackStack() },
