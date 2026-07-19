@@ -336,7 +336,7 @@ fun BioDataScreen(
                 )
             }
             Text(
-                "🖼 Upload",
+                "📤 Upload",
                 fontSize = 14.sp,
                 color = Color.Blue,
                 modifier = Modifier.clickable { uploadLauncher.launch("image/*") }
