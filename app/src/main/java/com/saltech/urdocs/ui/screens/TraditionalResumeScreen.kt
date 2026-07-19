@@ -340,7 +340,7 @@ fun TraditionalResumeScreen(
             if (displaySelfie != null) {
                 Text("🔄 Retake", fontSize = 14.sp, color = Color.Blue, modifier = Modifier.clickable { onTakeSelfie() })
             }
-            Text("🖼 Upload", fontSize = 14.sp, color = Color.Blue, modifier = Modifier.clickable { uploadLauncher.launch("image/*") })
+            Text("📤 Upload", fontSize = 14.sp, color = Color.Blue, modifier = Modifier.clickable { uploadLauncher.launch("image/*") })
 }
         Button(
             onClick = {
