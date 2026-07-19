@@ -9,7 +9,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -21,12 +20,16 @@ fun ResumeChoiceScreen(onChoose: (String) -> Unit) {
         modifier = Modifier.fillMaxSize()
     ) {
         Image(
-            painter = painterResource(id = R.drawable.ic_launcher_bg),
-            contentDescription = null,
-            modifier = Modifier.fillMaxSize().scale(1.1f),
-            Box(modifier = Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.5f)))
-            contentScale = ContentScale.Crop
-        )
+    painter = painterResource(id = R.drawable.ic_launcher_bg),
+    contentDescription = null,
+    modifier = Modifier.fillMaxSize().scale(1.1f),
+    contentScale = ContentScale.Crop
+)
+Box(
+    modifier = Modifier
+        .fillMaxSize()
+        .background(Color.Black.copy(alpha = 0.5f))
+)
         Column(
             modifier = Modifier.fillMaxSize().padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
