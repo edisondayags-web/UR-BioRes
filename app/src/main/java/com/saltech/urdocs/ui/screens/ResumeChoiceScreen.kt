@@ -49,6 +49,14 @@ Box(
             Button(onClick = { onChoose("chronological") }, modifier = Modifier.fillMaxWidth()) {
                 Text("💼 Chronological Resume (walang photo, tech/CV style)")
             }
-        }
-    }
-}
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(
+                onClick = { throw RuntimeException("Test Crash — UR BioRes Crashlytics check") },
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF2E7E))
+            ) {
+                Text("🧪 Force Crash (Test Crashlytics)")
+                }
+            }
+        } 
+   }
