@@ -452,13 +452,17 @@ private fun LettersHubContent(
 
             Spacer(Modifier.height(20.dp))
         }
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color(0xFF0A0A0A))
-                .border(BorderStroke(1.dp, Color(0xFF222222)))
-                .padding(vertical = 10.dp),
+    Row(
+     modifier = Modifier
+        .fillMaxWidth()
+        .padding(horizontal = 12.dp, vertical = 8.dp)
+        .clip(RoundedCornerShape(24.dp))
+        .background(Color(0xFF0A0A0A))
+        .border(
+            BorderStroke(1.5.dp, Brush.linearGradient(listOf(UrPink, UrGreen))),
+            RoundedCornerShape(24.dp)
+        )
+        .padding(vertical = 10.dp),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             BottomNavItem(Icons.Filled.Home, "Home", false) { onNavigate("home") }
@@ -466,6 +470,7 @@ private fun LettersHubContent(
             BottomNavItem(Icons.Filled.Person, "Bio-Data", false) { onNavigate("biodata") }
             BottomNavItem(Icons.Filled.Email, "Letters", true) { }
             BottomNavItem(Icons.Filled.List, "Forms", false) { onNavigate("govt_forms") }
+            BottomNavItem(Icons.Filled.Settings, "Settings", false) { onNavigate("settings") }
         }
     }
 }
