@@ -138,7 +138,7 @@ fun TraditionalResumeScreen(
         Image(
             painter = painterResource(id = R.drawable.ic_launcher_bg),
             contentDescription = null,
-            modifier = Modifier.fillMaxSize().alpha(0.15f),
+            modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop
         )
         var scale by remember { mutableStateOf(fitScale) }
