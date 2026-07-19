@@ -344,7 +344,7 @@ fun BioDataScreen(
         }
 
         Text(
-            "Developer: Edison Suclatan Dayaguit",
+            "luv pag itap mo yang Download ay automatically nasa gallery muna",
             fontSize = 10.sp,
             color = Color.Gray,
             modifier = Modifier
