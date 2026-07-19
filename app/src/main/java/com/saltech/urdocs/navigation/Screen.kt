@@ -14,6 +14,9 @@ sealed class Screen(val route: String) {
     object DataPermissions : Screen("data_permissions")
     object AboutDeveloper : Screen("about_developer")
     object SelfieCapture : Screen("selfie_capture/{returnTo}") {
-        fun createRoute(returnTo: String) = "selfie_capture/$returnTo"
+      fun createRoute(returnTo: String) = "selfie_capture/$returnTo"
+    }
+    object LetterAssistant : Screen("letter_assistant/{letterType}") {
+      fun createRoute(letterType: String) = "letter_assistant/$letterType"
     }
 }
