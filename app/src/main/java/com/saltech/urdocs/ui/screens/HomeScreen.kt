@@ -46,14 +46,14 @@ fun HomeScreen(
     painter = painterResource(id = R.drawable.ic_launcher_bg),
     contentDescription = null,
     contentScale = ContentScale.Crop,
-    alpha = 0.40f,
+    alpha = 0.60f,
     modifier = Modifier.fillMaxSize().scale(1.1f),
 )
 
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(24.dp),
+                .padding(top = 80.dp, start = 24.dp, end = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween
         ) {
