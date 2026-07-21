@@ -28,9 +28,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -41,16 +43,7 @@ private val GCardBg = Color(0xFF0F0F0F)
 
 data class GovtLink(val id: Int, val name: String, val url: String, val initials: String)
 data class GovtCategory(val index: Int, val title: String, val links: List<GovtLink>)
-private val categoryFilters = listOf(
-    CategoryFilter("All", Icons.Filled.GridView, null, GGreen),
-    CategoryFilter("Big 5", Icons.Filled.Star, 1, GPink),
-    CategoryFilter("IDs & Clearances", Icons.Filled.Badge, 2, GGreen),
-    CategoryFilter("Trabaho & Business", Icons.Filled.Work, 3, GPink),
-    CategoryFilter("Health & Safety", Icons.Filled.Favorite, 4, GPink),
-    CategoryFilter("Job Portals", Icons.Filled.People, 5, GGreen),
-    CategoryFilter("Education", Icons.Filled.School, 6, GGreen),
-    CategoryFilter("Bayad & Pera", Icons.Filled.Payments, 7, GPink)
-)
+data class CategoryFilter(val label: String, val icon: ImageVector, val categoryIndex: Int?, val iconColor: Color)
 
 private val govtCategories = listOf(
     GovtCategory(1, "GOV'T REQUIREMENTS -- THE BIG 5", listOf(
@@ -112,14 +105,14 @@ private val govtCategories = listOf(
 )
 
 private val categoryFilters = listOf(
-    CategoryFilter("All", Icons.Filled.GridView, null),
-    CategoryFilter("Big 5", Icons.Filled.Star, 1),
-    CategoryFilter("IDs & Clearances", Icons.Filled.Badge, 2),
-    CategoryFilter("Trabaho & Business", Icons.Filled.Work, 3),
-    CategoryFilter("Health & Safety", Icons.Filled.Favorite, 4),
-    CategoryFilter("Job Portals", Icons.Filled.People, 5),
-    CategoryFilter("Education", Icons.Filled.School, 6),
-    CategoryFilter("Bayad & Pera", Icons.Filled.Payments, 7)
+    CategoryFilter("All", Icons.Filled.GridView, null, GGreen),
+    CategoryFilter("Big 5", Icons.Filled.Star, 1, GPink),
+    CategoryFilter("IDs & Clearances", Icons.Filled.Badge, 2, GGreen),
+    CategoryFilter("Trabaho & Business", Icons.Filled.Work, 3, GPink),
+    CategoryFilter("Health & Safety", Icons.Filled.Favorite, 4, GPink),
+    CategoryFilter("Job Portals", Icons.Filled.People, 5, GGreen),
+    CategoryFilter("Education", Icons.Filled.School, 6, GGreen),
+    CategoryFilter("Bayad & Pera", Icons.Filled.Payments, 7, GPink)
 )
 
 @Composable
@@ -235,7 +228,7 @@ fun GovtFormsScreen(onNavigate: (String) -> Unit = {}) {
                 ) {
                     Icon(filter.icon, contentDescription = null, tint = filter.iconColor, modifier = Modifier.size(20.dp))
                     Spacer(Modifier.height(4.dp))
-                    Text(filter.label, color = if (isSelected) Color.White else GGray, fontSize = 10.sp, textAlign = androidx.compose.ui.text.style.TextAlign.Center)
+                    Text(filter.label, color = if (isSelected) Color.White else GGray, fontSize = 10.sp, textAlign = TextAlign.Center)
                 }
             }
         }
@@ -249,13 +242,13 @@ fun GovtFormsScreen(onNavigate: (String) -> Unit = {}) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        Text("$totalLinks", color = GGreen, fontWeight = FontWeight.Bold, fontSize = 15.sp)
-        Spacer(Modifier.width(6.dp))
-        Text("OFFICIAL LINKS", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 13.sp)
-    }
-    Spacer(Modifier.height(3.dp))
-    Box(modifier = Modifier.width(28.dp).height(2.dp).background(GGreen))
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text("$totalLinks", color = GGreen, fontWeight = FontWeight.Bold, fontSize = 15.sp)
+                    Spacer(Modifier.width(6.dp))
+                    Text("OFFICIAL LINKS", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 13.sp)
+                }
+                Spacer(Modifier.height(3.dp))
+                Box(modifier = Modifier.width(28.dp).height(2.dp).background(GGreen))
             }
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text("Tap any link to open", color = GGray, fontSize = 11.sp)
