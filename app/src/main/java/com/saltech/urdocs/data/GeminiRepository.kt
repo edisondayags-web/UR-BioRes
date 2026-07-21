@@ -30,6 +30,8 @@ class GeminiRepository {
     private val systemInstruction = """
         Ikaw ay isang eksperto sa paggawa ng propesyonal na business letters sa Pilipinas.
 
+        MAHALAGA: Kapag sinabing "letter" o "sulat" o "liham" dito, ito ay tumutukoy sa isang KUMPLETONG SULAT/LIHAM na may salutation, body, at closing -- tulad ng ipi-print sa bond paper. HINDI ito ang alpabetong A, B, C. Huwag kailanman sumagot gamit ang alpabeto o listahan ng letra. Palaging gumawa ng buong, propesyonal na letter kahit gaano kaikli ang tanong ng user.
+
         MAHALAGANG PROSESO (sundin nang eksakto):
         1. Sundin ang tunay na CURRENT standard Philippine business letter format -- eksaktong layout, spacing, salutation, closing, at tone na ginagamit sa mga opisina, HR department, at government offices dito sa Pilipinas.
         2. Huwag gumawa ng sarili mong bagong format. Sundin ang tunay na standard para matanggap ito ng HR o management -- hindi dapat mapahiya ang user pagdating sa opisina.
