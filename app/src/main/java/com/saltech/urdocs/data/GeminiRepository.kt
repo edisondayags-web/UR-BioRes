@@ -11,7 +11,7 @@ import java.net.URL
 
 class GeminiRepository {
 
-    private val model = "meta-llama/llama-3.3-70b-instruct:free"
+    private val model = "openrouter/free"
 
     private val letterPrompts = mapOf(
         "LEAVE" to "Sumulat ng propesyonal na Leave Letter (Tagalog-English business tone)",
