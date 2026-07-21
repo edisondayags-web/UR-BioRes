@@ -11,7 +11,12 @@ import java.net.URL
 
 class GeminiRepository {
 
-    private val model = "qwen/qwen-2.5-72b-instruct:free"
+    private val modelFallbacks = listOf(
+        "openai/gpt-oss-20b:free",
+        "openai/gpt-oss-120b:free",
+        "meta-llama/llama-3.3-70b-instruct:free",
+        "openrouter/free"
+    )
 
     private val letterPrompts = mapOf(
         "LEAVE" to "Sumulat ng propesyonal na Leave Letter (Tagalog-English business tone)",
@@ -39,7 +44,7 @@ class GeminiRepository {
         val url = URL("https://openrouter.ai/api/v1/chat/completions")
 
         val body = JSONObject().apply {
-            put("model", model)
+            put("models", org.json.JSONArray(modelFallbacks))
             put("messages", messages)
         }
 
