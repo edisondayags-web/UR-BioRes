@@ -53,7 +53,15 @@ fun LettersScreen(
             ?: LetterType.entries.first()
 
     Box(modifier = Modifier.fillMaxSize().background(Color.Black)) {
-        when (screenState) {
+    androidx.compose.animation.AnimatedContent(
+        targetState = screenState,
+        transitionSpec = {
+            (androidx.compose.animation.slideInHorizontally(initialOffsetX = { it / 3 }) { it } + androidx.compose.animation.fadeIn(animationSpec = androidx.compose.animation.core.tween(300)))
+                .togetherWith(androidx.compose.animation.slideOutHorizontally(targetOffsetX = { -it / 3 }) { it } + androidx.compose.animation.fadeOut(animationSpec = androidx.compose.animation.core.tween(300)))
+        },
+        label = "lettersScreenTransition"
+    ) { state ->
+        when (state) {
             "form" -> LetterFormContent(
                 viewModel = viewModel,
                 initialType = selectedType,
