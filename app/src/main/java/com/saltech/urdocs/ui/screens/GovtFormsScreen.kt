@@ -173,72 +173,67 @@ private val govtCategories = listOf(
         ),
     GovtCategory(
         11,
-        listOf(
         "idagdag pa",
         listOf(
-           GovtLink(48, "GSIS", "https://www.gsis.gov.ph/", "GSIS"),
-           GovtLink(49, "DSWD", "https://www.dswd.gov.ph/", "DSWD")
-           
-            )
-        ),
-    GovtCategory(
-        12,
-        listOf(
-        "pahabol",
-          GovtLink(50, "LTFRB", "https://ltfrb.gov.ph/", "LTF"),
-          GovtLink(51, "MARINA", "https://marina.gov.ph/", "MAR"),
-          GovtLink(52, "CAAP", "https://caap.gov.ph/", "CAA"),
-          GovtLink(53, "PCG", "https://coastguard.gov.ph/", "PCG")
-          
+            GovtLink(48, "GSIS", "https://www.gsis.gov.ph/", "GSIS"),
+            GovtLink(49, "DSWD", "https://www.dswd.gov.ph/", "DSWD")
         )
     ),
-GovtCategory(
-    13,
-    listOf(
-    "pahabol",
-    GovtLink(54, "eTravel", "https://etravel.gov.ph/", "ET"),
-    GovtLink(55, "Department of Tourism", "https://beta.tourism.gov.ph/", "DOT")
-
-    )
-),
-GovtCategory(
-    14,
-    listOf(
-    "kulang",
-    GovtLink(56, "Department of Agriculture", "https://www.da.gov.ph/", "DA"),
-    GovtLink(57, "DENR", "https://denr.gov.ph/", "DENR"),
-    GovtLink(58, "PAGASA", "https://bagong.pagasa.dost.gov.ph/", "PAG"),
-    GovtLink(59, "PHIVOLCS", "https://www.phivolcs.dost.gov.ph/", "PHI")
-
-    )
-),
-GovtCategory(
-    15,
-    listOf(
-    "kukang din",
-    GovtLink(60, "DOST", "https://www.dost.gov.ph/", "DOST"),
-    GovtLink(61, "DICT", "https://dict.gov.ph/", "DICT")
-
-       )
-   )
-   GovtCategory(
-       16,
-       listOf(
-     GovtLink(62, "ARTA", "https://arta.gov.ph/", "ARTA"),
-     GovtLink(63, "8888 Citizens' Complaint", "https://8888.gov.ph/", "8888"),
-     GovtLink(64, "Civil Service Commission", "https://csc.gov.ph/", "CSC")
-
-           )
-       ),
-        GovtCategory(
-            17,
-            listOf(
-              GovtLink(65, "Philippine Heart Center", "https://www.phc.gov.ph/", "PHC"),
-              GovtLink(66, "Lung Center", "https://lcp.gov.ph/", "LCP"),
-              GovtLink(67, "NKTI", "https://www.nkti.gov.ph/", "NKTI")
-               )
-            ),
+    GovtCategory(
+        12,
+        "pahabol",
+        listOf(
+            GovtLink(50, "LTFRB", "https://ltfrb.gov.ph/", "LTF"),
+            GovtLink(51, "MARINA", "https://marina.gov.ph/", "MAR"),
+            GovtLink(52, "CAAP", "https://caap.gov.ph/", "CAA"),
+            GovtLink(53, "PCG", "https://coastguard.gov.ph/", "PCG")
         )
+    ),
+    GovtCategory(
+        13,
+        "pahabol",
+        listOf(
+            GovtLink(54, "eTravel", "https://etravel.gov.ph/", "ET"),
+            GovtLink(55, "Department of Tourism", "https://beta.tourism.gov.ph/", "DOT")
+        )
+    ),
+    GovtCategory(
+        14,
+        "kulang",
+        listOf(
+            GovtLink(56, "Department of Agriculture", "https://www.da.gov.ph/", "DA"),
+            GovtLink(57, "DENR", "https://denr.gov.ph/", "DENR"),
+            GovtLink(58, "PAGASA", "https://bagong.pagasa.dost.gov.ph/", "PAG"),
+            GovtLink(59, "PHIVOLCS", "https://www.phivolcs.dost.gov.ph/", "PHI")
+        )
+    ),
+    GovtCategory(
+        15,
+        "kukang din",
+        listOf(
+            GovtLink(60, "DOST", "https://www.dost.gov.ph/", "DOST"),
+            GovtLink(61, "DICT", "https://dict.gov.ph/", "DICT")
+        )
+    ),
+    GovtCategory(
+        16,
+        "iba pa",
+        listOf(
+            GovtLink(62, "ARTA", "https://arta.gov.ph/", "ARTA"),
+            GovtLink(63, "8888 Citizens' Complaint", "https://8888.gov.ph/", "8888"),
+            GovtLink(64, "Civil Service Commission", "https://csc.gov.ph/", "CSC")
+        )
+    ),
+    GovtCategory(
+        17,
+        "ospital",
+        listOf(
+            GovtLink(65, "Philippine Heart Center", "https://www.phc.gov.ph/", "PHC"),
+            GovtLink(66, "Lung Center", "https://lcp.gov.ph/", "LCP"),
+            GovtLink(67, "NKTI", "https://www.nkti.gov.ph/", "NKTI")
+        )
+    ),
+)
    
 private val categoryFilters = listOf(
     CategoryFilter("All", Icons.Filled.GridView, null, GGreen),
