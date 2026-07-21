@@ -128,12 +128,14 @@ fun LetterAssistantScreen(
         }
         Box(modifier = Modifier.fillMaxWidth().height(1.dp).background(Brush.horizontalGradient(listOf(UrPink, UrGreen))))
 
-        LazyColumn(
-            state = listState,
-            modifier = Modifier.weight(1f).fillMaxWidth(),
-            contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(14.dp)
-        ) {
+        Box(modifier = Modifier.weight(1f).fillMaxWidth()) {
+            AnimatedChatBackground(isTyping)
+            LazyColumn(
+                state = listState,
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(16.dp),
+                verticalArrangement = Arrangement.spacedBy(14.dp)
+            ) {
             items(messages) { msg -> ChatBubble(msg) }
             if (isTyping) {
                 item {
@@ -149,7 +151,7 @@ fun LetterAssistantScreen(
                 }
             }
         }
-
+    
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -248,4 +250,38 @@ private fun ChatBubble(msg: ChatMessage) {
             }
         }
     }
+}
+
+@Composable
+private fun AnimatedChatBackground(isTyping: Boolean) {
+    val transition = rememberInfiniteTransition(label = "bgShift")
+    val shift by transition.animateFloat(
+        initialValue = 0f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(
+            animation = androidx.compose.animation.core.tween(
+                durationMillis = if (isTyping) 2500 else 6000,
+                easing = androidx.compose.animation.core.LinearEasing
+            ),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "bgShiftValue"
+    )
+    val baseAlpha = if (isTyping) 0.18f else 0.08f
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black)
+            .background(
+                Brush.linearGradient(
+                    colors = listOf(
+                        UrPink.copy(alpha = baseAlpha * shift),
+                        Color.Black,
+                        UrGreen.copy(alpha = baseAlpha * (1f - shift))
+                    ),
+                    start = androidx.compose.ui.geometry.Offset(0f, shift * 1000f),
+                    end = androidx.compose.ui.geometry.Offset(1000f, (1f - shift) * 1000f)
+                )
+            )
+    )
 }
