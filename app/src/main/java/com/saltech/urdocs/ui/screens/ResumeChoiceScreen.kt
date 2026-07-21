@@ -37,7 +37,7 @@ fun ResumeChoiceScreen(onChoose: (String) -> Unit) {
         Image(
             painter = painterResource(id = R.drawable.ic_launcher_bg),
             contentDescription = null,
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize().scale(1.1),
             contentScale = ContentScale.Crop
         )
 
@@ -67,7 +67,7 @@ fun ResumeChoiceScreen(onChoose: (String) -> Unit) {
             Spacer(Modifier.height(16.dp))
 
             Row(
-                modifier = Modifier.fillMaxWidth().scale(1.1f),
+                modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Box(
