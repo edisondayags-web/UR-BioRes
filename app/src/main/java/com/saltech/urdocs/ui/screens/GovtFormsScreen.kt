@@ -41,7 +41,16 @@ private val GCardBg = Color(0xFF0F0F0F)
 
 data class GovtLink(val id: Int, val name: String, val url: String, val initials: String)
 data class GovtCategory(val index: Int, val title: String, val links: List<GovtLink>)
-data class CategoryFilter(val label: String, val icon: androidx.compose.ui.graphics.vector.ImageVector, val categoryIndex: Int?)
+private val categoryFilters = listOf(
+    CategoryFilter("All", Icons.Filled.GridView, null, GGreen),
+    CategoryFilter("Big 5", Icons.Filled.Star, 1, GPink),
+    CategoryFilter("IDs & Clearances", Icons.Filled.Badge, 2, GGreen),
+    CategoryFilter("Trabaho & Business", Icons.Filled.Work, 3, GPink),
+    CategoryFilter("Health & Safety", Icons.Filled.Favorite, 4, GPink),
+    CategoryFilter("Job Portals", Icons.Filled.People, 5, GGreen),
+    CategoryFilter("Education", Icons.Filled.School, 6, GGreen),
+    CategoryFilter("Bayad & Pera", Icons.Filled.Payments, 7, GPink)
+)
 
 private val govtCategories = listOf(
     GovtCategory(1, "GOV'T REQUIREMENTS -- THE BIG 5", listOf(
@@ -224,7 +233,7 @@ fun GovtFormsScreen(onNavigate: (String) -> Unit = {}) {
                         .widthIn(min = 64.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Icon(filter.icon, contentDescription = null, tint = if (isSelected) GGreen else GGray, modifier = Modifier.size(20.dp))
+                    Icon(filter.icon, contentDescription = null, tint = filter.iconColor, modifier = Modifier.size(20.dp))
                     Spacer(Modifier.height(4.dp))
                     Text(filter.label, color = if (isSelected) Color.White else GGray, fontSize = 10.sp, textAlign = androidx.compose.ui.text.style.TextAlign.Center)
                 }
@@ -239,10 +248,14 @@ fun GovtFormsScreen(onNavigate: (String) -> Unit = {}) {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text("$totalLinks", color = GGreen, fontWeight = FontWeight.Bold, fontSize = 15.sp)
-                Spacer(Modifier.width(6.dp))
-                Text("OFFICIAL LINKS", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 13.sp)
+            Column {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Text("$totalLinks", color = GGreen, fontWeight = FontWeight.Bold, fontSize = 15.sp)
+        Spacer(Modifier.width(6.dp))
+        Text("OFFICIAL LINKS", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 13.sp)
+    }
+    Spacer(Modifier.height(3.dp))
+    Box(modifier = Modifier.width(28.dp).height(2.dp).background(GGreen))
             }
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text("Tap any link to open", color = GGray, fontSize = 11.sp)
