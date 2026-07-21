@@ -1,6 +1,13 @@
 package com.saltech.urdocs.ui.screens
 
 import android.widget.Toast
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -53,30 +60,31 @@ fun LettersScreen(
             ?: LetterType.entries.first()
 
     Box(modifier = Modifier.fillMaxSize().background(Color.Black)) {
-    androidx.compose.animation.AnimatedContent(
-        targetState = screenState,
-        transitionSpec = {
-            (androidx.compose.animation.slideInHorizontally(initialOffsetX = { it / 3 }) { it } + androidx.compose.animation.fadeIn(animationSpec = androidx.compose.animation.core.tween(300)))
-                .togetherWith(androidx.compose.animation.slideOutHorizontally(targetOffsetX = { -it / 3 }) { it } + androidx.compose.animation.fadeOut(animationSpec = androidx.compose.animation.core.tween(300)))
-        },
-        label = "lettersScreenTransition"
-    ) { state ->
-        when (state) {
-            "form" -> LetterFormContent(
-                viewModel = viewModel,
-                initialType = selectedType,
-                onBack = { screenState = "hub" }
-            )
-            "all" -> AllTemplatesContent(
-                onBack = { screenState = "hub" },
-                onPick = { type -> selectedType = type; screenState = "form" }
-            )
-            else -> LettersHubContent(
-                onPremiumTap = { Toast.makeText(context, "Premium -- Coming Soon!", Toast.LENGTH_SHORT).show() },
-                onPopularTap = { keyword -> onNavigate(com.saltech.urdocs.navigation.Screen.LetterAssistant.createRoute(findType(keyword).name)) },
-                onMoreTemplates = { screenState = "all" },
-                onNavigate = onNavigate
-            )
+        AnimatedContent(
+            targetState = screenState,
+            transitionSpec = {
+                (slideInHorizontally(initialOffsetX = { it / 3 }) { it } + fadeIn(animationSpec = tween(300)))
+                    .togetherWith(slideOutHorizontally(targetOffsetX = { -it / 3 }) { it } + fadeOut(animationSpec = tween(300)))
+            },
+            label = "lettersScreenTransition"
+        ) { state ->
+            when (state) {
+                "form" -> LetterFormContent(
+                    viewModel = viewModel,
+                    initialType = selectedType,
+                    onBack = { screenState = "hub" }
+                )
+                "all" -> AllTemplatesContent(
+                    onBack = { screenState = "hub" },
+                    onPick = { type -> selectedType = type; screenState = "form" }
+                )
+                else -> LettersHubContent(
+                    onPremiumTap = { Toast.makeText(context, "Premium -- Coming Soon!", Toast.LENGTH_SHORT).show() },
+                    onPopularTap = { keyword -> onNavigate(com.saltech.urdocs.navigation.Screen.LetterAssistant.createRoute(findType(keyword).name)) },
+                    onMoreTemplates = { screenState = "all" },
+                    onNavigate = onNavigate
+                )
+            }
         }
     }
 }
@@ -221,7 +229,6 @@ private fun LetterIllustration(modifier: Modifier = Modifier) {
         val w = size.width
         val h = size.height
 
-        // Envelope sa likod (kaliwa-baba)
         val envW = w * 0.55f
         val envH = h * 0.42f
         val envLeft = 0f
@@ -240,7 +247,6 @@ private fun LetterIllustration(modifier: Modifier = Modifier) {
         }
         drawPath(flap, color = UrPink, style = Stroke(width = 3f))
 
-        // Papel sa harap (kanan)
         val paperW = w * 0.55f
         val paperH = h * 0.85f
         val paperLeft = w * 0.42f
@@ -258,7 +264,6 @@ private fun LetterIllustration(modifier: Modifier = Modifier) {
             cornerRadius = androidx.compose.ui.geometry.CornerRadius(8f),
             style = Stroke(width = 2f)
         )
-        // Kapirasong tiklop sa kanang sulok
         val fold = Path().apply {
             moveTo(paperLeft + paperW - 22f, paperTop)
             lineTo(paperLeft + paperW, paperTop)
@@ -267,7 +272,6 @@ private fun LetterIllustration(modifier: Modifier = Modifier) {
         }
         drawPath(fold, color = UrPink)
 
-        // Mga linya ng "text"
         val lineX = paperLeft + paperW * 0.15f
         val lineWidth = paperW * 0.65f
         listOf(0.28f, 0.42f, 0.56f).forEach { frac ->
@@ -278,7 +282,6 @@ private fun LetterIllustration(modifier: Modifier = Modifier) {
                 strokeWidth = 4f
             )
         }
-        // Signature squiggle
         val sig = Path().apply {
             moveTo(lineX, paperTop + paperH * 0.72f)
             quadraticBezierTo(lineX + lineWidth * 0.2f, paperTop + paperH * 0.62f, lineX + lineWidth * 0.4f, paperTop + paperH * 0.72f)
@@ -286,7 +289,6 @@ private fun LetterIllustration(modifier: Modifier = Modifier) {
         }
         drawPath(sig, color = UrPink, style = Stroke(width = 3f))
 
-        // Pen -- diagonal sa kanang ibaba
         val penPath = Path().apply {
             moveTo(paperLeft + paperW * 0.55f, paperTop + paperH * 0.95f)
             lineTo(paperLeft + paperW * 0.85f, paperTop + paperH * 0.45f)
@@ -460,17 +462,18 @@ private fun LettersHubContent(
 
             Spacer(Modifier.height(20.dp))
         }
-    Row(
-     modifier = Modifier
-        .fillMaxWidth()
-        .padding(horizontal = 12.dp, vertical = 8.dp)
-        .clip(RoundedCornerShape(24.dp))
-        .background(Color(0xFF0A0A0A))
-        .border(
-            BorderStroke(1.5.dp, Brush.linearGradient(listOf(UrPink, UrGreen))),
-            RoundedCornerShape(24.dp)
-        )
-        .padding(vertical = 10.dp),
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 12.dp, vertical = 8.dp)
+                .clip(RoundedCornerShape(24.dp))
+                .background(Color(0xFF0A0A0A))
+                .border(
+                    BorderStroke(1.5.dp, Brush.linearGradient(listOf(UrPink, UrGreen))),
+                    RoundedCornerShape(24.dp)
+                )
+                .padding(vertical = 10.dp),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             BottomNavItem(Icons.Filled.Home, "Home", false) { onNavigate("home") }
