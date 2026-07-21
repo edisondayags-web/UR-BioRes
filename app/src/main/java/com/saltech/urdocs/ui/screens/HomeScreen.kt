@@ -40,7 +40,7 @@ fun HomeScreen(
     val items = listOf(
         HomeMenuItem("📄", "RESUME", "Pang BPO/Office etc • Professional CV", "resume"),
         HomeMenuItem("📝", "BIO-DATA", "Pang Company/Store etc. • PH Job Application", "biodata"),
-        HomeMenuItem("🏛️", "GOV'T WEBSITES", "All Links You Want andito na lahat as in lahat", "govtforms"),
+        HomeMenuItem("🏛️", "GOV'T WEBSITES", "All Links You Want", "govt_forms"),
         HomeMenuItem("✉️", "LETTERS", "Leave, Excuse, Resign, etc.", "letters")
     )
 
