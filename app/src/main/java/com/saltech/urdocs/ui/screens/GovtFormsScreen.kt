@@ -444,7 +444,10 @@ fun GovtFormsScreen(
                         .padding(bottom = 12.dp)
                         .clip(RoundedCornerShape(16.dp))
                         .background(GCardBg)
-                        .border(1.dp, GPink, RoundedCornerShape(16.dp))
+                        .border(
+                            BorderStroke(1.dp, Brush.horizontalGradient(listOf(GPink, GGreen))),
+                            RoundedCornerShape(16.dp)
+                        )
                 ) {
                     Row(
                         modifier = Modifier
@@ -459,16 +462,17 @@ fun GovtFormsScreen(
                             .padding(14.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
+                        val badgeColor = if (category.index % 2 == 1) GPink else GGreen
                         Box(
                             modifier = Modifier
                                 .size(26.dp)
                                 .clip(CircleShape)
-                                .border(1.dp, GPink, CircleShape),
+                                .border(1.dp, badgeColor, CircleShape),
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
                                 "${category.index}",
-                                color = GPink,
+                                color = badgeColor,
                                 fontSize = 12.sp,
                                 fontWeight = FontWeight.Bold
                             )
@@ -484,12 +488,12 @@ fun GovtFormsScreen(
                         Box(
                             modifier = Modifier
                                 .clip(RoundedCornerShape(50))
-                                .border(1.dp, GGreen, RoundedCornerShape(50))
+                                .border(1.dp, if (category.index % 2 == 1) GGreen else GPink, RoundedCornerShape(50))
                                 .padding(horizontal = 10.dp, vertical = 3.dp)
                         ) {
                             Text(
                                 "${category.links.size}",
-                                color = GGreen,
+                                color = if (category.index % 2 == 1) GGreen else GPink,
                                 fontSize = 11.sp,
                                 fontWeight = FontWeight.Bold
                             )
