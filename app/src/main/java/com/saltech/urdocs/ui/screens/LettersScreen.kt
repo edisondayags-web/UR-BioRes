@@ -63,8 +63,8 @@ fun LettersScreen(
         AnimatedContent(
             targetState = screenState,
             transitionSpec = {
-                (slideInHorizontally(initialOffsetX = { it / 3 }) { it } + fadeIn(animationSpec = tween(300)))
-                    .togetherWith(slideOutHorizontally(targetOffsetX = { -it / 3 }) { it } + fadeOut(animationSpec = tween(300)))
+                (slideInHorizontally(initialOffsetX = { it / 3 }) + fadeIn(animationSpec = tween(300)))
+                    .togetherWith(slideOutHorizontally(targetOffsetX = { -it / 3 }) + fadeOut(animationSpec = tween(300)))
             },
             label = "lettersScreenTransition"
         ) { state ->
