@@ -22,6 +22,9 @@ import com.saltech.urdocs.R
 import com.saltech.urdocs.ui.theme.UrGray
 import com.saltech.urdocs.ui.theme.UrNeon
 import com.saltech.urdocs.ui.theme.UrPink
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.runtime.remember
+import com.saltech.urdocs.ui.theme.pressScale
 
 data class HomeMenuItem(
     val emoji: String,
@@ -99,12 +102,14 @@ fun HomeScreen(
 
 @Composable
 private fun HomeMenuCard(item: HomeMenuItem, onClick: () -> Unit) {
+    val interactionSource = remember { MutableInteractionSource() }
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .pressScale(interactionSource)
             .clip(RoundedCornerShape(16.dp))
             .background(UrGray)
-            .clickable { onClick() }
+            .clickable(interactionSource = interactionSource, indication = null) { onClick() }
             .padding(20.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
