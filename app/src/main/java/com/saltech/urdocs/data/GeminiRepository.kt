@@ -11,7 +11,7 @@ import java.net.URL
 
 class GeminiRepository {
 
-    private val model = "deepseek/deepseek-chat-v3.1:free"
+    private val model = "meta-llama/llama-3.3-70b-instruct:free"
 
     private val letterPrompts = mapOf(
         "LEAVE" to "Sumulat ng propesyonal na Leave Letter (Tagalog-English business tone)",
