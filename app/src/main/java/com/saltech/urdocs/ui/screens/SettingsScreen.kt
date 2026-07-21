@@ -130,6 +130,7 @@ fun SettingsScreen(
                         sectionItems.forEachIndexed { index, itemData ->
                             SettingsItemRow(
                                 item = itemData,
+                                accentColor = if (index % 2 == 0) SettingsColors.NeonPink else SettingsColors.NeonGreen,
                                 onClick = {
                                     if (itemData.enabled && itemData.route != null) {
                                         onNavigate(itemData.route)
@@ -217,7 +218,7 @@ private fun SettingsSectionHeader(title: String) {
 }
 
 @Composable
-private fun SettingsItemRow(item: SettingsItemData, onClick: () -> Unit) {
+private fun SettingsItemRow(item: SettingsItemData, accentColor: Color = SettingsColors.NeonPink, onClick: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -229,20 +230,20 @@ private fun SettingsItemRow(item: SettingsItemData, onClick: () -> Unit) {
             modifier = Modifier
                 .size(40.dp)
                 .clip(RoundedCornerShape(10.dp))
-                .border(1.dp, SettingsColors.NeonPink, RoundedCornerShape(10.dp)),
+                .background(Color(0xFF1A1A1A))
+                .border(1.dp, accentColor, RoundedCornerShape(10.dp)),
             contentAlignment = Alignment.Center
         ) {
             Text(item.icon, fontSize = 16.sp)
         }
         Spacer(Modifier.width(14.dp))
         Column(modifier = Modifier.weight(1f)) {
-            Text(item.title, color = SettingsColors.NeonPink, fontSize = 15.sp, fontWeight = FontWeight.Bold)
+            Text(item.title, color = accentColor, fontSize = 15.sp, fontWeight = FontWeight.Bold)
             Text(item.subtitle, color = SettingsColors.TextWhite, fontSize = 12.sp)
         }
-        Text("›", color = SettingsColors.NeonPink, fontSize = 22.sp, fontWeight = FontWeight.Bold)
+        Text("›", color = accentColor, fontSize = 22.sp, fontWeight = FontWeight.Bold)
     }
 }
-
 @Composable
 private fun SettingsQuoteFooter() {
     Column(
@@ -263,6 +264,6 @@ private fun SettingsQuoteFooter() {
         )
         Text("SAL-TECH. 😁", color = SettingsColors.NeonPink, fontSize = 12.sp, fontWeight = FontWeight.Bold)
         Spacer(Modifier.height(6.dp))
-        Text("Just a meme, walang halong seriosong sinasabi. Peace! ✌️", color = SettingsColors.TextMuted, fontSize = 11.sp)
+        Text("Ayg pataka diha ka inspirasyon basig walopon ko na imong sampot! ✌️", color = SettingsColors.TextMuted, fontSize = 11.sp)
     }
 }
