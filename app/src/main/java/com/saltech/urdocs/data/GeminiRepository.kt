@@ -9,12 +9,6 @@ import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
 
-/**
- * TESTING MODE: Direktang tumatawag sa Gemini API gamit ang BuildConfig key
- * (nasa local.properties, hindi committed sa GitHub).
- * TODO: Ibalik sa Firebase Cloud Function proxy bago i-release publicly,
- * para hindi ma-extract ang API key sa APK.
- */
 class GeminiRepository {
 
     private val letterPrompts = mapOf(
@@ -355,6 +349,43 @@ class GeminiRepository {
                 .getString("text")
         } catch (e: Exception) {
             "Walang na-generate na letter. Subukan ulit."
+        }
+    }
+
+    suspend fun chat(history: List<Pair<String, String>>): String = withContext(Dispatchers.IO) {
+        val contents = JSONArray()
+        history.forEach { (role, text) ->
+            contents.put(JSONObject().apply {
+                put("role", role)
+                put("parts", JSONArray().put(JSONObject().put("text", text)))
+            })
+        }
+        val body = JSONObject().apply {
+            put("system_instruction", JSONObject().apply {
+                put("parts", JSONArray().put(JSONObject().put("text", systemInstruction)))
+            })
+            put("contents", contents)
+        }
+        val apiKey = BuildConfig.GEMINI_API_KEY
+        val url = URL("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=$apiKey")
+        val connection = (url.openConnection() as HttpURLConnection).apply {
+            requestMethod = "POST"
+            setRequestProperty("Content-Type", "application/json")
+            doOutput = true
+            connectTimeout = 30000
+            readTimeout = 30000
+        }
+        connection.outputStream.use { it.write(body.toString().toByteArray()) }
+        val responseCode = connection.responseCode
+        val stream = if (responseCode in 200..299) connection.inputStream else connection.errorStream
+        val responseText = stream.bufferedReader().use { it.readText() }
+        if (responseCode !in 200..299) return@withContext "Error ($responseCode): $responseText"
+        val json = JSONObject(responseText)
+        return@withContext try {
+            json.getJSONArray("candidates").getJSONObject(0).getJSONObject("content")
+                .getJSONArray("parts").getJSONObject(0).getString("text")
+        } catch (e: Exception) {
+            "Walang sagot. Subukan ulit."
         }
     }
 }
