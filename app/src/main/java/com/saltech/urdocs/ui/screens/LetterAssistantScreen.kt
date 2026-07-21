@@ -30,6 +30,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
+import androidx.compose.animation.core.*
 
 private val UrPink = Color(0xFFFF2E7E)
 private val UrGreen = Color(0xFF39FF6A)
