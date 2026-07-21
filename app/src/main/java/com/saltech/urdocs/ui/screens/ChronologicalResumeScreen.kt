@@ -278,7 +278,7 @@ fun ChronologicalResumeScreen() {
             }
         }
 
-        // Download button -- laging nakikita, hindi kasama sa zoom/pan
+        // Download button -- laging nakikita, hindi kasama sa zoom/pan, nasa baba na (para sa ads sa taas)
         Button(
             onClick = {
                 scale = fitScale
@@ -296,10 +296,22 @@ fun ChronologicalResumeScreen() {
                     saveBitmapToGalleryChrono(context, bitmap)
                 }
             },
-            modifier = Modifier.align(Alignment.TopEnd).padding(16.dp)
-        ) { Text("Download") }
+            colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+            contentPadding = PaddingValues(0.dp),
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp, vertical = 14.dp)
+                .clip(androidx.compose.foundation.shape.RoundedCornerShape(24.dp))
+                .background(
+                    androidx.compose.ui.graphics.Brush.horizontalGradient(
+                        listOf(Color(0xFFFF2E7E), Color(0xFF1A1A1A), Color(0xFF39FF6A))
+                    )
+                )
+        ) { Text("Download", color = Color.White, fontWeight = FontWeight.Bold) }
     }
 }
+        
 
 private fun saveBitmapToGalleryChrono(context: android.content.Context, bitmap: Bitmap) {
     val filename = "Resume_Chronological_${System.currentTimeMillis()}.png"
