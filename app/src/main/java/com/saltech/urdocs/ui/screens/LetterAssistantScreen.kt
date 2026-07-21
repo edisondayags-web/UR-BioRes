@@ -152,7 +152,7 @@ fun LetterAssistantScreen(
                 }
             }
         }
-    
+        }
         Row(
             modifier = Modifier
                 .fillMaxWidth()
