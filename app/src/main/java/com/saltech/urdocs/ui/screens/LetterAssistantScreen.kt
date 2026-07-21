@@ -178,8 +178,9 @@ fun LetterAssistantScreen(
                     focusedTextColor = Color.White,
                     unfocusedTextColor = Color.White
                 ),
-                singleLine = true,
+                
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
+                maxLines = 5,
                 enabled = !isTyping
             )
             Box(
