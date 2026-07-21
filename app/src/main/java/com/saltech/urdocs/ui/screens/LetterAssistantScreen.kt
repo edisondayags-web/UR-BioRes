@@ -18,6 +18,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.scale
+import androidx.compose.foundation.Canvas
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -146,7 +151,7 @@ fun LetterAssistantScreen(
                         Box(
                             modifier = Modifier.clip(RoundedCornerShape(16.dp)).background(UrBubbleDark).padding(14.dp)
                         ) {
-                            TypingDots()
+                            ThinkingIndicator()
                         }
                     }
                 }
@@ -190,6 +195,76 @@ fun LetterAssistantScreen(
             ) {
                 Icon(Icons.Filled.Send, contentDescription = "Send", tint = Color.White, modifier = Modifier.size(18.dp))
             }
+        }
+    }
+}
+
+@Composable
+private fun ThinkingIndicator() {
+    val transition = rememberInfiniteTransition(label = "thinking")
+
+    val ringRotation by transition.animateFloat(
+        initialValue = 0f, targetValue = 360f,
+        animationSpec = infiniteRepeatable(
+            animation = androidx.compose.animation.core.tween(2200, easing = androidx.compose.animation.core.LinearEasing)
+        ), label = "ringRotation"
+    )
+
+    val pulse by transition.animateFloat(
+        initialValue = 0.85f, targetValue = 1.15f,
+        animationSpec = infiniteRepeatable(
+            animation = androidx.compose.animation.core.tween(900, easing = androidx.compose.animation.core.FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ), label = "pulse"
+    )
+
+    val textAlpha by transition.animateFloat(
+        initialValue = 0.35f, targetValue = 1f,
+        animationSpec = infiniteRepeatable(
+            animation = androidx.compose.animation.core.tween(800),
+            repeatMode = RepeatMode.Reverse
+        ), label = "textAlpha"
+    )
+
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Box(
+            modifier = Modifier
+                .width(3.dp)
+                .height(22.dp)
+                .background(Brush.verticalGradient(listOf(Color(0xFF0A3D1F), Color.Black)))
+        )
+        Spacer(Modifier.width(8.dp))
+        Column {
+            Text("Thinking...", color = UrGray.copy(alpha = textAlpha), fontSize = 12.sp)
+            Spacer(Modifier.height(4.dp))
+            TypingDots()
+        }
+        Spacer(Modifier.width(10.dp))
+        Box(
+            modifier = Modifier.size(30.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Canvas(modifier = Modifier.matchParentSize().rotate(ringRotation)) {
+                val stroke = 2.dp.toPx()
+                drawArc(
+                    color = UrPink,
+                    startAngle = 0f, sweepAngle = 110f,
+                    useCenter = false,
+                    style = Stroke(width = stroke, cap = StrokeCap.Round)
+                )
+                drawArc(
+                    color = UrGreen,
+                    startAngle = 180f, sweepAngle = 110f,
+                    useCenter = false,
+                    style = Stroke(width = stroke, cap = StrokeCap.Round)
+                )
+            }
+            Icon(
+                Icons.Filled.Psychology,
+                contentDescription = null,
+                tint = UrGreen,
+                modifier = Modifier.size(16.dp).scale(pulse)
+            )
         }
     }
 }
