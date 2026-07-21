@@ -24,10 +24,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.saltech.urdocs.model.LetterRequest
+import com.saltech.urdocs.data.GeminiRepository
 import com.saltech.urdocs.model.LetterType
-import com.saltech.urdocs.viewmodel.LettersViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -43,113 +42,56 @@ data class ChatMessage(
     val time: String = SimpleDateFormat("h:mm a", Locale.getDefault()).format(Date())
 )
 
-private enum class ChatStep { ASK_REASON, ASK_NAME_POSITION, GENERATING, DONE }
-
-private fun quickRepliesFor(type: LetterType): List<Pair<String, String>> = when {
-    type.name.contains("LEAVE") -> listOf(
-        "Sick Leave" to "heart", "Vacation Leave" to "beach",
-        "Personal Leave" to "person", "Other" to "dots"
-    )
-    type.name.contains("EXCUSE") -> listOf(
-        "Medical" to "heart", "Family Emergency" to "person",
-        "Traffic/Weather" to "beach", "Other" to "dots"
-    )
-    type.name.contains("RESIGNATION") -> listOf(
-        "Immediate" to "dots", "2 Weeks Notice" to "beach",
-        "1 Month Notice" to "person", "Other" to "dots"
-    )
-    else -> listOf("Standard Request" to "person", "Other" to "dots")
-}
-
-@Composable
-private fun QuickReplyIcon(key: String, tint: Color) {
-    val icon = when (key) {
-        "heart" -> Icons.Filled.Favorite
-        "beach" -> Icons.Filled.BeachAccess
-        "person" -> Icons.Filled.Person
-        else -> Icons.Filled.MoreHoriz
-    }
-    Icon(icon, contentDescription = null, tint = tint, modifier = Modifier.size(16.dp))
-}
-
 @Composable
 fun LetterAssistantScreen(
     letterType: LetterType,
     onBack: () -> Unit,
-    viewModel: LettersViewModel = viewModel()
+    repository: GeminiRepository = remember { GeminiRepository() }
 ) {
     val scope = rememberCoroutineScope()
-    val uiState by viewModel.uiState.collectAsState()
     val listState = rememberLazyListState()
 
-    var messages by remember {
-        mutableStateOf(
-            listOf(
-                ChatMessage(
-                    text = "Hi! I'll help you create a professional ${letterType.label}.\n\nAno ang klase/rason nito?",
-                    isUser = false
-                )
-            )
-        )
-    }
-    var step by remember { mutableStateOf(ChatStep.ASK_REASON) }
-    var showQuickReplies by remember { mutableStateOf(true) }
+    var messages by remember { mutableStateOf(listOf<ChatMessage>()) }
+    var history by remember { mutableStateOf(listOf<Pair<String, String>>()) }
     var inputText by remember { mutableStateOf("") }
-    var collectedReason by remember { mutableStateOf("") }
+    var isTyping by remember { mutableStateOf(false) }
+    var started by remember { mutableStateOf(false) }
 
     fun addMessage(text: String, isUser: Boolean) {
         messages = messages + ChatMessage(text = text, isUser = isUser)
     }
 
+    fun sendToGemini(userText: String?) {
+        scope.launch {
+            isTyping = true
+            if (userText != null) {
+                history = history + ("user" to userText)
+            }
+            delay(600 + (200..900).random().toLong())
+            val reply = repository.chat(history)
+            history = history + ("model" to reply)
+            isTyping = false
+            addMessage(reply, isUser = false)
+        }
+    }
+
     fun handleUserInput(text: String) {
-        if (text.isBlank()) return
+        if (text.isBlank() || isTyping) return
         addMessage(text, isUser = true)
-        showQuickReplies = false
         inputText = ""
+        sendToGemini(text)
+    }
 
-        when (step) {
-            ChatStep.ASK_REASON -> {
-                collectedReason = text
-                step = ChatStep.ASK_NAME_POSITION
-                addMessage(
-                    "Got it! Gagawa ako ng ${letterType.label.lowercase()} para dito: \"$text\".\n\nPakisulat ang buong pangalan at position mo (hal. \"Juan Dela Cruz, Staff\").",
-                    isUser = false
-                )
-            }
-            ChatStep.ASK_NAME_POSITION -> {
-                val parts = text.split(",")
-                val fullName = parts.getOrNull(0)?.trim() ?: text.trim()
-                val position = parts.getOrNull(1)?.trim() ?: ""
-                step = ChatStep.GENERATING
-                addMessage("Perfect, ginagawa na ang letter mo... ✨", isUser = false)
-
-                scope.launch {
-                    viewModel.generate(
-                        LetterRequest(
-                            type = letterType,
-                            fullName = fullName,
-                            position = position,
-                            company = "",
-                            reason = collectedReason,
-                            dateNeeded = "",
-                            extraDetails = ""
-                        )
-                    )
-                }
-            }
-            else -> {}
+    LaunchedEffect(Unit) {
+        if (!started) {
+            started = true
+            sendToGemini("Gusto ko ng ${letterType.label}.")
         }
     }
 
-    LaunchedEffect(uiState.generatedLetter) {
-        uiState.generatedLetter?.let { letter ->
-            addMessage(letter, isUser = false)
-            step = ChatStep.DONE
-        }
-    }
-    LaunchedEffect(uiState.error) {
-        uiState.error?.let { err ->
-            addMessage("Pasensya na, may problema: $err\n\nSubukan mo ulit.", isUser = false)
+    LaunchedEffect(messages.size, isTyping) {
+        if (messages.isNotEmpty() || isTyping) {
+            listState.animateScrollToItem((messages.size - 1 + if (isTyping) 1 else 0).coerceAtLeast(0))
         }
     }
 
@@ -193,45 +135,19 @@ fun LetterAssistantScreen(
             verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
             items(messages) { msg -> ChatBubble(msg) }
-            if (step == ChatStep.GENERATING && uiState.isLoading) {
+            if (isTyping) {
                 item {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         AssistantAvatar()
                         Spacer(Modifier.width(10.dp))
-                        CircularProgressIndicator(color = UrGreen, modifier = Modifier.size(18.dp), strokeWidth = 2.dp)
-                        Spacer(Modifier.width(8.dp))
-                        Text("Gumagawa ng letter...", color = UrGray, fontSize = 12.sp)
-                    }
-                }
-            }
-            if (showQuickReplies && step == ChatStep.ASK_REASON) {
-                val opts = quickRepliesFor(letterType)
-                items(opts.chunked(2)) { rowItems ->
-                    Row(
-                        modifier = Modifier.fillMaxWidth().padding(start = 44.dp),
-                        horizontalArrangement = Arrangement.spacedBy(10.dp)
-                    ) {
-                        rowItems.forEach { (label, iconKey) ->
-                            Row(
-                                modifier = Modifier
-                                    .clip(RoundedCornerShape(20.dp))
-                                    .border(1.dp, UrPink, RoundedCornerShape(20.dp))
-                                    .clickable { handleUserInput(label) }
-                                    .padding(horizontal = 14.dp, vertical = 8.dp),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                QuickReplyIcon(iconKey, UrPink)
-                                Spacer(Modifier.width(6.dp))
-                                Text(label, color = Color.White, fontSize = 12.sp)
-                            }
+                        Box(
+                            modifier = Modifier.clip(RoundedCornerShape(16.dp)).background(UrBubbleDark).padding(14.dp)
+                        ) {
+                            TypingDots()
                         }
                     }
                 }
             }
-        }
-
-        LaunchedEffect(messages.size) {
-            if (messages.isNotEmpty()) listState.animateScrollToItem(messages.size - 1)
         }
 
         Row(
@@ -261,15 +177,38 @@ fun LetterAssistantScreen(
                 ),
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
-                enabled = step != ChatStep.GENERATING && step != ChatStep.DONE
+                enabled = !isTyping
             )
             Box(
                 modifier = Modifier.size(38.dp).clip(CircleShape).background(UrPink)
-                    .clickable(enabled = inputText.isNotBlank()) { handleUserInput(inputText) },
+                    .clickable(enabled = inputText.isNotBlank() && !isTyping) { handleUserInput(inputText) },
                 contentAlignment = Alignment.Center
             ) {
                 Icon(Icons.Filled.Send, contentDescription = "Send", tint = Color.White, modifier = Modifier.size(18.dp))
             }
+        }
+    }
+}
+
+@Composable
+private fun TypingDots() {
+    val transition = rememberInfiniteTransition(label = "typing")
+    Row {
+        repeat(3) { i ->
+            val alpha by transition.animateFloat(
+                initialValue = 0.3f, targetValue = 1f,
+                animationSpec = infiniteRepeatable(
+                    animation = androidx.compose.animation.core.tween(500, delayMillis = i * 150),
+                    repeatMode = RepeatMode.Reverse
+                ), label = "dot$i"
+            )
+            Box(
+                modifier = Modifier
+                    .padding(horizontal = 2.dp)
+                    .size(6.dp)
+                    .clip(CircleShape)
+                    .background(UrGreen.copy(alpha = alpha))
+            )
         }
     }
 }
