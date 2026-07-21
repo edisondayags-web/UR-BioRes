@@ -32,7 +32,7 @@ private val RGray = Color(0xFF9A9A9A)
 fun ResumeChoiceScreen(onChoose: (String) -> Unit) {
     Box(modifier = Modifier.fillMaxSize().background(Color.Black)) {
         Image(
-            painter = painterResource(id = R.drawable.home_hero_bg),
+            painter = painterResource(id = R.drawable.ic_launcher_bg),
             contentDescription = null,
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop
