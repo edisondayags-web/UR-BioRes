@@ -149,9 +149,97 @@ private val govtCategories = listOf(
             GovtLink(39, "COMELEC", "https://comelec.gov.ph/", "COM"),
             GovtLink(40, "MMDA", "https://www.mmda.gov.ph/", "MMDA")
         )
-    )
-)
+    ),
+    GovtCategory(
+        9,
+        "idagdag pa",
+        listOf(
+          GovtLink(41, "Police Clearance", "https://pnpclearance.ph/", "PNP"),
+          GovtLink(42, "National ID", "https://national-id.gov.ph/", "ID"),
+          GovtLink(43, "eGovPH", "https://egovph.ph/", "EGOV"),
+          GovtLink(44, "PSA Serbilis", "https://psaserbilis.com.ph/", "PSA")
+          
+          )
+     ),
+    GovtCategory(
+        10,
+        "kulang",
+        listOf(
+           GovtLink(45, "DOJ", "https://doj.gov.ph/", "DOJ"),
+           GovtLink(46, "Supreme Court", "https://sc.judiciary.gov.ph/", "SC"),
+           GovtLink(47, "PAO", "https://pao.gov.ph/", "PAO")
 
+             )
+        ),
+    GovtCategory(
+        11,
+        listOf(
+        "idagdag pa",
+        listOf(
+           GovtLink(48, "GSIS", "https://www.gsis.gov.ph/", "GSIS"),
+           GovtLink(49, "DSWD", "https://www.dswd.gov.ph/", "DSWD")
+           
+            )
+        ),
+    GovtCategory(
+        12,
+        listOf(
+        "pahabol",
+          GovtLink(50, "LTFRB", "https://ltfrb.gov.ph/", "LTF"),
+          GovtLink(51, "MARINA", "https://marina.gov.ph/", "MAR"),
+          GovtLink(52, "CAAP", "https://caap.gov.ph/", "CAA"),
+          GovtLink(53, "PCG", "https://coastguard.gov.ph/", "PCG")
+          
+        )
+    ),
+GovtCategory(
+    13,
+    listOf(
+    "pahabol",
+    GovtLink(54, "eTravel", "https://etravel.gov.ph/", "ET"),
+    GovtLink(55, "Department of Tourism", "https://beta.tourism.gov.ph/", "DOT")
+
+    )
+),
+GovtCategory(
+    14,
+    listOf(
+    "kulang",
+    GovtLink(56, "Department of Agriculture", "https://www.da.gov.ph/", "DA"),
+    GovtLink(57, "DENR", "https://denr.gov.ph/", "DENR"),
+    GovtLink(58, "PAGASA", "https://bagong.pagasa.dost.gov.ph/", "PAG"),
+    GovtLink(59, "PHIVOLCS", "https://www.phivolcs.dost.gov.ph/", "PHI")
+
+    )
+),
+GovtCategory(
+    15,
+    listOf(
+    "kukang din",
+    GovtLink(60, "DOST", "https://www.dost.gov.ph/", "DOST"),
+    GovtLink(61, "DICT", "https://dict.gov.ph/", "DICT")
+
+       )
+   )
+   GovtCategory(
+       16,
+       listOf(
+     GovtLink(62, "ARTA", "https://arta.gov.ph/", "ARTA"),
+     GovtLink(63, "8888 Citizens' Complaint", "https://8888.gov.ph/", "8888"),
+     GovtLink(64, "Civil Service Commission", "https://csc.gov.ph/", "CSC")
+
+           )
+       ),
+        GovtCategory(
+            17,
+            listOf(
+              GovtLink(65, "Philippine Heart Center", "https://www.phc.gov.ph/", "PHC"),
+              GovtLink(66, "Lung Center", "https://lcp.gov.ph/", "LCP"),
+              GovtLink(67, "NKTI", "https://www.nkti.gov.ph/", "NKTI")
+               )
+            ),
+        )
+   
 private val categoryFilters = listOf(
     CategoryFilter("All", Icons.Filled.GridView, null, GGreen),
     CategoryFilter("Big 5", Icons.Filled.Star, 1, GPink),
@@ -306,7 +394,7 @@ fun GovtFormsScreen(
                 onValueChange = { query = it },
                 placeholder = {
                     Text(
-                        "Ano hahanapin mo luv?",
+                        "Type mo lang unang letter na hahanapin mo luv🩵",
                         color = GGray,
                         fontSize = 13.sp
                     )
