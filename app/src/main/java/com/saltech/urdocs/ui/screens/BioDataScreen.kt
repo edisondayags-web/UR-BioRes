@@ -21,6 +21,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
@@ -319,65 +320,78 @@ fun BioDataScreen(
                 }
             }
         }
-
-        // Retake + Upload -- floating, LABAS ng papel, hindi kasama sa download.
-        Row(
+// Retake + Upload + Download -- floating, LABAS ng papel, nasa BABA (para sa ads sa taas).
+        Column(
             modifier = Modifier
-                .align(Alignment.TopStart)
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
+                .align(Alignment.BottomCenter)
+                .fillMaxWidth()
+                .background(Color.Black)
+                .padding(horizontal = 20.dp, vertical = 12.dp)
         ) {
-            if (displaySelfie != null) {
-                Text(
-                    "🔄 Retake",
-                    fontSize = 14.sp,
-                    color = Color.Blue,
-                    modifier = Modifier.clickable { onTakeSelfie() }
-                )
-            }
             Text(
-                "📤 Upload",
-                fontSize = 14.sp,
-                color = Color.Blue,
-                modifier = Modifier.clickable { uploadLauncher.launch("image/*") }
+                "luv pag itap mo yang Download ay automatically nasa gallery muna",
+                fontSize = 10.sp,
+                color = Color.Gray,
+                modifier = Modifier.fillMaxWidth(),
             )
-        }
-
-        Text(
-            "luv pag itap mo yang Download ay automatically nasa gallery muna",
-            fontSize = 10.sp,
-            color = Color.Gray,
-            modifier = Modifier
-                .align(Alignment.TopCenter)
-                .padding(top = 4.dp)
-        )
-
-        Button(
-            onClick = {
-                scale = fitScale
-                offset = Offset.Zero
-                coroutineScope.launch {
-                    delay(100)
-                    val bitmap = Bitmap.createBitmap(
-                        picture.width.coerceAtLeast(1),
-                        picture.height.coerceAtLeast(1),
-                        Bitmap.Config.ARGB_8888
-                    )
-                    val canvas = android.graphics.Canvas(bitmap)
-                    canvas.drawColor(android.graphics.Color.WHITE)
-                    canvas.drawPicture(picture)
-                    saveBitmapToGallery(context, bitmap)
+            Spacer(Modifier.height(10.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .clip(androidx.compose.foundation.shape.RoundedCornerShape(24.dp))
+                        .border(1.5.dp, Color(0xFF39FF6A), androidx.compose.foundation.shape.RoundedCornerShape(24.dp))
+                        .clickable { uploadLauncher.launch("image/*") }
+                        .padding(horizontal = 18.dp, vertical = 10.dp)
+                ) {
+                    Text("📤", fontSize = 16.sp)
+                    Spacer(Modifier.width(6.dp))
+                    Text("Upload", fontSize = 14.sp, fontWeight = FontWeight.Bold, color = Color(0xFF39FF6A))
+                    if (displaySelfie != null) {
+                        Spacer(Modifier.width(12.dp))
+                        Text("🔄 Retake", fontSize = 13.sp, color = Color(0xFFFF2E7E), modifier = Modifier.clickable { onTakeSelfie() })
+                    }
                 }
-            },
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(16.dp)
-        ) {
-            Text("Download")
+
+                Button(
+                    onClick = {
+                        scale = fitScale
+                        offset = Offset.Zero
+                        coroutineScope.launch {
+                            delay(100)
+                            val bitmap = Bitmap.createBitmap(
+                                picture.width.coerceAtLeast(1),
+                                picture.height.coerceAtLeast(1),
+                                Bitmap.Config.ARGB_8888
+                            )
+                            val canvas = android.graphics.Canvas(bitmap)
+                            canvas.drawColor(android.graphics.Color.WHITE)
+                            canvas.drawPicture(picture)
+                            saveBitmapToGallery(context, bitmap)
+                        }
+                    },
+                    colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+                    contentPadding = PaddingValues(0.dp),
+                    modifier = Modifier
+                        .clip(androidx.compose.foundation.shape.RoundedCornerShape(24.dp))
+                        .background(
+                            androidx.compose.ui.graphics.Brush.horizontalGradient(
+                                listOf(Color(0xFFFF2E7E), Color(0xFF1A1A1A), Color(0xFF39FF6A))
+                            )
+                        )
+                ) {
+                    Box(modifier = Modifier.padding(horizontal = 20.dp, vertical = 4.dp)) {
+                        Text("Download", color = Color.White, fontWeight = FontWeight.Bold)
+                    }
+                }
+            }
         }
     }
 }
-
 private fun saveBitmapToGallery(context: android.content.Context, bitmap: Bitmap) {
     val filename = "BioData_${System.currentTimeMillis()}.png"
     val contentValues = ContentValues().apply {
