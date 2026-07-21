@@ -67,7 +67,7 @@ fun ResumeChoiceScreen(onChoose: (String) -> Unit) {
             Spacer(Modifier.height(16.dp))
 
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().scale(1.1f),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Box(
