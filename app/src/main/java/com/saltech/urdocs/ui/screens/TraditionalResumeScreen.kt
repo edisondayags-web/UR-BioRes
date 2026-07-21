@@ -334,33 +334,63 @@ fun TraditionalResumeScreen(
             }
         }
         Row(
-            modifier = Modifier.align(Alignment.TopStart).padding(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .fillMaxWidth()
+                .background(Color.Black)
+                .padding(horizontal = 20.dp, vertical = 14.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            if (displaySelfie != null) {
-                Text("🔄 Retake", fontSize = 14.sp, color = Color.Blue, modifier = Modifier.clickable { onTakeSelfie() })
-            }
-            Text("📤 Upload", fontSize = 14.sp, color = Color.Blue, modifier = Modifier.clickable { uploadLauncher.launch("image/*") })
-}
-        Button(
-            onClick = {
-                scale = fitScale
-                offset = Offset.Zero
-                coroutineScope.launch {
-                    delay(100)
-                    val bitmap = Bitmap.createBitmap(
-                        picture.width.coerceAtLeast(1),
-                        picture.height.coerceAtLeast(1),
-                        Bitmap.Config.ARGB_8888
-                    )
-                    val canvas = android.graphics.Canvas(bitmap)
-                    canvas.drawColor(android.graphics.Color.WHITE)
-                    canvas.drawPicture(picture)
-                    saveBitmapToGalleryTraditional(context, bitmap)
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .clip(androidx.compose.foundation.shape.RoundedCornerShape(24.dp))
+                    .border(1.5.dp, Color(0xFF39FF6A), androidx.compose.foundation.shape.RoundedCornerShape(24.dp))
+                    .clickable { uploadLauncher.launch("image/*") }
+                    .padding(horizontal = 18.dp, vertical = 10.dp)
+            ) {
+                Text("📤", fontSize = 16.sp)
+                Spacer(Modifier.width(6.dp))
+                Text("Upload", fontSize = 14.sp, fontWeight = FontWeight.Bold, color = Color(0xFF39FF6A))
+                if (displaySelfie != null) {
+                    Spacer(Modifier.width(12.dp))
+                    Text("🔄 Retake", fontSize = 13.sp, color = Color(0xFFFF2E7E), modifier = Modifier.clickable { onTakeSelfie() })
                 }
-            },
-            modifier = Modifier.align(Alignment.TopEnd).padding(16.dp)
-        ) { Text("Download") }
+            }
+
+            Button(
+                onClick = {
+                    scale = fitScale
+                    offset = Offset.Zero
+                    coroutineScope.launch {
+                        delay(100)
+                        val bitmap = Bitmap.createBitmap(
+                            picture.width.coerceAtLeast(1),
+                            picture.height.coerceAtLeast(1),
+                            Bitmap.Config.ARGB_8888
+                        )
+                        val canvas = android.graphics.Canvas(bitmap)
+                        canvas.drawColor(android.graphics.Color.WHITE)
+                        canvas.drawPicture(picture)
+                        saveBitmapToGalleryTraditional(context, bitmap)
+                    }
+                },
+                colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+                contentPadding = PaddingValues(0.dp),
+                modifier = Modifier
+                    .clip(androidx.compose.foundation.shape.RoundedCornerShape(24.dp))
+                    .background(
+                        androidx.compose.ui.graphics.Brush.horizontalGradient(
+                            listOf(Color(0xFFFF2E7E), Color(0xFF1A1A1A), Color(0xFF39FF6A))
+                        )
+                    )
+            ) {
+                Box(modifier = Modifier.padding(horizontal = 20.dp, vertical = 4.dp)) {
+                    Text("Download", color = Color.White, fontWeight = FontWeight.Bold)
+                }
+            }
+        }
     }
 }
 
