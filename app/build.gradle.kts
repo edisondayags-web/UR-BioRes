@@ -25,7 +25,7 @@ android {
         versionCode = 2
         versionName = "0.2.0-TEST"
         buildConfigField("String", "GEMINI_API_KEY", "\"${localProps.getProperty("GEMINI_API_KEY", "")}\"")
-    buildConfigField("String", "OPENROUTER_API_KEY", "\"${localProps.getProperty(\"OPENROUTER_API_KEY\", \"\")}\"")
+        buildConfigField("String", "OPENROUTER_API_KEY", "\"${localProps.getProperty("OPENROUTER_API_KEY", "")}\"")
     }
 
     buildTypes {
