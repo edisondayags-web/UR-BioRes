@@ -152,7 +152,7 @@ private val govtCategories = listOf(
     ),
     GovtCategory(
         9,
-        "idagdag pa",
+        "unknown",
         listOf(
           GovtLink(41, "Police Clearance", "https://pnpclearance.ph/", "PNP"),
           GovtLink(42, "National ID", "https://national-id.gov.ph/", "ID"),
@@ -163,7 +163,7 @@ private val govtCategories = listOf(
      ),
     GovtCategory(
         10,
-        "kulang",
+        "unknown",
         listOf(
            GovtLink(45, "DOJ", "https://doj.gov.ph/", "DOJ"),
            GovtLink(46, "Supreme Court", "https://sc.judiciary.gov.ph/", "SC"),
@@ -173,7 +173,7 @@ private val govtCategories = listOf(
         ),
     GovtCategory(
         11,
-        "idagdag pa",
+        "unknown",
         listOf(
             GovtLink(48, "GSIS", "https://www.gsis.gov.ph/", "GSIS"),
             GovtLink(49, "DSWD", "https://www.dswd.gov.ph/", "DSWD")
@@ -181,7 +181,7 @@ private val govtCategories = listOf(
     ),
     GovtCategory(
         12,
-        "pahabol",
+        "unknown",
         listOf(
             GovtLink(50, "LTFRB", "https://ltfrb.gov.ph/", "LTF"),
             GovtLink(51, "MARINA", "https://marina.gov.ph/", "MAR"),
@@ -191,7 +191,7 @@ private val govtCategories = listOf(
     ),
     GovtCategory(
         13,
-        "pahabol",
+        "unknown",
         listOf(
             GovtLink(54, "eTravel", "https://etravel.gov.ph/", "ET"),
             GovtLink(55, "Department of Tourism", "https://beta.tourism.gov.ph/", "DOT")
@@ -199,7 +199,7 @@ private val govtCategories = listOf(
     ),
     GovtCategory(
         14,
-        "kulang",
+        "unknown",
         listOf(
             GovtLink(56, "Department of Agriculture", "https://www.da.gov.ph/", "DA"),
             GovtLink(57, "DENR", "https://denr.gov.ph/", "DENR"),
@@ -209,7 +209,7 @@ private val govtCategories = listOf(
     ),
     GovtCategory(
         15,
-        "kukang din",
+        "unknown",
         listOf(
             GovtLink(60, "DOST", "https://www.dost.gov.ph/", "DOST"),
             GovtLink(61, "DICT", "https://dict.gov.ph/", "DICT")
@@ -335,7 +335,7 @@ fun GovtFormsScreen(
                 onValueChange = { query = it },
                 placeholder = {
                     Text(
-                        "Type mo lang unang letter na hahanapin mo luv🩵",
+                        "search🔍",
                         color = GGray,
                         fontSize = 13.sp
                     )
