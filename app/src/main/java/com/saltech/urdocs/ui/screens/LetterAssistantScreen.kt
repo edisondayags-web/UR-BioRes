@@ -101,6 +101,7 @@ fun LetterAssistantScreen(
         }
     }
 
+    Box(modifier = Modifier.fillMaxSize()) {
     Column(modifier = Modifier.fillMaxSize().background(Color.Black)) {
         Row(
             modifier = Modifier.fillMaxWidth().padding(16.dp),
@@ -143,19 +144,7 @@ fun LetterAssistantScreen(
                 verticalArrangement = Arrangement.spacedBy(14.dp)
             ) {
             items(messages) { msg -> ChatBubble(msg) }
-            if (isTyping) {
-                item {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        AssistantAvatar()
-                        Spacer(Modifier.width(10.dp))
-                        Box(
-                            modifier = Modifier.clip(RoundedCornerShape(16.dp)).background(UrBubbleDark).padding(14.dp)
-                        ) {
-                            ThinkingIndicator()
-                        }
-                    }
-                }
-            }
+
         }
         }
         Row(
@@ -196,6 +185,18 @@ fun LetterAssistantScreen(
                 Icon(Icons.Filled.Send, contentDescription = "Send", tint = Color.White, modifier = Modifier.size(18.dp))
             }
         }
+    }
+
+    if (isTyping) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black.copy(alpha = 0.85f)),
+            contentAlignment = Alignment.Center
+        ) {
+            ThinkingIndicator()
+        }
+    }
     }
 }
 
