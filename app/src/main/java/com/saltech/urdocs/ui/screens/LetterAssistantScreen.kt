@@ -144,6 +144,9 @@ fun LetterAssistantScreen(
                 verticalArrangement = Arrangement.spacedBy(14.dp)
             ) {
             items(messages) { msg -> ChatBubble(msg) }
+            if (isTyping) {
+                item { ThinkingBubble() }
+            }
 
         }
         }
@@ -184,17 +187,6 @@ fun LetterAssistantScreen(
             ) {
                 Icon(Icons.Filled.Send, contentDescription = "Send", tint = Color.White, modifier = Modifier.size(18.dp))
             }
-        }
-    }
-
-    if (isTyping) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Black.copy(alpha = 0.85f)),
-            contentAlignment = Alignment.Center
-        ) {
-            ThinkingIndicator()
         }
     }
     }
@@ -326,6 +318,23 @@ private fun ChatBubble(msg: ChatMessage) {
                     Icon(Icons.Filled.DoneAll, contentDescription = null, tint = Color(0xFF0A3D1F), modifier = Modifier.size(12.dp))
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun ThinkingBubble() {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Start
+    ) {
+        AssistantAvatar()
+        Spacer(Modifier.width(10.dp))
+        Column(
+            modifier = Modifier.clip(RoundedCornerShape(16.dp))
+                .background(UrBubbleDark).padding(14.dp)
+        ) {
+            ThinkingIndicator()
         }
     }
 }
