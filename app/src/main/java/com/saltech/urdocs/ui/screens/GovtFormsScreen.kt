@@ -288,11 +288,11 @@ fun GovtFormsScreen(
             .background(Color.Black)
     ) {
 
-        // ---------- HEADER ----------
+        // ---------- TOP ROW: back + search + heart ----------
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(horizontal = 16.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Box(
@@ -309,74 +309,20 @@ fun GovtFormsScreen(
                     tint = GPink
                 )
             }
-            Spacer(Modifier.width(12.dp))
-            Column(
-                modifier = Modifier.weight(1f),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Icon(
-                    Icons.Filled.AccountBalance,
-                    contentDescription = null,
-                    tint = GGreen,
-                    modifier = Modifier.size(22.dp)
-                )
-                Spacer(Modifier.height(2.dp))
-                Row {
-                    Text(
-                        "BODEGA",
-                        color = GPink,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp
-                    )
-                    Text(
-                        " NG ",
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp
-                    )
-                    Text(
-                        "LINKS",
-                        color = GGreen,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp
-                    )
-                }
-                Text(
-                    "G O V ' T   W E B S I T E S",
-                    color = GGray,
-                    fontSize = 10.sp
-                )
-            }
-            Box(
+            Spacer(Modifier.width(10.dp))
+            Row(
                 modifier = Modifier
-                    .size(40.dp)
-                    .clip(RoundedCornerShape(10.dp))
-                    .border(1.dp, GPink, RoundedCornerShape(10.dp)),
-                contentAlignment = Alignment.Center
+                    .weight(1f)
+                    .clip(RoundedCornerShape(24.dp))
+                    .background(GCardBg)
+                    .border(
+                        BorderStroke(1.5.dp, Brush.horizontalGradient(listOf(GGreen, GPink))),
+                        RoundedCornerShape(24.dp)
+                    )
+                    .padding(horizontal = 14.dp, vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(
-                    Icons.Filled.Favorite,
-                    contentDescription = null,
-                    tint = GPink,
-                    modifier = Modifier.size(20.dp)
-                )
-            }
-        }
 
-        // ---------- SEARCH BAR ----------
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-                .clip(RoundedCornerShape(24.dp))
-                .background(GCardBg)
-                .border(
-                    BorderStroke(1.5.dp, Brush.horizontalGradient(listOf(GGreen, GPink))),
-                    RoundedCornerShape(24.dp)
-                )
-                .padding(horizontal = 14.dp, vertical = 8.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
             Icon(
                 Icons.Filled.Search,
                 contentDescription = null,
@@ -412,6 +358,64 @@ fun GovtFormsScreen(
                 tint = GPink,
                 modifier = Modifier.size(20.dp)
             )
+        
+            }
+            Spacer(Modifier.width(10.dp))
+            Box(
+                modifier = Modifier
+                    .size(40.dp)
+                    .clip(RoundedCornerShape(10.dp))
+                    .border(1.dp, GPink, RoundedCornerShape(10.dp)),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    Icons.Filled.Favorite,
+                    contentDescription = null,
+                    tint = GPink,
+                    modifier = Modifier.size(20.dp)
+                )
+            }
+        }
+
+        // ---------- LOGO / TITLE ----------
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+
+                Icon(
+                    Icons.Filled.AccountBalance,
+                    contentDescription = null,
+                    tint = GGreen,
+                    modifier = Modifier.size(22.dp)
+                )
+                Spacer(Modifier.height(2.dp))
+                Row {
+                    Text(
+                        "BODEGA",
+                        color = GPink,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp
+                    )
+                    Text(
+                        " NG ",
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp
+                    )
+                    Text(
+                        "LINKS",
+                        color = GGreen,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp
+                    )
+                }
+                Text(
+                    "G O V ' T   W E B S I T E S",
+                    color = GGray,
+                    fontSize = 10.sp
+                )
+            
         }
 
         Spacer(Modifier.height(12.dp))
