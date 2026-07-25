@@ -408,6 +408,9 @@ private fun saveBitmapToGalleryTraditional(context: android.content.Context, bit
     val uri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
     uri?.let {
         resolver.openOutputStream(it)?.use { out -> bitmap.compress(Bitmap.CompressFormat.PNG, 100, out) }
+        android.widget.Toast.makeText(context, "Na-download! Nasa Gallery (Pictures/URDocs)", android.widget.Toast.LENGTH_LONG).show()
+    } ?: run {
+        android.widget.Toast.makeText(context, "Hindi na-download, subukan ulit.", android.widget.Toast.LENGTH_LONG).show()
     }
 }
 
