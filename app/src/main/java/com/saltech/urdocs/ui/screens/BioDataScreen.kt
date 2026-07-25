@@ -329,7 +329,7 @@ fun BioDataScreen(
                 .padding(horizontal = 20.dp, vertical = 12.dp)
         ) {
             Text(
-                "luv pag itap mo yang Download ay automatically nasa gallery muna",
+                "tap upload to upload photo to your form",
                 fontSize = 10.sp,
                 color = Color.Gray,
                 modifier = Modifier.fillMaxWidth(),
@@ -407,7 +407,7 @@ private fun saveBitmapToGallery(context: android.content.Context, bitmap: Bitmap
         resolver.openOutputStream(it)?.use { out ->
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
         }
-        android.widget.Toast.makeText(context, "Na-download! Nasa Gallery (Pictures/URDocs)", android.widget.Toast.LENGTH_LONG).show()
+        android.widget.Toast.makeText(context, "see your gellery luv🩵", android.widget.Toast.LENGTH_LONG).show()
     } ?: run {
         android.widget.Toast.makeText(context, "Hindi na-download, subukan ulit.", android.widget.Toast.LENGTH_LONG).show()
     }
