@@ -407,6 +407,9 @@ private fun saveBitmapToGallery(context: android.content.Context, bitmap: Bitmap
         resolver.openOutputStream(it)?.use { out ->
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
         }
+        android.widget.Toast.makeText(context, "Na-download! Nasa Gallery (Pictures/URDocs)", android.widget.Toast.LENGTH_LONG).show()
+    } ?: run {
+        android.widget.Toast.makeText(context, "Hindi na-download, subukan ulit.", android.widget.Toast.LENGTH_LONG).show()
     }
 }
 
