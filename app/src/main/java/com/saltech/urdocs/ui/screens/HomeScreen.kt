@@ -105,7 +105,7 @@ private fun HomeMenuCard(item: HomeMenuItem, onClick: () -> Unit) {
             .fillMaxWidth()
             .pressScale(interactionSource)
             .clip(RoundedCornerShape(16.dp))
-            .background(Brush.horizontalGradient(listOf(Color.Black, Color(0xFF4C8DFF))))
+            .background(Brush.horizontalGradient(colorStops = arrayOf(0f to Color.Black, 0.45f to Color.Black, 0.55f to Color(0xFF4C8DFF), 1f to Color(0xFF4C8DFF))))
             .border(1.dp, Brush.linearGradient(listOf(Color.Black, Color(0xFF4C8DFF))), RoundedCornerShape(16.dp))
             .clickable(interactionSource = interactionSource, indication = null) { onClick() }
             .padding(20.dp),
