@@ -67,6 +67,8 @@ fun LetterAssistantScreen(
         messages = messages + ChatMessage(text = text, isUser = isUser)
     }
 
+    var generatedLetter by remember { mutableStateOf<String?>(null) }
+
     fun sendToGemini(userText: String?) {
         scope.launch {
             isTyping = true
@@ -77,7 +79,17 @@ fun LetterAssistantScreen(
             val reply = repository.chat(history)
             history = history + ("model" to reply)
             isTyping = false
-            addMessage(reply, isUser = false)
+
+            val startMarker = "###LETTER_START###"
+            val endMarker = "###LETTER_END###"
+            if (reply.contains(startMarker) && reply.contains(endMarker)) {
+                val letterText = reply.substringAfter(startMarker).substringBefore(endMarker).trim()
+                val advice = reply.substringAfter(endMarker).trim()
+                generatedLetter = letterText
+                addMessage(if (advice.isNotBlank()) advice else "Handa na ang iyong letter! Tignan sa itaas.", isUser = false)
+            } else {
+                addMessage(reply, isUser = false)
+            }
         }
     }
 
