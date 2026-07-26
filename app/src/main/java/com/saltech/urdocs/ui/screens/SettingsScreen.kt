@@ -179,12 +179,12 @@ private fun SettingsHeaderCard() {
                 .border(1.dp, Brush.linearGradient(listOf(SettingsColors.NeonPink, SettingsColors.NeonGreen)), RoundedCornerShape(14.dp)),
             contentAlignment = Alignment.Center
         ) {
-            Text("UR\nBioRes", color = SettingsColors.NeonPink, fontSize = 11.sp, fontWeight = FontWeight.Bold, textAlign = androidx.compose.ui.text.style.TextAlign.Center)
+            Text("UR\nBioRes", color = Color.White, fontSize = 11.sp, fontWeight = FontWeight.Bold, textAlign = androidx.compose.ui.text.style.TextAlign.Center)
         }
         Spacer(Modifier.width(14.dp))
         Column(modifier = Modifier.weight(1f)) {
             Text("UR BioRes", color = SettingsColors.TextWhite, fontSize = 18.sp, fontWeight = FontWeight.Bold)
-            Text("Version 1.0.0", color = SettingsColors.NeonGreen, fontSize = 13.sp)
+            Text("Version 1.0.0", color = Color.White, fontSize = 13.sp)
             Spacer(Modifier.height(8.dp))
             Box(
                 modifier = Modifier
@@ -197,7 +197,7 @@ private fun SettingsHeaderCard() {
         }
         Spacer(Modifier.width(10.dp))
         Column(modifier = Modifier.weight(1f)) {
-            Text("🚀 Startup Project", color = SettingsColors.NeonGreen, fontSize = 13.sp, fontWeight = FontWeight.Bold)
+            Text("🚀 Startup Project", color = Color.White, fontSize = 13.sp, fontWeight = FontWeight.Bold)
             Spacer(Modifier.height(4.dp))
             Text(
                 "Sal-Tech is an upcoming startup. Papers and registration coming soon!",
@@ -211,8 +211,8 @@ private fun SettingsHeaderCard() {
 @Composable
 private fun SettingsSectionHeader(title: String) {
     Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(bottom = 8.dp, top = 4.dp)) {
-        Text("● ", color = SettingsColors.NeonGreen, fontSize = 12.sp)
-        Text(title, color = SettingsColors.NeonGreen, fontSize = 13.sp, fontWeight = FontWeight.Bold)
+        Text("● ", color = Color.White, fontSize = 12.sp)
+        Text(title, color = Color.White, fontSize = 13.sp, fontWeight = FontWeight.Bold)
     }
 }
 
@@ -253,7 +253,7 @@ private fun SettingsQuoteFooter() {
             .border(1.dp, SettingsColors.NeonPink, RoundedCornerShape(16.dp))
             .padding(16.dp)
     ) {
-        Text("❝ ", color = SettingsColors.NeonGreen, fontSize = 18.sp)
+        Text("❝ ", color = Color.White, fontSize = 18.sp)
         Text(
             buildString {
                 append("WALANG KWENTA PAGIGING MATALINO NYO KONG TATAWANAN LANG YAN NG SALTIK... este ")
@@ -261,7 +261,7 @@ private fun SettingsQuoteFooter() {
             color = SettingsColors.TextMuted,
             fontSize = 12.sp
         )
-        Text("SAL-TECH. 😁", color = SettingsColors.NeonPink, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+        Text("SAL-TECH. 😁", color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.Bold)
         Spacer(Modifier.height(6.dp))
         Text("Ayg pataka diha ka inspirasyon basig walopon ko na imong sampot! ✌️", color = SettingsColors.TextMuted, fontSize = 11.sp)
     }

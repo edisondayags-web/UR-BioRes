@@ -348,7 +348,7 @@ private fun LettersHubContent(
                 ) {
                     CrownIcon(modifier = Modifier.size(14.dp))
                     Spacer(Modifier.width(4.dp))
-                    Text("PREMIUM", color = UrPink, fontWeight = FontWeight.Bold, fontSize = 10.sp)
+                    Text("PREMIUM", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 10.sp)
                 }
             }
 
@@ -370,7 +370,7 @@ private fun LettersHubContent(
                     Column(modifier = Modifier.weight(1f)) {
                         Text("Create Professional", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 20.sp)
                         Row {
-                            Text("Letters", color = UrPink, fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                            Text("Letters", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 20.sp)
                             Text(" in Minutes", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 20.sp)
                         }
                     }
@@ -444,7 +444,7 @@ private fun LettersHubContent(
                 CrownIcon(modifier = Modifier.size(30.dp))
                 Spacer(Modifier.width(12.dp))
                 Column(modifier = Modifier.weight(1f)) {
-                    Text("Go Premium", color = UrPink, fontWeight = FontWeight.Bold, fontSize = 15.sp)
+                    Text("Go Premium", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 15.sp)
                     Text("Unlock all templates and premium features", color = UrGray, fontSize = 11.sp)
                 }
                 Row(
@@ -551,7 +551,7 @@ private fun BottomNavItem(icon: androidx.compose.ui.graphics.vector.ImageVector,
     ) {
         Icon(icon, contentDescription = label, tint = if (active) UrPink else UrGray, modifier = Modifier.size(22.dp))
         Spacer(Modifier.height(2.dp))
-        Text(label, color = if (active) UrPink else UrGray, fontSize = 10.sp)
+        Text(label, color = if (active) Color.White else UrGray, fontSize = 10.sp)
     }
 }
 
