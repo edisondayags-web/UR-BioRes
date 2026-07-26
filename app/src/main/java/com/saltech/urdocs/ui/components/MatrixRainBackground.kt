@@ -53,7 +53,7 @@ fun MatrixRainBackground(
             for (row in 0 until rows) {
                 for (col in 0 until cols) {
                     val dist = hypot(col - centerX, row - centerY)
-                    val delaySec = (dist / max(maxDist, 1f)) * 1.2f
+                    val delaySec = (dist / max(maxDist, 1f)) * 4f
                     val elapsed = time - delaySec
                     if (elapsed < 0) continue
 
