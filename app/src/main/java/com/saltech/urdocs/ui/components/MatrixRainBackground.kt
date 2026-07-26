@@ -57,7 +57,7 @@ fun MatrixRainBackground(
                     val elapsed = time - delaySec
                     if (elapsed < 0) continue
 
-                    val cyclePos = elapsed / 3f
+                    val cyclePos = elapsed / 10f
                     val idx = cyclePos.toInt() % CYCLE_CHARS.length
                     val nextIdx = (idx + 1) % CYCLE_CHARS.length
                     val frac = cyclePos - cyclePos.toInt()
