@@ -3,6 +3,7 @@ package com.saltech.urdocs.ui.screens
 import android.content.ContentValues
 import android.graphics.Bitmap
 import android.graphics.Picture
+import android.graphics.Rect
 import android.os.Build
 import android.provider.MediaStore
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -15,8 +16,10 @@ import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -92,11 +95,11 @@ fun BioDataScreen(
     var data by remember { mutableStateOf(BioDataFields()) }
     var offset by remember { mutableStateOf(Offset.Zero) }
 
-    // rawSource = pinagmulan ng litrato -- galing man sa camera (processedSelfie)
-    // o sa Upload (gallery). Kahit alin dito, parehong pipeline ang tatakbo.
     var rawSource by remember { mutableStateOf<Bitmap?>(null) }
     var displaySelfie by remember { mutableStateOf<Bitmap?>(null) }
     var isProcessingPhoto by remember { mutableStateOf(false) }
+
+    var poloChoicePending by remember { mutableStateOf<Pair<Bitmap, Rect>?>(null) }
 
     LaunchedEffect(processedSelfie) {
         if (processedSelfie != null) rawSource = processedSelfie
@@ -117,16 +120,64 @@ fun BioDataScreen(
             isProcessingPhoto = true
             val result = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) {
                 try {
-                    val cropped = com.saltech.urdocs.ml.FaceCropHelper.cropTo2x2(raw)
-                    val whiteBg = com.saltech.urdocs.ml.BackgroundHelper.replaceWithWhiteBackground(cropped)
-                    com.saltech.urdocs.ml.SkinSmoothingHelper.studioClean(whiteBg)
+                    com.saltech.urdocs.ml.FaceCropHelper.cropTo2x2WithFaceBox(raw)
                 } catch (e: Exception) {
-                    raw
+                    null
                 }
+            }
+            isProcessingPhoto = false
+            if (result != null) {
+                poloChoicePending = result
+            } else {
+                displaySelfie = raw
+            }
+        }
+    }
+
+    fun finishProcessing(cropped: Bitmap, faceBox: Rect, addPolo: Boolean) {
+        val scope = kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Default)
+        scope.launch {
+            isProcessingPhoto = true
+            val result = try {
+                val withPolo = if (addPolo) {
+                    com.saltech.urdocs.ml.FaceCropHelper.addPoloOverlay(cropped, faceBox)
+                } else {
+                    cropped
+                }
+                val whiteBg = com.saltech.urdocs.ml.BackgroundHelper.replaceWithWhiteBackground(withPolo)
+                com.saltech.urdocs.ml.SkinSmoothingHelper.studioClean(whiteBg)
+            } catch (e: Exception) {
+                cropped
             }
             displaySelfie = result
             isProcessingPhoto = false
         }
+    }
+
+    poloChoicePending?.let { (cropped, faceBox) ->
+        AlertDialog(
+            onDismissRequest = { },
+            title = { Text("Lagyan ng polo?") },
+            text = {
+                Text("Gusto mo bang lagyan ng simpleng puting polo/collar ang litrato mo, o gamitin na lang ang litrato mo mismo?")
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    poloChoicePending = null
+                    finishProcessing(cropped, faceBox, addPolo = true)
+                }) {
+                    Text("Oo, lagyan ng polo")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = {
+                    poloChoicePending = null
+                    finishProcessing(cropped, faceBox, addPolo = false)
+                }) {
+                    Text("Hindi, ito na")
+                }
+            }
+        )
     }
 
     val picture = remember { Picture() }
@@ -314,7 +365,6 @@ fun BioDataScreen(
                 }
             }
         }
-// Retake + Upload + Download -- floating, LABAS ng papel, nasa BABA (para sa ads sa taas).
         Column(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
