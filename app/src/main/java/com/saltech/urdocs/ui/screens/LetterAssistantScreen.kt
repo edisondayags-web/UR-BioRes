@@ -180,11 +180,7 @@ fun LetterAssistantScreen(
                 LaunchedEffect(Unit) { visible = true }
                 AnimatedVisibility(
                     visible = visible,
-                    enter = fadeIn(animationSpec = tween(350, easing = FastOutSlowInEasing)) +
-                            slideInVertically(
-                                animationSpec = tween(350, easing = FastOutSlowInEasing),
-                                initialOffsetY = { it / 4 }
-                            )
+                    enter = fadeIn(animationSpec = tween(400, easing = LinearOutSlowInEasing))
                 ) {
                     ChatBubble(msg)
                 }
@@ -230,7 +226,12 @@ fun LetterAssistantScreen(
                 modifier = Modifier
                     .size(38.dp)
                     .clip(CircleShape)
-                    .background(if (inputText.isNotBlank() && !isTyping) UrBlue else Color(0xFF2A2A2A))
+                    .background(
+                        if (inputText.isNotBlank() && !isTyping)
+                            Brush.verticalGradient(listOf(UrBlue, Color.Black))
+                        else
+                            Brush.verticalGradient(listOf(Color(0xFF2A2A2A), Color(0xFF2A2A2A)))
+                    )
                     .clickable(enabled = inputText.isNotBlank() && !isTyping) { handleUserInput(inputText) },
                 contentAlignment = Alignment.Center
             ) {
@@ -376,8 +377,9 @@ private fun ChatBubble(msg: ChatMessage) {
         }
         Column(
             modifier = if (msg.isUser) {
-                Modifier.widthIn(max = 260.dp).clip(RoundedCornerShape(16.dp))
-                    .background(UrUserBubble).padding(14.dp)
+                Modifier.widthIn(max = 260.dp).clip(RoundedCornerShape(18.dp))
+                    .background(Brush.verticalGradient(listOf(UrUserBubble, Color(0xFF0D1440))))
+                    .padding(horizontal = 16.dp, vertical = 12.dp)
             } else {
                 Modifier.widthIn(max = 280.dp).padding(vertical = 4.dp)
             }
@@ -387,13 +389,9 @@ private fun ChatBubble(msg: ChatMessage) {
             } else {
                 TypewriterText(msg.text, Color.White, 14.sp)
             }
-            Spacer(Modifier.height(4.dp))
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.CenterVertically) {
-                Text(msg.time, color = if (msg.isUser) Color(0xFFB9CBFF) else UrGray, fontSize = 10.sp)
-                if (msg.isUser) {
-                    Spacer(Modifier.width(4.dp))
-                    Icon(Icons.Filled.DoneAll, contentDescription = null, tint = Color(0xFFB9CBFF), modifier = Modifier.size(12.dp))
-                }
+            Spacer(Modifier.height(6.dp))
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+                Text(msg.time, color = if (msg.isUser) Color(0xFFB9CBFF).copy(alpha = 0.7f) else UrGray, fontSize = 10.sp)
             }
         }
     }
