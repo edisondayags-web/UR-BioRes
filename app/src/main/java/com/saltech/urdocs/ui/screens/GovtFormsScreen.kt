@@ -319,7 +319,7 @@ fun GovtFormsScreen(
                         BorderStroke(1.5.dp, Brush.horizontalGradient(listOf(GGreen, GPink))),
                         RoundedCornerShape(24.dp)
                     )
-                    .padding(horizontal = 14.dp, vertical = 8.dp),
+                    .padding(horizontal = 14.dp, vertical = 0.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
 
