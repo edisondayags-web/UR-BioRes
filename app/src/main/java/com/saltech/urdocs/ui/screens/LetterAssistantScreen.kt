@@ -260,6 +260,7 @@ Row(verticalAlignment = Alignment.CenterVertically) {
             )
         }
 }
+}
 
 @Composable
 private fun TypingDots() {
