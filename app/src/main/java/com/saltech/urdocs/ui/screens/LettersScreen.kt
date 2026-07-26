@@ -59,7 +59,7 @@ fun LettersScreen(
         LetterType.entries.firstOrNull { it.label.contains(keyword, ignoreCase = true) }
             ?: LetterType.entries.first()
 
-    Box(modifier = Modifier.fillMaxSize().background(Color.Black)) {
+    Box(modifier = Modifier.fillMaxSize()) {
         AnimatedContent(
             targetState = screenState,
             transitionSpec = {
@@ -557,7 +557,7 @@ private fun BottomNavItem(icon: androidx.compose.ui.graphics.vector.ImageVector,
 
 @Composable
 private fun AllTemplatesContent(onBack: () -> Unit, onPick: (LetterType) -> Unit) {
-    Column(modifier = Modifier.fillMaxSize().background(Color.Black).padding(20.dp)) {
+    Column(modifier = Modifier.fillMaxSize().padding(20.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
                 Icons.Filled.ChevronLeft, contentDescription = "Back", tint = Color.White,
@@ -606,7 +606,6 @@ private fun LetterFormContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black)
             .verticalScroll(rememberScrollState())
             .padding(20.dp)
     ) {

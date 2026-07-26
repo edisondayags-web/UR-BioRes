@@ -90,7 +90,6 @@ fun SettingsScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(SettingsColors.Background)
     ) {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),

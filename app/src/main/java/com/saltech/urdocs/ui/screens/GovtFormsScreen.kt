@@ -285,7 +285,6 @@ fun GovtFormsScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black)
     ) {
 
         // ---------- TOP ROW: back + search + heart ----------
