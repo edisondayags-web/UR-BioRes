@@ -133,7 +133,7 @@ fun TraditionalResumeScreen(
     val coroutineScope = rememberCoroutineScope()
 
     BoxWithConstraints(
-        modifier = Modifier.fillMaxSize().background(Color(0xFFCFCFCF))
+        modifier = Modifier.fillMaxSize().background(Color.Transparent)
     ) {
         val fitScale = minOf(maxWidth / paperWidthDp, maxHeight / paperHeightDp)
         var scale by remember { mutableStateOf(fitScale) }
