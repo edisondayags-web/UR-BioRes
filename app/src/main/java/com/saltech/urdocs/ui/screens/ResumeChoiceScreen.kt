@@ -45,7 +45,7 @@ fun ResumeChoiceScreen(onChoose: (String) -> Unit) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.Black.copy(alpha = 0.07f))
+                .background(Color.Black.copy(alpha = 0.85f))
         )
         Column(
             modifier = Modifier
