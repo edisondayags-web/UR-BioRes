@@ -138,7 +138,7 @@ fun LetterAssistantScreen(
                 .size(40.dp)
                 .clip(RoundedCornerShape(12.dp))
                 .background(Color.White.copy(alpha = 0.06f))
-                .border(1.dp, UrBlue.copy(alpha = 0.6f), RoundedCornerShape(12.dp))
+                .border(1.dp, Brush.verticalGradient(listOf(UrBlue, Color.Black)), RoundedCornerShape(12.dp))
                 .clickable { onBack() },
             contentAlignment = Alignment.Center
         ) {
@@ -342,7 +342,8 @@ private fun TypingDots() {
 @Composable
 private fun AssistantAvatar() {
     Box(
-        modifier = Modifier.size(34.dp).clip(CircleShape).border(1.dp, UrBlue, CircleShape),
+        modifier = Modifier.size(34.dp).clip(CircleShape)
+            .border(1.dp, Brush.verticalGradient(listOf(UrBlue, Color.Black)), CircleShape),
         contentAlignment = Alignment.Center
     ) {
         Icon(Icons.Filled.AutoAwesome, contentDescription = null, tint = UrBlue, modifier = Modifier.size(16.dp))
@@ -374,8 +375,12 @@ private fun ChatBubble(msg: ChatMessage) {
             Spacer(Modifier.width(10.dp))
         }
         Column(
-            modifier = Modifier.widthIn(max = 260.dp).clip(RoundedCornerShape(16.dp))
-                .background(if (msg.isUser) UrUserBubble else UrBubbleDark).padding(14.dp)
+            modifier = if (msg.isUser) {
+                Modifier.widthIn(max = 260.dp).clip(RoundedCornerShape(16.dp))
+                    .background(UrUserBubble).padding(14.dp)
+            } else {
+                Modifier.widthIn(max = 280.dp).padding(vertical = 4.dp)
+            }
         ) {
             if (msg.isUser) {
                 Text(msg.text, color = Color.White, fontSize = 14.sp)
@@ -425,8 +430,8 @@ private fun AnimatedChatBackground(isTyping: Boolean) {
         label = "bgPulseValue"
     )
 
-    val baseIntensity = if (isTyping) 0.55f else 0.30f
-    val intensity = baseIntensity + pulse * 0.15f
+    val baseIntensity = if (isTyping) 0.25f else 0.12f
+    val intensity = baseIntensity + pulse * 0.08f
 
     Box(
         modifier = Modifier
