@@ -18,12 +18,15 @@ android {
     namespace = "com.saltech.urdocs"
     compileSdk = 34
 
-    defaultConfig {
+defaultConfig {
         applicationId = "com.saltech.urdocs"
         minSdk = 24
         targetSdk = 34
         versionCode = 2
         versionName = "0.2.0-TEST"
+        ndk {
+            abiFilters += listOf("arm64-v8a")
+        }
         buildConfigField("String", "GEMINI_API_KEY", "\"${localProps.getProperty("GEMINI_API_KEY", "")}\"")
         buildConfigField("String", "OPENROUTER_API_KEY", "\"${localProps.getProperty("OPENROUTER_API_KEY", "")}\"")
     }
