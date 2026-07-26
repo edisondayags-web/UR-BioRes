@@ -119,14 +119,7 @@ fun LetterAssistantScreen(
             }
             Spacer(Modifier.width(12.dp))
             Spacer(Modifier.weight(1f))
-            Box(
-                modifier = Modifier.size(40.dp).clip(RoundedCornerShape(10.dp)).border(1.dp, UrGreen, RoundedCornerShape(10.dp)),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(Icons.Filled.Description, contentDescription = null, tint = UrGreen, modifier = Modifier.size(20.dp))
-            }
         }
-        Box(modifier = Modifier.fillMaxWidth().height(1.dp).background(Brush.horizontalGradient(listOf(UrPink, UrGreen))))
 
         Box(modifier = Modifier.weight(1f).fillMaxWidth()) {
             AnimatedChatBackground(isTyping)
