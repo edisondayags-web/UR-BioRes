@@ -126,7 +126,7 @@ fun SettingsScreen(
                                 .fillMaxWidth()
                                 .clip(RoundedCornerShape(16.dp))
                                 .background(Color.Black.copy(alpha = 0.55f))
-                                .border(1.dp, Brush.linearGradient(listOf(Color.Black, Color(0xFF4C8DFF))), RoundedCornerShape(16.dp))
+                                .border(1.dp, Brush.linearGradient(listOf(Color(0xFF4C8DFF), Color.Black)), RoundedCornerShape(16.dp))
                         ) {
                             SettingsItemRow(
                                 item = itemData,
