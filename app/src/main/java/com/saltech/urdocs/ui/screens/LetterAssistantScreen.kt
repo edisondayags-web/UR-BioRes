@@ -39,6 +39,7 @@ import androidx.compose.animation.core.*
 import android.graphics.Bitmap
 import android.provider.MediaStore
 import androidx.compose.ui.graphics.rememberGraphicsLayer
+import androidx.compose.ui.graphics.layer.drawLayer
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.foundation.text.selection.SelectionContainer
