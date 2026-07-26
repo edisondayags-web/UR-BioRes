@@ -49,7 +49,6 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
-// ==================== Blue "Gemini-style" palette ====================
 private val UrBlue = Color(0xFF4C8DFF)
 private val UrBlueDeep = Color(0xFF16255E)
 private val UrBlueDark = Color(0xFF060B18)
@@ -120,7 +119,12 @@ fun LetterAssistantScreen(
         }
     }
 
-    // No manual scroll needed -- reverseLayout keeps the list anchored to the latest message automatically
+    LaunchedEffect(messages.size, isTyping) {
+        val lastIndex = messages.size - 1 + if (isTyping) 1 else 0
+        if (lastIndex >= 0) {
+            listState.animateScrollToItem(lastIndex)
+        }
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
 
@@ -150,18 +154,14 @@ fun LetterAssistantScreen(
             }
         }
 
-        // ---------- Chat list, anchored to the bottom automatically via reverseLayout ----------
+        // ---------- Chat list, grows from the top like a normal conversation, auto-scrolls as it overflows ----------
         LazyColumn(
             state = listState,
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 110.dp, bottom = 72.dp),
-            verticalArrangement = Arrangement.spacedBy(14.dp, Alignment.Bottom),
-            reverseLayout = true
+            verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
-            if (isTyping) {
-                item { ThinkingBubble() }
-            }
-            items(messages.reversed(), key = { it.time + it.text.hashCode() }) { msg ->
+            items(messages, key = { it.time + it.text.hashCode() }) { msg ->
                 var visible by remember { mutableStateOf(false) }
                 LaunchedEffect(Unit) { visible = true }
                 AnimatedVisibility(
@@ -170,6 +170,9 @@ fun LetterAssistantScreen(
                 ) {
                     ChatBubble(msg)
                 }
+            }
+            if (isTyping) {
+                item { ThinkingBubble() }
             }
         }
 
@@ -241,8 +244,6 @@ fun LetterAssistantScreen(
         }
     }
 }
-
-// ==================== Thinking indicator (blue, fast & smooth) ====================
 
 @Composable
 private fun ThinkingIndicator() {
@@ -408,13 +409,10 @@ private fun ThinkingBubble() {
     }
 }
 
-// ==================== Gemini-style pulsing vertical gradient (dark top -> blue bottom, defined start/end, no drifting) ====================
-
 @Composable
 private fun AnimatedChatBackground(isTyping: Boolean) {
     val transition = rememberInfiniteTransition(label = "bgPulse")
 
-    // Gentle heartbeat pulse, exactly like Gemini's "processing" glow -- clear start and end each cycle
     val pulse by transition.animateFloat(
         initialValue = 0f,
         targetValue = 1f,
@@ -443,8 +441,6 @@ private fun AnimatedChatBackground(isTyping: Boolean) {
             )
     )
 }
-
-// ==================== Letter bond-paper preview + save to gallery ====================
 
 @Composable
 private fun LetterPaperPreview(letterText: String, onDismiss: () -> Unit) {
