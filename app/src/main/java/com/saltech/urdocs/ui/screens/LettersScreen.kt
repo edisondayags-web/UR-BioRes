@@ -341,7 +341,7 @@ private fun LettersHubContent(
                         .shadow(10.dp, RoundedCornerShape(20.dp), ambientColor = UrPink, spotColor = UrPink)
                         .clip(RoundedCornerShape(20.dp))
                         .background(Color(0xFF2A0A16))
-                        .border(1.dp, UrPink.copy(alpha = 0.8f), RoundedCornerShape(20.dp))
+                        .border(1.dp, Brush.linearGradient(listOf(Color(0xFF4C8DFF), Color.Black)), RoundedCornerShape(20.dp))
                         .clickable { onPremiumTap() }
                         .padding(horizontal = 12.dp, vertical = 6.dp),
                     verticalAlignment = Alignment.CenterVertically
