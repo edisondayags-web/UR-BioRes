@@ -120,14 +120,7 @@ fun LetterAssistantScreen(
         }
     }
 
-    LaunchedEffect(messages.size, isTyping) {
-        if (messages.isNotEmpty() || isTyping) {
-            val target = (messages.size - 1 + if (isTyping) 1 else 0).coerceAtLeast(0)
-            if (listState.firstVisibleItemIndex != target) {
-                listState.animateScrollToItem(target)
-            }
-        }
-    }
+    // No manual scroll needed -- reverseLayout keeps the list anchored to the latest message automatically
 
     Box(modifier = Modifier.fillMaxSize()) {
 
@@ -157,14 +150,18 @@ fun LetterAssistantScreen(
             }
         }
 
-        // ---------- Chat list ----------
+        // ---------- Chat list, anchored to the bottom automatically via reverseLayout ----------
         LazyColumn(
             state = listState,
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 72.dp, bottom = 110.dp),
-            verticalArrangement = Arrangement.spacedBy(14.dp)
+            verticalArrangement = Arrangement.spacedBy(14.dp, Alignment.Bottom),
+            reverseLayout = true
         ) {
-            items(messages, key = { it.time + it.text.hashCode() }) { msg ->
+            if (isTyping) {
+                item { ThinkingBubble() }
+            }
+            items(messages.reversed(), key = { it.time + it.text.hashCode() }) { msg ->
                 var visible by remember { mutableStateOf(false) }
                 LaunchedEffect(Unit) { visible = true }
                 AnimatedVisibility(
@@ -173,9 +170,6 @@ fun LetterAssistantScreen(
                 ) {
                     ChatBubble(msg)
                 }
-            }
-            if (isTyping) {
-                item { ThinkingBubble() }
             }
         }
 
