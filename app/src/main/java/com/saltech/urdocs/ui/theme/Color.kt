@@ -5,7 +5,7 @@ import androidx.compose.ui.graphics.Color
 // TODO Edison: palitan ng EXACT hex values mula sa UR Call theme file
 // para consistent ang branding sa dalawang app (Sal-Tech Software Services).
 val UrBlack = Color(0xFF000000)
-val UrPink = Color(0xFFFF2D78)
-val UrNeon = Color(0xFF39FF14)
+val UrPink = Color(0xFF1E3A6E)
+val UrNeon = Color(0xFF0B1530)
 val UrWhite = Color(0xFFFFFFFF)
 val UrGray = Color(0xFF1A1A1A)
