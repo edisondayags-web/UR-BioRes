@@ -6,6 +6,6 @@ import androidx.compose.ui.graphics.Color
 // para consistent ang branding sa dalawang app (Sal-Tech Software Services).
 val UrBlack = Color(0xFF000000)
 val UrPink = Color(0xFF1E3A6E)
-val UrNeon = Color(0xFF0B1530)
+val UrNeon = Color(0xFF6B8CC7)
 val UrWhite = Color(0xFFFFFFFF)
 val UrGray = Color(0xFF1A1A1A)
