@@ -508,7 +508,7 @@ private fun LetterCard(
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
             .background(UrCardBg)
-            .border(1.dp, Brush.linearGradient(listOf(Color.Black, Color(0xFF4C8DFF))), RoundedCornerShape(16.dp))
+            .border(1.dp, Brush.linearGradient(listOf(Color(0xFF4C8DFF), Color.Black)), RoundedCornerShape(16.dp))
             .clickable { onClick() }
             .padding(14.dp),
         verticalAlignment = Alignment.CenterVertically
