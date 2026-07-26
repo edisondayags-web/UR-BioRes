@@ -348,8 +348,7 @@ private fun ThinkingBubble() {
         AssistantAvatar()
         Spacer(Modifier.width(10.dp))
         Column(
-            modifier = Modifier.clip(RoundedCornerShape(16.dp))
-                .background(UrBubbleDark).padding(14.dp)
+            modifier = Modifier
         ) {
             ThinkingIndicator()
         }
