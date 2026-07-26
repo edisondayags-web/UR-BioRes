@@ -15,7 +15,6 @@ class GeminiRepository {
         "openai/gpt-oss-20b:free",
         "openai/gpt-oss-120b:free",
         "meta-llama/llama-3.3-70b-instruct:free",
-        "openrouter/free"
     )
 
     private val letterPrompts = mapOf(
