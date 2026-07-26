@@ -298,7 +298,7 @@ fun GovtFormsScreen(
                 modifier = Modifier
                     .size(40.dp)
                     .clip(RoundedCornerShape(10.dp))
-                    .border(1.dp, GPink, RoundedCornerShape(10.dp))
+                    .border(1.dp, Brush.linearGradient(listOf(Color(0xFF4C8DFF), Color.Black)), RoundedCornerShape(10.dp))
                     .clickable { onNavigate("home") },
                 contentAlignment = Alignment.Center
             ) {
@@ -364,7 +364,7 @@ fun GovtFormsScreen(
                 modifier = Modifier
                     .size(40.dp)
                     .clip(RoundedCornerShape(10.dp))
-                    .border(1.dp, GPink, RoundedCornerShape(10.dp)),
+                    .border(1.dp, Brush.linearGradient(listOf(Color(0xFF4C8DFF), Color.Black)), RoundedCornerShape(10.dp)),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
@@ -473,7 +473,7 @@ fun GovtFormsScreen(
                         .background(if (isSelected) GCardBg else Color.Transparent)
                         .border(
                             1.dp,
-                            if (isSelected) GPink else Color.Transparent,
+                            if (isSelected) Brush.linearGradient(listOf(Color(0xFF4C8DFF), Color.Black)) else Brush.linearGradient(listOf(Color.Transparent, Color.Transparent)),
                             RoundedCornerShape(14.dp)
                         )
                         .clickable {
