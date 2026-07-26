@@ -575,6 +575,7 @@ private fun AllTemplatesContent(onBack: () -> Unit, onPick: (LetterType) -> Unit
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(14.dp))
                         .background(UrCardBg)
+                        .border(1.dp, Brush.linearGradient(listOf(Color(0xFF4C8DFF), Color.Black)), RoundedCornerShape(14.dp))
                         .clickable { onPick(type) }
                         .padding(16.dp),
                     verticalAlignment = Alignment.CenterVertically
