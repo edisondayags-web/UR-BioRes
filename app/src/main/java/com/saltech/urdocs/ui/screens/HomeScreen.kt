@@ -47,13 +47,6 @@ fun HomeScreen(
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.ic_launcher_bg),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            alpha = 0.60f,
-            modifier = Modifier.fillMaxSize().scale(1.1f),
-        )
 
         // Gear icon -- malapit sa status bar, palaging nakikita
         IconButton(
