@@ -244,7 +244,7 @@ private fun SettingsQuoteFooter() {
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
             .background(SettingsColors.CardBg)
-            .border(1.dp, SettingsColors.NeonPink, RoundedCornerShape(16.dp))
+            .border(1.dp, Brush.linearGradient(listOf(Color(0xFF4C8DFF), Color.Black)), RoundedCornerShape(16.dp))
             .padding(16.dp)
     ) {
         Text("❝ ", color = Color.White, fontSize = 18.sp)
