@@ -125,7 +125,7 @@ fun SettingsScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clip(RoundedCornerShape(16.dp))
-                                .background(Brush.horizontalGradient(colorStops = arrayOf(0f to Color(0xFF4C8DFF), 0.45f to Color(0xFF4C8DFF), 0.55f to Color.Black, 1f to Color.Black)))
+                                .background(Color.Black.copy(alpha = 0.55f))
                                 .border(1.dp, Brush.linearGradient(listOf(Color.Black, Color(0xFF4C8DFF))), RoundedCornerShape(16.dp))
                         ) {
                             SettingsItemRow(
