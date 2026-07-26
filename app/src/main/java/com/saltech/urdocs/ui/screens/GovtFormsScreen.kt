@@ -691,7 +691,7 @@ fun GovtFormsScreen(
                                         )
                                         Text(
                                             link.url,
-                                            color = GGreen,
+                                            color = Color.White,
                                             fontSize = 10.sp
                                         )
                                     }
