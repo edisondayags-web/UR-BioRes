@@ -328,13 +328,6 @@ fun BioDataScreen(
                 .background(Color.Black)
                 .padding(horizontal = 20.dp, vertical = 12.dp)
         ) {
-            Text(
-                "tap upload to upload photo to your form",
-                fontSize = 10.sp,
-                color = Color.Gray,
-                modifier = Modifier.fillMaxWidth(),
-            )
-            Spacer(Modifier.height(10.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
