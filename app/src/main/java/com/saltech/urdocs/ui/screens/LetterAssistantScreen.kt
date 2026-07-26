@@ -122,7 +122,10 @@ fun LetterAssistantScreen(
 
     LaunchedEffect(messages.size, isTyping) {
         if (messages.isNotEmpty() || isTyping) {
-            listState.animateScrollToItem((messages.size - 1 + if (isTyping) 1 else 0).coerceAtLeast(0))
+            val target = (messages.size - 1 + if (isTyping) 1 else 0).coerceAtLeast(0)
+            if (listState.firstVisibleItemIndex != target) {
+                listState.animateScrollToItem(target)
+            }
         }
     }
 
@@ -130,20 +133,6 @@ fun LetterAssistantScreen(
 
         // ---------- Full-bleed pulsing gradient background, Gemini-style: dark on top, blue glow at bottom ----------
         AnimatedChatBackground(isTyping)
-
-        // ---------- Back button floats on top ----------
-        Box(
-            modifier = Modifier
-                .padding(16.dp)
-                .size(40.dp)
-                .clip(RoundedCornerShape(12.dp))
-                .background(Color.White.copy(alpha = 0.06f))
-                .border(1.dp, Brush.verticalGradient(listOf(UrBlue, Color.Black)), RoundedCornerShape(12.dp))
-                .clickable { onBack() },
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(Icons.Filled.ArrowBack, contentDescription = "Back", tint = UrBlue)
-        }
 
         // ---------- Greeting header, only shows before the first reply arrives ----------
         AnimatedVisibility(
@@ -188,6 +177,20 @@ fun LetterAssistantScreen(
             if (isTyping) {
                 item { ThinkingBubble() }
             }
+        }
+
+        // ---------- Back button floats on top, rendered LAST so it always receives taps ----------
+        Box(
+            modifier = Modifier
+                .padding(16.dp)
+                .size(40.dp)
+                .clip(RoundedCornerShape(12.dp))
+                .background(Color.White.copy(alpha = 0.06f))
+                .border(1.dp, Brush.verticalGradient(listOf(UrBlue, Color.Black)), RoundedCornerShape(12.dp))
+                .clickable { onBack() },
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(Icons.Filled.ArrowBack, contentDescription = "Back", tint = UrBlue)
         }
 
         // ---------- Floating input box ----------
