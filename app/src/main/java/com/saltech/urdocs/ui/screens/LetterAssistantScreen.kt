@@ -118,14 +118,7 @@ fun LetterAssistantScreen(
                 Icon(Icons.Filled.ArrowBack, contentDescription = "Back", tint = UrPink)
             }
             Spacer(Modifier.width(12.dp))
-            Column(modifier = Modifier.weight(1f)) {
-                Row {
-                    Text(letterType.label.substringBefore(" "), color = UrPink, fontWeight = FontWeight.Bold, fontSize = 18.sp)
-                    Text(" Letter ", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp)
-                    Text("Assistant", color = UrGreen, fontWeight = FontWeight.Bold, fontSize = 18.sp)
-                }
-                Text("I'm here to help you create your ${letterType.label.lowercase()}.", color = UrGray, fontSize = 11.sp)
-            }
+            Spacer(Modifier.weight(1f))
             Box(
                 modifier = Modifier.size(40.dp).clip(RoundedCornerShape(10.dp)).border(1.dp, UrGreen, RoundedCornerShape(10.dp)),
                 contentAlignment = Alignment.Center
@@ -363,16 +356,17 @@ private fun AnimatedChatBackground(isTyping: Boolean) {
         targetValue = 1f,
         animationSpec = infiniteRepeatable(
             animation = androidx.compose.animation.core.keyframes {
-                durationMillis = 5000
+                durationMillis = 6000
                 0f at 0
-                0.9f at 1500
-                0f at 3000
-                0f at 5000
+                1f at 2000
+                1f at 3000
+                0f at 3200
+                0f at 6000
             }
         ),
         label = "bgWaveValue"
     )
-    val maxAlpha = 0.07f
+    val maxAlpha = 0.10f
     Box(
         modifier = Modifier
             .fillMaxSize()
