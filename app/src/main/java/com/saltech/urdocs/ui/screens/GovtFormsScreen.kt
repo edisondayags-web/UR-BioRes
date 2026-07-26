@@ -389,16 +389,13 @@ fun GovtFormsScreen(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .heightIn(min = 98.dp)
+                .heightIn(min = 50.dp)
                 .padding(horizontal = 16.dp)
         ) {
             if (suggestionMatches.isNotEmpty()) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clip(RoundedCornerShape(14.dp))
-                        .background(GCardBg)
-                        .border(1.dp, GGreen, RoundedCornerShape(14.dp))
                         .padding(8.dp)
                 ) {
                     suggestionMatches.forEach { link ->
