@@ -154,7 +154,7 @@ fun LetterAssistantScreen(
         LazyColumn(
             state = listState,
             modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 72.dp, bottom = 110.dp),
+            contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 110.dp, bottom = 72.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp, Alignment.Bottom),
             reverseLayout = true
         ) {
@@ -384,7 +384,7 @@ private fun ChatBubble(msg: ChatMessage) {
             if (msg.isUser) {
                 Text(msg.text, color = Color.White, fontSize = 14.sp)
             } else {
-                TypewriterText(msg.text, Color.White, 14.sp)
+                Text(msg.text, color = Color.White, fontSize = 14.sp)
             }
             Spacer(Modifier.height(6.dp))
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
