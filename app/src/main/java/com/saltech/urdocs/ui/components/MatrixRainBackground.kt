@@ -15,14 +15,14 @@ import kotlin.math.hypot
 import kotlin.math.max
 import kotlin.math.min
 
-private val MatrixGreen = Color(0xFF1A3A6B)
+private val MatrixGreen = Color(0xFFFFFFFF)
 private const val CYCLE_CHARS = "&xv"
 
 @Composable
 fun MatrixRainBackground(
     modifier: Modifier = Modifier,
     color: Color = MatrixGreen,
-    alpha: Float = 0.35f
+    alpha: Float = 0.15f
 ) {
     val transition = rememberInfiniteTransition(label = "matrixCycle")
     val time by transition.animateFloat(
