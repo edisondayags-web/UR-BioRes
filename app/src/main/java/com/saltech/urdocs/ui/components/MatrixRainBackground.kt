@@ -19,7 +19,7 @@ private const val MATRIX_CHARS = "01ABCDEFGHIJKLMNOPQRSTUVWXYZ\$%#@*+-/\\<>"
 fun MatrixRainBackground(
     modifier: Modifier = Modifier,
     color: Color = MatrixGreen,
-    alpha: Float = 0.12f
+    alpha: Float = 0.35f
 ) {
     val transition = rememberInfiniteTransition(label = "matrixRain")
     val time by transition.animateFloat(

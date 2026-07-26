@@ -4,6 +4,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,7 +29,7 @@ fun UrDocsTheme(
         colorScheme = UrDocsColorScheme,
         typography = UrDocsTypography,
     ) {
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box(modifier = Modifier.fillMaxSize().background(UrBlack)) {
             MatrixRainBackground(modifier = Modifier.fillMaxSize())
             content()
         }
