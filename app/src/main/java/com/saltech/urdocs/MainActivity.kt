@@ -31,10 +31,6 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             UrDocsTheme {
-              Surface(
-                modifier = androidx.compose.ui.Modifier.fillMaxSize(),
-                color = MaterialTheme.colorScheme.background
-              ) {
                 val navController = rememberNavController()
                 var pendingSelfieTarget by remember { mutableStateOf<String?>(null) }
                 var resumeSelfie by remember { mutableStateOf<Bitmap?>(null) }
@@ -128,7 +124,6 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                 }
-              }
             }
         }
     }
