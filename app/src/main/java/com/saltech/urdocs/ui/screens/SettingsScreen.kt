@@ -224,7 +224,7 @@ private fun SettingsItemRow(item: SettingsItemData, accentColor: Color = Setting
                 .size(40.dp)
                 .clip(RoundedCornerShape(10.dp))
                 .background(Color(0xFF1A1A1A))
-                .border(1.dp, accentColor, RoundedCornerShape(10.dp)),
+                .border(1.dp, Brush.linearGradient(listOf(Color(0xFF4C8DFF), Color.Black)), RoundedCornerShape(10.dp)),
             contentAlignment = Alignment.Center
         ) {
             Text(item.icon, fontSize = 16.sp)
