@@ -11,9 +11,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
+import kotlin.math.hypot
+import kotlin.math.max
+import kotlin.math.min
 
 private val MatrixGreen = Color(0xFF39FF6A)
-private const val MATRIX_CHARS = "01ABCDEFGHIJKLMNOPQRSTUVWXYZ\$%#@*+-/\\<>"
+private const val CYCLE_CHARS = "&xv"
 
 @Composable
 fun MatrixRainBackground(
@@ -21,44 +24,54 @@ fun MatrixRainBackground(
     color: Color = MatrixGreen,
     alpha: Float = 0.35f
 ) {
-    val transition = rememberInfiniteTransition(label = "matrixRain")
+    val transition = rememberInfiniteTransition(label = "matrixCycle")
     val time by transition.animateFloat(
         initialValue = 0f,
         targetValue = 1000f,
         animationSpec = infiniteRepeatable(
-            animation = tween(20000, easing = LinearEasing)
+            animation = tween(1000 * 1000, easing = LinearEasing)
         ),
         label = "matrixTime"
     )
 
     Canvas(modifier = modifier.fillMaxSize()) {
-        val fontSizePx = 14.dp.toPx()
-        val columnWidth = fontSizePx
-        val columns = (size.width / columnWidth).toInt() + 1
+        val fontSizePx = 22.dp.toPx()
+        val cellSize = fontSizePx * 1.6f
+        val cols = (size.width / cellSize).toInt() + 1
+        val rows = (size.height / cellSize).toInt() + 1
+        val centerX = cols / 2f
+        val centerY = rows / 2f
+        val maxDist = hypot(centerX, centerY)
 
         val paint = Paint().apply {
-            this.color = color.copy(alpha = alpha).toArgb()
+            this.color = color.toArgb()
             textSize = fontSizePx
             isAntiAlias = true
         }
 
         drawContext.canvas.nativeCanvas.apply {
-            for (col in 0 until columns) {
-                val seed = col * 9973
-                val speed = 40f + (seed % 60)
-                val startOffset = (seed % 2000).toFloat()
-                val colHeight = size.height + fontSizePx * 20
-                val y = ((time * speed + startOffset) % colHeight) - fontSizePx * 20
+            for (row in 0 until rows) {
+                for (col in 0 until cols) {
+                    val dist = hypot(col - centerX, row - centerY)
+                    val delaySec = (dist / max(maxDist, 1f)) * 3f
+                    val elapsed = time - delaySec
+                    if (elapsed < 0) continue
 
-                val x = col * columnWidth
-                for (i in 0 until 18) {
-                    val charY = y - i * fontSizePx
-                    if (charY in -fontSizePx..size.height) {
-                        val ch = MATRIX_CHARS[(seed + i * 31) % MATRIX_CHARS.length]
-                        val fadeAlpha = (alpha * (1f - i / 18f)).coerceIn(0f, alpha)
-                        paint.alpha = (fadeAlpha * 255).toInt().coerceIn(0, 255)
-                        drawText(ch.toString(), x, charY, paint)
-                    }
+                    val cyclePos = elapsed / 3f
+                    val idx = cyclePos.toInt() % CYCLE_CHARS.length
+                    val nextIdx = (idx + 1) % CYCLE_CHARS.length
+                    val frac = cyclePos - cyclePos.toInt()
+
+                    val fadeAlpha = if (frac < 0.5f) 1f - (frac * 2f) else (frac - 0.5f) * 2f
+                    val ch = if (frac < 0.5f) CYCLE_CHARS[idx] else CYCLE_CHARS[nextIdx]
+
+                    val entryFade = min(1f, elapsed)
+                    val finalAlpha = (alpha * (0.4f + 0.6f * fadeAlpha) * entryFade).coerceIn(0f, alpha)
+                    paint.alpha = (finalAlpha * 255).toInt().coerceIn(0, 255)
+
+                    val x = col * cellSize
+                    val y = row * cellSize
+                    drawText(ch.toString(), x, y, paint)
                 }
             }
         }
