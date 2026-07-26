@@ -27,8 +27,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.saltech.urdocs.R
 
-private val RPink = Color(0xFFFF2E7E)
-private val RGreen = Color(0xFF39FF6A)
+private val RPink = Color(0xFF3B6FE0)
+private val RGreen = Color(0xFF0B1530)
 private val RGray = Color(0xFF9A9A9A)
 private val RGradient = Brush.horizontalGradient(listOf(RPink, RGreen))
 

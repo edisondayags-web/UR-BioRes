@@ -31,8 +31,8 @@ import androidx.compose.ui.unit.sp
 object SettingsColors {
     val Background = Color(0xFF0A0A0A)
     val CardBg = Color(0xFF141414)
-    val NeonPink = Color(0xFFFF2E7E)
-    val NeonGreen = Color(0xFF39FF6E)
+    val NeonPink = Color(0xFF3B6FE0)
+    val NeonGreen = Color(0xFF0B1530)
     val TextWhite = Color(0xFFF5F5F5)
     val TextMuted = Color(0xFFB0B0B0)
 }

@@ -300,7 +300,7 @@ fun ChronologicalResumeScreen() {
                 .clip(androidx.compose.foundation.shape.RoundedCornerShape(24.dp))
                 .background(
                     androidx.compose.ui.graphics.Brush.horizontalGradient(
-                        listOf(Color(0xFFFF2E7E), Color(0xFF1A1A1A), Color(0xFF39FF6A))
+                        listOf(Color(0xFF3B6FE0), Color(0xFF1A1A1A), Color(0xFF0B1530))
                     )
                 )
         ) { Text("Download", color = Color.White, fontWeight = FontWeight.Bold) }

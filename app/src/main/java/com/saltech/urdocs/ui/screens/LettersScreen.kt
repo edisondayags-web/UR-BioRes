@@ -40,8 +40,8 @@ import com.saltech.urdocs.model.LetterRequest
 import com.saltech.urdocs.model.LetterType
 import com.saltech.urdocs.viewmodel.LettersViewModel
 
-private val UrPink = Color(0xFFFF2E7E)
-private val UrGreen = Color(0xFF39FF6A)
+private val UrPink = Color(0xFF3B6FE0)
+private val UrGreen = Color(0xFF0B1530)
 private val UrCardBg = Color(0xFF161616)
 private val UrGray = Color(0xFF9A9A9A)
 
@@ -325,7 +325,7 @@ private fun LettersHubContent(
                         .size(52.dp)
                         .shadow(16.dp, RoundedCornerShape(14.dp), ambientColor = UrPink, spotColor = UrPink)
                         .clip(RoundedCornerShape(14.dp))
-                        .background(Brush.verticalGradient(listOf(Color(0xFFFF2E7E), Color(0xFF8A0033))))
+                        .background(Brush.verticalGradient(listOf(Color(0xFF3B6FE0), Color(0xFF081024))))
                         .border(1.dp, UrPink, RoundedCornerShape(14.dp)),
                     contentAlignment = Alignment.Center
                 ) {

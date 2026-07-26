@@ -331,16 +331,16 @@ fun BioDataScreen(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .clip(androidx.compose.foundation.shape.RoundedCornerShape(24.dp))
-                        .border(1.5.dp, Color(0xFF39FF6A), androidx.compose.foundation.shape.RoundedCornerShape(24.dp))
+                        .border(1.5.dp, Color(0xFF0B1530), androidx.compose.foundation.shape.RoundedCornerShape(24.dp))
                         .clickable { uploadLauncher.launch("image/*") }
                         .padding(horizontal = 18.dp, vertical = 10.dp)
                 ) {
                     Text("📤", fontSize = 16.sp)
                     Spacer(Modifier.width(6.dp))
-                    Text("Upload", fontSize = 14.sp, fontWeight = FontWeight.Bold, color = Color(0xFF39FF6A))
+                    Text("Upload", fontSize = 14.sp, fontWeight = FontWeight.Bold, color = Color(0xFF0B1530))
                     if (displaySelfie != null) {
                         Spacer(Modifier.width(12.dp))
-                        Text("🔄 Retake", fontSize = 13.sp, color = Color(0xFFFF2E7E), modifier = Modifier.clickable { onTakeSelfie() })
+                        Text("🔄 Retake", fontSize = 13.sp, color = Color(0xFF3B6FE0), modifier = Modifier.clickable { onTakeSelfie() })
                     }
                 }
 
@@ -367,7 +367,7 @@ fun BioDataScreen(
                         .clip(androidx.compose.foundation.shape.RoundedCornerShape(24.dp))
                         .background(
                             androidx.compose.ui.graphics.Brush.horizontalGradient(
-                                listOf(Color(0xFFFF2E7E), Color(0xFF1A1A1A), Color(0xFF39FF6A))
+                                listOf(Color(0xFF3B6FE0), Color(0xFF1A1A1A), Color(0xFF0B1530))
                             )
                         )
                 ) {

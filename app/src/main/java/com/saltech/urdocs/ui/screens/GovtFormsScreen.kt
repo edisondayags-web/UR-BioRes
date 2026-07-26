@@ -36,8 +36,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-private val GPink = Color(0xFFFF2E7E)
-private val GGreen = Color(0xFF39FF6A)
+private val GPink = Color(0xFF3B6FE0)
+private val GGreen = Color(0xFF0B1530)
 private val GGray = Color(0xFF9A9A9A)
 private val GCardBg = Color(0xFF0F0F0F)
 
