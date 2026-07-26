@@ -6,7 +6,7 @@ sealed class Screen(val route: String) {
     object ResumeTraditional : Screen("resume_traditional")
     object ResumeChronological : Screen("resume_chronological")
     object BioData : Screen("biodata")
-    object GovtForms : Screen("govt_links")
+    object GovtForms : Screen("govt_forms")
     object Letters : Screen("letters")
     object Settings : Screen("settings")
     object PrivacyPolicy : Screen("privacy_policy")
