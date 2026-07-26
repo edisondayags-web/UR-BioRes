@@ -22,7 +22,7 @@ private const val CYCLE_CHARS = "&xv"
 fun MatrixRainBackground(
     modifier: Modifier = Modifier,
     color: Color = MatrixGreen,
-    alpha: Float = 0.15f
+    alpha: Float = 0.25f
 ) {
     val transition = rememberInfiniteTransition(label = "matrixCycle")
     val time by transition.animateFloat(
