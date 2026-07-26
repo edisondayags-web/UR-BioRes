@@ -4,6 +4,10 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.ui.Modifier
+import androidx.compose.foundation.layout.fillMaxSize
+import com.saltech.urdocs.ui.components.MatrixRainBackground
 
 private val UrDocsColorScheme = darkColorScheme(
     primary = UrPink,
@@ -23,6 +27,10 @@ fun UrDocsTheme(
     MaterialTheme(
         colorScheme = UrDocsColorScheme,
         typography = UrDocsTypography,
-        content = content
-    )
+    ) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            MatrixRainBackground(modifier = Modifier.fillMaxSize())
+            content()
+        }
+    }
 }
