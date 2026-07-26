@@ -47,6 +47,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.Image
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import com.saltech.urdocs.R
 
 data class BioDataFields(
@@ -344,7 +345,7 @@ fun BioDataScreen(
                             "Date",
                             fontSize = 11.sp,
                             color = Color.Black,
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center,
                         )
                     }
                     Column(modifier = Modifier.weight(1f)) {
@@ -359,7 +360,7 @@ fun BioDataScreen(
                             "Signature",
                             fontSize = 11.sp,
                             color = Color.Black,
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center,
                         )
                     }
                 }
