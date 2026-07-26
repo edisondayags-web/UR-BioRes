@@ -15,7 +15,7 @@ import kotlin.math.hypot
 import kotlin.math.max
 import kotlin.math.min
 
-private val MatrixGreen = Color(0xFF39FF6A)
+private val MatrixGreen = Color(0xFF1A3A6B)
 private const val CYCLE_CHARS = "&xv"
 
 @Composable
@@ -53,7 +53,7 @@ fun MatrixRainBackground(
             for (row in 0 until rows) {
                 for (col in 0 until cols) {
                     val dist = hypot(col - centerX, row - centerY)
-                    val delaySec = (dist / max(maxDist, 1f)) * 3f
+                    val delaySec = (dist / max(maxDist, 1f)) * 8f
                     val elapsed = time - delaySec
                     if (elapsed < 0) continue
 
