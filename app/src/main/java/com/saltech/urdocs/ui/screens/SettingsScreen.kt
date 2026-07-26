@@ -119,37 +119,31 @@ fun SettingsScreen(
                 item {
                     SettingsSectionHeader(sectionTitle)
                 }
-                item {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(16.dp))
-                            .background(SettingsColors.CardBg)
-                    ) {
-                        sectionItems.forEachIndexed { index, itemData ->
+                sectionItems.forEach { itemData ->
+                    item {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(16.dp))
+                                .background(SettingsColors.CardBg)
+                                .border(1.dp, Color.White, RoundedCornerShape(16.dp))
+                        ) {
                             SettingsItemRow(
                                 item = itemData,
-                                accentColor = if (index % 2 == 0) SettingsColors.NeonPink else SettingsColors.NeonGreen,
+                                accentColor = Color.White,
                                 onClick = {
                                     if (itemData.enabled && itemData.route != null) {
                                         onNavigate(itemData.route)
                                     } else {
-                                        Toast.makeText(context, "Coming soon 🩵", Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(context, "Coming soon \uD83E\uDEB5", Toast.LENGTH_SHORT).show()
                                     }
                                 }
                             )
-                            if (index != sectionItems.lastIndex) {
-                                Spacer(
-                                    Modifier
-                                        .fillMaxWidth()
-                                        .height(1.dp)
-                                        .background(Color(0xFF2A2A2A))
-                                )
-                            }
                         }
+                        Spacer(Modifier.height(10.dp))
                     }
                 }
-                item { Spacer(Modifier.height(24.dp)) }
+                item { Spacer(Modifier.height(14.dp)) }
             }
 
             item { SettingsQuoteFooter() }
