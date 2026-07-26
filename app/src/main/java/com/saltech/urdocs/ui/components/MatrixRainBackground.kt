@@ -35,8 +35,8 @@ fun MatrixRainBackground(
     )
 
     Canvas(modifier = modifier.fillMaxSize()) {
-        val fontSizePx = 22.dp.toPx()
-        val cellSize = fontSizePx * 1.6f
+        val fontSizePx = 8.dp.toPx()
+        val cellSize = fontSizePx * 0.9f
         val cols = (size.width / cellSize).toInt() + 1
         val rows = (size.height / cellSize).toInt() + 1
         val centerX = cols / 2f
