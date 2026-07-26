@@ -3,6 +3,7 @@ package com.saltech.urdocs.ui.screens
 import android.content.ContentValues
 import android.graphics.Bitmap
 import android.graphics.Picture
+import android.graphics.Rect
 import android.os.Build
 import android.provider.MediaStore
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -17,9 +18,11 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -46,7 +49,7 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.layout.ContentScale  
+import androidx.compose.ui.layout.ContentScale
 import com.saltech.urdocs.R
 
 data class TraditionalResumeFields(
@@ -98,6 +101,9 @@ fun TraditionalResumeScreen(
     var displaySelfie by remember { mutableStateOf<Bitmap?>(null) }
     var isProcessingPhoto by remember { mutableStateOf(false) }
 
+    // ---------- Polo overlay choice: state para sa pending crop habang naghihintay ng consent ----------
+    var poloChoicePending by remember { mutableStateOf<Pair<Bitmap, Rect>?>(null) }
+
     LaunchedEffect(processedSelfie) {
         if (processedSelfie != null) rawSource = processedSelfie
     }
@@ -117,16 +123,65 @@ fun TraditionalResumeScreen(
             isProcessingPhoto = true
             val result = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) {
                 try {
-                    val cropped = com.saltech.urdocs.ml.FaceCropHelper.cropTo2x2(raw)
-                    val whiteBg = com.saltech.urdocs.ml.BackgroundHelper.replaceWithWhiteBackground(cropped)
-                    com.saltech.urdocs.ml.SkinSmoothingHelper.studioClean(whiteBg)
+                    com.saltech.urdocs.ml.FaceCropHelper.cropTo2x2WithFaceBox(raw)
                 } catch (e: Exception) {
-                    raw
+                    null
                 }
+            }
+            isProcessingPhoto = false
+            if (result != null) {
+                poloChoicePending = result
+            } else {
+                displaySelfie = raw
+            }
+        }
+    }
+
+    fun finishProcessing(cropped: Bitmap, faceBox: Rect, addPolo: Boolean) {
+        val scope = kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Default)
+        scope.launch {
+            isProcessingPhoto = true
+            val result = try {
+                val withPolo = if (addPolo) {
+                    com.saltech.urdocs.ml.FaceCropHelper.addPoloOverlay(cropped, faceBox)
+                } else {
+                    cropped
+                }
+                val whiteBg = com.saltech.urdocs.ml.BackgroundHelper.replaceWithWhiteBackground(withPolo)
+                com.saltech.urdocs.ml.SkinSmoothingHelper.studioClean(whiteBg)
+            } catch (e: Exception) {
+                cropped
             }
             displaySelfie = result
             isProcessingPhoto = false
         }
+    }
+
+    // ---------- Consent dialog: may polo o yun na lang ----------
+    poloChoicePending?.let { (cropped, faceBox) ->
+        AlertDialog(
+            onDismissRequest = { },
+            title = { Text("Lagyan ng polo?") },
+            text = {
+                Text("Gusto mo bang lagyan ng simpleng puting polo/collar ang litrato mo, o gamitin na lang ang litrato mo mismo?")
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    poloChoicePending = null
+                    finishProcessing(cropped, faceBox, addPolo = true)
+                }) {
+                    Text("Oo, lagyan ng polo")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = {
+                    poloChoicePending = null
+                    finishProcessing(cropped, faceBox, addPolo = false)
+                }) {
+                    Text("Hindi, ito na")
+                }
+            }
+        )
     }
 
     val picture = remember { Picture() }
@@ -171,7 +226,6 @@ fun TraditionalResumeScreen(
                 .padding(28.dp)
         ) {
             Column(modifier = Modifier.fillMaxSize()) {
-
                 Text(
                     "R E S U M E",
                     fontSize = 34.sp,
@@ -388,7 +442,6 @@ fun TraditionalResumeScreen(
         }
     }
 }
-
 private fun saveBitmapToGalleryTraditional(context: android.content.Context, bitmap: Bitmap) {
     val filename = "Resume_Traditional_${System.currentTimeMillis()}.png"
     val contentValues = ContentValues().apply {
