@@ -315,7 +315,7 @@ fun GovtFormsScreen(
                     .clip(RoundedCornerShape(24.dp))
                     .background(GCardBg)
                     .border(
-                        BorderStroke(1.5.dp, Brush.horizontalGradient(listOf(GGreen, GPink))),
+                        BorderStroke(1.5.dp, Brush.horizontalGradient(listOf(GPink, GGreen))),
                         RoundedCornerShape(24.dp)
                     )
                     .padding(horizontal = 14.dp, vertical = 0.dp),

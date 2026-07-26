@@ -435,7 +435,7 @@ private fun LettersHubContent(
                     .clip(RoundedCornerShape(16.dp))
                     .background(Color(0xFF0A0A0A))
                     .border(
-                        BorderStroke(1.5.dp, Brush.linearGradient(listOf(UrGreen, UrPink))),
+                        BorderStroke(1.5.dp, Brush.linearGradient(listOf(UrPink, UrGreen))),
                         RoundedCornerShape(16.dp)
                     )
                     .padding(16.dp),
