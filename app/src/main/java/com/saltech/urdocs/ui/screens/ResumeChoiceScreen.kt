@@ -35,12 +35,6 @@ private val RGradient = Brush.horizontalGradient(listOf(RPink, RGreen))
 @Composable
 fun ResumeChoiceScreen(onChoose: (String) -> Unit) {
     Box(modifier = Modifier.fillMaxSize().background(Color.Black)) {
-        Image(
-            painter = painterResource(id = R.drawable.ic_launcher_bg),
-            contentDescription = null,
-            modifier = Modifier.fillMaxSize().scale(1.1f),
-            contentScale = ContentScale.Crop
-        )
         
         Box(
             modifier = Modifier
