@@ -218,17 +218,17 @@ private fun ThinkingIndicator() {
             repeatMode = RepeatMode.Reverse
         ), label = "textAlpha"
     )
-
-    Row(verticalAlignment = Alignment.CenterVertically) {
+    
+Row(verticalAlignment = Alignment.CenterVertically) {
         Box(
             modifier = Modifier
                 .width(3.dp)
                 .height(22.dp)
-                .background(Brush.verticalGradient(listOf(Color(0xFF0A3D1F), Color.Black)))
+                .background(Brush.verticalGradient(listOf(Color(0xFF9A2050), Color(0xFF1E6B34))))
         )
         Spacer(Modifier.width(8.dp))
         Column {
-            Text("Thinking...", color = UrGray.copy(alpha = textAlpha), fontSize = 12.sp)
+            Text("Thinking...", color = Color(0xFF9A9A9A).copy(alpha = textAlpha), fontSize = 12.sp)
             Spacer(Modifier.height(4.dp))
             TypingDots()
         }
@@ -240,13 +240,13 @@ private fun ThinkingIndicator() {
             Canvas(modifier = Modifier.matchParentSize().rotate(ringRotation)) {
                 val stroke = 2.dp.toPx()
                 drawArc(
-                    color = UrPink,
+                    color = Color(0xFF9A2050),
                     startAngle = 0f, sweepAngle = 110f,
                     useCenter = false,
                     style = Stroke(width = stroke, cap = StrokeCap.Round)
                 )
                 drawArc(
-                    color = UrGreen,
+                    color = Color(0xFF1E6B34),
                     startAngle = 180f, sweepAngle = 110f,
                     useCenter = false,
                     style = Stroke(width = stroke, cap = StrokeCap.Round)
@@ -255,11 +255,10 @@ private fun ThinkingIndicator() {
             Icon(
                 Icons.Filled.Psychology,
                 contentDescription = null,
-                tint = UrGreen,
+                tint = Color(0xFF1E6B34),
                 modifier = Modifier.size(16.dp).scale(pulse)
             )
         }
-    }
 }
 
 @Composable
@@ -294,6 +293,19 @@ private fun AssistantAvatar() {
         Icon(Icons.Filled.AutoAwesome, contentDescription = null, tint = UrGreen, modifier = Modifier.size(16.dp))
     }
 }
+@Composable
+private fun TypewriterText(fullText: String, color: Color, fontSize: androidx.compose.ui.unit.TextUnit) {
+    var shownChars by remember(fullText) { mutableStateOf(0) }
+    LaunchedEffect(fullText) {
+        shownChars = 0
+        while (shownChars < fullText.length) {
+            shownChars += 2
+            delay(18)
+        }
+        shownChars = fullText.length
+    }
+    Text(fullText.take(shownChars), color = color, fontSize = fontSize)
+}
 
 @Composable
 private fun ChatBubble(msg: ChatMessage) {
@@ -309,7 +321,11 @@ private fun ChatBubble(msg: ChatMessage) {
             modifier = Modifier.widthIn(max = 260.dp).clip(RoundedCornerShape(16.dp))
                 .background(if (msg.isUser) UrGreen else UrBubbleDark).padding(14.dp)
         ) {
-            Text(msg.text, color = if (msg.isUser) Color.Black else Color.White, fontSize = 14.sp)
+            if (msg.isUser) {
+    Text(msg.text, color = Color.Black, fontSize = 14.sp)
+} else {
+    TypewriterText(msg.text, Color.White, 14.sp)
+            }
             Spacer(Modifier.height(4.dp))
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.CenterVertically) {
                 Text(msg.time, color = if (msg.isUser) Color(0xFF0A3D1F) else UrGray, fontSize = 10.sp)
@@ -341,20 +357,22 @@ private fun ThinkingBubble() {
 
 @Composable
 private fun AnimatedChatBackground(isTyping: Boolean) {
-    val transition = rememberInfiniteTransition(label = "bgShift")
-    val shift by transition.animateFloat(
+    val transition = rememberInfiniteTransition(label = "bgWave")
+    val wave by transition.animateFloat(
         initialValue = 0f,
         targetValue = 1f,
         animationSpec = infiniteRepeatable(
-            animation = androidx.compose.animation.core.tween(
-                durationMillis = if (isTyping) 2500 else 6000,
-                easing = androidx.compose.animation.core.LinearEasing
-            ),
-            repeatMode = RepeatMode.Reverse
+            animation = androidx.compose.animation.core.keyframes {
+                durationMillis = 5000
+                0f at 0
+                0.9f at 1500
+                0f at 3000
+                0f at 5000
+            }
         ),
-        label = "bgShiftValue"
+        label = "bgWaveValue"
     )
-    val baseAlpha = if (isTyping) 0.18f else 0.08f
+    val maxAlpha = 0.07f
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -362,12 +380,12 @@ private fun AnimatedChatBackground(isTyping: Boolean) {
             .background(
                 Brush.linearGradient(
                     colors = listOf(
-                        UrPink.copy(alpha = baseAlpha * shift),
+                        Color(0xFF9A2050).copy(alpha = maxAlpha * wave),
                         Color.Black,
-                        UrGreen.copy(alpha = baseAlpha * (1f - shift))
+                        Color(0xFF1E6B34).copy(alpha = maxAlpha * wave)
                     ),
-                    start = androidx.compose.ui.geometry.Offset(0f, shift * 1000f),
-                    end = androidx.compose.ui.geometry.Offset(1000f, (1f - shift) * 1000f)
+                    start = androidx.compose.ui.geometry.Offset(0f, 0f),
+                    end = androidx.compose.ui.geometry.Offset(1000f, 1000f)
                 )
             )
     )
