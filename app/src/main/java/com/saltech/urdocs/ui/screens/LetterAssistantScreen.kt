@@ -36,6 +36,13 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 import androidx.compose.animation.core.*
+import android.graphics.Bitmap
+import android.provider.MediaStore
+import androidx.compose.ui.graphics.rememberGraphicsLayer
+import androidx.compose.ui.graphics.asAndroidBitmap
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.ui.draw.drawWithContent
 
 private val UrPink = Color(0xFFFF2E7E)
 private val UrGreen = Color(0xFF39FF6A)
@@ -187,6 +194,9 @@ fun LetterAssistantScreen(
             }
         }
     }
+    }
+    generatedLetter?.let { letter ->
+        LetterPaperPreview(letterText = letter, onDismiss = { generatedLetter = null })
     }
 }
 
@@ -388,4 +398,94 @@ private fun AnimatedChatBackground(isTyping: Boolean) {
                 )
             )
     )
+}
+
+@Composable
+private fun LetterPaperPreview(letterText: String, onDismiss: () -> Unit) {
+    val context = LocalContext.current
+    val graphicsLayer = rememberGraphicsLayer()
+    val scope = rememberCoroutineScope()
+    var saving by remember { mutableStateOf(false) }
+
+    fun saveToGallery(bitmap: Bitmap) {
+        val filename = "UR_Letter_${System.currentTimeMillis()}.png"
+        val resolver = context.contentResolver
+        val values = android.content.ContentValues().apply {
+            put(MediaStore.Images.Media.DISPLAY_NAME, filename)
+            put(MediaStore.Images.Media.MIME_TYPE, "image/png")
+            put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/URDocs")
+        }
+        val uri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+        uri?.let {
+            resolver.openOutputStream(it)?.use { out ->
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
+            }
+        }
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black.copy(alpha = 0.9f))
+            .clickable(enabled = false) {},
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth(0.9f)
+                .fillMaxHeight(0.85f)
+        ) {
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+                    .drawWithContent {
+                        graphicsLayer.record { this@drawWithContent.drawContent() }
+                        drawLayer(graphicsLayer)
+                    }
+                    .background(Color.White)
+                    .padding(24.dp)
+            ) {
+                SelectionContainer {
+                    Text(
+                        letterText,
+                        color = Color.Black,
+                        fontSize = 13.sp,
+                        lineHeight = 20.sp
+                    )
+                }
+            }
+            Spacer(Modifier.height(12.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(Color(0xFF2A2A2A))
+                        .clickable { onDismiss() }
+                        .padding(horizontal = 20.dp, vertical = 12.dp)
+                ) {
+                    Text("Isara", color = Color.White)
+                }
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(UrGreen)
+                        .clickable(enabled = !saving) {
+                            saving = true
+                            scope.launch {
+                                val bitmap = graphicsLayer.toImageBitmap().asAndroidBitmap()
+                                saveToGallery(bitmap)
+                                saving = false
+                            }
+                        }
+                        .padding(horizontal = 20.dp, vertical = 12.dp)
+                ) {
+                    Text(if (saving) "Sinesave..." else "I-Download", color = Color.Black, fontWeight = FontWeight.Bold)
+                }
+            }
+        }
+    }
 }
