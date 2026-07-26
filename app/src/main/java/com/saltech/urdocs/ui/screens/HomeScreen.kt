@@ -102,6 +102,7 @@ private fun HomeMenuCard(item: HomeMenuItem, onClick: () -> Unit) {
             .pressScale(interactionSource)
             .clip(RoundedCornerShape(16.dp))
             .background(UrGray)
+            .border(1.dp, Brush.linearGradient(listOf(Color.Black, Color(0xFF4C8DFF))), RoundedCornerShape(16.dp))
             .clickable(interactionSource = interactionSource, indication = null) { onClick() }
             .padding(20.dp),
         verticalAlignment = Alignment.CenterVertically
