@@ -518,7 +518,7 @@ private fun LetterCard(
                 .size(54.dp)
                 .clip(RoundedCornerShape(12.dp))
                 .background(Color(0xFF1F1F1F))
-                .border(1.dp, UrPink.copy(alpha = 0.4f), RoundedCornerShape(12.dp)),
+                .border(1.dp, Brush.linearGradient(listOf(Color(0xFF4C8DFF), Color.Black)), RoundedCornerShape(12.dp)),
             contentAlignment = Alignment.Center
         ) {
             icon(Modifier.size(24.dp))
