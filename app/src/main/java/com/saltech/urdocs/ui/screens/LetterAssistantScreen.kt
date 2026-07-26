@@ -1,6 +1,13 @@
 package com.saltech.urdocs.ui.screens
 
+import android.graphics.Bitmap
+import android.provider.MediaStore
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.*
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -11,6 +18,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -18,13 +26,18 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
-import androidx.compose.foundation.Canvas
-import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Canvas as ComposeCanvas
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.draw
+import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
@@ -35,21 +48,14 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
-import androidx.compose.animation.core.*
-import android.graphics.Bitmap
-import android.provider.MediaStore
-import androidx.compose.ui.draw.drawWithCache
-import androidx.compose.ui.graphics.drawscope.draw
-import androidx.compose.ui.graphics.nativeCanvas
-import androidx.compose.ui.graphics.Canvas as ComposeCanvas
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.ui.draw.drawWithContent
 
-private val UrPink = Color(0xFFFF2E7E)
-private val UrGreen = Color(0xFF39FF6A)
+// ==================== Blue "Gemini-style" palette ====================
+private val UrBlue = Color(0xFF4C8DFF)
+private val UrBlueDeep = Color(0xFF16255E)
+private val UrBlueDark = Color(0xFF060B18)
 private val UrGray = Color(0xFF9A9A9A)
 private val UrBubbleDark = Color(0xFF161616)
+private val UrUserBubble = Color(0xFF1E4FD6)
 
 data class ChatMessage(
     val text: String,
@@ -71,12 +77,11 @@ fun LetterAssistantScreen(
     var inputText by remember { mutableStateOf("") }
     var isTyping by remember { mutableStateOf(false) }
     var started by remember { mutableStateOf(false) }
+    var generatedLetter by remember { mutableStateOf<String?>(null) }
 
     fun addMessage(text: String, isUser: Boolean) {
         messages = messages + ChatMessage(text = text, isUser = isUser)
     }
-
-    var generatedLetter by remember { mutableStateOf<String?>(null) }
 
     fun sendToGemini(userText: String?) {
         scope.launch {
@@ -84,7 +89,6 @@ fun LetterAssistantScreen(
             if (userText != null) {
                 history = history + ("user" to userText)
             }
-            delay(600 + (200..900).random().toLong())
             val reply = repository.chat(history)
             history = history + ("model" to reply)
             isTyping = false
@@ -123,51 +127,87 @@ fun LetterAssistantScreen(
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
-    Column(modifier = Modifier.fillMaxSize().background(Color.Black)) {
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
+
+        // ---------- Full-bleed pulsing gradient background, Gemini-style: dark on top, blue glow at bottom ----------
+        AnimatedChatBackground(isTyping)
+
+        // ---------- Back button floats on top ----------
+        Box(
+            modifier = Modifier
+                .padding(16.dp)
+                .size(40.dp)
+                .clip(RoundedCornerShape(12.dp))
+                .background(Color.White.copy(alpha = 0.06f))
+                .border(1.dp, UrBlue.copy(alpha = 0.6f), RoundedCornerShape(12.dp))
+                .clickable { onBack() },
+            contentAlignment = Alignment.Center
         ) {
-            Box(
-                modifier = Modifier
-                    .size(40.dp)
-                    .clip(RoundedCornerShape(10.dp))
-                    .border(1.dp, UrPink, RoundedCornerShape(10.dp))
-                    .clickable { onBack() },
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(Icons.Filled.ArrowBack, contentDescription = "Back", tint = UrPink)
-            }
-            Spacer(Modifier.width(12.dp))
-            Spacer(Modifier.weight(1f))
+            Icon(Icons.Filled.ArrowBack, contentDescription = "Back", tint = UrBlue)
         }
 
-        Box(modifier = Modifier.weight(1f).fillMaxWidth()) {
-            AnimatedChatBackground(isTyping)
-            LazyColumn(
-                state = listState,
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(16.dp),
-                verticalArrangement = Arrangement.spacedBy(14.dp)
+        // ---------- Greeting header, only shows before the first reply arrives ----------
+        AnimatedVisibility(
+            visible = messages.isEmpty() && !isTyping,
+            enter = fadeIn(animationSpec = tween(500))
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 100.dp, start = 24.dp, end = 24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-            items(messages) { msg -> ChatBubble(msg) }
+                Icon(Icons.Filled.AutoAwesome, contentDescription = null, tint = UrBlue, modifier = Modifier.size(30.dp))
+                Spacer(Modifier.height(10.dp))
+                Text(
+                    "Good day Luv, how are You",
+                    color = Color.White,
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Medium,
+                    textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                )
+            }
+        }
+
+        // ---------- Chat list ----------
+        LazyColumn(
+            state = listState,
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 72.dp, bottom = 110.dp),
+            verticalArrangement = Arrangement.spacedBy(14.dp)
+        ) {
+            items(messages, key = { it.time + it.text.hashCode() }) { msg ->
+                var visible by remember { mutableStateOf(false) }
+                LaunchedEffect(Unit) { visible = true }
+                AnimatedVisibility(
+                    visible = visible,
+                    enter = fadeIn(animationSpec = tween(350, easing = FastOutSlowInEasing)) +
+                            slideInVertically(
+                                animationSpec = tween(350, easing = FastOutSlowInEasing),
+                                initialOffsetY = { it / 4 }
+                            )
+                ) {
+                    ChatBubble(msg)
+                }
+            }
             if (isTyping) {
                 item { ThinkingBubble() }
             }
+        }
 
-        }
-        }
+        // ---------- Floating input box ----------
         Row(
             modifier = Modifier
+                .align(Alignment.BottomCenter)
                 .fillMaxWidth()
-                .padding(12.dp)
-                .clip(RoundedCornerShape(24.dp))
-                .background(Color(0xFF0A0A0A))
-                .border(BorderStroke(1.5.dp, Brush.linearGradient(listOf(UrGreen, UrPink))), RoundedCornerShape(24.dp))
-                .padding(horizontal = 8.dp, vertical = 6.dp),
+                .padding(horizontal = 14.dp, vertical = 14.dp)
+                .shadow(18.dp, RoundedCornerShape(28.dp), ambientColor = UrBlue, spotColor = UrBlue)
+                .clip(RoundedCornerShape(28.dp))
+                .background(Color(0xFF0C0F16))
+                .border(BorderStroke(1.2.dp, Brush.horizontalGradient(listOf(UrBlue, UrBlueDeep))), RoundedCornerShape(28.dp))
+                .padding(horizontal = 10.dp, vertical = 6.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(Icons.Filled.AttachFile, contentDescription = null, tint = UrPink, modifier = Modifier.size(20.dp))
+            Icon(Icons.Filled.AttachFile, contentDescription = null, tint = UrBlue, modifier = Modifier.size(20.dp))
             Spacer(Modifier.width(8.dp))
             TextField(
                 value = inputText,
@@ -182,25 +222,29 @@ fun LetterAssistantScreen(
                     focusedTextColor = Color.White,
                     unfocusedTextColor = Color.White
                 ),
-                
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
                 maxLines = 5,
                 enabled = !isTyping
             )
             Box(
-                modifier = Modifier.size(38.dp).clip(CircleShape).background(UrPink)
+                modifier = Modifier
+                    .size(38.dp)
+                    .clip(CircleShape)
+                    .background(if (inputText.isNotBlank() && !isTyping) UrBlue else Color(0xFF2A2A2A))
                     .clickable(enabled = inputText.isNotBlank() && !isTyping) { handleUserInput(inputText) },
                 contentAlignment = Alignment.Center
             ) {
                 Icon(Icons.Filled.Send, contentDescription = "Send", tint = Color.White, modifier = Modifier.size(18.dp))
             }
         }
-    }
-    }
-    generatedLetter?.let { letter ->
-        LetterPaperPreview(letterText = letter, onDismiss = { generatedLetter = null })
+
+        generatedLetter?.let { letter ->
+            LetterPaperPreview(letterText = letter, onDismiss = { generatedLetter = null })
+        }
     }
 }
+
+// ==================== Thinking indicator (blue, fast & smooth) ====================
 
 @Composable
 private fun ThinkingIndicator() {
@@ -209,36 +253,36 @@ private fun ThinkingIndicator() {
     val ringRotation by transition.animateFloat(
         initialValue = 0f, targetValue = 360f,
         animationSpec = infiniteRepeatable(
-            animation = androidx.compose.animation.core.tween(2200, easing = androidx.compose.animation.core.LinearEasing)
+            animation = tween(1400, easing = LinearEasing)
         ), label = "ringRotation"
     )
 
     val pulse by transition.animateFloat(
-        initialValue = 0.85f, targetValue = 1.15f,
+        initialValue = 0.88f, targetValue = 1.12f,
         animationSpec = infiniteRepeatable(
-            animation = androidx.compose.animation.core.tween(900, easing = androidx.compose.animation.core.FastOutSlowInEasing),
+            animation = tween(600, easing = FastOutSlowInEasing),
             repeatMode = RepeatMode.Reverse
         ), label = "pulse"
     )
 
     val textAlpha by transition.animateFloat(
-        initialValue = 0.35f, targetValue = 1f,
+        initialValue = 0.4f, targetValue = 1f,
         animationSpec = infiniteRepeatable(
-            animation = androidx.compose.animation.core.tween(800),
+            animation = tween(600),
             repeatMode = RepeatMode.Reverse
         ), label = "textAlpha"
     )
-    
-Row(verticalAlignment = Alignment.CenterVertically) {
+
+    Row(verticalAlignment = Alignment.CenterVertically) {
         Box(
             modifier = Modifier
                 .width(3.dp)
                 .height(22.dp)
-                .background(Brush.verticalGradient(listOf(Color(0xFF9A2050), Color(0xFF1E6B34))))
+                .background(Brush.verticalGradient(listOf(UrBlue, UrBlueDeep)))
         )
         Spacer(Modifier.width(8.dp))
         Column {
-            Text("Thinking...", color = Color(0xFF9A9A9A).copy(alpha = textAlpha), fontSize = 12.sp)
+            Text("Thinking...", color = UrGray.copy(alpha = textAlpha), fontSize = 12.sp)
             Spacer(Modifier.height(4.dp))
             TypingDots()
         }
@@ -250,14 +294,14 @@ Row(verticalAlignment = Alignment.CenterVertically) {
             Canvas(modifier = Modifier.matchParentSize().rotate(ringRotation)) {
                 val stroke = 2.dp.toPx()
                 drawArc(
-                    color = Color(0xFF9A2050),
-                    startAngle = 0f, sweepAngle = 110f,
+                    color = UrBlue,
+                    startAngle = 0f, sweepAngle = 160f,
                     useCenter = false,
                     style = Stroke(width = stroke, cap = StrokeCap.Round)
                 )
                 drawArc(
-                    color = Color(0xFF1E6B34),
-                    startAngle = 180f, sweepAngle = 110f,
+                    color = UrBlueDeep,
+                    startAngle = 180f, sweepAngle = 160f,
                     useCenter = false,
                     style = Stroke(width = stroke, cap = StrokeCap.Round)
                 )
@@ -265,11 +309,11 @@ Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
                 Icons.Filled.Psychology,
                 contentDescription = null,
-                tint = Color(0xFF1E6B34),
+                tint = UrBlue,
                 modifier = Modifier.size(16.dp).scale(pulse)
             )
         }
-}
+    }
 }
 
 @Composable
@@ -280,7 +324,7 @@ private fun TypingDots() {
             val alpha by transition.animateFloat(
                 initialValue = 0.3f, targetValue = 1f,
                 animationSpec = infiniteRepeatable(
-                    animation = androidx.compose.animation.core.tween(500, delayMillis = i * 150),
+                    animation = tween(400, delayMillis = i * 120),
                     repeatMode = RepeatMode.Reverse
                 ), label = "dot$i"
             )
@@ -289,7 +333,7 @@ private fun TypingDots() {
                     .padding(horizontal = 2.dp)
                     .size(6.dp)
                     .clip(CircleShape)
-                    .background(UrGreen.copy(alpha = alpha))
+                    .background(UrBlue.copy(alpha = alpha))
             )
         }
     }
@@ -298,20 +342,21 @@ private fun TypingDots() {
 @Composable
 private fun AssistantAvatar() {
     Box(
-        modifier = Modifier.size(34.dp).clip(CircleShape).border(1.dp, UrGreen, CircleShape),
+        modifier = Modifier.size(34.dp).clip(CircleShape).border(1.dp, UrBlue, CircleShape),
         contentAlignment = Alignment.Center
     ) {
-        Icon(Icons.Filled.AutoAwesome, contentDescription = null, tint = UrGreen, modifier = Modifier.size(16.dp))
+        Icon(Icons.Filled.AutoAwesome, contentDescription = null, tint = UrBlue, modifier = Modifier.size(16.dp))
     }
 }
+
 @Composable
 private fun TypewriterText(fullText: String, color: Color, fontSize: androidx.compose.ui.unit.TextUnit) {
     var shownChars by remember(fullText) { mutableStateOf(0) }
     LaunchedEffect(fullText) {
         shownChars = 0
         while (shownChars < fullText.length) {
-            shownChars += 2
-            delay(18)
+            shownChars += 3
+            delay(12)
         }
         shownChars = fullText.length
     }
@@ -330,19 +375,19 @@ private fun ChatBubble(msg: ChatMessage) {
         }
         Column(
             modifier = Modifier.widthIn(max = 260.dp).clip(RoundedCornerShape(16.dp))
-                .background(if (msg.isUser) UrGreen else UrBubbleDark).padding(14.dp)
+                .background(if (msg.isUser) UrUserBubble else UrBubbleDark).padding(14.dp)
         ) {
             if (msg.isUser) {
-    Text(msg.text, color = Color.Black, fontSize = 14.sp)
-} else {
-    TypewriterText(msg.text, Color.White, 14.sp)
+                Text(msg.text, color = Color.White, fontSize = 14.sp)
+            } else {
+                TypewriterText(msg.text, Color.White, 14.sp)
             }
             Spacer(Modifier.height(4.dp))
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.CenterVertically) {
-                Text(msg.time, color = if (msg.isUser) Color(0xFF0A3D1F) else UrGray, fontSize = 10.sp)
+                Text(msg.time, color = if (msg.isUser) Color(0xFFB9CBFF) else UrGray, fontSize = 10.sp)
                 if (msg.isUser) {
                     Spacer(Modifier.width(4.dp))
-                    Icon(Icons.Filled.DoneAll, contentDescription = null, tint = Color(0xFF0A3D1F), modifier = Modifier.size(12.dp))
+                    Icon(Icons.Filled.DoneAll, contentDescription = null, tint = Color(0xFFB9CBFF), modifier = Modifier.size(12.dp))
                 }
             }
         }
@@ -357,50 +402,49 @@ private fun ThinkingBubble() {
     ) {
         AssistantAvatar()
         Spacer(Modifier.width(10.dp))
-        Column(
-            modifier = Modifier
-        ) {
+        Column(modifier = Modifier) {
             ThinkingIndicator()
         }
     }
 }
 
+// ==================== Gemini-style pulsing vertical gradient (dark top -> blue bottom, defined start/end, no drifting) ====================
+
 @Composable
 private fun AnimatedChatBackground(isTyping: Boolean) {
-    val transition = rememberInfiniteTransition(label = "bgWave")
-    val wave by transition.animateFloat(
+    val transition = rememberInfiniteTransition(label = "bgPulse")
+
+    // Gentle heartbeat pulse, exactly like Gemini's "processing" glow -- clear start and end each cycle
+    val pulse by transition.animateFloat(
         initialValue = 0f,
         targetValue = 1f,
         animationSpec = infiniteRepeatable(
-            animation = androidx.compose.animation.core.keyframes {
-                durationMillis = 6000
-                0f at 0
-                1f at 2000
-                1f at 3000
-                0f at 3200
-                0f at 6000
-            }
+            animation = tween(if (isTyping) 1400 else 3200, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
         ),
-        label = "bgWaveValue"
+        label = "bgPulseValue"
     )
-    val maxAlpha = 0.10f
+
+    val baseIntensity = if (isTyping) 0.55f else 0.30f
+    val intensity = baseIntensity + pulse * 0.15f
+
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black)
             .background(
-                Brush.linearGradient(
+                Brush.verticalGradient(
                     colors = listOf(
-                        Color(0xFF9A2050).copy(alpha = maxAlpha * wave),
                         Color.Black,
-                        Color(0xFF1E6B34).copy(alpha = maxAlpha * wave)
-                    ),
-                    start = androidx.compose.ui.geometry.Offset(0f, 0f),
-                    end = androidx.compose.ui.geometry.Offset(1000f, 1000f)
+                        UrBlueDark,
+                        UrBlueDeep.copy(alpha = intensity),
+                        UrBlue.copy(alpha = intensity * 0.9f)
+                    )
                 )
             )
     )
 }
+
+// ==================== Letter bond-paper preview + save to gallery ====================
 
 @Composable
 private fun LetterPaperPreview(letterText: String, onDismiss: () -> Unit) {
@@ -462,7 +506,7 @@ private fun LetterPaperPreview(letterText: String, onDismiss: () -> Unit) {
                         .clickable { onDismiss() }.padding(horizontal = 20.dp, vertical = 12.dp)
                 ) { Text("Isara", color = Color.White) }
                 Box(
-                    modifier = Modifier.clip(RoundedCornerShape(12.dp)).background(UrGreen)
+                    modifier = Modifier.clip(RoundedCornerShape(12.dp)).background(UrBlue)
                         .clickable(enabled = !saving) {
                             saving = true
                             scope.launch {
@@ -470,7 +514,7 @@ private fun LetterPaperPreview(letterText: String, onDismiss: () -> Unit) {
                                 saving = false
                             }
                         }.padding(horizontal = 20.dp, vertical = 12.dp)
-                ) { Text(if (saving) "Sinesave..." else "I-Download", color = Color.Black, fontWeight = FontWeight.Bold) }
+                ) { Text(if (saving) "Sinesave..." else "I-Download", color = Color.White, fontWeight = FontWeight.Bold) }
             }
         }
     }
