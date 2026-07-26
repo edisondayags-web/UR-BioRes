@@ -377,6 +377,48 @@ fun GovtFormsScreen(
             }
         }
 
+        // ---------- LIVE SEARCH SUGGESTIONS ----------
+        val suggestionMatches = if (query.isBlank()) {
+            emptyList()
+        } else {
+            govtCategories.flatMap { it.links }
+                .filter { it.name.contains(query, ignoreCase = true) }
+                .take(5)
+        }
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(min = 98.dp)
+                .padding(horizontal = 16.dp)
+        ) {
+            if (suggestionMatches.isNotEmpty()) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(14.dp))
+                        .background(GCardBg)
+                        .border(1.dp, GGreen, RoundedCornerShape(14.dp))
+                        .padding(8.dp)
+                ) {
+                    suggestionMatches.forEach { link ->
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(10.dp))
+                                .clickable { openLink(link.url) }
+                                .padding(horizontal = 10.dp, vertical = 8.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(Icons.Filled.Search, contentDescription = null, tint = GGray, modifier = Modifier.size(14.dp))
+                            Spacer(Modifier.width(8.dp))
+                            Text(link.name, color = Color.White, fontSize = 13.sp, modifier = Modifier.weight(1f))
+                            Icon(Icons.Filled.OpenInNew, contentDescription = null, tint = GPink, modifier = Modifier.size(14.dp))
+                        }
+                    }
+                }
+            }
+        }
         // ---------- LOGO / TITLE ----------
         Column(
             modifier = Modifier.fillMaxWidth(),
