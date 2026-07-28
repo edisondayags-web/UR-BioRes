@@ -1,6 +1,8 @@
 package com.saltech.urdocs.ui.screens
 
 import android.widget.Toast
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -132,7 +134,20 @@ fun SettingsScreen(
                                 item = itemData,
                                 accentColor = Color.White,
                                 onClick = {
-                                    if (itemData.enabled && itemData.route != null) {
+                                    val emailItems = setOf("Contact Support", "Report a Bug", "Suggest a Feature")
+                                    if (itemData.title in emailItems) {
+                                        val subject = when (itemData.title) {
+                                            "Contact Support" -> "UR BioRes Support"
+                                            "Report a Bug" -> "UR BioRes Bug Report"
+                                            else -> "UR BioRes Feature Suggestion"
+                                        }
+                                        val intent = Intent(Intent.ACTION_SENDTO).apply {
+                                            data = Uri.parse("mailto:")
+                                            putExtra(Intent.EXTRA_EMAIL, arrayOf("edisondayags@gmail.com"))
+                                            putExtra(Intent.EXTRA_SUBJECT, subject)
+                                        }
+                                        context.startActivity(Intent.createChooser(intent, "Send Email"))
+                                    } else if (itemData.enabled && itemData.route != null) {
                                         onNavigate(itemData.route)
                                     } else {
                                         Toast.makeText(context, "Coming soon \uD83E\uDEB5", Toast.LENGTH_SHORT).show()
