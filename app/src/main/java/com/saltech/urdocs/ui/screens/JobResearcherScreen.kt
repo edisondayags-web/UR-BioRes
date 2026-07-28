@@ -5,6 +5,9 @@ import androidx.compose.animation.core.*
 import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
+import androidx.compose.ui.res.painterResource
+import com.saltech.urdocs.R
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -99,7 +102,7 @@ fun JobResearcherScreen(
                     .padding(top = 100.dp, start = 24.dp, end = 24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Icon(Icons.Filled.Psychology, contentDescription = null, tint = JrBlue, modifier = Modifier.size(64.dp))
+                Image(painter = painterResource(R.drawable.ic_brain_thinking), contentDescription = null, modifier = Modifier.size(64.dp))
                 Spacer(Modifier.height(16.dp))
                 Text(
                     "Hello luv Have a Good Day",
@@ -312,10 +315,9 @@ private fun JrThinkingIndicator() {
                 drawArc(color = JrBlue, startAngle = 0f, sweepAngle = 160f, useCenter = false, style = Stroke(width = stroke, cap = StrokeCap.Round))
                 drawArc(color = JrBlueDeep, startAngle = 180f, sweepAngle = 160f, useCenter = false, style = Stroke(width = stroke, cap = StrokeCap.Round))
             }
-            Icon(
-                Icons.Filled.Psychology,
+            Image(
+                painter = painterResource(R.drawable.ic_brain_thinking),
                 contentDescription = null,
-                tint = JrBlue,
                 modifier = Modifier.size(16.dp).scale(pulse)
             )
         }
