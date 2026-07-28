@@ -226,9 +226,9 @@ object DocumentRenderer {
             canvas.drawBitmap(scaled, photoLeft, 40f, null)
         }
         canvas.drawRect(photoRect, box)
-
-        val headerPaint = Paint(black).apply { textSize = 28f; typeface = Typeface.DEFAULT_BOLD }
-        val labelPaint = Paint(black).apply { textSize = 22f }
+val headerPaint = Paint(black).apply { textSize = 28f; typeface = Typeface.DEFAULT_BOLD }
+        val labelBoldPaint = Paint(black).apply { textSize = 22f; typeface = Typeface.DEFAULT_BOLD }
+        val valuePaint = Paint(black).apply { textSize = 22f }
         var y = 150f
         canvas.drawText("PERSONAL DATA", MARGIN, y, headerPaint)
         y += 34f
@@ -236,10 +236,15 @@ object DocumentRenderer {
         fun row(vararg pairs: Pair<String, String>) {
             val colWidth = (DOC_WIDTH - 2 * MARGIN) / pairs.size
             pairs.forEachIndexed { i, (label, value) ->
-                canvas.drawText("$label: $value", MARGIN + i * colWidth, y, labelPaint)
+                val x = MARGIN + i * colWidth
+                val labelText = "$label: "
+                canvas.drawText(labelText, x, y, labelBoldPaint)
+                val labelWidth = labelBoldPaint.measureText(labelText)
+                canvas.drawText(value, x + labelWidth, y, valuePaint)
             }
             y += 32f
         }
+
 
         row("Name" to data.fullName)
         row("Gender" to data.gender)
