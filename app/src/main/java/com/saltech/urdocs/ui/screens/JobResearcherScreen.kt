@@ -76,7 +76,6 @@ fun JobResearcherScreen(
     LaunchedEffect(Unit) {
         if (!started) {
             started = true
-            addMessage("Hello luv have a good day", isUser = false)
         }
     }
 
@@ -100,10 +99,10 @@ fun JobResearcherScreen(
                     .padding(top = 100.dp, start = 24.dp, end = 24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Icon(Icons.Filled.WorkOutline, contentDescription = null, tint = JrBlue, modifier = Modifier.size(30.dp))
-                Spacer(Modifier.height(10.dp))
+                Icon(Icons.Filled.Psychology, contentDescription = null, tint = JrBlue, modifier = Modifier.size(64.dp))
+                Spacer(Modifier.height(16.dp))
                 Text(
-                    "Job Researcher",
+                    "Hello luv Have a Good Day",
                     color = Color.White,
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Medium,
