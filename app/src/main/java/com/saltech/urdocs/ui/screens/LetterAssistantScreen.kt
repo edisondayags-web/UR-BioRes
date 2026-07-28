@@ -2,6 +2,9 @@ package com.saltech.urdocs.ui.screens
 
 import android.graphics.Bitmap
 import android.provider.MediaStore
+import androidx.compose.foundation.Image
+import androidx.compose.ui.res.painterResource
+import com.saltech.urdocs.R
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.*
 import androidx.compose.animation.fadeIn
@@ -145,18 +148,20 @@ fun LetterAssistantScreen(
         // ---------- Greeting header, only shows before the first reply arrives ----------
         AnimatedVisibility(
             visible = messages.isEmpty() && !isTyping,
-            enter = fadeIn(animationSpec = tween(500))
+            enter = fadeIn(animationSpec = tween(500)),
+            modifier = Modifier.fillMaxSize()
         ) {
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 100.dp, start = 24.dp, end = 24.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                    .fillMaxSize()
+                    .padding(start = 24.dp, end = 24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
             ) {
-                Icon(Icons.Filled.Psychology, contentDescription = null, tint = UrBlue, modifier = Modifier.size(64.dp))
+                Image(painter = painterResource(R.drawable.ic_brain_thinking), contentDescription = null, modifier = Modifier.size(64.dp))
                 Spacer(Modifier.height(16.dp))
                 Text(
-                    "Good day Luv, how are You",
+                    "Hello luv have\nA great day",
                     color = Color.White,
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Medium,
