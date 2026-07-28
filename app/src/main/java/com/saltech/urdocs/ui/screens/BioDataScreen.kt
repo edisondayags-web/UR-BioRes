@@ -153,7 +153,8 @@ fun BioDataScreen(
                     cropped
                 }
                 val whiteBg = com.saltech.urdocs.ml.BackgroundHelper.replaceWithWhiteBackground(withPolo)
-                com.saltech.urdocs.ml.SkinSmoothingHelper.studioClean(whiteBg)
+                val leveled = com.saltech.urdocs.ml.SkinSmoothingHelper.studioClean(whiteBg)
+                com.saltech.urdocs.ml.SkinSmoothingHelper.frequencySeparationSmooth(leveled)
             } catch (e: Exception) {
                 cropped
             }
