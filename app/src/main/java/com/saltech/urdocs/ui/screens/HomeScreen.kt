@@ -106,22 +106,22 @@ private fun HomeMenuCard(item: HomeMenuItem, onClick: () -> Unit) {
             .background(Color.Black.copy(alpha = 0.55f))
             .border(1.dp, Brush.linearGradient(listOf(Color(0xFF4C8DFF), Color.Black)), RoundedCornerShape(16.dp))
             .clickable(interactionSource = interactionSource, indication = null) { onClick() }
-            .padding(horizontal = 14.dp, vertical = 10.dp),
+            .padding(horizontal = 18.dp, vertical = 18.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = item.emoji, style = MaterialTheme.typography.titleMedium)
+        Text(text = item.emoji, fontSize = 26.sp)
         Spacer(modifier = Modifier.width(12.dp))
         Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = item.title,
                 color = UrPink,
                 fontWeight = FontWeight.Bold,
-                fontSize = 14.sp
+                fontSize = 17.sp
             )
             Text(
                 text = item.subtitle,
                 color = UrNeon,
-                fontSize = 11.sp
+                fontSize = 13.sp
             )
         }
     }
