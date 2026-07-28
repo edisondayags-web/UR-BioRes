@@ -135,7 +135,7 @@ fun BioDataScreen(
             }
             isProcessingPhoto = false
             if (result != null) {
-                poloChoicePending = result
+                finishProcessing(result.first, result.second, addPolo = false)
             } else {
                 displaySelfie = raw
             }
