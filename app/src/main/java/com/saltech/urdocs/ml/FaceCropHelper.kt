@@ -183,4 +183,94 @@ object FaceCropHelper {
 
         return result
     }
+
+    fun addFormalAttireOverlay(croppedBitmap: Bitmap, faceBoxInCropped: Rect): Bitmap {
+        val result = croppedBitmap.copy(Bitmap.Config.ARGB_8888, true)
+        val canvas = android.graphics.Canvas(result)
+
+        val faceWidth = faceBoxInCropped.width().toFloat()
+        val faceCenterX = faceBoxInCropped.left + faceWidth / 2f
+        val neckY = faceBoxInCropped.bottom - faceWidth * 0.05f
+        val shoulderY = faceBoxInCropped.bottom + faceWidth * 0.55f
+        val shoulderHalfWidth = faceWidth * 1.35f
+        val neckHalfWidth = faceWidth * 0.32f
+        val bottomY = result.height.toFloat()
+
+        val shirtPaint = android.graphics.Paint().apply {
+            color = android.graphics.Color.WHITE
+            isAntiAlias = true
+            style = android.graphics.Paint.Style.FILL
+        }
+        val shirtPath = android.graphics.Path().apply {
+            moveTo(faceCenterX - neckHalfWidth, neckY)
+            lineTo(faceCenterX - shoulderHalfWidth, shoulderY)
+            lineTo(faceCenterX - shoulderHalfWidth, bottomY)
+            lineTo(faceCenterX + shoulderHalfWidth, bottomY)
+            lineTo(faceCenterX + shoulderHalfWidth, shoulderY)
+            lineTo(faceCenterX + neckHalfWidth, neckY)
+            close()
+        }
+        canvas.drawPath(shirtPath, shirtPaint)
+
+        val blazerPaint = android.graphics.Paint().apply {
+            color = android.graphics.Color.rgb(28, 28, 32)
+            isAntiAlias = true
+            style = android.graphics.Paint.Style.FILL
+        }
+        val vDepth = faceWidth * 1.05f
+        val lapelWidth = neckHalfWidth * 1.15f
+
+        val leftBlazer = android.graphics.Path().apply {
+            moveTo(faceCenterX - shoulderHalfWidth, shoulderY)
+            lineTo(faceCenterX - shoulderHalfWidth, bottomY)
+            lineTo(faceCenterX, bottomY)
+            lineTo(faceCenterX, shoulderY + vDepth)
+            lineTo(faceCenterX - lapelWidth, shoulderY + vDepth * 0.25f)
+            close()
+        }
+        canvas.drawPath(leftBlazer, blazerPaint)
+
+        val rightBlazer = android.graphics.Path().apply {
+            moveTo(faceCenterX + shoulderHalfWidth, shoulderY)
+            lineTo(faceCenterX + shoulderHalfWidth, bottomY)
+            lineTo(faceCenterX, bottomY)
+            lineTo(faceCenterX, shoulderY + vDepth)
+            lineTo(faceCenterX + lapelWidth, shoulderY + vDepth * 0.25f)
+            close()
+        }
+        canvas.drawPath(rightBlazer, blazerPaint)
+
+        val collarPaint = android.graphics.Paint().apply {
+            color = android.graphics.Color.rgb(235, 235, 235)
+            isAntiAlias = true
+            style = android.graphics.Paint.Style.FILL
+        }
+        val collarDrop = faceWidth * 0.38f
+        val leftCollar = android.graphics.Path().apply {
+            moveTo(faceCenterX - neckHalfWidth, neckY)
+            lineTo(faceCenterX, neckY + collarDrop)
+            lineTo(faceCenterX - neckHalfWidth * 0.35f, neckY)
+            close()
+        }
+        canvas.drawPath(leftCollar, collarPaint)
+
+        val rightCollar = android.graphics.Path().apply {
+            moveTo(faceCenterX + neckHalfWidth, neckY)
+            lineTo(faceCenterX, neckY + collarDrop)
+            lineTo(faceCenterX + neckHalfWidth * 0.35f, neckY)
+            close()
+        }
+        canvas.drawPath(rightCollar, collarPaint)
+
+        val outlinePaint = android.graphics.Paint().apply {
+            color = android.graphics.Color.rgb(10, 10, 12)
+            isAntiAlias = true
+            style = android.graphics.Paint.Style.STROKE
+            strokeWidth = faceWidth * 0.015f
+        }
+        canvas.drawPath(leftBlazer, outlinePaint)
+        canvas.drawPath(rightBlazer, outlinePaint)
+
+        return result
+    }
 }

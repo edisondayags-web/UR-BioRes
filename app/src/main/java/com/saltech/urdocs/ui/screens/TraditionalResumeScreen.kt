@@ -147,7 +147,7 @@ fun TraditionalResumeScreen(
             isProcessingPhoto = true
             val result = try {
                 val withPolo = if (addPolo) {
-                    com.saltech.urdocs.ml.FaceCropHelper.addPoloOverlay(cropped, faceBox)
+                    com.saltech.urdocs.ml.FaceCropHelper.addFormalAttireOverlay(cropped, faceBox)
                 } else {
                     cropped
                 }
@@ -165,16 +165,16 @@ fun TraditionalResumeScreen(
     poloChoicePending?.let { (cropped, faceBox) ->
         AlertDialog(
             onDismissRequest = { },
-            title = { Text("Lagyan ng polo?") },
+            title = { Text("Lagyan ng formal attire?") },
             text = {
-                Text("Gusto mo bang lagyan ng simpleng puting polo/collar ang litrato mo, o gamitin na lang ang litrato mo mismo?")
+                Text("Gusto mo bang lagyan ng formal attire (blazer/coat) ang litrato mo, o gamitin na lang ang litrato mo mismo?")
             },
             confirmButton = {
                 TextButton(onClick = {
                     poloChoicePending = null
                     finishProcessing(cropped, faceBox, addPolo = true)
                 }) {
-                    Text("Oo, lagyan ng polo")
+                    Text("Oo, lagyan ng formal attire")
                 }
             },
             dismissButton = {
