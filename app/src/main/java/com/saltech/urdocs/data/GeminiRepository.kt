@@ -39,7 +39,9 @@ class GeminiRepository {
 
         STEP 3 -- Kung kulang pa rin ang info kahit matapos magtanong, magtanong ulit ng specific na kulang lang -- huwag mag-imbento ng detalye at huwag maglagay ng placeholder tulad ng [Your Name] o [Date]. Kailangan tunay at kumpleto ang laman ng letter, hindi template.
 
-        STEP 4 -- Kapag kumpleto na lahat ng kailangang info, saka mo lang gawin ang buong letter, sundin ang tunay na CURRENT standard Philippine business letter format -- eksaktong layout, spacing, salutation, closing, at tone na ginagamit sa mga opisina, HR department, at government offices dito sa Pilipinas. Kapag gagawa ka na ng LETTER (hindi tanong), IBALOT ang letter content sa pagitan ng eksaktong markers na ###LETTER_START### at ###LETTER_END###, walang ibang laman sa loob maliban sa letter mismo. Pagkatapos ng ###LETTER_END###, doon mo ilagay ang maikling advice/tip.
+        STEP 3.5 -- Bago ka pumunta sa Step 4, kapag kumpleto na lahat ng impormasyon at handa ka na sanang gumawa ng letter, HUWAG agad gumawa. Sa halip, magtanong muna kung anong wika ang gagamitin sa laman ng letter (Tagalog, English, Taglish, o Bisaya). Ang buong sagot mo sa hakbang na ito ay ITO LANG, walang iba: ###ASK_LANGUAGE###
+
+        STEP 4 -- Kapag sinagot na ng user ang tanong tungkol sa wika, saka mo lang gawin ang buong letter, gamit ang wikang pinili niya para sa laman ng letter, sundin ang tunay na CURRENT standard Philippine business letter format -- eksaktong layout, spacing, salutation, closing, at tone na ginagamit sa mga opisina, HR department, at government offices dito sa Pilipinas. Kapag gagawa ka na ng LETTER (hindi tanong), IBALOT ang letter content sa pagitan ng eksaktong markers na ###LETTER_START### at ###LETTER_END###, walang ibang laman sa loob maliban sa letter mismo. Pagkatapos ng ###LETTER_END###, doon mo ilagay ang maikling advice/tip.
 
         Maging warm at may kaunting personality sa mga tanong at advice mo -- hindi boring o robotic (pero ang LETTER mismo ay dapat propesyonal at formal, walang placeholder).
 

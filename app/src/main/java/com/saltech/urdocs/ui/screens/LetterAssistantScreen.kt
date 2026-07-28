@@ -77,6 +77,14 @@ fun LetterAssistantScreen(
     var isTyping by remember { mutableStateOf(false) }
     var started by remember { mutableStateOf(false) }
     var generatedLetter by remember { mutableStateOf<String?>(null) }
+    var awaitingLanguage by remember { mutableStateOf(false) }
+
+    fun pickLanguage(lang: String) {
+        awaitingLanguage = false
+        addMessage("Sa wikang $lang po.", isUser = true)
+        history = history + ("user" to "Sa wikang $lang po.")
+        sendToGemini(null)
+    }
 
     fun addMessage(text: String, isUser: Boolean) {
         messages = messages + ChatMessage(text = text, isUser = isUser)
@@ -94,7 +102,9 @@ fun LetterAssistantScreen(
 
             val startMarker = "###LETTER_START###"
             val endMarker = "###LETTER_END###"
-            if (reply.contains(startMarker) && reply.contains(endMarker)) {
+            if (reply.trim().contains("###ASK_LANGUAGE###")) {
+                awaitingLanguage = true
+            } else if (reply.contains(startMarker) && reply.contains(endMarker)) {
                 val letterText = reply.substringAfter(startMarker).substringBefore(endMarker).trim()
                 val advice = reply.substringAfter(endMarker).trim()
                 generatedLetter = letterText
@@ -173,6 +183,29 @@ fun LetterAssistantScreen(
             }
             if (isTyping) {
                 item { ThinkingBubble() }
+            }
+            if (awaitingLanguage && !isTyping) {
+                item {
+                    Row(modifier = Modifier.fillMaxWidth()) {
+                        AssistantAvatar()
+                        Spacer(Modifier.width(10.dp))
+                        Column {
+                            Text("Anong wika gusto mo para sa letter mo?", color = Color.White, fontSize = 14.sp)
+                            Spacer(Modifier.height(10.dp))
+                            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                listOf("Tagalog", "English").forEach { lang ->
+                                    LanguageChip(lang) { pickLanguage(lang) }
+                                }
+                            }
+                            Spacer(Modifier.height(8.dp))
+                            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                listOf("Taglish", "Bisaya").forEach { lang ->
+                                    LanguageChip(lang) { pickLanguage(lang) }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -527,5 +560,20 @@ private fun LetterPaperPreview(letterText: String, onDismiss: () -> Unit) {
                 ) { Text(if (saving) "Sinesave..." else "I-Download", color = Color.White, fontWeight = FontWeight.Bold) }
             }
         }
+    }
+}
+
+
+@Composable
+private fun LanguageChip(label: String, onClick: () -> Unit) {
+    Box(
+        modifier = Modifier
+            .clip(RoundedCornerShape(24.dp))
+            .background(Color(0xFF0C0F16))
+            .border(1.dp, Brush.horizontalGradient(listOf(UrBlue, UrBlueDeep)), RoundedCornerShape(24.dp))
+            .clickable { onClick() }
+            .padding(horizontal = 18.dp, vertical = 8.dp)
+    ) {
+        Text(label, color = Color.White, fontSize = 13.sp)
     }
 }
