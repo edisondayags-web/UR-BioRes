@@ -152,8 +152,10 @@ fun TraditionalResumeScreen(
                     cropped
                 }
                 val whiteBg = com.saltech.urdocs.ml.BackgroundHelper.replaceWithWhiteBackground(withPolo)
-                val leveled = com.saltech.urdocs.ml.SkinSmoothingHelper.studioClean(whiteBg)
-                com.saltech.urdocs.ml.SkinSmoothingHelper.frequencySeparationSmooth(leveled)
+                val balanced = com.saltech.urdocs.ml.WhiteBalanceHelper.grayWorldCorrect(whiteBg)
+                val leveled = com.saltech.urdocs.ml.SkinSmoothingHelper.studioClean(balanced)
+                val smoothed = com.saltech.urdocs.ml.SkinSmoothingHelper.frequencySeparationSmooth(leveled)
+                com.saltech.urdocs.ml.SharpeningHelper.unsharpMask(smoothed)
             } catch (e: Exception) {
                 cropped
             }
