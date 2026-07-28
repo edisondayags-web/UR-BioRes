@@ -122,26 +122,6 @@ fun BioDataScreen(
         }
     }
 
-    LaunchedEffect(rawSource) {
-        val raw = rawSource
-        if (raw != null) {
-            isProcessingPhoto = true
-            val result = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) {
-                try {
-                    com.saltech.urdocs.ml.FaceCropHelper.cropTo2x2WithFaceBox(raw)
-                } catch (e: Exception) {
-                    null
-                }
-            }
-            isProcessingPhoto = false
-            if (result != null) {
-                finishProcessing(result.first, result.second, addPolo = false)
-            } else {
-                displaySelfie = raw
-            }
-        }
-    }
-
     fun finishProcessing(cropped: Bitmap, faceBox: Rect, addPolo: Boolean) {
         val scope = kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Default)
         scope.launch {
@@ -164,6 +144,26 @@ fun BioDataScreen(
             isProcessingPhoto = false
         }
     }
+    LaunchedEffect(rawSource) {
+        val raw = rawSource
+        if (raw != null) {
+            isProcessingPhoto = true
+            val result = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) {
+                try {
+                    com.saltech.urdocs.ml.FaceCropHelper.cropTo2x2WithFaceBox(raw)
+                } catch (e: Exception) {
+                    null
+                }
+            }
+            isProcessingPhoto = false
+            if (result != null) {
+                finishProcessing(result.first, result.second, addPolo = false)
+            } else {
+                displaySelfie = raw
+            }
+        }
+    }
+
 
     poloChoicePending?.let { (cropped, faceBox) ->
         AlertDialog(
@@ -585,3 +585,4 @@ private fun TwoCol(
         }
     }
 }
+

@@ -121,26 +121,6 @@ fun TraditionalResumeScreen(
         }
     }
 
-    LaunchedEffect(rawSource) {
-        val raw = rawSource
-        if (raw != null) {
-            isProcessingPhoto = true
-            val result = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) {
-                try {
-                    com.saltech.urdocs.ml.FaceCropHelper.cropTo2x2WithFaceBox(raw)
-                } catch (e: Exception) {
-                    null
-                }
-            }
-            isProcessingPhoto = false
-            if (result != null) {
-                finishProcessing(result.first, result.second, addPolo = false)
-            } else {
-                displaySelfie = raw
-            }
-        }
-    }
-
     fun finishProcessing(cropped: Bitmap, faceBox: Rect, addPolo: Boolean) {
         val scope = kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Default)
         scope.launch {
@@ -163,6 +143,26 @@ fun TraditionalResumeScreen(
             isProcessingPhoto = false
         }
     }
+    LaunchedEffect(rawSource) {
+        val raw = rawSource
+        if (raw != null) {
+            isProcessingPhoto = true
+            val result = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) {
+                try {
+                    com.saltech.urdocs.ml.FaceCropHelper.cropTo2x2WithFaceBox(raw)
+                } catch (e: Exception) {
+                    null
+                }
+            }
+            isProcessingPhoto = false
+            if (result != null) {
+                finishProcessing(result.first, result.second, addPolo = false)
+            } else {
+                displaySelfie = raw
+            }
+        }
+    }
+
 
     // ---------- Consent dialog: may polo o yun na lang ----------
     poloChoicePending?.let { (cropped, faceBox) ->
@@ -642,3 +642,4 @@ private fun RefEntry(
         FieldLine("Contact No.", contact, onChange = onContact)
     }
 }
+
