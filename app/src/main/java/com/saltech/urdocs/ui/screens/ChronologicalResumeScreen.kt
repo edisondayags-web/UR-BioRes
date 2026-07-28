@@ -43,6 +43,13 @@ import androidx.compose.foundation.Image
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.viewinterop.AndroidView
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.FullScreenContentCallback
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 /**
  * "Chronological" na Resume -- tech/CV style, walang photo box.
  * NAME: line sa taas, contact row (phone | email | location | github),
@@ -97,9 +104,35 @@ fun ChronologicalResumeScreen() {
     val picture = remember { Picture() }
     val coroutineScope = rememberCoroutineScope()
 
-    BoxWithConstraints(
-        modifier = Modifier.fillMaxSize().background(Color.Transparent)
-    ) {
+    var interstitialAd by remember { mutableStateOf<InterstitialAd?>(null) }
+    LaunchedEffect(Unit) {
+        InterstitialAd.load(
+            context,
+            "ca-app-pub-3940256099942544/1033173712",
+            AdRequest.Builder().build(),
+            object : InterstitialAdLoadCallback() {
+                override fun onAdLoaded(ad: InterstitialAd) {
+                    interstitialAd = ad
+                }
+            }
+        )
+    }
+
+    Column(modifier = Modifier.fillMaxSize()) {
+        AndroidView(
+            factory = { ctx ->
+                AdView(ctx).apply {
+                    setAdSize(AdSize.BANNER)
+                    adUnitId = "ca-app-pub-3940256099942544/6300978111"
+                    loadAd(AdRequest.Builder().build())
+                }
+            },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        BoxWithConstraints(
+            modifier = Modifier.weight(1f).background(Color.Transparent)
+        ) {
         val fitScale = minOf(maxWidth / paperWidthDp, maxHeight / paperHeightDp)
         var scale by remember { mutableStateOf(fitScale) }
 
@@ -276,19 +309,33 @@ fun ChronologicalResumeScreen() {
         // Download button -- laging nakikita, hindi kasama sa zoom/pan, nasa baba na (para sa ads sa taas)
         Button(
             onClick = {
-                scale = fitScale
-                offset = Offset.Zero
-                coroutineScope.launch {
-                    delay(100)
-                    val bitmap = Bitmap.createBitmap(
-                        picture.width.coerceAtLeast(1),
-                        picture.height.coerceAtLeast(1),
-                        Bitmap.Config.ARGB_8888
-                    )
-                    val canvas = android.graphics.Canvas(bitmap)
-                    canvas.drawColor(android.graphics.Color.WHITE)
-                    canvas.drawPicture(picture)
-                    saveBitmapToGalleryChrono(context, bitmap)
+                fun doSave() {
+                    scale = fitScale
+                    offset = Offset.Zero
+                    coroutineScope.launch {
+                        delay(100)
+                        val bitmap = Bitmap.createBitmap(
+                            picture.width.coerceAtLeast(1),
+                            picture.height.coerceAtLeast(1),
+                            Bitmap.Config.ARGB_8888
+                        )
+                        val canvas = android.graphics.Canvas(bitmap)
+                        canvas.drawColor(android.graphics.Color.WHITE)
+                        canvas.drawPicture(picture)
+                        saveBitmapToGalleryChrono(context, bitmap)
+                    }
+                }
+                val activity = context as? android.app.Activity
+                if (activity != null && interstitialAd != null) {
+                    interstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
+                        override fun onAdDismissedFullScreenContent() {
+                            interstitialAd = null
+                            doSave()
+                        }
+                    }
+                    interstitialAd?.show(activity)
+                } else {
+                    doSave()
                 }
             },
             colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = Color.Transparent),
@@ -304,6 +351,7 @@ fun ChronologicalResumeScreen() {
                     )
                 )
         ) { Text("Download", color = Color.White, fontWeight = FontWeight.Bold) }
+    }
     }
 }
         

@@ -28,6 +28,10 @@
             </intent-filter>
         </activity>
 
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3940256099942544~3347511713" />
+
         <!-- ML Kit face detection model auto-download flag -->
         <meta-data
             android:name="com.google.mlkit.vision.DEPENDENCIES"

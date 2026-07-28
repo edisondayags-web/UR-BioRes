@@ -17,6 +17,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.saltech.urdocs.util.*
+import androidx.compose.ui.viewinterop.AndroidView
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.AdView
 
 /** Maliit na underline-style field -- itsura ng "Label: ____" sa papel. */
 @Composable
@@ -94,6 +98,18 @@ fun ResumeScreen(
             .verticalScroll(rememberScrollState())
             .padding(20.dp)
     ) {
+        AndroidView(
+            factory = { ctx ->
+                AdView(ctx).apply {
+                    setAdSize(AdSize.BANNER)
+                    adUnitId = "ca-app-pub-3940256099942544/6300978111"
+                    loadAd(AdRequest.Builder().build())
+                }
+            },
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(12.dp))
+
         Text("RESUME", color = Color.Black, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleLarge)
         Spacer(modifier = Modifier.height(12.dp))
 

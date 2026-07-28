@@ -114,6 +114,9 @@ dependencies {
 
     implementation("com.google.guava:guava:31.1-android")
 
+    // AdMob
+    implementation("com.google.android.gms:play-services-ads:23.6.0")
+
     // Testing
     testImplementation("junit:junit:4.13.2")
 }
