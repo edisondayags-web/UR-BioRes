@@ -95,18 +95,21 @@ fun JobResearcherScreen(
 
         AnimatedVisibility(
             visible = messages.isEmpty() && !isTyping,
-            enter = fadeIn(animationSpec = tween(500))
+            enter = fadeIn(animationSpec = tween(500)),
+            modifier = Modifier.fillMaxSize()
         ) {
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 100.dp, start = 24.dp, end = 24.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                    .fillMaxSize()
+                    .padding(start = 24.dp, end = 24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
             ) {
                 Image(painter = painterResource(R.drawable.ic_brain_thinking), contentDescription = null, modifier = Modifier.size(64.dp))
                 Spacer(Modifier.height(16.dp))
                 Text(
-                    "Hello luv Have a Good Day",
+                    "Hello luv have
+A great day",
                     color = Color.White,
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Medium,
