@@ -3,6 +3,6 @@
     <item
         android:drawable="@drawable/ic_launcher_fg_source"
         android:gravity="center"
-        android:width="72dp"
-        android:height="72dp"/>
+        android:width="55dp"
+        android:height="55dp"/>
 </layer-list>
