@@ -73,8 +73,16 @@ fun JobResearcherScreen(
     fun handleUserInput(text: String) {
         if (text.isBlank() || isTyping) return
         addMessage(text, isUser = true)
+        val updatedHistory = history + ("user" to text)
+        history = updatedHistory
         inputText = ""
-        // TODO: connect AI dito mamaya
+        isTyping = true
+        scope.launch {
+            val reply = repository.chat(updatedHistory)
+            addMessage(reply, isUser = false)
+            history = history + ("model" to reply)
+            isTyping = false
+        }
     }
 
     LaunchedEffect(Unit) {

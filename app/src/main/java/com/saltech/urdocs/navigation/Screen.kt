@@ -9,7 +9,6 @@ sealed class Screen(val route: String) {
     object GovtForms : Screen("govt_forms")
     object Letters : Screen("letters")
     object JobResearcher : Screen("job_researcher")
-    object HowToEmail : Screen("how_to_email")
     object Settings : Screen("settings")
     object PrivacyPolicy : Screen("privacy_policy")
     object TermsConditions : Screen("terms_conditions")

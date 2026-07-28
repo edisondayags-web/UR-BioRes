@@ -96,11 +96,6 @@ class MainActivity : ComponentActivity() {
                             onBack = { navController.popBackStack() }
                         )
                     }
-                    composable(Screen.HowToEmail.route) {
-                        JobResearcherScreen(
-                            onBack = { navController.popBackStack() }
-                        )
-                    }
                     composable(Screen.Settings.route) {
                         SettingsScreen(
                             onBack = { navController.popBackStack() },

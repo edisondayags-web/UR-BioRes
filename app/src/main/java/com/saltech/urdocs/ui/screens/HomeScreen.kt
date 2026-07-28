@@ -48,7 +48,6 @@ fun HomeScreen(
         HomeMenuItem("🏛️", "GOV'T WEBSITES", "All Links You Want", "govt_forms"),
         HomeMenuItem("✉️", "LETTERS", "Leave, Excuse, Resign, etc.", "letters"),
         HomeMenuItem("🔎", "JOB RESEARCHER", "Hanap Trabaho Malapit Sa'yo", "job_researcher"),
-        HomeMenuItem("📧", "HOW TO SEND AN EMAIL", "Step-by-Step Guide", "how_to_email")
     )
 
     Box(
