@@ -442,7 +442,24 @@ private fun LettersHubContent(
                         icon = { Icon(mainIcon, contentDescription = null, tint = UrPink, modifier = it) },
                         badge = { Icon(badgeIcon, contentDescription = null, tint = Color.Black, modifier = it) },
                         title = type.label,
-                        subtitle = "Tap to create this letter",
+                        subtitle = when (type) {
+    LetterType.GOVT_SSS -> "para sa gusto mong padalhan para maayos/ayusin"
+    LetterType.GOVT_PAGIBIG -> "Request or inquiry letter para sa Pag-IBIG"
+    LetterType.APPLICATION -> "Job or school application letter"
+    LetterType.AUTHORIZATION -> "para sa hindi makadalo at ibang tao lang ipadalo mo for you"
+    LetterType.REFERRAL -> "kung may gusto kang e-recommend na tao"
+    LetterType.FOLLOW_UP -> "kung may gusto kang i-follow-up kaso mahiyain ka"
+    LetterType.THANK_YOU -> "Pasasalamat para sa gusto mong pasalamatan"
+    LetterType.JOB_OFFER -> "if may gusto kang offeran ng trabaho via letter"
+    LetterType.SALARY_INCREASE -> "letter request para sa dagdag sweldo"
+    LetterType.COMPLAINT -> "Reklamo tungkol sa isyu or need mo i-settle"
+    LetterType.BRGY_CITY_REQUEST -> "Request letter sa barangay o city hall para sa lugar nyo"
+    LetterType.SCHOLARSHIP -> "form para mag apply ng scholarship"
+    LetterType.OJT_INTERNSHIP -> "Application letter para sa fresh grad na mag OJT"
+    LetterType.OTHERS_REQUEST -> "other requests pa na gusto mo? tap mo lang luv"
+    LetterType.CUSTOM -> "Gumawa ng sarili mong klase ng letter"
+    else -> "Tap to create this letter"
+},
                         onClick = { onPick(type) }
                     )
                 }
