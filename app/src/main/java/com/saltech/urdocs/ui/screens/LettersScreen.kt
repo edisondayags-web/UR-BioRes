@@ -419,10 +419,28 @@ private fun LettersHubContent(
             LetterType.entries
                 .filter { it != LetterType.LEAVE && it != LetterType.RESIGNATION && it != LetterType.EXCUSE }
                 .forEach { type ->
+                    val (mainIcon, badgeIcon) = when (type) {
+                        LetterType.GOVT_SSS -> Icons.Filled.AccountBalance to Icons.Filled.Description
+                        LetterType.GOVT_PAGIBIG -> Icons.Filled.Home to Icons.Filled.Description
+                        LetterType.APPLICATION -> Icons.Filled.Description to Icons.Filled.Send
+                        LetterType.AUTHORIZATION -> Icons.Filled.VerifiedUser to Icons.Filled.CheckCircle
+                        LetterType.REFERRAL -> Icons.Filled.ThumbUp to Icons.Filled.Star
+                        LetterType.FOLLOW_UP -> Icons.Filled.Refresh to Icons.Filled.Schedule
+                        LetterType.THANK_YOU -> Icons.Filled.Favorite to Icons.Filled.Star
+                        LetterType.JOB_OFFER -> Icons.Filled.Work to Icons.Filled.CheckCircle
+                        LetterType.SALARY_INCREASE -> Icons.Filled.AttachMoney to Icons.Filled.TrendingUp
+                        LetterType.COMPLAINT -> Icons.Filled.ReportProblem to Icons.Filled.Warning
+                        LetterType.BRGY_CITY_REQUEST -> Icons.Filled.LocationCity to Icons.Filled.Description
+                        LetterType.SCHOLARSHIP -> Icons.Filled.School to Icons.Filled.Star
+                        LetterType.OJT_INTERNSHIP -> Icons.Filled.Build to Icons.Filled.Description
+                        LetterType.OTHERS_REQUEST -> Icons.Filled.HelpOutline to Icons.Filled.Description
+                        LetterType.CUSTOM -> Icons.Filled.Edit to Icons.Filled.Description
+                        else -> Icons.Filled.Description to Icons.Filled.Description
+                    }
                     Spacer(Modifier.height(12.dp))
                     LetterCard(
-                        icon = { GridIcon(modifier = it) },
-                        badge = { Icon(Icons.Filled.Description, contentDescription = null, tint = Color.Black, modifier = it) },
+                        icon = { Icon(mainIcon, contentDescription = null, tint = UrPink, modifier = it) },
+                        badge = { Icon(badgeIcon, contentDescription = null, tint = Color.Black, modifier = it) },
                         title = type.label,
                         subtitle = "Tap to create this letter",
                         onClick = { onPick(type) }
