@@ -435,7 +435,7 @@ fun TraditionalResumeScreen(
             ) {
                 Text("📤", fontSize = 16.sp)
                 Spacer(Modifier.width(6.dp))
-                Text("Upload", fontSize = 14.sp, fontWeight = FontWeight.Bold, color = Color(0xFF0B1530))
+                Text("Upload", fontSize = 14.sp, fontWeight = FontWeight.Bold, color = Color.White)
                 if (displaySelfie != null) {
                     Spacer(Modifier.width(12.dp))
                     Text("🔄 Retake", fontSize = 13.sp, color = Color(0xFF3B6FE0), modifier = Modifier.clickable { onTakeSelfie() })
