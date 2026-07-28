@@ -491,7 +491,6 @@ private fun saveBitmapToGalleryTraditional(context: android.content.Context, bit
     val filename = "Resume_Traditional_${System.currentTimeMillis()}.png"
     val contentValues = ContentValues().apply {
         put(MediaStore.Images.Media.DISPLAY_NAME, filename)
-    }
         put(MediaStore.Images.Media.MIME_TYPE, "image/png")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/URDocs")
