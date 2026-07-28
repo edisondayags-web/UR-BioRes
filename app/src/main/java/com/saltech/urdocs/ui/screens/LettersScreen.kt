@@ -81,6 +81,7 @@ fun LettersScreen(
                 else -> LettersHubContent(
                     onPremiumTap = { Toast.makeText(context, "Premium -- Coming Soon!", Toast.LENGTH_SHORT).show() },
                     onPopularTap = { keyword -> onNavigate(com.saltech.urdocs.navigation.Screen.LetterAssistant.createRoute(findType(keyword).name)) },
+                    onPick = { type -> onNavigate(com.saltech.urdocs.navigation.Screen.LetterAssistant.createRoute(type.name)) },
                     onMoreTemplates = { screenState = "all" },
                     onNavigate = onNavigate
                 )
@@ -307,6 +308,7 @@ private fun LetterIllustration(modifier: Modifier = Modifier) {
 private fun LettersHubContent(
     onPremiumTap: () -> Unit,
     onPopularTap: (String) -> Unit,
+    onPick: (LetterType) -> Unit,
     onMoreTemplates: () -> Unit,
     onNavigate: (String) -> Unit
 ) {
@@ -414,17 +416,18 @@ private fun LettersHubContent(
                 onClick = { onPopularTap("Excuse") }
             )
 
-            Spacer(Modifier.height(22.dp))
-            SectionLabel("OTHER", UrPink)
-            Spacer(Modifier.height(10.dp))
-
-            LetterCard(
-                icon = { GridIcon(modifier = it) },
-                badge = { Icon(Icons.Filled.Add, contentDescription = null, tint = Color.Black, modifier = it) },
-                title = "More Letter Templates",
-                subtitle = "View all templates",
-                onClick = onMoreTemplates
-            )
+            LetterType.entries
+                .filter { it != LetterType.LEAVE && it != LetterType.RESIGNATION && it != LetterType.EXCUSE }
+                .forEach { type ->
+                    Spacer(Modifier.height(12.dp))
+                    LetterCard(
+                        icon = { GridIcon(modifier = it) },
+                        badge = { Icon(Icons.Filled.Description, contentDescription = null, tint = Color.Black, modifier = it) },
+                        title = type.label,
+                        subtitle = "Tap to create this letter",
+                        onClick = { onPick(type) }
+                    )
+                }
 
             Spacer(Modifier.height(18.dp))
 
