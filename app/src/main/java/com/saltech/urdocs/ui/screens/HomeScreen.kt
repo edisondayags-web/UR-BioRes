@@ -82,7 +82,7 @@ fun HomeScreen(
                 color = Color.White
             )
 
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Column(verticalArrangement = Arrangement.spacedBy(18.dp)) {
                 items.forEach { item ->
                     HomeMenuCard(item = item, onClick = { onNavigate(item.route) })
                 }
@@ -91,7 +91,7 @@ fun HomeScreen(
             Spacer(modifier = Modifier.weight(1f))
 
             Text(
-                text = "Powered by Edison Suclatan Dayaguit",
+                text = "DEVELOPER: EDISON SUCLATAN DAYAGUIT",
                 color = UrGray,
                 fontSize = 10.sp
             )
