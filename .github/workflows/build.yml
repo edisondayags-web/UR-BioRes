@@ -28,6 +28,7 @@ jobs:
         env:
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
         run: echo "$GOOGLE_SERVICES_JSON" | base64 -d > app/google-services.json
+
       - name: Write local.properties
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
@@ -35,6 +36,7 @@ jobs:
         run: |
           echo "GEMINI_API_KEY=$GEMINI_API_KEY" >> local.properties
           echo "OPENROUTER_API_KEY=$OPENROUTER_API_KEY" >> local.properties
+
       - name: Generate Gradle wrapper
         run: gradle wrapper --gradle-version 8.7
 
@@ -44,7 +46,7 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: gradle-${{ runner.os }}-${{ hashFiles('**/gradle-wrapper.properties') }}
+          key: gradle-${{ runner.os }}-v1
           restore-keys: |
             gradle-${{ runner.os }}-
 
