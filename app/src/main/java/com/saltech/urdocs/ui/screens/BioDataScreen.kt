@@ -195,7 +195,7 @@ fun BioDataScreen(
     LaunchedEffect(Unit) {
         InterstitialAd.load(
             context,
-            "ca-app-pub-3940256099942544/1033173712",
+            "ca-app-pub-3134240485602899/5274307709",
             AdRequest.Builder().build(),
             object : InterstitialAdLoadCallback() {
                 override fun onAdLoaded(ad: InterstitialAd) {
@@ -209,8 +209,12 @@ fun BioDataScreen(
         AndroidView(
             factory = { ctx ->
                 AdView(ctx).apply {
-                    setAdSize(AdSize.BANNER)
-                    adUnitId = "ca-app-pub-3940256099942544/6300978111"
+                    val displayMetrics = ctx.resources.displayMetrics
+                    val adWidthPixels = displayMetrics.widthPixels.toFloat()
+                    val density = displayMetrics.density
+                    val adWidth = (adWidthPixels / density).toInt()
+                    setAdSize(AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(ctx, adWidth))
+                    adUnitId = "ca-app-pub-3134240485602899/5923255956"
                     loadAd(AdRequest.Builder().build())
                 }
             },
