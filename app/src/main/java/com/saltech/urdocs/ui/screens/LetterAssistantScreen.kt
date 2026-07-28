@@ -8,6 +8,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
+import com.saltech.urdocs.ui.components.PremiumThinkingIndicator
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -280,63 +281,7 @@ fun LetterAssistantScreen(
 
 @Composable
 private fun ThinkingIndicator() {
-    val transition = rememberInfiniteTransition(label = "thinking")
-    val ringRotation by transition.animateFloat(
-        initialValue = 0f, targetValue = 360f,
-        animationSpec = infiniteRepeatable(animation = tween(1200, easing = LinearEasing)),
-        label = "ringRotation"
-    )
-    val pulse by transition.animateFloat(
-        initialValue = 0.85f, targetValue = 1.25f,
-        animationSpec = infiniteRepeatable(animation = tween(500, easing = FastOutSlowInEasing), repeatMode = RepeatMode.Reverse),
-        label = "pulse"
-    )
-    val dropOffset by transition.animateFloat(
-        initialValue = -2f, targetValue = 22f,
-        animationSpec = infiniteRepeatable(animation = tween(700, easing = LinearEasing)),
-        label = "drop"
-    )
-
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        Box(
-            modifier = Modifier
-                .width(3.dp)
-                .height(22.dp)
-                .clip(RoundedCornerShape(2.dp))
-                .background(Brush.verticalGradient(listOf(UrBlue, UrBlueDeep)))
-        ) {
-            Box(
-                modifier = Modifier
-                    .offset(y = dropOffset.dp)
-                    .width(3.dp)
-                    .height(5.dp)
-                    .background(Color.Black.copy(alpha = 0.6f))
-            )
-        }
-        Spacer(Modifier.width(8.dp))
-        Column {
-            WavingText("Thinking...", UrGray)
-            Spacer(Modifier.height(4.dp))
-            TypingDots()
-        }
-        Spacer(Modifier.width(10.dp))
-        Box(
-            modifier = Modifier.size(30.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Canvas(modifier = Modifier.matchParentSize().rotate(ringRotation)) {
-                val stroke = 2.dp.toPx()
-                drawArc(color = UrBlue, startAngle = 0f, sweepAngle = 160f, useCenter = false, style = Stroke(width = stroke, cap = StrokeCap.Round))
-                drawArc(color = UrBlueDeep, startAngle = 180f, sweepAngle = 160f, useCenter = false, style = Stroke(width = stroke, cap = StrokeCap.Round))
-            }
-            Icon(
-                Icons.Filled.Psychology,
-                contentDescription = null,
-                tint = UrBlue,
-                modifier = Modifier.size(16.dp).scale(pulse)
-            )
-        }
-    }
+    PremiumThinkingIndicator()
 }
 
 @Composable
