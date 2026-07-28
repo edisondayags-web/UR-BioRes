@@ -73,7 +73,7 @@ fun HomeScreen(
                 .fillMaxSize()
                 .padding(top = 56.dp, start = 20.dp, end = 20.dp, bottom = 12.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
             Text(
                 text = "Pili ka ng gusto mo luv🩵",
@@ -82,14 +82,18 @@ fun HomeScreen(
                 color = Color.White
             )
 
-            items.forEach { item ->
-                HomeMenuCard(item = item, onClick = { onNavigate(item.route) })
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                items.forEach { item ->
+                    HomeMenuCard(item = item, onClick = { onNavigate(item.route) })
+                }
             }
 
+            Spacer(modifier = Modifier.weight(1f))
+
             Text(
-                text = "DEVELOPER: EDISON SUCLATAN DAYAGUIT",
+                text = "Powered by Edison Suclatan Dayaguit",
                 color = UrGray,
-                fontSize = 9.sp
+                fontSize = 10.sp
             )
         }
     }
