@@ -73,7 +73,7 @@ fun HomeScreen(
                 .fillMaxSize()
                 .padding(top = 56.dp, start = 20.dp, end = 20.dp, bottom = 12.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceEvenly
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Text(
                 text = "Pili ka ng gusto mo luv🩵",
