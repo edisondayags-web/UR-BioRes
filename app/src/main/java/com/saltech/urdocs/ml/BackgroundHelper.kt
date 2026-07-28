@@ -14,9 +14,9 @@ import kotlin.coroutines.resumeWithException
  * ng puting background yung selfie -- karaniwang requirement sa 2x2 ID photo
  * dito sa Pilipinas (SSS, Pag-IBIG, atbp).
  *
- * Gumagamit ng SOFT alpha blend base sa confidence value (hindi hard cutoff)
- * para makinis ang gilid ng buhok/balikat -- katulad ng totoong studio backdrop,
- * hindi pixelated/jagged na edges.
+ * Gumagamit ng SOFT alpha blend base sa confidence value (hindi hard cutoff),
+ * at ang confidence mask mismo ay pinapantay muna (blur) bago gamitin -- para
+ * maalis ang "wavy/jagged" na gilid na dulot ng magaspang/noisy na raw mask.
  */
 object BackgroundHelper {
 
@@ -43,13 +43,15 @@ object BackgroundHelper {
                     val scaleX = maskWidth.toFloat() / bitmap.width
                     val scaleY = maskHeight.toFloat() / bitmap.height
 
-                    // I-store muna lahat ng confidence sa array para magamit
-                    // ulit sa feathering (soft edge) sa halip na hard 0.5 cutoff.
-                    val confidences = FloatArray(maskWidth * maskHeight)
+                    val rawConfidences = FloatArray(maskWidth * maskHeight)
                     buffer.rewind()
-                    for (i in confidences.indices) {
-                        confidences[i] = buffer.float
+                    for (i in rawConfidences.indices) {
+                        rawConfidences[i] = buffer.float
                     }
+
+                    // I-smooth muna ang confidence mask bago gamitin -- para
+                    // maalis ang wavy/jagged edges na dulot ng noisy na raw mask.
+                    val confidences = blurConfidenceMask(rawConfidences, maskWidth, maskHeight, radius = 3)
 
                     for (y in 0 until bitmap.height) {
                         for (x in 0 until bitmap.width) {
@@ -62,10 +64,6 @@ object BackgroundHelper {
                             val srcG = (srcPixel shr 8) and 0xFF
                             val srcB = srcPixel and 0xFF
 
-                            // Soft blend: kapag malapit sa 1.0 (tao) -- gamitin
-                            // yung orihinal; kapag malapit sa 0.0 (bg) -- puti.
-                            // Sa pagitan (edges ng buhok/balikat), i-blend nang
-                            // makinis para walang jagged/pixelated na gilid.
                             val alpha = confidence.coerceIn(0f, 1f)
                             val r = (srcR * alpha + 255 * (1 - alpha)).toInt().coerceIn(0, 255)
                             val g = (srcG * alpha + 255 * (1 - alpha)).toInt().coerceIn(0, 255)
@@ -78,4 +76,40 @@ object BackgroundHelper {
                 }
                 .addOnFailureListener { e -> cont.resumeWithException(e) }
         }
+
+    /** Two-pass box blur sa float confidence values -- pinapantay ang mask, tinatanggal ang wavy noise. */
+    private fun blurConfidenceMask(mask: FloatArray, width: Int, height: Int, radius: Int): FloatArray {
+        val temp = FloatArray(width * height)
+        val result = FloatArray(width * height)
+        val windowSize = (radius * 2 + 1).toFloat()
+
+        for (y in 0 until height) {
+            var sum = 0f
+            for (x in -radius..radius) {
+                val xi = x.coerceIn(0, width - 1)
+                sum += mask[y * width + xi]
+            }
+            for (x in 0 until width) {
+                temp[y * width + x] = sum / windowSize
+                val xOutIdx = (x - radius).coerceIn(0, width - 1)
+                val xInIdx = (x + radius + 1).coerceIn(0, width - 1)
+                sum += mask[y * width + xInIdx] - mask[y * width + xOutIdx]
+            }
+        }
+
+        for (x in 0 until width) {
+            var sum = 0f
+            for (y in -radius..radius) {
+                val yi = y.coerceIn(0, height - 1)
+                sum += temp[yi * width + x]
+            }
+            for (y in 0 until height) {
+                result[y * width + x] = sum / windowSize
+                val yOutIdx = (y - radius).coerceIn(0, height - 1)
+                val yInIdx = (y + radius + 1).coerceIn(0, height - 1)
+                sum += temp[yInIdx * width + x] - temp[yOutIdx * width + x]
+            }
+        }
+        return result
+    }
 }
