@@ -71,30 +71,25 @@ fun HomeScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(top = 64.dp, start = 24.dp, end = 24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(top = 56.dp, start = 20.dp, end = 20.dp, bottom = 12.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceEvenly
         ) {
-            Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = "Pili ka ng gusto mo luv🩵",
-                style = MaterialTheme.typography.titleLarge,
+                style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = Color.White
             )
-            Spacer(modifier = Modifier.height(16.dp))
 
             items.forEach { item ->
                 HomeMenuCard(item = item, onClick = { onNavigate(item.route) })
-                Spacer(modifier = Modifier.height(12.dp))
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
             Text(
                 text = "DEVELOPER: EDISON SUCLATAN DAYAGUIT",
                 color = UrGray,
-                fontSize = 10.sp,
-                modifier = Modifier.padding(bottom = 24.dp)
+                fontSize = 9.sp
             )
         }
     }
@@ -111,22 +106,22 @@ private fun HomeMenuCard(item: HomeMenuItem, onClick: () -> Unit) {
             .background(Color.Black.copy(alpha = 0.55f))
             .border(1.dp, Brush.linearGradient(listOf(Color(0xFF4C8DFF), Color.Black)), RoundedCornerShape(16.dp))
             .clickable(interactionSource = interactionSource, indication = null) { onClick() }
-            .padding(16.dp),
+            .padding(horizontal = 14.dp, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = item.emoji, style = MaterialTheme.typography.titleLarge)
-        Spacer(modifier = Modifier.width(16.dp))
+        Text(text = item.emoji, style = MaterialTheme.typography.titleMedium)
+        Spacer(modifier = Modifier.width(12.dp))
         Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = item.title,
                 color = UrPink,
                 fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.bodyLarge
+                fontSize = 14.sp
             )
             Text(
                 text = item.subtitle,
                 color = UrNeon,
-                style = MaterialTheme.typography.bodyLarge
+                fontSize = 11.sp
             )
         }
     }
