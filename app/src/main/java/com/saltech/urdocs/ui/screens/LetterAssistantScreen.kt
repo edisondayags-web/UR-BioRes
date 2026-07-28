@@ -248,28 +248,20 @@ fun LetterAssistantScreen(
 @Composable
 private fun ThinkingIndicator() {
     val transition = rememberInfiniteTransition(label = "thinking")
-
     val ringRotation by transition.animateFloat(
         initialValue = 0f, targetValue = 360f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(1400, easing = LinearEasing)
-        ), label = "ringRotation"
+        animationSpec = infiniteRepeatable(animation = tween(1200, easing = LinearEasing)),
+        label = "ringRotation"
     )
-
     val pulse by transition.animateFloat(
-        initialValue = 0.88f, targetValue = 1.12f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(600, easing = FastOutSlowInEasing),
-            repeatMode = RepeatMode.Reverse
-        ), label = "pulse"
+        initialValue = 0.85f, targetValue = 1.25f,
+        animationSpec = infiniteRepeatable(animation = tween(500, easing = FastOutSlowInEasing), repeatMode = RepeatMode.Reverse),
+        label = "pulse"
     )
-
-    val textAlpha by transition.animateFloat(
-        initialValue = 0.4f, targetValue = 1f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(600),
-            repeatMode = RepeatMode.Reverse
-        ), label = "textAlpha"
+    val dropOffset by transition.animateFloat(
+        initialValue = -2f, targetValue = 22f,
+        animationSpec = infiniteRepeatable(animation = tween(700, easing = LinearEasing)),
+        label = "drop"
     )
 
     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -277,11 +269,20 @@ private fun ThinkingIndicator() {
             modifier = Modifier
                 .width(3.dp)
                 .height(22.dp)
+                .clip(RoundedCornerShape(2.dp))
                 .background(Brush.verticalGradient(listOf(UrBlue, UrBlueDeep)))
-        )
+        ) {
+            Box(
+                modifier = Modifier
+                    .offset(y = dropOffset.dp)
+                    .width(3.dp)
+                    .height(5.dp)
+                    .background(Color.Black.copy(alpha = 0.6f))
+            )
+        }
         Spacer(Modifier.width(8.dp))
         Column {
-            Text("Thinking...", color = UrGray.copy(alpha = textAlpha), fontSize = 12.sp)
+            WavingText("Thinking...", UrGray)
             Spacer(Modifier.height(4.dp))
             TypingDots()
         }
@@ -292,18 +293,8 @@ private fun ThinkingIndicator() {
         ) {
             Canvas(modifier = Modifier.matchParentSize().rotate(ringRotation)) {
                 val stroke = 2.dp.toPx()
-                drawArc(
-                    color = UrBlue,
-                    startAngle = 0f, sweepAngle = 160f,
-                    useCenter = false,
-                    style = Stroke(width = stroke, cap = StrokeCap.Round)
-                )
-                drawArc(
-                    color = UrBlueDeep,
-                    startAngle = 180f, sweepAngle = 160f,
-                    useCenter = false,
-                    style = Stroke(width = stroke, cap = StrokeCap.Round)
-                )
+                drawArc(color = UrBlue, startAngle = 0f, sweepAngle = 160f, useCenter = false, style = Stroke(width = stroke, cap = StrokeCap.Round))
+                drawArc(color = UrBlueDeep, startAngle = 180f, sweepAngle = 160f, useCenter = false, style = Stroke(width = stroke, cap = StrokeCap.Round))
             }
             Icon(
                 Icons.Filled.Psychology,
@@ -316,12 +307,34 @@ private fun ThinkingIndicator() {
 }
 
 @Composable
+private fun WavingText(text: String, color: Color) {
+    val transition = rememberInfiniteTransition(label = "wave")
+    Row {
+        text.forEachIndexed { i, ch ->
+            val offsetY by transition.animateFloat(
+                initialValue = 0f, targetValue = -4f,
+                animationSpec = infiniteRepeatable(
+                    animation = tween(400, delayMillis = i * 60, easing = FastOutSlowInEasing),
+                    repeatMode = RepeatMode.Reverse
+                ), label = "wave$i"
+            )
+            Text(
+                ch.toString(),
+                color = color,
+                fontSize = 12.sp,
+                modifier = Modifier.offset(y = offsetY.dp)
+            )
+        }
+    }
+}
+
+@Composable
 private fun TypingDots() {
     val transition = rememberInfiniteTransition(label = "typing")
     Row {
         repeat(3) { i ->
-            val alpha by transition.animateFloat(
-                initialValue = 0.3f, targetValue = 1f,
+            val scaleAnim by transition.animateFloat(
+                initialValue = 0.6f, targetValue = 1.3f,
                 animationSpec = infiniteRepeatable(
                     animation = tween(400, delayMillis = i * 120),
                     repeatMode = RepeatMode.Reverse
@@ -331,8 +344,9 @@ private fun TypingDots() {
                 modifier = Modifier
                     .padding(horizontal = 2.dp)
                     .size(6.dp)
+                    .scale(scaleAnim)
                     .clip(CircleShape)
-                    .background(UrBlue.copy(alpha = alpha))
+                    .background(UrBlue)
             )
         }
     }
