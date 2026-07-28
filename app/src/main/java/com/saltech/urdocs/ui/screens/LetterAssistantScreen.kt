@@ -79,13 +79,6 @@ fun LetterAssistantScreen(
     var generatedLetter by remember { mutableStateOf<String?>(null) }
     var awaitingLanguage by remember { mutableStateOf(false) }
 
-    fun pickLanguage(lang: String) {
-        awaitingLanguage = false
-        addMessage("Sa wikang $lang po.", isUser = true)
-        history = history + ("user" to "Sa wikang $lang po.")
-        sendToGemini(null)
-    }
-
     fun addMessage(text: String, isUser: Boolean) {
         messages = messages + ChatMessage(text = text, isUser = isUser)
     }
@@ -113,6 +106,13 @@ fun LetterAssistantScreen(
                 addMessage(reply, isUser = false)
             }
         }
+    }
+
+    fun pickLanguage(lang: String) {
+        awaitingLanguage = false
+        addMessage("Sa wikang $lang po.", isUser = true)
+        history = history + ("user" to "Sa wikang $lang po.")
+        sendToGemini(null)
     }
 
     fun handleUserInput(text: String) {
