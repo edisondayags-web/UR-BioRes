@@ -73,9 +73,9 @@ fun SettingsScreen(
             SettingsItemData("🛡️", "Data & Permissions", "Understand why we need access", SettingsRoutes.DATA_PERMISSIONS, enabled = true),
         ),
         "APP" to listOf(
-            SettingsItemData("⭐", "Rate UR BioRes", "Show your support"),
-            SettingsItemData("🔗", "Share UR BioRes", "Share the app with your friends"),
-            SettingsItemData("⬇️", "Check for Updates", "Get the latest version"),
+            SettingsItemData("⭐", "Rate UR BioRes", "Show your support", enabled = true),
+            SettingsItemData("🔗", "Share UR BioRes", "Share the app with your friends", enabled = true),
+            SettingsItemData("⬇️", "Check for Updates", "Get the latest version", enabled = true),
         ),
         "SUPPORT" to listOf(
             SettingsItemData("✉️", "Contact Support", "We're here to help you"),
@@ -84,7 +84,7 @@ fun SettingsScreen(
         ),
         "ABOUT" to listOf(
             SettingsItemData("👤", "About Developer", "Meet the developer", SettingsRoutes.ABOUT_DEVELOPER, enabled = true),
-            SettingsItemData("</>", "Open Source Licenses", "Third-party libraries used"),
+            SettingsItemData("</>", "Open Source Licenses", "Third-party libraries used", enabled = true),
             SettingsItemData("ℹ️", "Version", "UR BioRes v1.0.0"),
         )
     )
@@ -147,7 +147,22 @@ fun SettingsScreen(
                                             putExtra(Intent.EXTRA_SUBJECT, subject)
                                         }
                                         context.startActivity(Intent.createChooser(intent, "Send Email"))
-                                    } else if (itemData.enabled && itemData.route != null) {
+                                    } else if (itemData.title == "Rate UR BioRes") {
+     val intent = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.saltech.urdocs"))
+     try { context.startActivity(intent) } catch (e: Exception) {
+         context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.saltech.urdocs")))
+     }
+ } else if (itemData.title == "Share UR BioRes") {
+     val shareIntent = Intent(Intent.ACTION_SEND).apply {
+         type = "text/plain"
+         putExtra(Intent.EXTRA_TEXT, "Check out UR BioRes! https://play.google.com/store/apps/details?id=com.saltech.urdocs")
+     }
+     context.startActivity(Intent.createChooser(shareIntent, "Share UR BioRes"))
+ } else if (itemData.title == "Check for Updates") {
+     context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.saltech.urdocs")))
+ } else if (itemData.title == "Open Source Licenses") {
+     Toast.makeText(context, "Built with Jetpack Compose, AndroidX, Material3", Toast.LENGTH_LONG).show()
+ } else if (itemData.enabled && itemData.route != null) {
                                         onNavigate(itemData.route)
                                     } else {
                                         Toast.makeText(context, "Coming soon \uD83E\uDEB5", Toast.LENGTH_SHORT).show()
