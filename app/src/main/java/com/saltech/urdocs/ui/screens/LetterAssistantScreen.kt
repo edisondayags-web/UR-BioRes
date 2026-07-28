@@ -152,8 +152,8 @@ fun LetterAssistantScreen(
                     .padding(top = 100.dp, start = 24.dp, end = 24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Icon(Icons.Filled.AutoAwesome, contentDescription = null, tint = UrBlue, modifier = Modifier.size(30.dp))
-                Spacer(Modifier.height(10.dp))
+                Icon(Icons.Filled.Psychology, contentDescription = null, tint = UrBlue, modifier = Modifier.size(64.dp))
+                Spacer(Modifier.height(16.dp))
                 Text(
                     "Good day Luv, how are You",
                     color = Color.White,
