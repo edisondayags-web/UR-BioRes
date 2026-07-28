@@ -81,6 +81,8 @@ fun HomeScreen(
                 color = Color.White
             )
 
+            Spacer(modifier = Modifier.weight(1f))
+
             Column(verticalArrangement = Arrangement.spacedBy(18.dp)) {
                 items.forEach { item ->
                     HomeMenuCard(item = item, onClick = { onNavigate(item.route) })
