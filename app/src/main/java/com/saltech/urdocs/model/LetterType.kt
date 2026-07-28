@@ -6,6 +6,18 @@ enum class LetterType(val label: String) {
     RESIGNATION("Resignation Letter"),
     GOVT_SSS("SSS Letter/Request"),
     GOVT_PAGIBIG("Pag-IBIG Letter/Request"),
+    APPLICATION("Application Letter"),
+    AUTHORIZATION("Authorization Letter"),
+    REFERRAL("Referral Letter"),
+    FOLLOW_UP("Follow Up Letter"),
+    THANK_YOU("Thank You Letter"),
+    JOB_OFFER("Job Offer Letter"),
+    SALARY_INCREASE("Salary Increase Request"),
+    COMPLAINT("Complaint Letter"),
+    BRGY_CITY_REQUEST("Brgy/City Request Letter"),
+    SCHOLARSHIP("Scholarship Application Letter"),
+    OJT_INTERNSHIP("OJT/Internship Letter"),
+    OTHERS_REQUEST("Other Requests"),
     CUSTOM("Custom / Iba pa")
 }
 
