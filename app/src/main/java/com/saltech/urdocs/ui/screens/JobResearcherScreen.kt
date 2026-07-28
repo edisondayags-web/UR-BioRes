@@ -108,8 +108,7 @@ fun JobResearcherScreen(
                 Image(painter = painterResource(R.drawable.ic_brain_thinking), contentDescription = null, modifier = Modifier.size(64.dp))
                 Spacer(Modifier.height(16.dp))
                 Text(
-                    "Hello luv have
-A great day",
+                    "Hello luv have\nA great day",
                     color = Color.White,
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Medium,
