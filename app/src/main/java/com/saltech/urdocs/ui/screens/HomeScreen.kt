@@ -44,14 +44,15 @@ fun HomeScreen(
         HomeMenuItem("📄", "RESUME", "Pang BPO/Office etc • Professional CV", "resume"),
         HomeMenuItem("📝", "BIO-DATA", "Pang Company/Store etc. • PH Job Application", "biodata"),
         HomeMenuItem("🏛️", "GOV'T WEBSITES", "All Links You Want", "govt_forms"),
-        HomeMenuItem("✉️", "LETTERS", "Leave, Excuse, Resign, etc.", "letters")
+        HomeMenuItem("✉️", "LETTERS", "Leave, Excuse, Resign, etc.", "letters"),
+        HomeMenuItem("🔎", "JOB RESEARCHER", "Hanap Trabaho Malapit Sa'yo", "job_researcher"),
+        HomeMenuItem("📧", "HOW TO SEND AN EMAIL", "Step-by-Step Guide", "how_to_email")
     )
 
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
 
-        // Gear icon -- malapit sa status bar, palaging nakikita
         IconButton(
             onClick = { onNavigate("settings") },
             modifier = Modifier
