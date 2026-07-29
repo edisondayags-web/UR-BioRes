@@ -51,6 +51,10 @@ import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.TextButton
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.text.AnnotatedString
 /**
  * "Chronological" na Resume -- tech/CV style, walang photo box.
  * NAME: line sa taas, contact row (phone | email | location | github),
@@ -96,15 +100,37 @@ data class ChronologicalResumeFields(
 
 @Composable
 fun ChronologicalResumeScreen() {
-    SecureScreen()
+    //SecureScreen()
     val paperWidthDp = 850.dp
     val paperHeightDp = 1250.dp
 
     var data by remember { mutableStateOf(ChronologicalResumeFields()) }
     var offset by remember { mutableStateOf(Offset.Zero) }
     val context = LocalContext.current
+    val clipboardManager = LocalClipboardManager.current
+    var showPaymentDialog by remember { mutableStateOf(false) }
+    var hasPaid by remember { mutableStateOf(false) }
     val picture = remember { Picture() }
     val coroutineScope = rememberCoroutineScope()
+
+    if (showPaymentDialog) {
+        AlertDialog(
+            onDismissRequest = { showPaymentDialog = false },
+            title = { Text("₱5 to Continue 💙") },
+            text = { Text("paste mo lang yung nasa clipboard mo. Send Money → Bank Transfer/InstaPay → Tonik Bank. I-paste mo na lang sa GCash/bank app mo.") },
+            confirmButton = {
+                Button(onClick = {
+                    clipboardManager.setText(AnnotatedString("60843949330007"))
+                    android.widget.Toast.makeText(context, "Number copied! 📋", android.widget.Toast.LENGTH_SHORT).show()
+                }) { Text("Copy Number") }
+            },
+            dismissButton = {
+                TextButton(onClick = { hasPaid = true; showPaymentDialog = false }) {
+                    Text("I've Paid ✅")
+                }
+            }
+        )
+    }
 
     var interstitialAd by remember { mutableStateOf<InterstitialAd?>(null) }
     LaunchedEffect(Unit) {
@@ -332,17 +358,25 @@ fun ChronologicalResumeScreen() {
                     }
                 }
                 val activity = context as? android.app.Activity
-                if (activity != null && interstitialAd != null) {
+               if (activity != null && interstitialAd != null) {
                     interstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
                         override fun onAdDismissedFullScreenContent() {
                             interstitialAd = null
-                            doSave()
+                            if (!hasPaid) {
+                                showPaymentDialog = true
+                            } else {
+                                doSave()
+                            }
                         }
                     }
                     interstitialAd?.show(activity)
                 } else {
-                    doSave()
-                }
+                    if (!hasPaid) {
+                        showPaymentDialog = true
+                    } else {
+                        doSave()
+                    }
+               }
             },
             colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = Color.Transparent),
             contentPadding = PaddingValues(0.dp),
