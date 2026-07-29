@@ -57,6 +57,8 @@ import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.text.AnnotatedString
 
 data class BioDataFields(
     val name: String = "",
@@ -102,8 +104,30 @@ fun BioDataScreen(
     val paperHeightDp = 1250.dp
 
     val context = LocalContext.current
+    val clipboardManager = LocalClipboardManager.current
+    var showPaymentDialog by remember { mutableStateOf(false) }
+    var hasPaid by remember { mutableStateOf(false) }
     var data by remember { mutableStateOf(BioDataFields()) }
     var offset by remember { mutableStateOf(Offset.Zero) }
+
+    if (showPaymentDialog) {
+        AlertDialog(
+            onDismissRequest = { showPaymentDialog = false },
+            title = { Text("₱5 to Continue 💙") },
+            text = { Text("Na-copy na sa clipboard yung Tonik account number ko. Send Money → Bank Transfer/InstaPay → Tonik Bank. I-paste mo na lang sa GCash/bank app mo.") },
+            confirmButton = {
+                Button(onClick = {
+                    clipboardManager.setText(AnnotatedString("60843949330007"))
+                    android.widget.Toast.makeText(context, "Number copied! 📋", android.widget.Toast.LENGTH_SHORT).show()
+                }) { Text("Copy Number") }
+            },
+            dismissButton = {
+                TextButton(onClick = { hasPaid = true; showPaymentDialog = false }) {
+                    Text("I've Paid ✅")
+                }
+            }
+        )
+    }
 
     var rawSource by remember { mutableStateOf<Bitmap?>(null) }
     var displaySelfie by remember { mutableStateOf<Bitmap?>(null) }
@@ -460,12 +484,20 @@ fun BioDataScreen(
                             interstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
                                 override fun onAdDismissedFullScreenContent() {
                                     interstitialAd = null
-                                    doSave()
+                                    if (!hasPaid) {
+                                        showPaymentDialog = true
+                                    } else {
+                                        doSave()
+                                    }
                                 }
                             }
                             interstitialAd?.show(activity)
                         } else {
-                            doSave()
+                            if (!hasPaid) {
+                                showPaymentDialog = true
+                            } else {
+                                doSave()
+                            }
                         }
                     },
                     colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = Color.Transparent),
