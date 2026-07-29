@@ -1,4 +1,3 @@
-cat > LetterAssistantScreen.kt << 'ENDOFFILE'
 package com.saltech.urdocs.ui.screens
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
@@ -607,5 +606,3 @@ private fun LanguageChip(label: String, onClick: () -> Unit) {
         Text(label, color = Color.White, fontSize = 13.sp)
     }
 }
-
-
