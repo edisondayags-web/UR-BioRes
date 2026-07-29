@@ -68,26 +68,23 @@ fun LettersScreen(
             },
             label = "lettersScreenTransition"
         ) { state ->
-            when (state) {
-                "form" -> LetterFormContent(
-                    viewModel = viewModel,
-                    initialType = selectedType,
-                    onBack = { screenState = "hub" }
-                )
-                "all" -> AllTemplatesContent(
-                    onBack = { screenState = "hub" },
-                    onPick = { type -> onNavigate(com.saltech.urdocs.navigation.Screen.LetterAssistant.createRoute(type.name)) }
-                )
-                else -> LettersHubContent(
-                    onPremiumTap = { Toast.makeText(context, "Premium -- Coming Soon!", Toast.LENGTH_SHORT).show() },
-                    onPopularTap = { keyword -> onNavigate(com.saltech.urdocs.navigation.Screen.LetterAssistant.createRoute(findType(keyword).name)) },
-                    onPick = { type -> onNavigate(com.saltech.urdocs.navigation.Screen.LetterAssistant.createRoute(type.name)) },
-                    onMoreTemplates = { screenState = "all" },
-                    onNavigate = onNavigate
-                )
-            }
-        }
-    }
+when (state) {
+    "form" -> LetterFormContent(
+        viewModel = viewModel,
+        initialType = selectedType,
+        onBack = { screenState = "hub" }
+    )
+    "all" -> AllTemplatesContent(
+        onBack = { screenState = "hub" },
+        onPick = { _ -> Toast.makeText(context, "coming soon pa to luv🩵", Toast.LENGTH_SHORT).show() }
+    )
+    else -> LettersHubContent(
+        onPremiumTap = { Toast.makeText(context, "Premium -- Coming Soon!", Toast.LENGTH_SHORT).show() },
+        onPopularTap = { _ -> Toast.makeText(context, "coming soon pa to luv🩵", Toast.LENGTH_SHORT).show() },
+        onPick = { _ -> Toast.makeText(context, "coming soon pa to luv🩵", Toast.LENGTH_SHORT).show() },
+        onMoreTemplates = { screenState = "all" },
+        onNavigate = onNavigate
+    )
 }
 
 // ================== Custom vector icons (hindi Material icon, sariling guhit) ==================
