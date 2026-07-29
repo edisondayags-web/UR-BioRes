@@ -1,4 +1,5 @@
 package com.saltech.urdocs.ui.screens
+import com.saltech.urdocs.util.SecureScreen
 
 import android.content.ContentValues
 import android.graphics.Bitmap
@@ -93,6 +94,7 @@ fun TraditionalResumeScreen(
     onTakeSelfie: () -> Unit = {},
     onBack: () -> Unit = {}
 ) {
+    SecureScreen()
     val paperWidthDp = 850.dp
     val paperHeightDp = 1250.dp
 

@@ -1,4 +1,5 @@
 package com.saltech.urdocs.ui.screens
+import com.saltech.urdocs.util.SecureScreen
 
 import android.content.ContentValues
 import android.graphics.Bitmap
@@ -95,6 +96,7 @@ data class ChronologicalResumeFields(
 
 @Composable
 fun ChronologicalResumeScreen() {
+    SecureScreen()
     val paperWidthDp = 850.dp
     val paperHeightDp = 1250.dp
 

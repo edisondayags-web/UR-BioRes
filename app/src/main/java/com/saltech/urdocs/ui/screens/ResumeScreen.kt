@@ -1,4 +1,5 @@
 package com.saltech.urdocs.ui.screens
+import com.saltech.urdocs.util.SecureScreen
 
 import android.graphics.Bitmap
 import android.widget.Toast
@@ -51,6 +52,7 @@ fun ResumeScreen(
     processedSelfie: Bitmap? = null,
     onTakeSelfie: () -> Unit
 ) {
+    SecureScreen()
     val context = LocalContext.current
 
     var fullName by remember { mutableStateOf("") }
