@@ -1,4 +1,11 @@
 package com.saltech.urdocs.ui.screens
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.FullScreenContentCallback
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.pointer.pointerInput
@@ -453,6 +460,20 @@ private fun LetterPaperPreview(letterText: String, onDismiss: () -> Unit) {
     val paperHeightDp = 1250.dp
     var offset by remember { mutableStateOf(Offset.Zero) }
 
+    var interstitialAd by remember { mutableStateOf<InterstitialAd?>(null) }
+    LaunchedEffect(Unit) {
+        InterstitialAd.load(
+            context,
+            "ca-app-pub-3134240485602899/5274307709",
+            AdRequest.Builder().build(),
+            object : InterstitialAdLoadCallback() {
+                override fun onAdLoaded(ad: InterstitialAd) {
+                    interstitialAd = ad
+                }
+            }
+        )
+    }
+
     fun saveToGallery() {
         val bitmap = Bitmap.createBitmap(picture.width.coerceAtLeast(1), picture.height.coerceAtLeast(1), Bitmap.Config.ARGB_8888)
         val canvas = android.graphics.Canvas(bitmap)
@@ -468,6 +489,9 @@ private fun LetterPaperPreview(letterText: String, onDismiss: () -> Unit) {
         val uri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
         uri?.let {
             resolver.openOutputStream(it)?.use { out -> bitmap.compress(Bitmap.CompressFormat.PNG, 100, out) }
+            android.widget.Toast.makeText(context, "see your gellery luv🩵", android.widget.Toast.LENGTH_LONG).show()
+        } ?: run {
+            android.widget.Toast.makeText(context, "Hindi na-download, subukan ulit.", android.widget.Toast.LENGTH_LONG).show()
         }
     }
 
@@ -476,6 +500,20 @@ private fun LetterPaperPreview(letterText: String, onDismiss: () -> Unit) {
         contentAlignment = Alignment.Center
     ) {
         Column(modifier = Modifier.fillMaxWidth(0.9f).fillMaxHeight(0.85f)) {
+            AndroidView(
+                factory = { ctx ->
+                    AdView(ctx).apply {
+                        val displayMetrics = ctx.resources.displayMetrics
+                        val adWidthPixels = displayMetrics.widthPixels.toFloat()
+                        val density = displayMetrics.density
+                        val adWidth = (adWidthPixels / density).toInt()
+                        setAdSize(AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(ctx, adWidth))
+                        adUnitId = "ca-app-pub-3134240485602899/5923255956"
+                        loadAd(AdRequest.Builder().build())
+                    }
+                },
+                modifier = Modifier.fillMaxWidth()
+            )
             BoxWithConstraints(
                 modifier = Modifier.weight(1f).background(Color.Transparent)
             ) {
@@ -527,9 +565,23 @@ private fun LetterPaperPreview(letterText: String, onDismiss: () -> Unit) {
                     modifier = Modifier.clip(RoundedCornerShape(12.dp)).background(UrBlue)
                         .clickable(enabled = !saving) {
                             saving = true
-                            scope.launch {
-                                saveToGallery()
-                                saving = false
+                            val activity = context as? android.app.Activity
+                            if (activity != null && interstitialAd != null) {
+                                interstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
+                                    override fun onAdDismissedFullScreenContent() {
+                                        interstitialAd = null
+                                        scope.launch {
+                                            saveToGallery()
+                                            saving = false
+                                        }
+                                    }
+                                }
+                                interstitialAd?.show(activity)
+                            } else {
+                                scope.launch {
+                                    saveToGallery()
+                                    saving = false
+                                }
                             }
                         }.padding(horizontal = 20.dp, vertical = 12.dp)
                 ) { Text(if (saving) "Sinesave..." else "I-Download", color = Color.White, fontWeight = FontWeight.Bold) }
@@ -537,9 +589,6 @@ private fun LetterPaperPreview(letterText: String, onDismiss: () -> Unit) {
         }
     }
 }
-
-
-
 @Composable
 private fun LanguageChip(label: String, onClick: () -> Unit) {
     Box(
