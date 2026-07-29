@@ -94,7 +94,7 @@ fun TraditionalResumeScreen(
     onTakeSelfie: () -> Unit = {},
     onBack: () -> Unit = {}
 ) {
-    SecureScreen()
+    //SecureScreen()
     val paperWidthDp = 850.dp
     val paperHeightDp = 1250.dp
 
