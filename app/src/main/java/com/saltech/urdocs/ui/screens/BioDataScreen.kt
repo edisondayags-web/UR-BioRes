@@ -97,7 +97,7 @@ fun BioDataScreen(
     processedSelfie: android.graphics.Bitmap? = null,
     onTakeSelfie: () -> Unit = {}
 ) {
-    SecureScreen()
+    //SecureScreen()
     val paperWidthDp = 750.dp
     val paperHeightDp = 1250.dp
 
