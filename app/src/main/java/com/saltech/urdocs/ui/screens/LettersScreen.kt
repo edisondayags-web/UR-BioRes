@@ -86,7 +86,9 @@ when (state) {
         onNavigate = onNavigate
     )
 }
-
+}
+    }
+}
 // ================== Custom vector icons (hindi Material icon, sariling guhit) ==================
 
 @Composable
