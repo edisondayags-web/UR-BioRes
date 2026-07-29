@@ -1,4 +1,5 @@
 package com.saltech.urdocs
+import com.saltech.urdocs.util.rememberConnectivityState
 
 import android.graphics.Bitmap
 import android.os.Bundle
@@ -35,7 +36,9 @@ class MainActivity : ComponentActivity() {
                 var pendingSelfieTarget by remember { mutableStateOf<String?>(null) }
                 var resumeSelfie by remember { mutableStateOf<Bitmap?>(null) }
                 var biodataSelfie by remember { mutableStateOf<Bitmap?>(null) }
+                val isConnected by rememberConnectivityState()
 
+                if (isConnected) {
                 NavHost(navController = navController, startDestination = Screen.Home.route) {
                     composable(Screen.Home.route) {
                         HomeScreen(onNavigate = { route -> navController.navigate(route) })
@@ -129,6 +132,9 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                 }
+            } else {
+                NoInternetScreen(onRetry = {})
+            }
             }
         }
     }
