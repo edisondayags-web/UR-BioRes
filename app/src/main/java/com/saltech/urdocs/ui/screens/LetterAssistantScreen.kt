@@ -538,19 +538,18 @@ private fun LetterPaperPreview(letterText: String, onDismiss: () -> Unit) {
                         .requiredWidth(paperWidthDp)
                         .requiredHeight(paperHeightDp)
 
-                        .drawWithCache {
+                      .drawWithContent {
                             val w = size.width.toInt().coerceAtLeast(1)
                             val h = size.height.toInt().coerceAtLeast(1)
-                            onDrawWithContent {
-                                val pictureCanvas = ComposeCanvas(picture.beginRecording(w, h))
-                                draw(this@onDrawWithContent, this@onDrawWithContent.layoutDirection, pictureCanvas, this@onDrawWithContent.size) {
-                                    this@onDrawWithContent.drawContent()
-                                }
-                                picture.endRecording()
-                                this@onDrawWithContent.drawIntoCanvas { canvas ->
-                                    canvas.nativeCanvas.drawPicture(picture)
-                                }
+                            val pictureCanvas = ComposeCanvas(picture.beginRecording(w, h))
+                            draw(this, layoutDirection, pictureCanvas, size) {
+                                this@drawWithContent.drawContent()
                             }
+                            picture.endRecording()
+                            drawIntoCanvas { canvas ->
+                                canvas.nativeCanvas.drawPicture(picture)
+                            }
+                            drawContent()
                         }
                         
                         .background(Color.White)
