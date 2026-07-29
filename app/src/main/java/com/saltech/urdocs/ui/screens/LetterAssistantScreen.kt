@@ -63,6 +63,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
+import androidx.compose.ui.draw.drawWithContent
 
 private val UrBlue = Color(0xFF4C8DFF)
 private val UrBlueDeep = Color(0xFF16255E)
@@ -535,17 +536,16 @@ private fun LetterPaperPreview(letterText: String, onDismiss: () -> Unit) {
                         )
                         .requiredWidth(paperWidthDp)
                         .requiredHeight(paperHeightDp)
-                        .drawWithCache {
-                            val w = size.width.toInt().coerceAtLeast(1)
-                            val h = size.height.toInt().coerceAtLeast(1)
-                            onDrawWithContent {
-                                val pictureCanvas = ComposeCanvas(picture.beginRecording(w, h))
-                                draw(this, layoutDirection, pictureCanvas, size) {
-                                    this@onDrawWithContent.drawContent()
-                                }
-                                picture.endRecording()
-                                drawContext.canvas.nativeCanvas.drawPicture(picture)
-                            }
+                        .drawWithContent {
+    val w = size.width.toInt().coerceAtLeast(1)
+    val h = size.height.toInt().coerceAtLeast(1)
+    val pictureCanvas = ComposeCanvas(picture.beginRecording(w, h))
+    draw(this, layoutDirection, pictureCanvas, size) {
+        drawContent()
+    }
+    picture.endRecording()
+    drawContext.canvas.nativeCanvas.drawPicture(picture)
+    drawContent()
                         }
                         .background(Color.White)
                         .padding(48.dp)
