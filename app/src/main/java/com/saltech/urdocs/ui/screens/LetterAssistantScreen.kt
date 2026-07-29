@@ -463,7 +463,7 @@ private fun LetterPaperPreview(letterText: String, onDismiss: () -> Unit) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     var saving by remember { mutableStateOf(false) }
-    val graphicsLayer = rememberGraphicsLayer()
+    val picture = remember { android.graphics.Picture() }
     val paperWidthDp = 850.dp
     val paperHeightDp = 1250.dp
     var offset by remember { mutableStateOf(Offset.Zero) }
@@ -483,7 +483,10 @@ private fun LetterPaperPreview(letterText: String, onDismiss: () -> Unit) {
     }
 
     suspend fun saveToGallery() {
-        val bitmap = graphicsLayer.toImageBitmap().asAndroidBitmap()
+        val bitmap = Bitmap.createBitmap(picture.width.coerceAtLeast(1), picture.height.coerceAtLeast(1), Bitmap.Config.ARGB_8888)
+        val canvas = android.graphics.Canvas(bitmap)
+        canvas.drawColor(android.graphics.Color.WHITE)
+        picture.draw(canvas)
         val filename = "UR_Letter_${System.currentTimeMillis()}.png"
         val resolver = context.contentResolver
         val values = android.content.ContentValues().apply {
@@ -542,9 +545,11 @@ private fun LetterPaperPreview(letterText: String, onDismiss: () -> Unit) {
                         .requiredHeight(paperHeightDp)
 
                         .drawWithContent {
-                            graphicsLayer.record {
+                            val pictureCanvas = androidx.compose.ui.graphics.Canvas(picture.beginRecording(size.width.toInt().coerceAtLeast(1), size.height.toInt().coerceAtLeast(1)))
+                            draw(this, layoutDirection, pictureCanvas, size) {
                                 this@drawWithContent.drawContent()
                             }
+                            picture.endRecording()
                             drawContent()
                         }
                         
