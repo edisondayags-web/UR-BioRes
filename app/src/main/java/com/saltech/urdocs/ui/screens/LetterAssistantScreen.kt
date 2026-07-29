@@ -10,7 +10,6 @@ import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.draw.graphicsLayer
-
 import android.graphics.Bitmap
 import android.provider.MediaStore
 import androidx.compose.foundation.Image
@@ -65,6 +64,9 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.graphics.layer.rememberGraphicsLayer
+import androidx.compose.ui.graphics.layer.drawLayer
+import androidx.compose.ui.graphics.asAndroidBitmap
 
 private val UrBlue = Color(0xFF4C8DFF)
 private val UrBlueDeep = Color(0xFF16255E)
@@ -457,7 +459,7 @@ private fun LetterPaperPreview(letterText: String, onDismiss: () -> Unit) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     var saving by remember { mutableStateOf(false) }
-    val picture = remember { android.graphics.Picture() }
+    val graphicsLayer = rememberGraphicsLayer()
     val paperWidthDp = 850.dp
     val paperHeightDp = 1250.dp
     var offset by remember { mutableStateOf(Offset.Zero) }
@@ -476,11 +478,8 @@ private fun LetterPaperPreview(letterText: String, onDismiss: () -> Unit) {
         )
     }
 
-    fun saveToGallery() {
-        val bitmap = Bitmap.createBitmap(picture.width.coerceAtLeast(1), picture.height.coerceAtLeast(1), Bitmap.Config.ARGB_8888)
-        val canvas = android.graphics.Canvas(bitmap)
-        canvas.drawColor(android.graphics.Color.WHITE)
-        picture.draw(canvas)
+    suspend fun saveToGallery() {
+        val bitmap = graphicsLayer.toImageBitmap().asAndroidBitmap()
         val filename = "UR_Letter_${System.currentTimeMillis()}.png"
         val resolver = context.contentResolver
         val values = android.content.ContentValues().apply {
@@ -539,18 +538,11 @@ private fun LetterPaperPreview(letterText: String, onDismiss: () -> Unit) {
                         .requiredHeight(paperHeightDp)
 
                       .drawWithContent {
-                            val w = size.width.toInt().coerceAtLeast(1)
-                            val h = size.height.toInt().coerceAtLeast(1)
-                            val pictureCanvas = ComposeCanvas(picture.beginRecording(w, h))
-                            draw(this, layoutDirection, pictureCanvas, size) {
+                            graphicsLayer.record {
                                 this@drawWithContent.drawContent()
                             }
-                            picture.endRecording()
-                            drawIntoCanvas { canvas ->
-                                canvas.nativeCanvas.drawPicture(picture)
-                            }
-                            drawContent()
-                        }
+                            drawLayer(graphicsLayer)
+                      }
                         
                         .background(Color.White)
                         .padding(48.dp)
