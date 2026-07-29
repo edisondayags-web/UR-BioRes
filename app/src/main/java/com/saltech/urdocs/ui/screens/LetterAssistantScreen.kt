@@ -40,19 +40,15 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Canvas as ComposeCanvas
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.drawscope.draw
-import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
-import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
@@ -63,14 +59,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
-import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.graphics.layer.rememberGraphicsLayer
-import androidx.compose.ui.graphics.layer.toImageBitmap
-import androidx.compose.ui.graphics.layer.drawLayer
-import androidx.compose.ui.graphics.asAndroidBitmap
-import androidx.compose.ui.graphics.drawscope.draw
-import androidx.compose.ui.draw.drawWithCache
-import android.graphics.Picture
 
 private val UrBlue = Color(0xFF4C8DFF)
 private val UrBlueDeep = Color(0xFF16255E)
@@ -462,8 +450,8 @@ private fun AnimatedChatBackground(isTyping: Boolean) {
 private fun LetterPaperPreview(letterText: String, onDismiss: () -> Unit) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
+    val density = LocalDensity.current
     var saving by remember { mutableStateOf(false) }
-    val picture = remember { android.graphics.Picture() }
     val paperWidthDp = 850.dp
     val paperHeightDp = 1250.dp
     var offset by remember { mutableStateOf(Offset.Zero) }
@@ -483,10 +471,30 @@ private fun LetterPaperPreview(letterText: String, onDismiss: () -> Unit) {
     }
 
     suspend fun saveToGallery() {
-        val bitmap = Bitmap.createBitmap(picture.width.coerceAtLeast(1), picture.height.coerceAtLeast(1), Bitmap.Config.ARGB_8888)
+        val widthPx = with(density) { paperWidthDp.roundToPx() }
+        val heightPx = with(density) { paperHeightDp.roundToPx() }
+        val paddingPx = with(density) { 48.dp.roundToPx() }
+
+        val bitmap = Bitmap.createBitmap(widthPx, heightPx, Bitmap.Config.ARGB_8888)
         val canvas = android.graphics.Canvas(bitmap)
         canvas.drawColor(android.graphics.Color.WHITE)
-        picture.draw(canvas)
+
+        val paint = android.text.TextPaint().apply {
+            color = android.graphics.Color.BLACK
+            textSize = with(density) { 16.sp.toPx() }
+            isAntiAlias = true
+        }
+
+        val layout = android.text.StaticLayout.Builder
+            .obtain(letterText, 0, letterText.length, paint, (widthPx - 2 * paddingPx).coerceAtLeast(1))
+            .setLineSpacing(0f, 1.5f)
+            .build()
+
+        canvas.save()
+        canvas.translate(paddingPx.toFloat(), paddingPx.toFloat())
+        layout.draw(canvas)
+        canvas.restore()
+
         val filename = "UR_Letter_${System.currentTimeMillis()}.png"
         val resolver = context.contentResolver
         val values = android.content.ContentValues().apply {
@@ -497,7 +505,7 @@ private fun LetterPaperPreview(letterText: String, onDismiss: () -> Unit) {
         val uri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
         uri?.let {
             resolver.openOutputStream(it)?.use { out -> bitmap.compress(Bitmap.CompressFormat.PNG, 100, out) }
-            android.widget.Toast.makeText(context, "see your gellery luv🩵", android.widget.Toast.LENGTH_LONG).show()
+            android.widget.Toast.makeText(context, "see your gellery luv\uD83E\uDDE1", android.widget.Toast.LENGTH_LONG).show()
         } ?: run {
             android.widget.Toast.makeText(context, "Hindi na-download, subukan ulit.", android.widget.Toast.LENGTH_LONG).show()
         }
@@ -513,8 +521,8 @@ private fun LetterPaperPreview(letterText: String, onDismiss: () -> Unit) {
                     AdView(ctx).apply {
                         val displayMetrics = ctx.resources.displayMetrics
                         val adWidthPixels = displayMetrics.widthPixels.toFloat()
-                        val density = displayMetrics.density
-                        val adWidth = (adWidthPixels / density).toInt()
+                        val adDensity = displayMetrics.density
+                        val adWidth = (adWidthPixels / adDensity).toInt()
                         setAdSize(AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(ctx, adWidth))
                         adUnitId = "ca-app-pub-3134240485602899/5923255956"
                         loadAd(AdRequest.Builder().build())
@@ -543,16 +551,6 @@ private fun LetterPaperPreview(letterText: String, onDismiss: () -> Unit) {
                         )
                         .requiredWidth(paperWidthDp)
                         .requiredHeight(paperHeightDp)
-
-                        .drawWithContent {
-                            val pictureCanvas = androidx.compose.ui.graphics.Canvas(picture.beginRecording(size.width.toInt().coerceAtLeast(1), size.height.toInt().coerceAtLeast(1)))
-                            draw(this, layoutDirection, pictureCanvas, size) {
-                                this@drawWithContent.drawContent()
-                            }
-                            picture.endRecording()
-                            drawContent()
-                        }
-                        
                         .background(Color.White)
                         .padding(48.dp)
                 ) {
