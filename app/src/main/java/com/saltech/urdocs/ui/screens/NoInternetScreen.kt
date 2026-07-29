@@ -24,22 +24,22 @@ fun NoInternetScreen(onRetry: () -> Unit) {
             verticalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier.padding(24.dp)
         ) {
-            Text(text = "📡", fontSize = 48.sp)
+            Text(text = "🤦", fontSize = 48.sp)
             Text(
-                text = "Walang Internet Connection",
+                text = "luv wala kang Internet🩵",
                 color = Color.White,
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
                 textAlign = androidx.compose.ui.text.style.TextAlign.Center
             )
             Text(
-                text = "Kailangan ng internet connection para gumana ang app na ito.",
+                text = "need mo internet luv🩵.",
                 color = Color.Gray,
                 fontSize = 14.sp,
                 textAlign = androidx.compose.ui.text.style.TextAlign.Center
             )
             Button(onClick = onRetry) {
-                Text("Subukan Ulit")
+                Text("Try Again Luv")
             }
         }
     }
