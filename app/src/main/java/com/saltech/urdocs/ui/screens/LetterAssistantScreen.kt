@@ -1,4 +1,5 @@
 package com.saltech.urdocs.ui.screens
+
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
@@ -9,7 +10,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.draw.graphicsLayer
+import androidx.compose.ui.graphics.graphicsLayer
 import android.graphics.Bitmap
 import android.provider.MediaStore
 import androidx.compose.foundation.Image
