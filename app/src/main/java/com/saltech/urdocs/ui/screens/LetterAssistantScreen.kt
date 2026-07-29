@@ -1,4 +1,8 @@
 package com.saltech.urdocs.ui.screens
+import androidx.compose.foundation.gestures.detectTransformGestures
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.draw.graphicsLayer
 
 import android.graphics.Bitmap
 import android.provider.MediaStore
@@ -445,6 +449,9 @@ private fun LetterPaperPreview(letterText: String, onDismiss: () -> Unit) {
     val scope = rememberCoroutineScope()
     var saving by remember { mutableStateOf(false) }
     val picture = remember { android.graphics.Picture() }
+    val paperWidthDp = 850.dp
+    val paperHeightDp = 1250.dp
+    var offset by remember { mutableStateOf(Offset.Zero) }
 
     fun saveToGallery() {
         val bitmap = Bitmap.createBitmap(picture.width.coerceAtLeast(1), picture.height.coerceAtLeast(1), Bitmap.Config.ARGB_8888)
@@ -469,27 +476,45 @@ private fun LetterPaperPreview(letterText: String, onDismiss: () -> Unit) {
         contentAlignment = Alignment.Center
     ) {
         Column(modifier = Modifier.fillMaxWidth(0.9f).fillMaxHeight(0.85f)) {
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth()
-                    .drawWithCache {
-                        val w = size.width.toInt().coerceAtLeast(1)
-                        val h = size.height.toInt().coerceAtLeast(1)
-                        onDrawWithContent {
-                            val pictureCanvas = ComposeCanvas(picture.beginRecording(w, h))
-                            draw(this, layoutDirection, pictureCanvas, size) {
-                                this@onDrawWithContent.drawContent()
-                            }
-                            picture.endRecording()
-                            drawContext.canvas.nativeCanvas.drawPicture(picture)
-                        }
-                    }
-                    .background(Color.White)
-                    .padding(24.dp)
+            BoxWithConstraints(
+                modifier = Modifier.weight(1f).background(Color.Transparent)
             ) {
-                SelectionContainer {
-                    Text(letterText, color = Color.Black, fontSize = 13.sp, lineHeight = 20.sp)
+                val fitScale = minOf(maxWidth / paperWidthDp, maxHeight / paperHeightDp)
+                var scale by remember { mutableStateOf(fitScale) }
+
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .pointerInput(Unit) {
+                            detectTransformGestures { _, pan, zoom, _ ->
+                                scale = (scale * zoom).coerceIn(fitScale, 4f)
+                                offset = if (scale <= fitScale) Offset.Zero else offset + pan
+                            }
+                        }
+                        .graphicsLayer(
+                            scaleX = scale, scaleY = scale,
+                            translationX = offset.x, translationY = offset.y
+                        )
+                        .requiredWidth(paperWidthDp)
+                        .requiredHeight(paperHeightDp)
+                        .drawWithCache {
+                            val w = size.width.toInt().coerceAtLeast(1)
+                            val h = size.height.toInt().coerceAtLeast(1)
+                            onDrawWithContent {
+                                val pictureCanvas = ComposeCanvas(picture.beginRecording(w, h))
+                                draw(this, layoutDirection, pictureCanvas, size) {
+                                    this@onDrawWithContent.drawContent()
+                                }
+                                picture.endRecording()
+                                drawContext.canvas.nativeCanvas.drawPicture(picture)
+                            }
+                        }
+                        .background(Color.White)
+                        .padding(48.dp)
+                ) {
+                    SelectionContainer {
+                        Text(letterText, color = Color.Black, fontSize = 16.sp, lineHeight = 24.sp)
+                    }
                 }
             }
             Spacer(Modifier.height(12.dp))
@@ -512,6 +537,7 @@ private fun LetterPaperPreview(letterText: String, onDismiss: () -> Unit) {
         }
     }
 }
+
 
 
 @Composable
