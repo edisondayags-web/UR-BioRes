@@ -78,7 +78,7 @@ fun JobResearcherScreen(
         inputText = ""
         isTyping = true
         scope.launch {
-            val reply = repository.chat(updatedHistory)
+            val reply = repository.chatOpen(updatedHistory)
             addMessage(reply, isUser = false)
             history = history + ("model" to reply)
             isTyping = false

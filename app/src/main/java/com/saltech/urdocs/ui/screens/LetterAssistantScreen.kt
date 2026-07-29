@@ -93,7 +93,7 @@ fun LetterAssistantScreen(
             if (userText != null) {
                 history = history + ("user" to userText)
             }
-            val reply = repository.chat(history)
+            val reply = repository.chat(history, letterType)
             history = history + ("model" to reply)
             isTyping = false
 
