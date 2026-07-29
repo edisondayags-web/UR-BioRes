@@ -51,6 +51,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.draw
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -536,17 +537,22 @@ private fun LetterPaperPreview(letterText: String, onDismiss: () -> Unit) {
                         )
                         .requiredWidth(paperWidthDp)
                         .requiredHeight(paperHeightDp)
-                        .drawWithContent {
-    val w = size.width.toInt().coerceAtLeast(1)
-    val h = size.height.toInt().coerceAtLeast(1)
-    val pictureCanvas = ComposeCanvas(picture.beginRecording(w, h))
-    draw(this, layoutDirection, pictureCanvas, size) {
-        drawContent()
-    }
-    picture.endRecording()
-    drawContext.canvas.nativeCanvas.drawPicture(picture)
-    drawContent()
+
+                        .drawWithCache {
+                            val w = size.width.toInt().coerceAtLeast(1)
+                            val h = size.height.toInt().coerceAtLeast(1)
+                            onDrawWithContent {
+                                val pictureCanvas = ComposeCanvas(picture.beginRecording(w, h))
+                                draw(this@onDrawWithContent, this@onDrawWithContent.layoutDirection, pictureCanvas, this@onDrawWithContent.size) {
+                                    this@onDrawWithContent.drawContent()
+                                }
+                                picture.endRecording()
+                                this@onDrawWithContent.drawIntoCanvas { canvas ->
+                                    canvas.nativeCanvas.drawPicture(picture)
+                                }
+                            }
                         }
+                        
                         .background(Color.White)
                         .padding(48.dp)
                 ) {
