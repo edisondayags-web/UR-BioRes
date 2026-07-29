@@ -56,6 +56,8 @@ import androidx.compose.ui.viewinterop.AndroidView
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.text.AnnotatedString
 
 data class TraditionalResumeFields(
     val fullName: String = "",
@@ -97,7 +99,9 @@ fun TraditionalResumeScreen(
     //SecureScreen()
     val paperWidthDp = 850.dp
     val paperHeightDp = 1250.dp
-
+    val clipboardManager = LocalClipboardManager.current
+    var showPaymentDialog by remember { mutableStateOf(false) }
+    var hasPaid by remember { mutableStateOf(false) }
     val context = LocalContext.current
     var data by remember { mutableStateOf(TraditionalResumeFields()) }
     var offset by remember { mutableStateOf(Offset.Zero) }
@@ -112,6 +116,24 @@ fun TraditionalResumeScreen(
 
     LaunchedEffect(processedSelfie) {
         if (processedSelfie != null) rawSource = processedSelfie
+    }
+    if (showPaymentDialog) {
+            AlertDialog(
+                onDismissRequest = { showPaymentDialog = false },
+                title = { Text("₱5 to Continue 💙") },
+                text = { Text("paste mo lang tong nasa clipboard mo. Send Money → Bank Transfer/InstaPay → Tonik Bank. I-paste mo na lang sa GCash/bank app mo.") },
+                confirmButton = {
+                    Button(onClick = {
+                        clipboardManager.setText(AnnotatedString("60843949330007"))
+                        android.widget.Toast.makeText(context, "Number copied! 📋", android.widget.Toast.LENGTH_SHORT).show()
+                    }) { Text("Copy Number") }
+                },
+                dismissButton = {
+                    TextButton(onClick = { hasPaid = true; showPaymentDialog = false }) {
+                        Text("I've Paid ✅")
+                    }
+                }
+            )
     }
 
     val uploadLauncher = rememberLauncherForActivityResult(
@@ -469,13 +491,21 @@ fun TraditionalResumeScreen(
                     if (activity != null && interstitialAd != null) {
                         interstitialAd?.fullScreenContentCallback = object : com.google.android.gms.ads.FullScreenContentCallback() {
                             override fun onAdDismissedFullScreenContent() {
-                                interstitialAd = null
+                            interstitialAd = null
+                            if (!hasPaid) {
+                                showPaymentDialog = true
+                            } else {
                                 doSave()
+                            }
                             }
                         }
                         interstitialAd?.show(activity)
                     } else {
+                    if (!hasPaid) {
+                        showPaymentDialog = true
+                    } else {
                         doSave()
+                    }
                     }
                 },
                 colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = Color.Transparent),
