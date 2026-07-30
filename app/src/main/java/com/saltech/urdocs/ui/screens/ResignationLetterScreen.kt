@@ -195,7 +195,7 @@ fun ResignationLetterScreen() {
                         "Thank you once again for the experience and for everything I have learned during my tenure."
                     )
 
-                    Spacer(Modifier.height(28.dp))
+                    Spacer(Modifier.weight(1f))
 
                   Spacer(Modifier.padding(start = 60.dp)) // hindi ito gagana mag-isa, tignan sa baba
 
