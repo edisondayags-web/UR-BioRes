@@ -129,13 +129,13 @@ fun ResignationLetterScreen() {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(horizontal = 50.dp, vertical = 60.dp)
+                        .padding(horizontal = 70.dp, vertical = 55.dp)
                 ) {
                     Text(
     buildAnnotatedString {
         "RESIGNATION LETTER".forEachIndexed { i, c ->
             val isFirstOfWord = i == 0 || "RESIGNATION LETTER"[i-1] == ' '
-            withStyle(SpanStyle(fontSize = if (isFirstOfWord) 34.sp else 24.sp)) {
+            withStyle(SpanStyle(fontSize = if (isFirstOfWord) 44.sp else 30.sp)) {
                 append(c)
             }
         }
@@ -146,9 +146,7 @@ fun ResignationLetterScreen() {
     textAlign = TextAlign.Center,
     modifier = Modifier.fillMaxWidth()
 )
-                    Spacer(Modifier.height(8.dp))
-                    Spacer(Modifier.height(30.dp))
-                    Spacer(Modifier.height(24.dp))
+                    Spacer(Modifier.height(14.dp))
 
                     RLField("Date", data.date) { data = data.copy(date = it) }
                     Spacer(Modifier.height(14.dp))
@@ -162,16 +160,24 @@ fun ResignationLetterScreen() {
                     RLText("Respected Sir/Madam,")
                     Spacer(Modifier.height(10.dp))
 
-                    Row(verticalAlignment = Alignment.Bottom) {
-                        RLText("I am writing to formally tender my resignation from my position as ")
-                        RLInlineField(data.position, 140.dp) { data = data.copy(position = it) }
-                        RLText(", effective ")
-                        RLInlineField(data.effectiveDate, 140.dp) { data = data.copy(effectiveDate = it) }
-                        RLText(".")
+                    Column {
+    Row(verticalAlignment = Alignment.Bottom) {
+        RLText("I am writing to formally tender my resignation from my position")
+    }
+
+    Spacer(Modifier.height(4.dp))
+
+    Row(verticalAlignment = Alignment.Bottom) {
+        RLText("as ")
+        RLInlineField(data.position, 220.dp) { data = data.copy(position = it) }
+        RLText(", effective ")
+        RLInlineField(data.effectiveDate, 220.dp) { data = data.copy(effectiveDate = it) }
+        RLText(".")
+    }
                     }
                     Spacer(Modifier.height(10.dp))
                     RLText("Please accept this letter as my official notice of resignation in accordance with the company's policy.")
-                    Spacer(Modifier.height(14.dp))
+                    Spacer(Modifier.height(24.dp))
                     RLText("I have truly valued the opportunities for growth and development that I have gained during my time here. I am grateful for the support, guidance, and encouragement I have received from you and the entire team.")
                     Spacer(Modifier.height(14.dp))
                     RLText("I will do my best to ensure a smooth transition by completing my assigned tasks and assisting in the turnover process before my last day.")
@@ -179,11 +185,17 @@ fun ResignationLetterScreen() {
                     RLText("Thank you once again for the experience and for everything I have learned during my tenure.")
                     Spacer(Modifier.height(28.dp))
                     RLText("Yours sincerely,")
-                    Spacer(Modifier.height(30.dp))
+                    Spacer(Modifier.height(140.dp))
 
                     RLField("Name", data.name) { data = data.copy(name = it) }
+                    Spacer(Modifier.height(10.dp))
+
                     RLField("Employee ID", data.employeeId) { data = data.copy(employeeId = it) }
+                    Spacer(Modifier.height(10.dp))
+
                     RLField("Department", data.department) { data = data.copy(department = it) }
+                    Spacer(Modifier.height(10.dp))
+
                     RLField("Signature", data.signature) { data = data.copy(signature = it) }
                 }
             }
@@ -221,9 +233,13 @@ private fun RLText(text: String, bold: Boolean = false) {
         fontFamily = FontFamily.Serif,
         fontStyle = FontStyle.Italic,
         fontWeight = if (bold) FontWeight.Bold else FontWeight.Normal,
-        fontSize = 14.sp,
+        fontSize = 16.sp,
         color = RLBlue,
-        modifier = Modifier.padding(vertical = 2.dp)
+        modifier = Modifier
+       .fillMaxWidth()
+       .padding(vertical = 2.dp),
+        textAlign = TextAlign.Center
+        textAlign = TextAlign.Center
     )
 }
 
@@ -286,6 +302,6 @@ private fun saveResignationToGallery(context: android.content.Context, bitmap: B
 private fun RLField(label: String, value: String, onChange: (String) -> Unit) {
     Row(verticalAlignment = Alignment.Bottom) {
         RLText("$label: ", bold = true)
-        RLInlineField(value, 160.dp, onChange)
+        RLInlineField(value, 300.dp, onChange)
     }
 }
