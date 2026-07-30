@@ -118,8 +118,8 @@ fun ResignationLetterScreen() {
                 Image(
                     painter = painterResource(R.drawable.resignation_flowers),
                     contentDescription = null,
-                    modifier = Modifier.fillMaxWidth().align(Alignment.TopEnd),
-                    contentScale = ContentScale.FillWidth
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.FillBounds
                 )
 
                 Column(
@@ -137,7 +137,7 @@ fun ResignationLetterScreen() {
                         modifier = Modifier.fillMaxWidth()
                     )
                     Spacer(Modifier.height(8.dp))
-                    Image(painterResource(R.drawable.divider_flourish), null, Modifier.fillMaxWidth().height(30.dp))
+                    Spacer(Modifier.height(30.dp))
                     Spacer(Modifier.height(24.dp))
 
                     RLField("Date", data.date) { data = data.copy(date = it) }
