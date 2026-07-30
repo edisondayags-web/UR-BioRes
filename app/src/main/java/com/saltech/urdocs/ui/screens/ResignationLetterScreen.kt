@@ -256,7 +256,7 @@ private fun RLLine(value: String, onChange: (String) -> Unit) {
         cursorBrush = SolidColor(RLBlue),
         interactionSource = interactionSource,
         modifier = Modifier
-            .fillMaxWidth()
+            .widthIn(min = 250.dp)
             .background(if (isFocused) Color(0xFFEFF3FF) else Color.Transparent)
     )
     Spacer(Modifier.fillMaxWidth().height(1.dp).background(RLBlue))
