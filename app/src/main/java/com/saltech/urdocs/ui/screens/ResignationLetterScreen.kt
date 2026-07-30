@@ -8,7 +8,6 @@ import android.provider.MediaStore
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
@@ -33,6 +32,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -42,13 +44,8 @@ import androidx.compose.ui.unit.sp
 import com.saltech.urdocs.R
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.draw.drawBehind
 
 private val RLBlue = Color(0xFF1D3FB5)
-private val RLBlueDark = Color(0xFF16309C)
 
 data class ResignationFields(
     val date: String = "",
@@ -62,6 +59,7 @@ data class ResignationFields(
     val signature: String = ""
 )
 
+@OptIn(androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
 @Composable
 fun ResignationLetterScreen() {
     val paperWidthDp = 850.dp
@@ -106,19 +104,7 @@ fun ResignationLetterScreen() {
                     }
                     .background(Color.White)
             ) {
-                // Double border frame
-                Canvas(modifier = Modifier.fillMaxSize()) {
-                    val inset1 = 14.dp.toPx()
-                    val inset2 = 22.dp.toPx()
-                    drawRect(color = RLBlue, topLeft = Offset(inset1, inset1),
-                        size = androidx.compose.ui.geometry.Size(size.width - inset1 * 2, size.height - inset1 * 2),
-                        style = Stroke(width = 2.dp.toPx()))
-                    drawRect(color = RLBlue, topLeft = Offset(inset2, inset2),
-                        size = androidx.compose.ui.geometry.Size(size.width - inset2 * 2, size.height - inset2 * 2),
-                        style = Stroke(width = 1.dp.toPx()))
-                }
-
-                // Corner flowers - totoong image na, buong frame
+                // Bond paper background (flowers + border) — already in your drawable
                 Image(
                     painter = painterResource(R.drawable.resignation_flowers),
                     contentDescription = null,
@@ -131,72 +117,95 @@ fun ResignationLetterScreen() {
                         .fillMaxSize()
                         .padding(horizontal = 70.dp, vertical = 55.dp)
                 ) {
+                    // Title - big first letter per word, like a small-caps heading
                     Text(
-    buildAnnotatedString {
-        "RESIGNATION LETTER".forEachIndexed { i, c ->
-            val isFirstOfWord = i == 0 || "RESIGNATION LETTER"[i-1] == ' '
-            withStyle(SpanStyle(fontSize = if (isFirstOfWord) 44.sp else 30.sp)) {
-                append(c)
-            }
-        }
-    },
-    fontFamily = FontFamily.Serif,
-    fontWeight = FontWeight.Bold,
-    color = RLBlue,
-    textAlign = TextAlign.Center,
-    modifier = Modifier.fillMaxWidth()
-)
-                    Spacer(Modifier.height(14.dp))
+                        buildAnnotatedString {
+                            "RESIGNATION LETTER".forEachIndexed { i, c ->
+                                val isFirstOfWord = i == 0 || "RESIGNATION LETTER"[i - 1] == ' '
+                                withStyle(SpanStyle(fontSize = if (isFirstOfWord) 44.sp else 30.sp)) {
+                                    append(c)
+                                }
+                            }
+                        },
+                        fontFamily = FontFamily.Serif,
+                        fontWeight = FontWeight.Bold,
+                        color = RLBlue,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    )
 
-                    RLField("Date", data.date) { data = data.copy(date = it) }
-                    Spacer(Modifier.height(14.dp))
-                    RLText("To,")
-                    RLText("The Manager / Principal")
-                    RLLine(data.to1) { data = data.copy(to1 = it) }
-                    RLLine(data.to2) { data = data.copy(to2 = it) }
-                    Spacer(Modifier.height(14.dp))
-                    RLText("Subject: Resignation Letter", bold = true)
-                    Spacer(Modifier.height(10.dp))
-                    RLText("Respected Sir/Madam,")
-                    Spacer(Modifier.height(10.dp))
+                    Spacer(Modifier.height(18.dp))
 
-                    Column {
-    Row(verticalAlignment = Alignment.Bottom) {
-        RLText("I am writing to formally tender my resignation from my position")
-    }
+                    // Date
+                    RLField("Date", data.date, fieldWidth = 220.dp) { data = data.copy(date = it) }
 
-    Spacer(Modifier.height(4.dp))
+                    Spacer(Modifier.height(18.dp))
 
-    Row(verticalAlignment = Alignment.Bottom) {
-        RLText("as ")
-        RLInlineField(data.position, 220.dp) { data = data.copy(position = it) }
-        RLText(", effective ")
-        RLInlineField(data.effectiveDate, 220.dp) { data = data.copy(effectiveDate = it) }
-        RLText(".")
-    }
+                    RLPlainText("To,")
+                    RLPlainText("The Manager / Principal")
+                    RLUnderline(data.to1) { data = data.copy(to1 = it) }
+                    RLUnderline(data.to2) { data = data.copy(to2 = it) }
+
+                    Spacer(Modifier.height(16.dp))
+
+                    // Subject line - bold label, normal rest
+                    FlowRow(modifier = Modifier.fillMaxWidth()) {
+                        RLWord("Subject:", bold = true)
+                        RLWord("Resignation Letter")
                     }
-                    Spacer(Modifier.height(10.dp))
-                    RLText("Please accept this letter as my official notice of resignation in accordance with the company's policy.")
-                    Spacer(Modifier.height(24.dp))
-                    RLText("I have truly valued the opportunities for growth and development that I have gained during my time here. I am grateful for the support, guidance, and encouragement I have received from you and the entire team.")
+
                     Spacer(Modifier.height(14.dp))
-                    RLText("I will do my best to ensure a smooth transition by completing my assigned tasks and assisting in the turnover process before my last day.")
+
+                    RLPlainText("Respected Sir/Madam,")
+
                     Spacer(Modifier.height(14.dp))
-                    RLText("Thank you once again for the experience and for everything I have learned during my tenure.")
+
+                    // Flowing paragraph with two inline blanks - wraps like real text
+                    FlowRow(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(0.dp)
+                    ) {
+                        "I am writing to formally tender my resignation from my position as"
+                            .split(" ").forEach { RLWord(it) }
+                        RLInlineField(data.position, 180.dp) { data = data.copy(position = it) }
+                        RLWord(", effective")
+                        RLInlineField(data.effectiveDate, 180.dp) { data = data.copy(effectiveDate = it) }
+                        RLWord(".")
+                        "Please accept this letter as my official notice of resignation in accordance with the company's policy."
+                            .split(" ").forEach { RLWord(it) }
+                    }
+
+                    Spacer(Modifier.height(16.dp))
+
+                    RLParagraph(
+                        "I have truly valued the opportunities for growth and development that I have gained during my time here. I am grateful for the support, guidance, and encouragement I have received from you and the entire team."
+                    )
+
+                    Spacer(Modifier.height(14.dp))
+
+                    RLParagraph(
+                        "I will do my best to ensure a smooth transition by completing my assigned tasks and assisting in the turnover process before my last day."
+                    )
+
+                    Spacer(Modifier.height(14.dp))
+
+                    RLParagraph(
+                        "Thank you once again for the experience and for everything I have learned during my tenure."
+                    )
+
                     Spacer(Modifier.height(28.dp))
-                    RLText("Yours sincerely,")
-                    Spacer(Modifier.height(140.dp))
 
-                    RLField("Name", data.name) { data = data.copy(name = it) }
-                    Spacer(Modifier.height(10.dp))
+                    RLPlainText("Yours sincerely,")
 
-                    RLField("Employee ID", data.employeeId) { data = data.copy(employeeId = it) }
-                    Spacer(Modifier.height(10.dp))
+                    Spacer(Modifier.height(70.dp))
 
-                    RLField("Department", data.department) { data = data.copy(department = it) }
-                    Spacer(Modifier.height(10.dp))
-
-                    RLField("Signature", data.signature) { data = data.copy(signature = it) }
+                    RLField("Name", data.name, fieldWidth = 260.dp) { data = data.copy(name = it) }
+                    Spacer(Modifier.height(8.dp))
+                    RLField("Employee ID", data.employeeId, fieldWidth = 220.dp) { data = data.copy(employeeId = it) }
+                    Spacer(Modifier.height(8.dp))
+                    RLField("Department", data.department, fieldWidth = 220.dp) { data = data.copy(department = it) }
+                    Spacer(Modifier.height(8.dp))
+                    RLField("Signature", data.signature, fieldWidth = 220.dp) { data = data.copy(signature = it) }
                 }
             }
 
@@ -226,8 +235,10 @@ fun ResignationLetterScreen() {
     }
 }
 
+// ---------- Reusable pieces ----------
+
 @Composable
-private fun RLText(text: String, bold: Boolean = false) {
+private fun RLPlainText(text: String, bold: Boolean = false) {
     Text(
         text,
         fontFamily = FontFamily.Serif,
@@ -235,47 +246,95 @@ private fun RLText(text: String, bold: Boolean = false) {
         fontWeight = if (bold) FontWeight.Bold else FontWeight.Normal,
         fontSize = 16.sp,
         color = RLBlue,
-        modifier = Modifier
-       .fillMaxWidth()
-       .padding(vertical = 2.dp),
-        textAlign = TextAlign.Center
+        modifier = Modifier.padding(vertical = 2.dp)
     )
 }
 
+/** One paragraph that wraps naturally like the bond paper, with slight justification feel. */
+@Composable
+private fun RLParagraph(text: String) {
+    Text(
+        text,
+        fontFamily = FontFamily.Serif,
+        fontStyle = FontStyle.Italic,
+        fontSize = 16.sp,
+        color = RLBlue,
+        textAlign = TextAlign.Justify,
+        lineHeight = 22.sp,
+        modifier = Modifier.fillMaxWidth()
+    )
+}
+
+/** A single word rendered inside a FlowRow so it wraps like normal text. */
+@Composable
+private fun RLWord(word: String, bold: Boolean = false) {
+    Text(
+        "$word ",
+        fontFamily = FontFamily.Serif,
+        fontStyle = FontStyle.Italic,
+        fontWeight = if (bold) FontWeight.Bold else FontWeight.Normal,
+        fontSize = 16.sp,
+        color = RLBlue
+    )
+}
+
+/** Editable blank that sits inline inside a FlowRow, same size/spacing as the words around it. */
 @Composable
 private fun RLInlineField(value: String, width: androidx.compose.ui.unit.Dp, onChange: (String) -> Unit) {
     val interactionSource = remember { MutableInteractionSource() }
     val isFocused by interactionSource.collectIsFocusedAsState()
-    BasicTextField(
-        value = value, onValueChange = onChange,
-        textStyle = TextStyle(fontFamily = FontFamily.Serif, fontStyle = FontStyle.Italic, fontSize = 14.sp, color = RLBlue),
-        cursorBrush = SolidColor(RLBlue),
-        interactionSource = interactionSource,
+    Box(
         modifier = Modifier
-            .widthIn(min = 60.dp)
+            .padding(end = 4.dp)
             .background(if (isFocused) Color(0xFFEFF3FF) else Color.Transparent)
-            .drawBehind {
-                val y = size.height - 2.dp.toPx()
-                drawLine(RLBlue, Offset(0f, y), Offset(size.width, y), strokeWidth = 1.dp.toPx())
+            .drawWithCache {
+                onDrawWithContent {
+                    drawContent()
+                    val y = size.height - 2.dp.toPx()
+                    drawLine(RLBlue, Offset(0f, y), Offset(size.width, y), strokeWidth = 1.dp.toPx())
+                }
             }
-    )
+    ) {
+        BasicTextField(
+            value = value, onValueChange = onChange,
+            textStyle = TextStyle(fontFamily = FontFamily.Serif, fontStyle = FontStyle.Italic, fontSize = 16.sp, color = RLBlue),
+            cursorBrush = SolidColor(RLBlue),
+            interactionSource = interactionSource,
+            modifier = Modifier.widthIn(min = width)
+        )
+    }
 }
 
+/** Underline-only blank line (for "To," lines with no label). */
 @Composable
-private fun RLLine(value: String, onChange: (String) -> Unit) {
+private fun RLUnderline(value: String, onChange: (String) -> Unit) {
     val interactionSource = remember { MutableInteractionSource() }
     val isFocused by interactionSource.collectIsFocusedAsState()
     BasicTextField(
         value = value, onValueChange = onChange,
-        textStyle = TextStyle(fontFamily = FontFamily.Serif, fontStyle = FontStyle.Italic, fontSize = 14.sp, color = RLBlue),
+        textStyle = TextStyle(fontFamily = FontFamily.Serif, fontStyle = FontStyle.Italic, fontSize = 16.sp, color = RLBlue),
         cursorBrush = SolidColor(RLBlue),
         interactionSource = interactionSource,
         modifier = Modifier
-            .widthIn(min = 250.dp)
+            .fillMaxWidth()
             .background(if (isFocused) Color(0xFFEFF3FF) else Color.Transparent)
+            .drawWithCache {
+                onDrawWithContent {
+                    drawContent()
+                    val y = size.height - 2.dp.toPx()
+                    drawLine(RLBlue, Offset(0f, y), Offset(size.width, y), strokeWidth = 1.dp.toPx())
+                }
+            }
     )
-    Spacer(Modifier.fillMaxWidth().height(1.dp).background(RLBlue))
-    Spacer(Modifier.height(4.dp))
+}
+
+/** "Label: ___________" row like Date / Name / Employee ID / Department / Signature. */
+@Composable
+private fun RLField(label: String, value: String, fieldWidth: androidx.compose.ui.unit.Dp, onChange: (String) -> Unit) {
+    Row(verticalAlignment = Alignment.Bottom) {
+        RLPlainText("$label: ", bold = true)
+        RLInlineField(value, fieldWidth, onChange)
+    }
 }
 
 private fun saveResignationToGallery(context: android.content.Context, bitmap: Bitmap) {
@@ -294,13 +353,5 @@ private fun saveResignationToGallery(context: android.content.Context, bitmap: B
         android.widget.Toast.makeText(context, "see your gallery luv🩵", android.widget.Toast.LENGTH_LONG).show()
     } ?: run {
         android.widget.Toast.makeText(context, "Hindi na-download, subukan ulit.", android.widget.Toast.LENGTH_LONG).show()
-    }
-}
-
-@Composable
-private fun RLField(label: String, value: String, onChange: (String) -> Unit) {
-    Row(verticalAlignment = Alignment.Bottom) {
-        RLText("$label: ", bold = true)
-        RLInlineField(value, 300.dp, onChange)
     }
 }
