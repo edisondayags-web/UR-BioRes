@@ -117,24 +117,24 @@ fun TraditionalResumeScreen(
     LaunchedEffect(processedSelfie) {
         if (processedSelfie != null) rawSource = processedSelfie
     }
-    if (showPaymentDialog) {
-            AlertDialog(
-                onDismissRequest = { showPaymentDialog = false },
-                title = { Text("₱5 to Continue 💙") },
-                text = { Text("paste mo lang tong nasa clipboard mo. Send Money → Bank Transfer/InstaPay → Tonik Bank. I-paste mo na lang sa GCash/bank app mo.") },
-                confirmButton = {
-                    Button(onClick = {
-                        clipboardManager.setText(AnnotatedString("60843949330007"))
-                        android.widget.Toast.makeText(context, "Number copied! 📋", android.widget.Toast.LENGTH_SHORT).show()
-                    }) { Text("Copy Number") }
-                },
-                dismissButton = {
-                    TextButton(onClick = { hasPaid = true; showPaymentDialog = false }) {
-                        Text("I've Paid ✅")
-                    }
-                }
-            )
-    }
+ //   if (showPaymentDialog) {
+//            AlertDialog(
+ //               onDismissRequest = { showPaymentDialog = false },
+  //              title = { Text("₱5 to Continue 💙") },
+  //              text = { Text("paste mo lang tong nasa clipboard mo. Send Money → Bank Transfer/InstaPay → Tonik Bank. I-paste mo na lang sa GCash/bank app mo.") },
+       //         confirmButton = {
+          //          Button(onClick = {
+          //              clipboardManager.setText(AnnotatedString("60843949330007"))
+          //              android.widget.Toast.makeText(context, "Number copied! 📋", android.widget.Toast.LENGTH_SHORT).show()
+           //         }) { Text("Copy Number") }
+          //      },
+          //      dismissButton = {
+          //          TextButton(onClick = { hasPaid = true; showPaymentDialog = false }) {
+          //              Text("I've Paid ✅")
+         //           }
+        //        }
+         //    )
+  //  }
 
     val uploadLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.GetContent()
@@ -493,7 +493,7 @@ fun TraditionalResumeScreen(
                             override fun onAdDismissedFullScreenContent() {
                             interstitialAd = null
                             if (!hasPaid) {
-                                showPaymentDialog = true
+                                doSave()
                             } else {
                                 doSave()
                             }
@@ -502,7 +502,7 @@ fun TraditionalResumeScreen(
                         interstitialAd?.show(activity)
                     } else {
                     if (!hasPaid) {
-                        showPaymentDialog = true
+                        doSave()
                     } else {
                         doSave()
                     }
