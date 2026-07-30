@@ -42,6 +42,10 @@ import androidx.compose.ui.unit.sp
 import com.saltech.urdocs.R
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.geometry.Offset
 
 private val RLBlue = Color(0xFF1D3FB5)
 private val RLBlueDark = Color(0xFF16309C)
@@ -128,14 +132,20 @@ fun ResignationLetterScreen() {
                         .padding(horizontal = 50.dp, vertical = 60.dp)
                 ) {
                     Text(
-                        "RESIGNATION LETTER",
-                        fontFamily = FontFamily.Serif,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 34.sp,
-                        color = RLBlue,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.fillMaxWidth()
-                    )
+    buildAnnotatedString {
+        "RESIGNATION LETTER".forEachIndexed { i, c ->
+            val isFirstOfWord = i == 0 || "RESIGNATION LETTER"[i-1] == ' '
+            withStyle(SpanStyle(fontSize = if (isFirstOfWord) 34.sp else 24.sp)) {
+                append(c)
+            }
+        }
+    },
+    fontFamily = FontFamily.Serif,
+    fontWeight = FontWeight.Bold,
+    color = RLBlue,
+    textAlign = TextAlign.Center,
+    modifier = Modifier.fillMaxWidth()
+)
                     Spacer(Modifier.height(8.dp))
                     Spacer(Modifier.height(30.dp))
                     Spacer(Modifier.height(24.dp))
@@ -218,22 +228,22 @@ private fun RLText(text: String, bold: Boolean = false) {
 }
 
 @Composable
-private fun RLField(label: String, value: String, onChange: (String) -> Unit) {
+private fun RLInlineField(value: String, width: androidx.compose.ui.unit.Dp, onChange: (String) -> Unit) {
     val interactionSource = remember { MutableInteractionSource() }
     val isFocused by interactionSource.collectIsFocusedAsState()
-    Row(verticalAlignment = Alignment.Bottom, modifier = Modifier.padding(top = 6.dp)) {
-        Text("$label: ", fontFamily = FontFamily.Serif, fontStyle = FontStyle.Italic, fontWeight = FontWeight.Bold, fontSize = 14.sp, color = RLBlue)
-        BasicTextField(
-            value = value, onValueChange = onChange,
-            textStyle = TextStyle(fontFamily = FontFamily.Serif, fontStyle = FontStyle.Italic, fontSize = 14.sp, color = RLBlue),
-            cursorBrush = SolidColor(RLBlue),
-            interactionSource = interactionSource,
-            modifier = Modifier
-                .width(220.dp)
-                .background(if (isFocused) Color(0xFFEFF3FF) else Color.Transparent)
-        )
-    }
-    Spacer(Modifier.fillMaxWidth(0.5f).height(1.dp).background(RLBlue))
+    BasicTextField(
+        value = value, onValueChange = onChange,
+        textStyle = TextStyle(fontFamily = FontFamily.Serif, fontStyle = FontStyle.Italic, fontSize = 14.sp, color = RLBlue),
+        cursorBrush = SolidColor(RLBlue),
+        interactionSource = interactionSource,
+        modifier = Modifier
+            .widthIn(min = 60.dp)
+            .background(if (isFocused) Color(0xFFEFF3FF) else Color.Transparent)
+            .drawBehind {
+                val y = size.height - 2.dp.toPx()
+                drawLine(RLBlue, Offset(0f, y), Offset(size.width, y), strokeWidth = 1.dp.toPx())
+            }
+    )
 }
 
 @Composable
