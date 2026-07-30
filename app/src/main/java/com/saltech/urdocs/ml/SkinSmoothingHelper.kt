@@ -68,7 +68,7 @@ object SkinSmoothingHelper {
     fun frequencySeparationSmooth(
         bitmap: Bitmap,
         radius: Int = 8,
-        strength: Float = 0.1f
+        strength: Float = 0.0f
     ): Bitmap {
         val width = bitmap.width
         val height = bitmap.height
