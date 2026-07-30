@@ -71,10 +71,7 @@ fun LettersScreen(
             label = "lettersScreenTransition"
         ) { state ->
 when (state) {
-    "resignation" -> ResignationLetterScreen(
-        onDownload = { /* TODO: connect sa PDF generator, gaya ng Bio-Data */ },
-        onUpload = { }
-    )
+    "resignation" -> ResignationLetterScreen()
     "form" -> LetterFormContent(
         viewModel = viewModel,
         initialType = selectedType,
