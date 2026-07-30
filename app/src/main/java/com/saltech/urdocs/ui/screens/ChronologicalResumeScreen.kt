@@ -113,24 +113,24 @@ fun ChronologicalResumeScreen() {
     val picture = remember { Picture() }
     val coroutineScope = rememberCoroutineScope()
 
-    if (showPaymentDialog) {
-        AlertDialog(
-            onDismissRequest = { showPaymentDialog = false },
-            title = { Text("₱5 to Continue 💙") },
-            text = { Text("paste mo lang yung nasa clipboard mo. Send Money → Bank Transfer/InstaPay → Tonik Bank. I-paste mo na lang sa GCash/bank app mo.") },
-            confirmButton = {
-                Button(onClick = {
-                    clipboardManager.setText(AnnotatedString("60843949330007"))
-                    android.widget.Toast.makeText(context, "Number copied! 📋", android.widget.Toast.LENGTH_SHORT).show()
-                }) { Text("Copy Number") }
-            },
-            dismissButton = {
-                TextButton(onClick = { hasPaid = true; showPaymentDialog = false }) {
-                    Text("I've Paid ✅")
-                }
-            }
-        )
-    }
+    //if (showPaymentDialog) {
+        //AlertDialog(
+ //           onDismissRequest = { showPaymentDialog = false },
+  //          title = { Text("₱5 to Continue 💙") },
+  //          text = { Text("paste mo lang yung nasa clipboard mo. Send Money → Bank Transfer/InstaPay → Tonik Bank. I-paste mo na lang sa GCash/bank app mo.") },
+  //          confirmButton = {
+  //              Button(onClick = {
+ //                   clipboardManager.setText(AnnotatedString("60843949330007"))
+  //                  android.widget.Toast.makeText(context, "Number copied! 📋", android.widget.Toast.LENGTH_SHORT).show()
+  //              }) { Text("Copy Number") }
+ //           },
+  //          dismissButton = {
+ //               TextButton(onClick = { hasPaid = true; showPaymentDialog = false }) {
+ //                   Text("I've Paid ✅")
+  //              }
+//            }
+//        )
+ //   }
 
     var interstitialAd by remember { mutableStateOf<InterstitialAd?>(null) }
     LaunchedEffect(Unit) {
@@ -363,7 +363,7 @@ fun ChronologicalResumeScreen() {
                         override fun onAdDismissedFullScreenContent() {
                             interstitialAd = null
                             if (!hasPaid) {
-                                showPaymentDialog = true
+                                doSave()
                             } else {
                                 doSave()
                             }
@@ -372,7 +372,7 @@ fun ChronologicalResumeScreen() {
                     interstitialAd?.show(activity)
                 } else {
                     if (!hasPaid) {
-                        showPaymentDialog = true
+                        doSave()
                     } else {
                         doSave()
                     }
