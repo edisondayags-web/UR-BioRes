@@ -39,8 +39,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.saltech.urdocs.model.LetterRequest
 import com.saltech.urdocs.model.LetterType
 import com.saltech.urdocs.viewmodel.LettersViewModel
-import com.saltech.urdocs.letters.ResignationLetterScreen
-import com.saltech.urdocs.letters.ResignationLetterState
 
 private val UrPink = Color(0xFF3B6FE0)
 private val UrGreen = Color(0xFF0B1530)
