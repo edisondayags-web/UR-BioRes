@@ -215,6 +215,7 @@ Column(modifier = Modifier.padding(start = 100.dp)) {
     RLField("Signature", data.signature, fieldWidth = 130.dp) { data = data.copy(signature = it) }
 }
             }
+            }
 
             Button(
                 onClick = {
