@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.sp
 import com.saltech.urdocs.R
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import androidx.compose.ui.platform.LocalConfiguration
 
 private val RLBlue = Color(0xFF1D3FB5)
 
@@ -63,7 +64,7 @@ data class ResignationFields(
 @Composable
 fun ResignationLetterScreen() {
     val paperWidthDp = 850.dp
-    val paperHeightDp = 1250.dp
+    val paperHeightDp = 1800.dp
     val context = LocalContext.current
     var data by remember { mutableStateOf(ResignationFields()) }
     var offset by remember { mutableStateOf(Offset.Zero) }
