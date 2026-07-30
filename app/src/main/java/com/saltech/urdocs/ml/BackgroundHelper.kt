@@ -9,15 +9,6 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
-/**
- * On-device selfie segmentation (TFLite-based, Google ML Kit) para palitan
- * ng puting background yung selfie -- karaniwang requirement sa 2x2 ID photo
- * dito sa Pilipinas (SSS, Pag-IBIG, atbp).
- *
- * Gumagamit ng SOFT alpha blend base sa confidence value (hindi hard cutoff),
- * at ang confidence mask mismo ay pinapantay muna (blur) bago gamitin -- para
- * maalis ang "wavy/jagged" na gilid na dulot ng magaspang/noisy na raw mask.
- */
 object BackgroundHelper {
 
     private val segmenter by lazy {
@@ -49,8 +40,6 @@ object BackgroundHelper {
                         rawConfidences[i] = buffer.float
                     }
 
-                    // I-smooth muna ang confidence mask bago gamitin -- para
-                    // maalis ang wavy/jagged edges na dulot ng noisy na raw mask.
                     val confidences = blurConfidenceMask(rawConfidences, maskWidth, maskHeight, radius = 3)
 
                     for (y in 0 until bitmap.height) {
@@ -64,7 +53,7 @@ object BackgroundHelper {
                             val srcG = (srcPixel shr 8) and 0xFF
                             val srcB = srcPixel and 0xFF
 
-                            val alpha = confidence.coerceIn(0f, 1f)
+                            val alpha = sharpenAlpha(confidence)
                             val r = (srcR * alpha + 255 * (1 - alpha)).toInt().coerceIn(0, 255)
                             val g = (srcG * alpha + 255 * (1 - alpha)).toInt().coerceIn(0, 255)
                             val b = (srcB * alpha + 255 * (1 - alpha)).toInt().coerceIn(0, 255)
@@ -77,7 +66,12 @@ object BackgroundHelper {
                 .addOnFailureListener { e -> cont.resumeWithException(e) }
         }
 
-    /** Two-pass box blur sa float confidence values -- pinapantay ang mask, tinatanggal ang wavy noise. */
+    /** Itulak papuntang 0 o 1 ang gitnang confidence values; gradient lang sa totoong edge. */
+    private fun sharpenAlpha(confidence: Float): Float {
+        val t = ((confidence - 0.3f) / 0.4f).coerceIn(0f, 1f)
+        return t * t * (3f - 2f * t)
+    }
+
     private fun blurConfidenceMask(mask: FloatArray, width: Int, height: Int, radius: Int): FloatArray {
         val temp = FloatArray(width * height)
         val result = FloatArray(width * height)
