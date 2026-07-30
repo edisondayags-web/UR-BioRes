@@ -45,7 +45,6 @@ import kotlinx.coroutines.launch
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.draw.drawBehind
 
 private val RLBlue = Color(0xFF1D3FB5)
