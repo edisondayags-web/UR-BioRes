@@ -197,18 +197,23 @@ fun ResignationLetterScreen() {
 
                     Spacer(Modifier.height(28.dp))
 
-                    RLPlainText("Yours sincerely,")
+                  Spacer(Modifier.padding(start = 60.dp)) // hindi ito gagana mag-isa, tignan sa baba
 
-                    Spacer(Modifier.height(125.dp))
+Box(modifier = Modifier.padding(start = 60.dp)) {
+    RLPlainText("Yours sincerely,")
+}
 
-                    RLField("Name", data.name, fieldWidth = 160.dp) { data = data.copy(name = it) }
-Spacer(Modifier.height(8.dp))
-RLField("Employee ID", data.employeeId, fieldWidth = 130.dp) { data = data.copy(employeeId = it) }
-Spacer(Modifier.height(8.dp))
-RLField("Department", data.department, fieldWidth = 130.dp) { data = data.copy(department = it) }
-Spacer(Modifier.height(8.dp))
-RLField("Signature", data.signature, fieldWidth = 130.dp) { data = data.copy(signature = it) }
-                }
+Spacer(Modifier.height(50.dp))
+
+Column(modifier = Modifier.padding(start = 100.dp)) {
+    RLField("Name", data.name, fieldWidth = 160.dp) { data = data.copy(name = it) }
+    Spacer(Modifier.height(8.dp))
+    RLField("Employee ID", data.employeeId, fieldWidth = 130.dp) { data = data.copy(employeeId = it) }
+    Spacer(Modifier.height(8.dp))
+    RLField("Department", data.department, fieldWidth = 130.dp) { data = data.copy(department = it) }
+    Spacer(Modifier.height(8.dp))
+    RLField("Signature", data.signature, fieldWidth = 130.dp) { data = data.copy(signature = it) }
+}
             }
 
             Button(
