@@ -215,7 +215,7 @@ private fun LetterContent() {
         FlourishDivider()
         Spacer(modifier = Modifier.height(28.dp))
 
-        BlankLineField(label = "Date:", blankWidth = 150.dp)
+        BlankLineField(label = "Date:", minWidth = 150.dp)
 
         Spacer(modifier = Modifier.height(20.dp))
         LetterBodyText("To,")
@@ -255,13 +255,13 @@ private fun LetterContent() {
         LetterBodyText("Yours sincerely,")
 
         Spacer(modifier = Modifier.height(36.dp))
-        BlankLineField(label = "Name:", blankWidth = 170.dp)
+        BlankLineField(label = "Name:", minWidth = 170.dp)
         Spacer(modifier = Modifier.height(10.dp))
-        BlankLineField(label = "Employee ID:", blankWidth = 150.dp)
+        BlankLineField(label = "Employee ID:", minWidth = 150.dp)
         Spacer(modifier = Modifier.height(10.dp))
-        BlankLineField(label = "Department:", blankWidth = 140.dp)
+        BlankLineField(label = "Department:", minWidth = 140.dp)
         Spacer(modifier = Modifier.height(10.dp))
-        BlankLineField(label = "Signature:", blankWidth = 150.dp)
+        BlankLineField(label = "Signature:", minWidth = 150.dp)
 
         Spacer(modifier = Modifier.height(24.dp))
     }
@@ -298,7 +298,8 @@ private fun FlourishDivider() {
 }
 
 @Composable
-private fun BlankLineField(label: String, blankWidth: androidx.compose.ui.unit.Dp) {
+private fun BlankLineField(label: String, minWidth: Dp) {
+    var text by remember { mutableStateOf("") }
     Row(verticalAlignment = Alignment.Bottom) {
         Text(
             text = label,
@@ -309,17 +310,61 @@ private fun BlankLineField(label: String, blankWidth: androidx.compose.ui.unit.D
             fontSize = 16.sp
         )
         Spacer(modifier = Modifier.width(8.dp))
-        Box(modifier = Modifier.width(blankWidth).padding(bottom = 2.dp)) {
-            Divider(color = LetterBlue, thickness = 1.dp)
-        }
+        UnderlineTextField(value = text, onValueChange = { text = it }, minWidth = minWidth)
     }
 }
 
 @Composable
 private fun UnderlineOnlyField() {
-    Box(modifier = Modifier.fillMaxWidth(0.8f).padding(vertical = 6.dp)) {
-        Divider(color = LetterBlue, thickness = 1.dp)
-    }
+    var text by remember { mutableStateOf("") }
+    UnderlineTextField(
+        value = text,
+        onValueChange = { text = it },
+        minWidth = 260.dp,
+        modifier = Modifier.padding(vertical = 6.dp)
+    )
+}
+
+/**
+ * The core "blank line" field:
+ *  - EMPTY  -> reserves [minWidth] so it visually looks like a blank line.
+ *  - TYPED  -> width collapses to exactly fit the typed text (no reserved
+ *              space), so whatever comes right after it sits close, like a
+ *              normal sentence — no more leftover gap after short words.
+ * The underline is drawn in both cases.
+ */
+@Composable
+private fun UnderlineTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    minWidth: Dp,
+    modifier: Modifier = Modifier
+) {
+    val widthModifier = if (value.isEmpty()) Modifier.width(minWidth) else Modifier
+    BasicTextField(
+        value = value,
+        onValueChange = onValueChange,
+        singleLine = true,
+        textStyle = TextStyle(
+            color = LetterBlue,
+            fontFamily = LetterSerif,
+            fontStyle = FontStyle.Italic,
+            fontSize = 16.sp
+        ),
+        cursorBrush = androidx.compose.ui.graphics.SolidColor(LetterBlue),
+        modifier = modifier
+            .then(widthModifier)
+            .drawBehind {
+                // The underline itself — always drawn, empty or not.
+                drawLine(
+                    color = LetterBlue,
+                    start = Offset(0f, size.height + 2.dp.toPx()),
+                    end = Offset(size.width, size.height + 2.dp.toPx()),
+                    strokeWidth = 1.dp.toPx()
+                )
+            }
+            .padding(bottom = 2.dp)
+    )
 }
 
 @Composable
@@ -332,15 +377,21 @@ private fun SubjectLine() {
 
 @Composable
 private fun ResignationParagraphWithBlanks() {
+    var position by remember { mutableStateOf("") }
+    var effectiveDate by remember { mutableStateOf("") }
+
     Column {
         Text(
             "I am writing to formally tender my resignation from my position as",
             color = LetterBlue, fontFamily = LetterSerif, fontStyle = FontStyle.Italic, fontSize = 16.sp, lineHeight = 24.sp
         )
-        Row(verticalAlignment = Alignment.Bottom) {
-            Box(modifier = Modifier.width(170.dp).padding(bottom = 2.dp)) { Divider(color = LetterBlue, thickness = 1.dp) }
+        Row(
+            verticalAlignment = Alignment.Bottom,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            UnderlineTextField(value = position, onValueChange = { position = it }, minWidth = 140.dp)
             Text(", effective ", color = LetterBlue, fontFamily = LetterSerif, fontStyle = FontStyle.Italic, fontSize = 16.sp)
-            Box(modifier = Modifier.width(170.dp).padding(bottom = 2.dp)) { Divider(color = LetterBlue, thickness = 1.dp) }
+            UnderlineTextField(value = effectiveDate, onValueChange = { effectiveDate = it }, minWidth = 140.dp)
             Text(".", color = LetterBlue, fontFamily = LetterSerif, fontStyle = FontStyle.Italic, fontSize = 16.sp)
         }
         Text(
