@@ -39,6 +39,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.saltech.urdocs.model.LetterRequest
 import com.saltech.urdocs.model.LetterType
 import com.saltech.urdocs.viewmodel.LettersViewModel
+import com.saltech.urdocs.letters.ResignationLetterScreen
+import com.saltech.urdocs.letters.ResignationLetterState
 
 private val UrPink = Color(0xFF3B6FE0)
 private val UrGreen = Color(0xFF0B1530)
@@ -69,6 +71,10 @@ fun LettersScreen(
             label = "lettersScreenTransition"
         ) { state ->
 when (state) {
+    "resignation" -> ResignationLetterScreen(
+        onDownload = { /* TODO: connect sa PDF generator, gaya ng Bio-Data */ },
+        onUpload = { }
+    )
     "form" -> LetterFormContent(
         viewModel = viewModel,
         initialType = selectedType,
@@ -81,6 +87,7 @@ when (state) {
     else -> LettersHubContent(
         onPremiumTap = { Toast.makeText(context, "Premium -- Coming Soon!", Toast.LENGTH_SHORT).show() },
         onPopularTap = { _ -> Toast.makeText(context, "coming soon pa to luv🩵", Toast.LENGTH_SHORT).show() },
+        onResignationTap = { screenState = "resignation" },
         onPick = { _ -> Toast.makeText(context, "coming soon pa to luv🩵", Toast.LENGTH_SHORT).show() },
         onMoreTemplates = { screenState = "all" },
         onNavigate = onNavigate
@@ -307,6 +314,7 @@ private fun LetterIllustration(modifier: Modifier = Modifier) {
 private fun LettersHubContent(
     onPremiumTap: () -> Unit,
     onPopularTap: (String) -> Unit,
+    onResignationTap: () -> Unit,
     onPick: (LetterType) -> Unit,
     onMoreTemplates: () -> Unit,
     onNavigate: (String) -> Unit
@@ -404,7 +412,7 @@ private fun LettersHubContent(
                 badge = { Icon(Icons.Filled.ExitToApp, contentDescription = null, tint = Color.Black, modifier = it) },
                 title = "Resignation Letter",
                 subtitle = "Formal resignation from your position",
-                onClick = { onPopularTap("Resign") }
+                onClick = { onResignationTap() }
             )
             Spacer(Modifier.height(12.dp))
             LetterCard(
