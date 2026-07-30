@@ -46,6 +46,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.draw.drawBehind
 
 private val RLBlue = Color(0xFF1D3FB5)
 private val RLBlueDark = Color(0xFF16309C)
@@ -279,5 +280,13 @@ private fun saveResignationToGallery(context: android.content.Context, bitmap: B
         android.widget.Toast.makeText(context, "see your gallery luv🩵", android.widget.Toast.LENGTH_LONG).show()
     } ?: run {
         android.widget.Toast.makeText(context, "Hindi na-download, subukan ulit.", android.widget.Toast.LENGTH_LONG).show()
+    }
+}
+
+@Composable
+private fun RLField(label: String, value: String, onChange: (String) -> Unit) {
+    Row(verticalAlignment = Alignment.Bottom) {
+        RLText("$label: ", bold = true)
+        RLInlineField(value, 160.dp, onChange)
     }
 }
