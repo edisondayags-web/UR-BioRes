@@ -263,21 +263,6 @@ private fun RLLine(value: String, onChange: (String) -> Unit) {
     Spacer(Modifier.height(4.dp))
 }
 
-@Composable
-private fun RLInlineField(value: String, width: androidx.compose.ui.unit.Dp, onChange: (String) -> Unit) {
-    val interactionSource = remember { MutableInteractionSource() }
-    val isFocused by interactionSource.collectIsFocusedAsState()
-    BasicTextField(
-        value = value, onValueChange = onChange,
-        textStyle = TextStyle(fontFamily = FontFamily.Serif, fontStyle = FontStyle.Italic, fontSize = 14.sp, color = RLBlue),
-        cursorBrush = SolidColor(RLBlue),
-        interactionSource = interactionSource,
-        modifier = Modifier
-            .width(width)
-            .background(if (isFocused) Color(0xFFEFF3FF) else Color.Transparent)
-    )
-}
-
 private fun saveResignationToGallery(context: android.content.Context, bitmap: Bitmap) {
     val filename = "Resignation_${System.currentTimeMillis()}.png"
     val contentValues = ContentValues().apply {
