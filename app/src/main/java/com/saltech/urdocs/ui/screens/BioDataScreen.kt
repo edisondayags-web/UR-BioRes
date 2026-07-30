@@ -110,24 +110,24 @@ fun BioDataScreen(
     var data by remember { mutableStateOf(BioDataFields()) }
     var offset by remember { mutableStateOf(Offset.Zero) }
 
-    if (showPaymentDialog) {
-        AlertDialog(
-            onDismissRequest = { showPaymentDialog = false },
-            title = { Text("₱5 to Continue 💙") },
-            text = { Text("Na-copy na sa clipboard yung Tonik account number ko. Send Money → Bank Transfer/InstaPay → Tonik Bank. I-paste mo na lang sa GCash/bank app mo.") },
-            confirmButton = {
-                Button(onClick = {
-                    clipboardManager.setText(AnnotatedString("60843949330007"))
-                    android.widget.Toast.makeText(context, "Number copied! 📋", android.widget.Toast.LENGTH_SHORT).show()
-                }) { Text("Copy Number") }
-            },
-            dismissButton = {
-                TextButton(onClick = { hasPaid = true; showPaymentDialog = false }) {
-                    Text("I've Paid ✅")
-                }
-            }
-        )
-    }
+  //  if (showPaymentDialog) {
+   //     AlertDialog(
+     //       onDismissRequest = { showPaymentDialog = false },
+  //          title = { Text("₱5 to Continue 💙") },
+  //          text = { Text("Na-copy na sa clipboard yung Tonik account number ko. Send Money → Bank Transfer/InstaPay → Tonik Bank. I-paste mo na lang sa GCash/bank app mo.") },
+ //           confirmButton = {
+ //               Button(onClick = {
+//                    clipboardManager.setText(AnnotatedString("60843949330007"))
+//                    android.widget.Toast.makeText(context, "Number copied! 📋", android.widget.Toast.LENGTH_SHORT).show()
+ //               }) { Text("Copy Number") }
+ //           },
+  //          dismissButton = {
+   //             TextButton(onClick = { hasPaid = true; showPaymentDialog = false }) {
+ //                 Text("I've Paid ✅")
+ //               }
+//            }
+//        )
+//    }
 
     var rawSource by remember { mutableStateOf<Bitmap?>(null) }
     var displaySelfie by remember { mutableStateOf<Bitmap?>(null) }
@@ -483,18 +483,18 @@ fun BioDataScreen(
                         if (activity != null && interstitialAd != null) {
                             interstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
                                 override fun onAdDismissedFullScreenContent() {
-                                    interstitialAd = null
-                                    if (!hasPaid) {
-                                        showPaymentDialog = true
-                                    } else {
-                                        doSave()
+                            interstitialAd = null
+                            if (!hasPaid) {
+                                doSave()
+                            } else {
+                                doSave()
                                     }
                                 }
                             }
                             interstitialAd?.show(activity)
                         } else {
                             if (!hasPaid) {
-                                showPaymentDialog = true
+                                doSave()
                             } else {
                                 doSave()
                             }
