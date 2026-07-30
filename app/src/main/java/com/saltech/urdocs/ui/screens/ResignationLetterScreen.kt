@@ -136,8 +136,10 @@ fun ResignationLetterScreen() {
 
                     Spacer(Modifier.height(18.dp))
 
-                    // Date
-                    RLField("Date", data.date, fieldWidth = 220.dp) { data = data.copy(date = it) }
+                    Spacer(Modifier.height(30.dp))
+
+        // Date
+                    RLField("Date", data.date, fieldWidth = 130.dp) { data = data.copy(date = it) }
 
                     Spacer(Modifier.height(18.dp))
 
@@ -197,15 +199,15 @@ fun ResignationLetterScreen() {
 
                     RLPlainText("Yours sincerely,")
 
-                    Spacer(Modifier.height(70.dp))
+                    Spacer(Modifier.height(125.dp))
 
-                    RLField("Name", data.name, fieldWidth = 260.dp) { data = data.copy(name = it) }
-                    Spacer(Modifier.height(8.dp))
-                    RLField("Employee ID", data.employeeId, fieldWidth = 220.dp) { data = data.copy(employeeId = it) }
-                    Spacer(Modifier.height(8.dp))
-                    RLField("Department", data.department, fieldWidth = 220.dp) { data = data.copy(department = it) }
-                    Spacer(Modifier.height(8.dp))
-                    RLField("Signature", data.signature, fieldWidth = 220.dp) { data = data.copy(signature = it) }
+                    RLField("Name", data.name, fieldWidth = 160.dp) { data = data.copy(name = it) }
+Spacer(Modifier.height(8.dp))
+RLField("Employee ID", data.employeeId, fieldWidth = 130.dp) { data = data.copy(employeeId = it) }
+Spacer(Modifier.height(8.dp))
+RLField("Department", data.department, fieldWidth = 130.dp) { data = data.copy(department = it) }
+Spacer(Modifier.height(8.dp))
+RLField("Signature", data.signature, fieldWidth = 130.dp) { data = data.copy(signature = it) }
                 }
             }
 
