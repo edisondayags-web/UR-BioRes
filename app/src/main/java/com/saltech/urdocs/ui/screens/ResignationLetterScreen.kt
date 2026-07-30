@@ -145,7 +145,9 @@ fun ResignationLetterScreen() {
 
                     RLPlainText("To,")
                     RLPlainText("The Manager / Principal")
+                    Spacer(Modifier.height(10.dp))
                     RLUnderline(data.to1) { data = data.copy(to1 = it) }
+                    Spacer(Modifier.height(10.dp))
                     RLUnderline(data.to2) { data = data.copy(to2 = it) }
 
                     Spacer(Modifier.height(16.dp))
@@ -195,7 +197,7 @@ fun ResignationLetterScreen() {
                         "Thank you once again for the experience and for everything I have learned during my tenure."
                     )
 
-                    Spacer(Modifier.weight(1f))
+                    Spacer(Modifier.height(60.dp))
 
                   Spacer(Modifier.padding(start = 60.dp)) // hindi ito gagana mag-isa, tignan sa baba
 
