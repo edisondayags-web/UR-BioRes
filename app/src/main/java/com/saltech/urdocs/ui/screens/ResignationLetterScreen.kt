@@ -239,7 +239,6 @@ private fun RLText(text: String, bold: Boolean = false) {
        .fillMaxWidth()
        .padding(vertical = 2.dp),
         textAlign = TextAlign.Center
-        textAlign = TextAlign.Center
     )
 }
 
