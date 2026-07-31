@@ -135,7 +135,7 @@ fun ResignationLetterScreen() {
                         modifier = Modifier.fillMaxWidth()
                     )
 
-                    Spacer(Modifier.height(70.dp))
+                    Spacer(Modifier.height(90.dp))
 
 // Date
 RLField("Date", data.date, fieldWidth = 130.dp) { data = data.copy(date = it) }
