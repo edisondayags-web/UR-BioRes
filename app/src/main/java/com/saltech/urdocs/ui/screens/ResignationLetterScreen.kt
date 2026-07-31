@@ -135,10 +135,13 @@ fun ResignationLetterScreen() {
                         modifier = Modifier.fillMaxWidth()
                     )
 
-                    Spacer(Modifier.height(90.dp))
+                    Spacer(Modifier.height(20.dp))
 
-// Date
-RLField("Date", data.date, fieldWidth = 130.dp) { data = data.copy(date = it) }
+                    // ===== TOP FLEX SPACE - auto balances with bottom =====
+                    Spacer(Modifier.weight(1f))
+
+                    // Date
+                    RLField("Date", data.date, fieldWidth = 130.dp) { data = data.copy(date = it) }
 
                     Spacer(Modifier.height(35.dp))
 
@@ -165,68 +168,67 @@ RLField("Date", data.date, fieldWidth = 130.dp) { data = data.copy(date = it) }
 
                     // Flowing paragraph with two inline blanks - wraps like real text
                     FlowRow(modifier = Modifier.fillMaxWidth()) {
-    "I am writing to formally tender my resignation from my position"
-        .split(" ").forEach { RLWord(it) }
-}
+                        "I am writing to formally tender my resignation from my position"
+                            .split(" ").forEach { RLWord(it) }
+                    }
 
-FlowRow(modifier = Modifier.fillMaxWidth()) {
-    RLWord("as")
-    RLInlineField(data.position, 180.dp) { data = data.copy(position = it) }
-    RLWord(", effective")
-    RLInlineField(data.effectiveDate, 180.dp) { data = data.copy(effectiveDate = it) }
-    RLWord(".")
-}
+                    FlowRow(modifier = Modifier.fillMaxWidth()) {
+                        RLWord("as")
+                        RLInlineField(data.position, 180.dp) { data = data.copy(position = it) }
+                        RLWord(", effective")
+                        RLInlineField(data.effectiveDate, 180.dp) { data = data.copy(effectiveDate = it) }
+                        RLWord(".")
+                    }
 
-FlowRow(modifier = Modifier.fillMaxWidth()) {
-    "Please accept this letter as my official notice of resignation in accordance"
-        .split(" ").forEach { RLWord(it) }
-}
+                    FlowRow(modifier = Modifier.fillMaxWidth()) {
+                        "Please accept this letter as my official notice of resignation in accordance"
+                            .split(" ").forEach { RLWord(it) }
+                    }
 
-FlowRow(modifier = Modifier.fillMaxWidth()) {
-    "with the company's policy."
-        .split(" ").forEach { RLWord(it) }
-}
+                    FlowRow(modifier = Modifier.fillMaxWidth()) {
+                        "with the company's policy."
+                            .split(" ").forEach { RLWord(it) }
+                    }
 
                     Spacer(Modifier.height(16.dp))
 
-                        RLParagraph(
-    "I have truly valued the opportunities for growth and development\nthat I have gained during my time here. I am grateful for the support,\nguidance, and encouragement I have received from you and the entire\nteam."
-)
-
-                    Spacer(Modifier.height(14.dp))
-
-                        RLParagraph(
-    "I will do my best to ensure a smooth transition by completing my\nassigned tasks and assisting in the turnover process before my last day."
-)
+                    RLParagraph(
+                        "I have truly valued the opportunities for growth and development\nthat I have gained during my time here. I am grateful for the support,\nguidance, and encouragement I have received from you and the entire\nteam."
+                    )
 
                     Spacer(Modifier.height(14.dp))
 
                     RLParagraph(
-    "Thank you once again for the experience and for everything I have\nlearned during my tenure."
-)
+                        "I will do my best to ensure a smooth transition by completing my\nassigned tasks and assisting in the turnover process before my last day."
+                    )
+
+                    Spacer(Modifier.height(14.dp))
+
+                    RLParagraph(
+                        "Thank you once again for the experience and for everything I have\nlearned during my tenure."
+                    )
 
                     Spacer(Modifier.height(45.dp))
 
-                  Spacer(Modifier.padding(start = 60.dp)) // hindi ito gagana mag-isa, tignan sa baba
+                    Box(modifier = Modifier.padding(start = 60.dp)) {
+                        RLPlainText("Yours sincerely,")
+                    }
 
-Spacer(Modifier.height(30.dp))
+                    Spacer(Modifier.height(50.dp))
 
-Box(modifier = Modifier.padding(start = 60.dp)) {
-    RLPlainText("Yours sincerely,")
-}
+                    Column(modifier = Modifier.padding(start = 100.dp)) {
+                        RLField("Name", data.name, fieldWidth = 160.dp) { data = data.copy(name = it) }
+                        Spacer(Modifier.height(8.dp))
+                        RLField("Employee ID", data.employeeId, fieldWidth = 130.dp) { data = data.copy(employeeId = it) }
+                        Spacer(Modifier.height(8.dp))
+                        RLField("Department", data.department, fieldWidth = 130.dp) { data = data.copy(department = it) }
+                        Spacer(Modifier.height(8.dp))
+                        RLField("Signature", data.signature, fieldWidth = 130.dp) { data = data.copy(signature = it) }
+                    }
 
-Spacer(Modifier.height(50.dp))
-
-Column(modifier = Modifier.padding(start = 100.dp)) {
-    RLField("Name", data.name, fieldWidth = 160.dp) { data = data.copy(name = it) }
-    Spacer(Modifier.height(8.dp))
-    RLField("Employee ID", data.employeeId, fieldWidth = 130.dp) { data = data.copy(employeeId = it) }
-    Spacer(Modifier.height(8.dp))
-    RLField("Department", data.department, fieldWidth = 130.dp) { data = data.copy(department = it) }
-    Spacer(Modifier.height(8.dp))
-    RLField("Signature", data.signature, fieldWidth = 130.dp) { data = data.copy(signature = it) }
-}
-            }
+                    // ===== BOTTOM FLEX SPACE - same weight as top, keeps content centered =====
+                    Spacer(Modifier.weight(1f))
+                }
             }
 
             Button(
@@ -336,7 +338,7 @@ private fun RLUnderline(value: String, onChange: (String) -> Unit) {
         cursorBrush = SolidColor(RLBlue),
         interactionSource = interactionSource,
         modifier = Modifier
-            .width(400.dp)   // ✅ dati fillMaxWidth(), ngayon fixed
+            .width(400.dp)
             .background(if (isFocused) Color(0xFFEFF3FF) else Color.Transparent)
             .drawWithCache {
                 onDrawWithContent {
