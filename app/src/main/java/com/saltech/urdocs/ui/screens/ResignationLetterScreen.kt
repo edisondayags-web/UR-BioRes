@@ -135,7 +135,7 @@ fun ResignationLetterScreen() {
                         modifier = Modifier.fillMaxWidth()
                     )
 
-                    Spacer(Modifier.height(40.dp))
+                    Spacer(Modifier.height(70.dp))
 
 // Date
 RLField("Date", data.date, fieldWidth = 130.dp) { data = data.copy(date = it) }
@@ -205,7 +205,7 @@ FlowRow(modifier = Modifier.fillMaxWidth()) {
     "Thank you once again for the experience and for everything I have\nlearned during my tenure."
 )
 
-                    Spacer(Modifier.height(60.dp))
+                    Spacer(Modifier.height(45.dp))
 
                   Spacer(Modifier.padding(start = 60.dp)) // hindi ito gagana mag-isa, tignan sa baba
 
@@ -277,7 +277,7 @@ private fun RLParagraph(text: String) {
         text,
         fontFamily = FontFamily.Serif,
         fontStyle = FontStyle.Italic,
-        fontSize = 16.sp,
+        fontSize = 18.sp,
         color = RLBlue,
         textAlign = TextAlign.Justify,
         lineHeight = 27.sp,
@@ -293,7 +293,7 @@ private fun RLWord(word: String, bold: Boolean = false) {
         fontFamily = FontFamily.Serif,
         fontStyle = FontStyle.Italic,
         fontWeight = if (bold) FontWeight.Bold else FontWeight.Normal,
-        fontSize = 20.sp,
+        fontSize = 18.sp,
         color = RLBlue
     )
 }
@@ -336,7 +336,7 @@ private fun RLUnderline(value: String, onChange: (String) -> Unit) {
         cursorBrush = SolidColor(RLBlue),
         interactionSource = interactionSource,
         modifier = Modifier
-            .fillMaxWidth()
+            .width(400.dp)   // ✅ dati fillMaxWidth(), ngayon fixed
             .background(if (isFocused) Color(0xFFEFF3FF) else Color.Transparent)
             .drawWithCache {
                 onDrawWithContent {
