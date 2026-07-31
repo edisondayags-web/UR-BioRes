@@ -48,18 +48,6 @@ import androidx.compose.ui.platform.LocalConfiguration
 
 private val RLBlue = Color(0xFF1D3FB5)
 
-data class ResignationFields(
-    val date: String = "",
-    val to1: String = "",
-    val to2: String = "",
-    val position: String = "",
-    val effectiveDate: String = "",
-    val name: String = "",
-    val employeeId: String = "",
-    val department: String = "",
-    val signature: String = ""
-)
-
 private const val DEFAULT_BODY_TEXT =
     "I have truly valued the opportunities for growth and development\n" +
     "that I have gained during my time here. I am grateful for the support,\n" +
@@ -76,7 +64,19 @@ fun ResignationLetterScreen() {
     val paperWidthDp = 850.dp
     val paperHeightDp = 1600.dp
     val context = LocalContext.current
-    var data by remember { mutableStateOf(ResignationFields()) }
+
+    // ===== Per-field state (instead of one big data class) =====
+    // Typing in one field now only recomposes that field, not the whole letter.
+    var dateVal by remember { mutableStateOf("") }
+    var to1Val by remember { mutableStateOf("") }
+    var to2Val by remember { mutableStateOf("") }
+    var positionVal by remember { mutableStateOf("") }
+    var effectiveDateVal by remember { mutableStateOf("") }
+    var nameVal by remember { mutableStateOf("") }
+    var employeeIdVal by remember { mutableStateOf("") }
+    var departmentVal by remember { mutableStateOf("") }
+    var signatureVal by remember { mutableStateOf("") }
+
     var offset by remember { mutableStateOf(Offset.Zero) }
     val picture = remember { Picture() }
     val coroutineScope = rememberCoroutineScope()
@@ -109,12 +109,18 @@ fun ResignationLetterScreen() {
                         val w = size.width.toInt().coerceAtLeast(1)
                         val h = size.height.toInt().coerceAtLeast(1)
                         onDrawWithContent {
-                            val pictureCanvas = androidx.compose.ui.graphics.Canvas(picture.beginRecording(w, h))
-                            draw(this, this.layoutDirection, pictureCanvas, this.size) {
+                            if (isEditMode) {
+                                // Skip Picture recording while typing - big perf win, no lag.
+                                // Recording only matters when we actually Download.
                                 this@onDrawWithContent.drawContent()
+                            } else {
+                                val pictureCanvas = androidx.compose.ui.graphics.Canvas(picture.beginRecording(w, h))
+                                draw(this, this.layoutDirection, pictureCanvas, this.size) {
+                                    this@onDrawWithContent.drawContent()
+                                }
+                                picture.endRecording()
+                                drawIntoCanvas { canvas -> canvas.nativeCanvas.drawPicture(picture) }
                             }
-                            picture.endRecording()
-                            drawIntoCanvas { canvas -> canvas.nativeCanvas.drawPicture(picture) }
                         }
                     }
                     .background(Color.White)
@@ -157,16 +163,16 @@ fun ResignationLetterScreen() {
                     Spacer(Modifier.weight(1f))
 
                     // Date
-                    RLField("Date", data.date, fieldWidth = 130.dp) { data = data.copy(date = it) }
+                    RLField("Date", dateVal, fieldWidth = 130.dp) { dateVal = it }
 
                     Spacer(Modifier.height(35.dp))
 
                     RLPlainText("To,")
                     RLPlainText("The Manager / Principal")
                     Spacer(Modifier.height(10.dp))
-                    RLUnderline(data.to1) { data = data.copy(to1 = it) }
+                    RLUnderline(to1Val) { to1Val = it }
                     Spacer(Modifier.height(10.dp))
-                    RLUnderline(data.to2) { data = data.copy(to2 = it) }
+                    RLUnderline(to2Val) { to2Val = it }
 
                     Spacer(Modifier.height(16.dp))
 
@@ -190,9 +196,9 @@ fun ResignationLetterScreen() {
 
                     FlowRow(modifier = Modifier.fillMaxWidth()) {
                         RLWord("as")
-                        RLInlineField(data.position, 180.dp) { data = data.copy(position = it) }
+                        RLInlineField(positionVal, 180.dp) { positionVal = it }
                         RLWord("effective")
-                        RLInlineField(data.effectiveDate, 180.dp) { data = data.copy(effectiveDate = it) }
+                        RLInlineField(effectiveDateVal, 180.dp) { effectiveDateVal = it }
                         RLWord(".")
                     }
 
@@ -241,13 +247,13 @@ fun ResignationLetterScreen() {
                     Spacer(Modifier.height(50.dp))
 
                     Column(modifier = Modifier.padding(start = 100.dp)) {
-                        RLField("Name", data.name, fieldWidth = 160.dp) { data = data.copy(name = it) }
+                        RLField("Name", nameVal, fieldWidth = 160.dp) { nameVal = it }
                         Spacer(Modifier.height(8.dp))
-                        RLField("Employee ID", data.employeeId, fieldWidth = 130.dp) { data = data.copy(employeeId = it) }
+                        RLField("Employee ID", employeeIdVal, fieldWidth = 130.dp) { employeeIdVal = it }
                         Spacer(Modifier.height(8.dp))
-                        RLField("Department", data.department, fieldWidth = 130.dp) { data = data.copy(department = it) }
+                        RLField("Department", departmentVal, fieldWidth = 130.dp) { departmentVal = it }
                         Spacer(Modifier.height(8.dp))
-                        RLField("Signature", data.signature, fieldWidth = 130.dp) { data = data.copy(signature = it) }
+                        RLField("Signature", signatureVal, fieldWidth = 130.dp) { signatureVal = it }
                     }
 
                     // ===== BOTTOM FLEX SPACE - same weight as top, keeps content centered =====
@@ -271,7 +277,7 @@ fun ResignationLetterScreen() {
 
                 Button(
                     onClick = {
-                        isEditMode = false // exit edit mode so no highlight box shows in the saved image
+                        isEditMode = false // exit edit mode so no highlight box shows + so Picture recording turns back on
                         scale = fitScale
                         offset = Offset.Zero
                         coroutineScope.launch {
