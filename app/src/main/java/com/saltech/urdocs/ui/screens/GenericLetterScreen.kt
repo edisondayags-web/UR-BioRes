@@ -37,6 +37,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.saltech.urdocs.R
@@ -46,29 +47,48 @@ import kotlinx.coroutines.launch
 
 private val GLBlue = Color(0xFF1D3FB5)
 
-/** Title, subject line, salutation and default body per letter type. */
+/** A single closing field, e.g. "Student Name" or "SSS/ID Number" — width scales to fit the label. */
+private data class ClosingField(val label: String, val width: Dp = 150.dp)
+
+/**
+ * Title, subject, salutation, default body, closing line and closing fields — researched per
+ * letter type so we don't force irrelevant fields like Employee ID onto a student's excuse letter.
+ */
 private data class LetterContent(
     val title: String,
     val subject: String,
     val salutation: String,
     val defaultBody: String,
+    val closingLine: String,
+    val closingFields: List<ClosingField>,
     val fileNamePrefix: String
 )
 
 private fun contentFor(type: LetterType): LetterContent = when (type) {
+
+    // Researched: school excuse letters use student name + grade/section + parent signature,
+    // never Employee ID or Department (student, not employee).
     LetterType.EXCUSE -> LetterContent(
         title = "EXCUSE LETTER",
         subject = "Excuse Letter",
         salutation = "Dear Sir/Madam,",
         defaultBody =
-            "I am writing to formally explain my absence and to request your\n" +
-            "kind understanding regarding this matter.\n\n" +
-            "I sincerely apologize for any inconvenience this may have caused\n" +
-            "and assure you that I will make up for any missed work or\n" +
-            "responsibilities upon my return.\n\n" +
-            "Thank you for your understanding and consideration.",
+            "Please be informed that my son/daughter was not able to attend his/her\n" +
+            "class(es) on the date(s) stated above, due to the reason indicated below.\n\n" +
+            "I apologize for any inconvenience this may have caused and hope you will\n" +
+            "understand the situation. Thank you very much for your consideration.",
+        closingLine = "Respectfully yours,",
+        closingFields = listOf(
+            ClosingField("Parent/Guardian Name", 180.dp),
+            ClosingField("Student Name", 180.dp),
+            ClosingField("Grade & Section", 150.dp),
+            ClosingField("Signature", 130.dp)
+        ),
         fileNamePrefix = "Excuse"
     )
+
+    // Researched: SSS/Pag-IBIG letters are personal transactions - full name + a valid ID
+    // reference, not an employer's Employee ID/Department.
     LetterType.GOVT_SSS -> LetterContent(
         title = "SSS LETTER/REQUEST",
         subject = "SSS Request",
@@ -76,12 +96,19 @@ private fun contentFor(type: LetterType): LetterContent = when (type) {
         defaultBody =
             "I am writing to formally request assistance regarding my SSS\n" +
             "records/account, specifically for the concern stated below.\n\n" +
-            "I would greatly appreciate your help in processing this request at\n" +
-            "your earliest convenience. Please let me know if any additional\n" +
-            "documents or information are needed.\n\n" +
+            "I would greatly appreciate your help in processing this request at your\n" +
+            "earliest convenience. Please let me know if any additional documents\n" +
+            "or information are needed.\n\n" +
             "Thank you for your time and assistance.",
+        closingLine = "Respectfully yours,",
+        closingFields = listOf(
+            ClosingField("Full Name", 180.dp),
+            ClosingField("SSS Number", 150.dp),
+            ClosingField("Signature", 130.dp)
+        ),
         fileNamePrefix = "SSS"
     )
+
     LetterType.GOVT_PAGIBIG -> LetterContent(
         title = "PAG-IBIG LETTER/REQUEST",
         subject = "Pag-IBIG Request",
@@ -89,12 +116,19 @@ private fun contentFor(type: LetterType): LetterContent = when (type) {
         defaultBody =
             "I am writing to formally request assistance regarding my Pag-IBIG\n" +
             "membership/account, specifically for the concern stated below.\n\n" +
-            "I would greatly appreciate your help in processing this request at\n" +
-            "your earliest convenience. Please let me know if any additional\n" +
-            "documents or information are needed.\n\n" +
+            "I would greatly appreciate your help in processing this request at your\n" +
+            "earliest convenience. Please let me know if any additional documents\n" +
+            "or information are needed.\n\n" +
             "Thank you for your time and assistance.",
+        closingLine = "Respectfully yours,",
+        closingFields = listOf(
+            ClosingField("Full Name", 180.dp),
+            ClosingField("Pag-IBIG MID Number", 170.dp),
+            ClosingField("Signature", 130.dp)
+        ),
         fileNamePrefix = "PagIBIG"
     )
+
     LetterType.APPLICATION -> LetterContent(
         title = "APPLICATION LETTER",
         subject = "Application",
@@ -106,21 +140,39 @@ private fun contentFor(type: LetterType): LetterContent = when (type) {
             "I have attached my credentials for your review and would welcome\n" +
             "the opportunity to discuss my application further.\n\n" +
             "Thank you for considering my application.",
+        closingLine = "Respectfully yours,",
+        closingFields = listOf(
+            ClosingField("Full Name", 180.dp),
+            ClosingField("Contact Number", 150.dp),
+            ClosingField("Signature", 130.dp)
+        ),
         fileNamePrefix = "Application"
     )
+
+    // Researched: authorization letters name the Principal AND the Representative, each with
+    // their own valid ID reference - never Employee ID/Department.
     LetterType.AUTHORIZATION -> LetterContent(
         title = "AUTHORIZATION LETTER",
         subject = "Authorization",
         salutation = "To Whom It May Concern,",
         defaultBody =
-            "I am writing to authorize the person named below to act on my\n" +
-            "behalf regarding the matter stated in this letter, in the event that\n" +
-            "I am unable to attend or process it personally.\n\n" +
-            "This authorization is valid for the purpose stated and I take full\n" +
-            "responsibility for the actions taken on my behalf.\n\n" +
+            "I, the undersigned, hereby authorize the person named below to act on\n" +
+            "my behalf regarding the matter stated in this letter, in the event that I\n" +
+            "am unable to attend or process it personally.\n\n" +
+            "A photocopy of both our valid IDs is attached for verification. I take full\n" +
+            "responsibility for the actions taken by my representative on my behalf.\n\n" +
             "Thank you for your assistance in this matter.",
+        closingLine = "Sincerely,",
+        closingFields = listOf(
+            ClosingField("Principal's Name", 180.dp),
+            ClosingField("Principal's Valid ID No.", 170.dp),
+            ClosingField("Representative's Name", 180.dp),
+            ClosingField("Representative's Valid ID No.", 170.dp),
+            ClosingField("Signature", 130.dp)
+        ),
         fileNamePrefix = "Authorization"
     )
+
     LetterType.REFERRAL -> LetterContent(
         title = "REFERRAL LETTER",
         subject = "Referral",
@@ -128,12 +180,18 @@ private fun contentFor(type: LetterType): LetterContent = when (type) {
         defaultBody =
             "I am writing to formally recommend the person named below for the\n" +
             "opportunity/position stated in this letter.\n\n" +
-            "Based on my experience working with them, I am confident that\n" +
-            "they will be a valuable addition and will perform their\n" +
-            "responsibilities well.\n\n" +
+            "Based on my experience working with them, I am confident that they\n" +
+            "will be a valuable addition and will perform their responsibilities well.\n\n" +
             "Please feel free to reach out should you need further information.",
+        closingLine = "Sincerely,",
+        closingFields = listOf(
+            ClosingField("Referrer's Name", 180.dp),
+            ClosingField("Position/Title", 150.dp),
+            ClosingField("Signature", 130.dp)
+        ),
         fileNamePrefix = "Referral"
     )
+
     LetterType.FOLLOW_UP -> LetterContent(
         title = "FOLLOW-UP LETTER",
         subject = "Follow-up",
@@ -141,12 +199,19 @@ private fun contentFor(type: LetterType): LetterContent = when (type) {
         defaultBody =
             "I am writing to kindly follow up on my previous request/application\n" +
             "regarding the matter stated above.\n\n" +
-            "I understand that you may be busy, and I appreciate your time. I\n" +
-            "would just like to check on the status and see if there is any\n" +
-            "additional information needed from my end.\n\n" +
+            "I understand that you may be busy, and I appreciate your time. I would\n" +
+            "just like to check on the status and see if there is any additional\n" +
+            "information needed from my end.\n\n" +
             "Thank you for your attention to this matter.",
+        closingLine = "Respectfully yours,",
+        closingFields = listOf(
+            ClosingField("Full Name", 180.dp),
+            ClosingField("Contact Number", 150.dp),
+            ClosingField("Signature", 130.dp)
+        ),
         fileNamePrefix = "FollowUp"
     )
+
     LetterType.THANK_YOU -> LetterContent(
         title = "THANK YOU LETTER",
         subject = "Thank You",
@@ -157,48 +222,79 @@ private fun contentFor(type: LetterType): LetterContent = when (type) {
             "Your kindness and generosity have meant a lot to me, and I truly\n" +
             "appreciate everything you have done.\n\n" +
             "Thank you once again from the bottom of my heart.",
+        closingLine = "Sincerely,",
+        closingFields = listOf(
+            ClosingField("Full Name", 180.dp),
+            ClosingField("Signature", 130.dp)
+        ),
         fileNamePrefix = "ThankYou"
     )
+
+    // Job offer letters go FROM the employer TO the applicant - the signer is the
+    // company representative, not the employee, so the fields reflect that.
     LetterType.JOB_OFFER -> LetterContent(
         title = "JOB OFFER LETTER",
         subject = "Job Offer",
         salutation = "Dear",
         defaultBody =
-            "We are pleased to formally offer you the position stated above.\n" +
-            "We were impressed by your qualifications and believe you will be\n" +
-            "a great addition to our team.\n\n" +
-            "Please review the details of this offer and let us know your\n" +
-            "decision at your earliest convenience.\n\n" +
+            "We are pleased to formally offer you the position stated above. We\n" +
+            "were impressed by your qualifications and believe you will be a great\n" +
+            "addition to our team.\n\n" +
+            "Please review the details of this offer and let us know your decision\n" +
+            "at your earliest convenience.\n\n" +
             "We look forward to having you on board.",
+        closingLine = "Sincerely,",
+        closingFields = listOf(
+            ClosingField("Company Representative", 190.dp),
+            ClosingField("Position/Title", 150.dp),
+            ClosingField("Company Name", 170.dp),
+            ClosingField("Signature", 130.dp)
+        ),
         fileNamePrefix = "JobOffer"
     )
+
+    // This one IS a genuine employment matter, so Employee ID/Department are correct here.
     LetterType.SALARY_INCREASE -> LetterContent(
         title = "SALARY INCREASE REQUEST",
         subject = "Salary Increase Request",
         salutation = "Dear Sir/Madam,",
         defaultBody =
-            "I am writing to formally request a review of my current salary,\n" +
-            "given my contributions and responsibilities since I started this\n" +
-            "position.\n\n" +
+            "I am writing to formally request a review of my current salary, given\n" +
+            "my contributions and responsibilities since I started this position.\n\n" +
             "I believe this adjustment would fairly reflect my performance and\n" +
             "continued commitment to the company.\n\n" +
             "I would appreciate the opportunity to discuss this further at your\n" +
             "convenience.",
+        closingLine = "Respectfully yours,",
+        closingFields = listOf(
+            ClosingField("Name", 160.dp),
+            ClosingField("Employee ID", 130.dp),
+            ClosingField("Department", 130.dp),
+            ClosingField("Signature", 130.dp)
+        ),
         fileNamePrefix = "SalaryIncrease"
     )
+
     LetterType.COMPLAINT -> LetterContent(
         title = "COMPLAINT LETTER",
         subject = "Complaint",
         salutation = "Dear Sir/Madam,",
         defaultBody =
-            "I am writing to formally raise a concern regarding the matter\n" +
-            "stated above.\n\n" +
-            "I would appreciate it if this could be looked into and resolved at\n" +
-            "the earliest possible time. Please let me know if you need any\n" +
-            "further details from my end.\n\n" +
+            "I am writing to formally raise a concern regarding the matter stated\n" +
+            "above.\n\n" +
+            "I would appreciate it if this could be looked into and resolved at the\n" +
+            "earliest possible time. Please let me know if you need any further\n" +
+            "details from my end.\n\n" +
             "Thank you for your attention to this matter.",
+        closingLine = "Respectfully yours,",
+        closingFields = listOf(
+            ClosingField("Full Name", 180.dp),
+            ClosingField("Contact Number", 150.dp),
+            ClosingField("Signature", 130.dp)
+        ),
         fileNamePrefix = "Complaint"
     )
+
     LetterType.BRGY_CITY_REQUEST -> LetterContent(
         title = "BARANGAY/CITY REQUEST LETTER",
         subject = "Request Letter",
@@ -209,21 +305,37 @@ private fun contentFor(type: LetterType): LetterContent = when (type) {
             "I would greatly appreciate your kind consideration and support in\n" +
             "addressing this request at your earliest convenience.\n\n" +
             "Thank you for your time and assistance.",
+        closingLine = "Respectfully yours,",
+        closingFields = listOf(
+            ClosingField("Full Name", 180.dp),
+            ClosingField("Address", 220.dp),
+            ClosingField("Valid ID No.", 150.dp),
+            ClosingField("Signature", 130.dp)
+        ),
         fileNamePrefix = "BrgyCity"
     )
+
     LetterType.SCHOLARSHIP -> LetterContent(
         title = "SCHOLARSHIP APPLICATION LETTER",
         subject = "Scholarship Application",
         salutation = "Dear Sir/Madam,",
         defaultBody =
             "I am writing to formally apply for the scholarship program stated\n" +
-            "above. I believe that this opportunity would greatly help me\n" +
-            "continue my studies and achieve my academic goals.\n\n" +
-            "I have attached my credentials for your review and would be\n" +
-            "grateful for the chance to be considered.\n\n" +
+            "above. I believe that this opportunity would greatly help me continue\n" +
+            "my studies and achieve my academic goals.\n\n" +
+            "I have attached my credentials for your review and would be grateful\n" +
+            "for the chance to be considered.\n\n" +
             "Thank you for your time and consideration.",
+        closingLine = "Respectfully yours,",
+        closingFields = listOf(
+            ClosingField("Full Name", 180.dp),
+            ClosingField("School", 170.dp),
+            ClosingField("Student Number", 150.dp),
+            ClosingField("Signature", 130.dp)
+        ),
         fileNamePrefix = "Scholarship"
     )
+
     LetterType.OJT_INTERNSHIP -> LetterContent(
         title = "OJT/INTERNSHIP LETTER",
         subject = "OJT/Internship Application",
@@ -231,23 +343,38 @@ private fun contentFor(type: LetterType): LetterContent = when (type) {
         defaultBody =
             "I am writing to formally apply for an On-the-Job Training/Internship\n" +
             "opportunity at your company, as required by my course/program.\n\n" +
-            "I am eager to apply my academic knowledge in a practical setting\n" +
-            "and would welcome the opportunity to learn from your team.\n\n" +
+            "I am eager to apply my academic knowledge in a practical setting and\n" +
+            "would welcome the opportunity to learn from your team.\n\n" +
             "Thank you for considering my application.",
+        closingLine = "Respectfully yours,",
+        closingFields = listOf(
+            ClosingField("Student Name", 180.dp),
+            ClosingField("School", 170.dp),
+            ClosingField("Student Number", 150.dp),
+            ClosingField("Signature", 130.dp)
+        ),
         fileNamePrefix = "OJT"
     )
+
     LetterType.OTHERS_REQUEST -> LetterContent(
         title = "REQUEST LETTER",
         subject = "Request",
         salutation = "Dear Sir/Madam,",
         defaultBody =
-            "I am writing to formally request your assistance regarding the\n" +
-            "matter stated above.\n\n" +
+            "I am writing to formally request your assistance regarding the matter\n" +
+            "stated above.\n\n" +
             "I would greatly appreciate your kind consideration and support at\n" +
             "your earliest convenience.\n\n" +
             "Thank you for your time and assistance.",
+        closingLine = "Respectfully yours,",
+        closingFields = listOf(
+            ClosingField("Full Name", 180.dp),
+            ClosingField("Contact Number", 150.dp),
+            ClosingField("Signature", 130.dp)
+        ),
         fileNamePrefix = "Request"
     )
+
     LetterType.CUSTOM -> LetterContent(
         title = "LETTER",
         subject = "Letter",
@@ -256,13 +383,21 @@ private fun contentFor(type: LetterType): LetterContent = when (type) {
             "I am writing to formally address the matter stated above.\n\n" +
             "Please feel free to edit this letter to fit your specific needs.\n\n" +
             "Thank you for your time and consideration.",
+        closingLine = "Sincerely,",
+        closingFields = listOf(
+            ClosingField("Full Name", 180.dp),
+            ClosingField("Signature", 130.dp)
+        ),
         fileNamePrefix = "Custom"
     )
+
     else -> LetterContent(
         title = "LETTER",
         subject = "Letter",
         salutation = "Dear Sir/Madam,",
         defaultBody = "I am writing to formally address the matter stated above.",
+        closingLine = "Sincerely,",
+        closingFields = listOf(ClosingField("Full Name", 180.dp), ClosingField("Signature", 130.dp)),
         fileNamePrefix = "Letter"
     )
 }
@@ -278,10 +413,10 @@ fun GenericLetterScreen(letterType: LetterType) {
     var dateVal by remember { mutableStateOf("") }
     var to1Val by remember { mutableStateOf("") }
     var to2Val by remember { mutableStateOf("") }
-    var nameVal by remember { mutableStateOf("") }
-    var employeeIdVal by remember { mutableStateOf("") }
-    var departmentVal by remember { mutableStateOf("") }
-    var signatureVal by remember { mutableStateOf("") }
+
+    // Dynamic closing field values, keyed by label - each letter type only shows the fields
+    // it actually needs (see closingFields above).
+    val fieldValues = remember(letterType) { mutableStateMapOf<String, String>() }
 
     var offset by remember { mutableStateOf(Offset.Zero) }
     val picture = remember { Picture() }
@@ -431,19 +566,26 @@ fun GenericLetterScreen(letterType: LetterType) {
                     Spacer(Modifier.height(45.dp))
 
                     Box(modifier = Modifier.padding(start = 60.dp)) {
-                        GLPlainText("Yours sincerely,", color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not())
+                        GLPlainText(content.closingLine, color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not())
                     }
 
                     Spacer(Modifier.height(50.dp))
 
+                    // Only the fields this specific letter type actually needs.
                     Column(modifier = Modifier.padding(start = 100.dp)) {
-                        GLField("Name", nameVal, fieldWidth = 160.dp, color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not()) { nameVal = it }
-                        Spacer(Modifier.height(8.dp))
-                        GLField("Employee ID", employeeIdVal, fieldWidth = 130.dp, color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not()) { employeeIdVal = it }
-                        Spacer(Modifier.height(8.dp))
-                        GLField("Department", departmentVal, fieldWidth = 130.dp, color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not()) { departmentVal = it }
-                        Spacer(Modifier.height(8.dp))
-                        GLField("Signature", signatureVal, fieldWidth = 130.dp, color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not()) { signatureVal = it }
+                        content.closingFields.forEachIndexed { index, field ->
+                            GLField(
+                                field.label,
+                                fieldValues[field.label] ?: "",
+                                fieldWidth = field.width,
+                                color = textColor,
+                                fontFamily = bodyFontFamily,
+                                italic = isPlainMode.not()
+                            ) { fieldValues[field.label] = it }
+                            if (index != content.closingFields.lastIndex) {
+                                Spacer(Modifier.height(8.dp))
+                            }
+                        }
                     }
 
                     Spacer(Modifier.weight(1f))
@@ -499,7 +641,7 @@ fun GenericLetterScreen(letterType: LetterType) {
     }
 }
 
-// ---------- Reusable pieces (same pattern as ResignationLetterScreen/LeaveLetterScreen) ----------
+// ---------- Reusable pieces ----------
 
 @Composable
 private fun GLPlainText(
@@ -561,7 +703,7 @@ private fun GLWord(
 @Composable
 private fun GLInlineField(
     value: String,
-    width: androidx.compose.ui.unit.Dp,
+    width: Dp,
     color: Color = GLBlue,
     fontFamily: FontFamily = FontFamily.Serif,
     italic: Boolean = true,
@@ -633,7 +775,7 @@ private fun GLUnderline(
 private fun GLField(
     label: String,
     value: String,
-    fieldWidth: androidx.compose.ui.unit.Dp,
+    fieldWidth: Dp,
     color: Color = GLBlue,
     fontFamily: FontFamily = FontFamily.Serif,
     italic: Boolean = true,
