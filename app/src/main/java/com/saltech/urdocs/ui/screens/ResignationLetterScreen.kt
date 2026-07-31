@@ -209,7 +209,7 @@ FlowRow(modifier = Modifier.fillMaxWidth()) {
 
                   Spacer(Modifier.padding(start = 60.dp)) // hindi ito gagana mag-isa, tignan sa baba
 
-Spacer(Modifier.height(30dp))
+Spacer(Modifier.height(30.dp))
 
 Box(modifier = Modifier.padding(start = 60.dp)) {
     RLPlainText("Yours sincerely,")
