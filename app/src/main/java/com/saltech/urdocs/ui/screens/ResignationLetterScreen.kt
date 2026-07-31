@@ -65,8 +65,7 @@ fun ResignationLetterScreen() {
     val paperHeightDp = 1600.dp
     val context = LocalContext.current
 
-    // ===== Per-field state (instead of one big data class) =====
-    // Typing in one field now only recomposes that field, not the whole letter.
+    // ===== Per-field state (typing in one field only recomposes that field) =====
     var dateVal by remember { mutableStateOf("") }
     var to1Val by remember { mutableStateOf("") }
     var to2Val by remember { mutableStateOf("") }
@@ -81,9 +80,17 @@ fun ResignationLetterScreen() {
     val picture = remember { Picture() }
     val coroutineScope = rememberCoroutineScope()
 
-    // Edit mode toggle - lets user freely rewrite the body paragraph (add/remove lines, translate, etc.)
+    // Edit mode - lets user freely rewrite the body paragraph (add/remove lines, translate, etc.)
     var isEditMode by remember { mutableStateOf(false) }
     var bodyText by remember { mutableStateOf(DEFAULT_BODY_TEXT) }
+
+    // Plain mode - toggles between the blue floral design and a plain white/black letter
+    // (for strict offices/government that won't accept a "designed" letter)
+    var isPlainMode by remember { mutableStateOf(false) }
+
+    val textColor = if (isPlainMode) Color.Black else RLBlue
+    val bodyFontFamily = if (isPlainMode) FontFamily.Default else FontFamily.Serif
+    val bodyFontStyle = if (isPlainMode) FontStyle.Normal else FontStyle.Italic
 
     Column(modifier = Modifier.fillMaxSize()) {
         BoxWithConstraints(modifier = Modifier.weight(1f).background(Color.Black)) {
@@ -110,8 +117,7 @@ fun ResignationLetterScreen() {
                         val h = size.height.toInt().coerceAtLeast(1)
                         onDrawWithContent {
                             if (isEditMode) {
-                                // Skip Picture recording while typing - big perf win, no lag.
-                                // Recording only matters when we actually Download.
+                                // Skip Picture recording while typing - no lag. Recording only matters on Download.
                                 this@onDrawWithContent.drawContent()
                             } else {
                                 val pictureCanvas = androidx.compose.ui.graphics.Canvas(picture.beginRecording(w, h))
@@ -125,13 +131,15 @@ fun ResignationLetterScreen() {
                     }
                     .background(Color.White)
             ) {
-                // Bond paper background (blank floral border) — already in your drawable
-                Image(
-                    painter = painterResource(R.drawable.bond_paper_blank),
-                    contentDescription = null,
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.FillBounds
-                )
+                // Bond paper background (blue floral border) - only shown in design mode
+                if (!isPlainMode) {
+                    Image(
+                        painter = painterResource(R.drawable.bond_paper_blank),
+                        contentDescription = null,
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.FillBounds
+                    )
+                }
 
                 Column(
                     modifier = Modifier
@@ -150,9 +158,9 @@ fun ResignationLetterScreen() {
                                 }
                             }
                         },
-                        fontFamily = FontFamily.Serif,
+                        fontFamily = if (isPlainMode) FontFamily.Default else FontFamily.Serif,
                         fontWeight = FontWeight.Bold,
-                        color = RLBlue,
+                        color = textColor,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -163,53 +171,53 @@ fun ResignationLetterScreen() {
                     Spacer(Modifier.weight(1f))
 
                     // Date
-                    RLField("Date", dateVal, fieldWidth = 130.dp) { dateVal = it }
+                    RLField("Date", dateVal, fieldWidth = 130.dp, color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not()) { dateVal = it }
 
                     Spacer(Modifier.height(35.dp))
 
-                    RLPlainText("To,")
-                    RLPlainText("The Manager / Principal")
+                    RLPlainText("To,", color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not())
+                    RLPlainText("The Manager / Principal", color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not())
                     Spacer(Modifier.height(10.dp))
-                    RLUnderline(to1Val) { to1Val = it }
+                    RLUnderline(to1Val, color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not()) { to1Val = it }
                     Spacer(Modifier.height(10.dp))
-                    RLUnderline(to2Val) { to2Val = it }
+                    RLUnderline(to2Val, color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not()) { to2Val = it }
 
                     Spacer(Modifier.height(16.dp))
 
                     // Subject line - bold label, normal rest
                     FlowRow(modifier = Modifier.fillMaxWidth()) {
-                        RLWord("Subject:", bold = true)
-                        RLWord("Resignation Letter")
+                        RLWord("Subject:", bold = true, color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not())
+                        RLWord("Resignation Letter", color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not())
                     }
 
                     Spacer(Modifier.height(14.dp))
 
-                    RLPlainText("Respected Sir/Madam,")
+                    RLPlainText("Respected Sir/Madam,", color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not())
 
                     Spacer(Modifier.height(14.dp))
 
                     // Flowing paragraph with two inline blanks - wraps like real text
                     FlowRow(modifier = Modifier.fillMaxWidth()) {
                         "I am writing to formally tender my resignation from my position"
-                            .split(" ").forEach { RLWord(it) }
+                            .split(" ").forEach { RLWord(it, color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not()) }
                     }
 
                     FlowRow(modifier = Modifier.fillMaxWidth()) {
-                        RLWord("as")
-                        RLInlineField(positionVal, 180.dp) { positionVal = it }
-                        RLWord("effective")
-                        RLInlineField(effectiveDateVal, 180.dp) { effectiveDateVal = it }
-                        RLWord(".")
+                        RLWord("as", color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not())
+                        RLInlineField(positionVal, 180.dp, color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not()) { positionVal = it }
+                        RLWord("effective", color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not())
+                        RLInlineField(effectiveDateVal, 180.dp, color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not()) { effectiveDateVal = it }
+                        RLWord(".", color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not())
                     }
 
                     FlowRow(modifier = Modifier.fillMaxWidth()) {
                         "Please accept this letter as my official notice of resignation in accordance"
-                            .split(" ").forEach { RLWord(it) }
+                            .split(" ").forEach { RLWord(it, color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not()) }
                     }
 
                     FlowRow(modifier = Modifier.fillMaxWidth()) {
                         "with the company's policy."
-                            .split(" ").forEach { RLWord(it) }
+                            .split(" ").forEach { RLWord(it, color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not()) }
                     }
 
                     Spacer(Modifier.height(16.dp))
@@ -220,40 +228,40 @@ fun ResignationLetterScreen() {
                             value = bodyText,
                             onValueChange = { bodyText = it },
                             textStyle = TextStyle(
-                                fontFamily = FontFamily.Serif,
-                                fontStyle = FontStyle.Italic,
+                                fontFamily = bodyFontFamily,
+                                fontStyle = bodyFontStyle,
                                 fontWeight = FontWeight.Medium,
                                 fontSize = 18.sp,
-                                color = RLBlue,
+                                color = textColor,
                                 textAlign = TextAlign.Justify,
                                 lineHeight = 27.sp
                             ),
-                            cursorBrush = SolidColor(RLBlue),
+                            cursorBrush = SolidColor(textColor),
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .background(Color(0xFFEFF3FF))
                                 .padding(8.dp)
                         )
                     } else {
-                        RLParagraph(bodyText)
+                        RLParagraph(bodyText, color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not())
                     }
 
                     Spacer(Modifier.height(45.dp))
 
                     Box(modifier = Modifier.padding(start = 60.dp)) {
-                        RLPlainText("Yours sincerely,")
+                        RLPlainText("Yours sincerely,", color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not())
                     }
 
                     Spacer(Modifier.height(50.dp))
 
                     Column(modifier = Modifier.padding(start = 100.dp)) {
-                        RLField("Name", nameVal, fieldWidth = 160.dp) { nameVal = it }
+                        RLField("Name", nameVal, fieldWidth = 160.dp, color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not()) { nameVal = it }
                         Spacer(Modifier.height(8.dp))
-                        RLField("Employee ID", employeeIdVal, fieldWidth = 130.dp) { employeeIdVal = it }
+                        RLField("Employee ID", employeeIdVal, fieldWidth = 130.dp, color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not()) { employeeIdVal = it }
                         Spacer(Modifier.height(8.dp))
-                        RLField("Department", departmentVal, fieldWidth = 130.dp) { departmentVal = it }
+                        RLField("Department", departmentVal, fieldWidth = 130.dp, color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not()) { departmentVal = it }
                         Spacer(Modifier.height(8.dp))
-                        RLField("Signature", signatureVal, fieldWidth = 130.dp) { signatureVal = it }
+                        RLField("Signature", signatureVal, fieldWidth = 130.dp, color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not()) { signatureVal = it }
                     }
 
                     // ===== BOTTOM FLEX SPACE - same weight as top, keeps content centered =====
@@ -261,7 +269,7 @@ fun ResignationLetterScreen() {
                 }
             }
 
-            // Edit + Download buttons side by side
+            // Edit + Download + Plain buttons in a row
             Row(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
@@ -277,7 +285,7 @@ fun ResignationLetterScreen() {
 
                 Button(
                     onClick = {
-                        isEditMode = false // exit edit mode so no highlight box shows + so Picture recording turns back on
+                        isEditMode = false // exit edit mode so no highlight box shows + Picture recording turns back on
                         scale = fitScale
                         offset = Offset.Zero
                         coroutineScope.launch {
@@ -297,36 +305,58 @@ fun ResignationLetterScreen() {
                 ) {
                     Text("Download", color = Color.White, fontWeight = FontWeight.Bold)
                 }
+
+                Button(
+                    onClick = { isPlainMode = !isPlainMode },
+                    colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+                        containerColor = if (isPlainMode) Color.DarkGray else RLBlue
+                    )
+                ) {
+                    Text(if (isPlainMode) "Design" else "Plain", color = Color.White, fontWeight = FontWeight.Bold)
+                }
             }
         }
     }
 }
 
 // ---------- Reusable pieces ----------
+// All accept optional color/fontFamily/italic so Plain mode can override the look
+// without needing separate duplicate composables.
 
 @Composable
-private fun RLPlainText(text: String, bold: Boolean = false) {
+private fun RLPlainText(
+    text: String,
+    bold: Boolean = false,
+    color: Color = RLBlue,
+    fontFamily: FontFamily = FontFamily.Serif,
+    italic: Boolean = true
+) {
     Text(
         text,
-        fontFamily = FontFamily.Serif,
-        fontStyle = FontStyle.Italic,
+        fontFamily = fontFamily,
+        fontStyle = if (italic) FontStyle.Italic else FontStyle.Normal,
         fontWeight = if (bold) FontWeight.Bold else FontWeight.Normal,
         fontSize = 16.sp,
-        color = RLBlue,
+        color = color,
         modifier = Modifier.padding(vertical = 2.dp)
     )
 }
 
 /** One paragraph that wraps naturally like the bond paper, with slight justification feel. */
 @Composable
-private fun RLParagraph(text: String) {
+private fun RLParagraph(
+    text: String,
+    color: Color = RLBlue,
+    fontFamily: FontFamily = FontFamily.Serif,
+    italic: Boolean = true
+) {
     Text(
         text,
-        fontFamily = FontFamily.Serif,
-        fontStyle = FontStyle.Italic,
+        fontFamily = fontFamily,
+        fontStyle = if (italic) FontStyle.Italic else FontStyle.Normal,
         fontWeight = FontWeight.Medium,
         fontSize = 18.sp,
-        color = RLBlue,
+        color = color,
         textAlign = TextAlign.Justify,
         lineHeight = 27.sp,
         modifier = Modifier.fillMaxWidth()
@@ -335,20 +365,33 @@ private fun RLParagraph(text: String) {
 
 /** A single word rendered inside a FlowRow so it wraps like normal text. */
 @Composable
-private fun RLWord(word: String, bold: Boolean = false) {
+private fun RLWord(
+    word: String,
+    bold: Boolean = false,
+    color: Color = RLBlue,
+    fontFamily: FontFamily = FontFamily.Serif,
+    italic: Boolean = true
+) {
     Text(
         "$word ",
-        fontFamily = FontFamily.Serif,
-        fontStyle = FontStyle.Italic,
+        fontFamily = fontFamily,
+        fontStyle = if (italic) FontStyle.Italic else FontStyle.Normal,
         fontWeight = if (bold) FontWeight.Bold else FontWeight.Medium,
         fontSize = 18.sp,
-        color = RLBlue
+        color = color
     )
 }
 
 /** Editable blank that sits inline inside a FlowRow, same size/spacing as the words around it. */
 @Composable
-private fun RLInlineField(value: String, width: androidx.compose.ui.unit.Dp, onChange: (String) -> Unit) {
+private fun RLInlineField(
+    value: String,
+    width: androidx.compose.ui.unit.Dp,
+    color: Color = RLBlue,
+    fontFamily: FontFamily = FontFamily.Serif,
+    italic: Boolean = true,
+    onChange: (String) -> Unit
+) {
     val interactionSource = remember { MutableInteractionSource() }
     val isFocused by interactionSource.collectIsFocusedAsState()
     Box(
@@ -359,14 +402,19 @@ private fun RLInlineField(value: String, width: androidx.compose.ui.unit.Dp, onC
                 onDrawWithContent {
                     drawContent()
                     val y = size.height - 2.dp.toPx()
-                    drawLine(RLBlue, Offset(0f, y), Offset(size.width, y), strokeWidth = 1.dp.toPx())
+                    drawLine(color, Offset(0f, y), Offset(size.width, y), strokeWidth = 1.dp.toPx())
                 }
             }
     ) {
         BasicTextField(
             value = value, onValueChange = onChange,
-            textStyle = TextStyle(fontFamily = FontFamily.Serif, fontStyle = FontStyle.Italic, fontSize = 20.sp, color = RLBlue),
-            cursorBrush = SolidColor(RLBlue),
+            textStyle = TextStyle(
+                fontFamily = fontFamily,
+                fontStyle = if (italic) FontStyle.Italic else FontStyle.Normal,
+                fontSize = 20.sp,
+                color = color
+            ),
+            cursorBrush = SolidColor(color),
             interactionSource = interactionSource,
             modifier = Modifier.widthIn(min = width)
         )
@@ -375,13 +423,24 @@ private fun RLInlineField(value: String, width: androidx.compose.ui.unit.Dp, onC
 
 /** Underline-only blank line (for "To," lines with no label). */
 @Composable
-private fun RLUnderline(value: String, onChange: (String) -> Unit) {
+private fun RLUnderline(
+    value: String,
+    color: Color = RLBlue,
+    fontFamily: FontFamily = FontFamily.Serif,
+    italic: Boolean = true,
+    onChange: (String) -> Unit
+) {
     val interactionSource = remember { MutableInteractionSource() }
     val isFocused by interactionSource.collectIsFocusedAsState()
     BasicTextField(
         value = value, onValueChange = onChange,
-        textStyle = TextStyle(fontFamily = FontFamily.Serif, fontStyle = FontStyle.Italic, fontSize = 15.sp, color = RLBlue),
-        cursorBrush = SolidColor(RLBlue),
+        textStyle = TextStyle(
+            fontFamily = fontFamily,
+            fontStyle = if (italic) FontStyle.Italic else FontStyle.Normal,
+            fontSize = 15.sp,
+            color = color
+        ),
+        cursorBrush = SolidColor(color),
         interactionSource = interactionSource,
         modifier = Modifier
             .width(400.dp)
@@ -390,7 +449,7 @@ private fun RLUnderline(value: String, onChange: (String) -> Unit) {
                 onDrawWithContent {
                     drawContent()
                     val y = size.height - 2.dp.toPx()
-                    drawLine(RLBlue, Offset(0f, y), Offset(size.width, y), strokeWidth = 1.dp.toPx())
+                    drawLine(color, Offset(0f, y), Offset(size.width, y), strokeWidth = 1.dp.toPx())
                 }
             }
     )
@@ -398,10 +457,18 @@ private fun RLUnderline(value: String, onChange: (String) -> Unit) {
 
 /** "Label: ___________" row like Date / Name / Employee ID / Department / Signature. */
 @Composable
-private fun RLField(label: String, value: String, fieldWidth: androidx.compose.ui.unit.Dp, onChange: (String) -> Unit) {
+private fun RLField(
+    label: String,
+    value: String,
+    fieldWidth: androidx.compose.ui.unit.Dp,
+    color: Color = RLBlue,
+    fontFamily: FontFamily = FontFamily.Serif,
+    italic: Boolean = true,
+    onChange: (String) -> Unit
+) {
     Row(verticalAlignment = Alignment.Bottom) {
-        RLPlainText("$label: ", bold = true)
-        RLInlineField(value, fieldWidth, onChange)
+        RLPlainText("$label: ", bold = true, color = color, fontFamily = fontFamily, italic = italic)
+        RLInlineField(value, fieldWidth, color = color, fontFamily = fontFamily, italic = italic, onChange = onChange)
     }
 }
 
