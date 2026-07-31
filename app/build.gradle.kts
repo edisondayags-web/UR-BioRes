@@ -18,7 +18,7 @@ android {
     namespace = "com.saltech.urdocs"
     compileSdk = 34
 
-defaultConfig {
+    defaultConfig {
         applicationId = "com.saltech.urdocs"
         minSdk = 24
         targetSdk = 34
@@ -47,8 +47,15 @@ defaultConfig {
         release {
             isMinifyEnabled = true
             isShrinkResources = true
+            isDebuggable = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
+    }
+
+    bundle {
+        language { enableSplit = true }
+        density { enableSplit = true }
+        abi { enableSplit = true }
     }
 
     buildFeatures {
