@@ -45,6 +45,10 @@ import com.saltech.urdocs.R
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import androidx.compose.ui.platform.LocalConfiguration
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.FullScreenContentCallback
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 
 private val RLBlue = Color(0xFF1D3FB5)
 
@@ -64,6 +68,19 @@ fun ResignationLetterScreen() {
     val paperWidthDp = 850.dp
     val paperHeightDp = 1600.dp
     val context = LocalContext.current
+    var interstitialAd by remember { mutableStateOf<InterstitialAd?>(null) }
+    LaunchedEffect(Unit) {
+        InterstitialAd.load(
+            context,
+            "ca-app-pub-3134240485602899/5274307709",
+            AdRequest.Builder().build(),
+            object : InterstitialAdLoadCallback() {
+                override fun onAdLoaded(ad: InterstitialAd) {
+                    interstitialAd = ad
+                }
+            }
+        )
+    }
 
     // ===== Per-field state (typing in one field only recomposes that field) =====
     var dateVal by remember { mutableStateOf("") }
@@ -299,10 +316,12 @@ fun ResignationLetterScreen() {
                 }
 
                 Button(
-                    onClick = {
-                        isEditMode = false // exit edit mode so no highlight box shows + Picture recording turns back on
-                        scale = fitScale
-                        offset = Offset.Zero
+                onClick = {
+                    isEditMode = false // exit edit mode so no highlight box shows + Picture recording turns back on
+                    scale = fitScale
+                    offset = Offset.Zero
+                    val activity = context as? android.app.Activity
+                    fun proceedDownload() {
                         coroutineScope.launch {
                             delay(100)
                             val bitmap = Bitmap.createBitmap(
@@ -315,7 +334,19 @@ fun ResignationLetterScreen() {
                             canvas.drawPicture(picture)
                             saveResignationToGallery(context, bitmap)
                         }
-                    },
+                    }
+                    if (activity != null && interstitialAd != null) {
+                        interstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
+                            override fun onAdDismissedFullScreenContent() {
+                                interstitialAd = null
+                                proceedDownload()
+                            }
+                        }
+                        interstitialAd?.show(activity)
+                    } else {
+                        proceedDownload()
+                    }
+                },
                     colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = RLBlue)
                 ) {
                     Text("Download", color = Color.White, fontWeight = FontWeight.Bold)
