@@ -135,14 +135,14 @@ fun ResignationLetterScreen() {
                         modifier = Modifier.fillMaxWidth()
                     )
 
-                    Spacer(Modifier.height(18.dp))
-
                     Spacer(Modifier.height(30.dp))
 
-        // Date
-                    RLField("Date", data.date, fieldWidth = 130.dp) { data = data.copy(date = it) }
+                    Spacer(Modifier.height(45.dp))
 
-                    Spacer(Modifier.height(18.dp))
+        // Date
+                    RLField("Date", data.date, fieldWidth = 150.dp) { data = data.copy(date = it) }
+
+                    Spacer(Modifier.height(45.dp))
 
                     RLPlainText("To,")
                     RLPlainText("The Manager / Principal")
@@ -271,7 +271,7 @@ private fun RLParagraph(text: String) {
         fontSize = 16.sp,
         color = RLBlue,
         textAlign = TextAlign.Justify,
-        lineHeight = 22.sp,
+        lineHeight = 27.sp,
         modifier = Modifier.fillMaxWidth()
     )
 }
@@ -284,7 +284,7 @@ private fun RLWord(word: String, bold: Boolean = false) {
         fontFamily = FontFamily.Serif,
         fontStyle = FontStyle.Italic,
         fontWeight = if (bold) FontWeight.Bold else FontWeight.Normal,
-        fontSize = 16.sp,
+        fontSize = 20.sp,
         color = RLBlue
     )
 }
