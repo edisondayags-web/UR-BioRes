@@ -60,6 +60,16 @@ data class ResignationFields(
     val signature: String = ""
 )
 
+private const val DEFAULT_BODY_TEXT =
+    "I have truly valued the opportunities for growth and development\n" +
+    "that I have gained during my time here. I am grateful for the support,\n" +
+    "guidance, and encouragement I have received from you and the entire\n" +
+    "team.\n\n" +
+    "I will do my best to ensure a smooth transition by completing my\n" +
+    "assigned tasks and assisting in the turnover process before my last day.\n\n" +
+    "Thank you once again for the experience and for everything I have\n" +
+    "learned during my tenure."
+
 @OptIn(androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
 @Composable
 fun ResignationLetterScreen() {
@@ -70,6 +80,10 @@ fun ResignationLetterScreen() {
     var offset by remember { mutableStateOf(Offset.Zero) }
     val picture = remember { Picture() }
     val coroutineScope = rememberCoroutineScope()
+
+    // Edit mode toggle - lets user freely rewrite the body paragraph (add/remove lines, translate, etc.)
+    var isEditMode by remember { mutableStateOf(false) }
+    var bodyText by remember { mutableStateOf(DEFAULT_BODY_TEXT) }
 
     Column(modifier = Modifier.fillMaxSize()) {
         BoxWithConstraints(modifier = Modifier.weight(1f).background(Color.Black)) {
@@ -105,7 +119,7 @@ fun ResignationLetterScreen() {
                     }
                     .background(Color.White)
             ) {
-                // Bond paper background (flowers + border) — already in your drawable
+                // Bond paper background (blank floral border) — already in your drawable
                 Image(
                     painter = painterResource(R.drawable.bond_paper_blank),
                     contentDescription = null,
@@ -118,7 +132,9 @@ fun ResignationLetterScreen() {
                         .fillMaxSize()
                         .padding(horizontal = 70.dp, vertical = 55.dp)
                 ) {
-                    // Title - big first letter per word, like a small-caps heading
+                    Spacer(Modifier.height(60.dp))
+
+                    // Title - FROZEN, not editable, big first letter per word
                     Text(
                         buildAnnotatedString {
                             "RESIGNATION LETTER".forEachIndexed { i, c ->
@@ -192,21 +208,29 @@ fun ResignationLetterScreen() {
 
                     Spacer(Modifier.height(16.dp))
 
-                    RLParagraph(
-                        "I have truly valued the opportunities for growth and development\nthat I have gained during my time here. I am grateful for the support,\nguidance, and encouragement I have received from you and the entire\nteam."
-                    )
-
-                    Spacer(Modifier.height(14.dp))
-
-                    RLParagraph(
-                        "I will do my best to ensure a smooth transition by completing my\nassigned tasks and assisting in the turnover process before my last day."
-                    )
-
-                    Spacer(Modifier.height(14.dp))
-
-                    RLParagraph(
-                        "Thank you once again for the experience and for everything I have\nlearned during my tenure."
-                    )
+                    // ===== EDITABLE BODY - user can freely rewrite, translate, add/remove lines =====
+                    if (isEditMode) {
+                        BasicTextField(
+                            value = bodyText,
+                            onValueChange = { bodyText = it },
+                            textStyle = TextStyle(
+                                fontFamily = FontFamily.Serif,
+                                fontStyle = FontStyle.Italic,
+                                fontWeight = FontWeight.Medium,
+                                fontSize = 18.sp,
+                                color = RLBlue,
+                                textAlign = TextAlign.Justify,
+                                lineHeight = 27.sp
+                            ),
+                            cursorBrush = SolidColor(RLBlue),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(Color(0xFFEFF3FF))
+                                .padding(8.dp)
+                        )
+                    } else {
+                        RLParagraph(bodyText)
+                    }
 
                     Spacer(Modifier.height(45.dp))
 
@@ -231,28 +255,43 @@ fun ResignationLetterScreen() {
                 }
             }
 
-            Button(
-                onClick = {
-                    scale = fitScale
-                    offset = Offset.Zero
-                    coroutineScope.launch {
-                        delay(100)
-                        val bitmap = Bitmap.createBitmap(
-                            picture.width.coerceAtLeast(1),
-                            picture.height.coerceAtLeast(1),
-                            Bitmap.Config.ARGB_8888
-                        )
-                        val canvas = android.graphics.Canvas(bitmap)
-                        canvas.drawColor(android.graphics.Color.WHITE)
-                        canvas.drawPicture(picture)
-                        saveResignationToGallery(context, bitmap)
-                    }
-                },
-                colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = RLBlue),
+            // Edit + Download buttons side by side
+            Row(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .padding(16.dp)
-            ) { Text("Download", color = Color.White, fontWeight = FontWeight.Bold) }
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Button(
+                    onClick = { isEditMode = !isEditMode },
+                    colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = RLBlue)
+                ) {
+                    Text(if (isEditMode) "Done" else "Edit", color = Color.White, fontWeight = FontWeight.Bold)
+                }
+
+                Button(
+                    onClick = {
+                        isEditMode = false // exit edit mode so no highlight box shows in the saved image
+                        scale = fitScale
+                        offset = Offset.Zero
+                        coroutineScope.launch {
+                            delay(100)
+                            val bitmap = Bitmap.createBitmap(
+                                picture.width.coerceAtLeast(1),
+                                picture.height.coerceAtLeast(1),
+                                Bitmap.Config.ARGB_8888
+                            )
+                            val canvas = android.graphics.Canvas(bitmap)
+                            canvas.drawColor(android.graphics.Color.WHITE)
+                            canvas.drawPicture(picture)
+                            saveResignationToGallery(context, bitmap)
+                        }
+                    },
+                    colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = RLBlue)
+                ) {
+                    Text("Download", color = Color.White, fontWeight = FontWeight.Bold)
+                }
+            }
         }
     }
 }
@@ -279,6 +318,7 @@ private fun RLParagraph(text: String) {
         text,
         fontFamily = FontFamily.Serif,
         fontStyle = FontStyle.Italic,
+        fontWeight = FontWeight.Medium,
         fontSize = 18.sp,
         color = RLBlue,
         textAlign = TextAlign.Justify,
@@ -294,7 +334,7 @@ private fun RLWord(word: String, bold: Boolean = false) {
         "$word ",
         fontFamily = FontFamily.Serif,
         fontStyle = FontStyle.Italic,
-        fontWeight = if (bold) FontWeight.Bold else FontWeight.Normal,
+        fontWeight = if (bold) FontWeight.Bold else FontWeight.Medium,
         fontSize = 18.sp,
         color = RLBlue
     )
