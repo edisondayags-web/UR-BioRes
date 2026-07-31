@@ -107,7 +107,7 @@ fun ResignationLetterScreen() {
             ) {
                 // Bond paper background (flowers + border) — already in your drawable
                 Image(
-                    painter = painterResource(R.drawable.resignation_flowers),
+                    painter = painterResource(R.drawable.bond_paper_blank),
                     contentDescription = null,
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.FillBounds
