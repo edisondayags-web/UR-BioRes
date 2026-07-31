@@ -149,21 +149,36 @@ fun ResignationLetterScreen() {
                     Spacer(Modifier.height(60.dp))
 
                     // Title - FROZEN, not editable, big first letter per word
-                    Text(
-                        buildAnnotatedString {
-                            "RESIGNATION LETTER".forEachIndexed { i, c ->
-                                val isFirstOfWord = i == 0 || "RESIGNATION LETTER"[i - 1] == ' '
-                                withStyle(SpanStyle(fontSize = if (isFirstOfWord) 44.sp else 30.sp)) {
-                                    append(c)
-                                }
-                            }
-                        },
-                        fontFamily = if (isPlainMode) FontFamily.Default else FontFamily.Serif,
-                        fontWeight = FontWeight.Bold,
-                        color = textColor,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.fillMaxWidth()
-                    )
+                    if (isPlainMode) {
+    // Plain mode - simple, uniform, formal heading (no decorative caps)
+    Text(
+        text = "RESIGNATION LETTER",
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Bold,
+        fontSize = 26.sp,
+        letterSpacing = 1.sp,
+        color = textColor,
+        textAlign = TextAlign.Center,
+        modifier = Modifier.fillMaxWidth()
+    )
+} else {
+    // Design mode - decorative small-caps style
+    Text(
+        buildAnnotatedString {
+            "RESIGNATION LETTER".forEachIndexed { i, c ->
+                val isFirstOfWord = i == 0 || "RESIGNATION LETTER"[i - 1] == ' '
+                withStyle(SpanStyle(fontSize = if (isFirstOfWord) 44.sp else 30.sp)) {
+                    append(c)
+                }
+            }
+        },
+        fontFamily = FontFamily.Serif,
+        fontWeight = FontWeight.Bold,
+        color = textColor,
+        textAlign = TextAlign.Center,
+        modifier = Modifier.fillMaxWidth()
+    )
+                    }
 
                     Spacer(Modifier.height(20.dp))
 
