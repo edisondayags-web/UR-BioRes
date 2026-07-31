@@ -135,12 +135,12 @@ fun ResignationLetterScreen() {
                         modifier = Modifier.fillMaxWidth()
                     )
 
-                    Spacer(Modifier.weight(0.7f))
+                    Spacer(Modifier.weight(0.6f))
 
 // Date
 RLField("Date", data.date, fieldWidth = 130.dp) { data = data.copy(date = it) }
 
-                    Spacer(Modifier.height(45.dp))
+                    Spacer(Modifier.height(35.dp))
 
                     RLPlainText("To,")
                     RLPlainText("The Manager / Principal")
@@ -332,7 +332,7 @@ private fun RLUnderline(value: String, onChange: (String) -> Unit) {
     val isFocused by interactionSource.collectIsFocusedAsState()
     BasicTextField(
         value = value, onValueChange = onChange,
-        textStyle = TextStyle(fontFamily = FontFamily.Serif, fontStyle = FontStyle.Italic, fontSize = 16.sp, color = RLBlue),
+        textStyle = TextStyle(fontFamily = FontFamily.Serif, fontStyle = FontStyle.Italic, fontSize = 15.sp, color = RLBlue),
         cursorBrush = SolidColor(RLBlue),
         interactionSource = interactionSource,
         modifier = Modifier
