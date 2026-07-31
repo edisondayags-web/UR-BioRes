@@ -60,7 +60,7 @@ jobs:
             -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
 
       - name: Build debug APK
-        run: ./gradlew assembleDebug --no-daemon
+        run: ./gradlew assembleDebug --no-daemon --build-cache
 
       - name: Create Release with APK
         uses: softprops/action-gh-release@v2
