@@ -70,6 +70,8 @@ fun LettersScreen(
         ) { state ->
 when (state) {
     "resignation" -> ResignationLetterScreen()
+    "leave" -> LeaveLetterScreen()
+    "generic" -> GenericLetterScreen(letterType = selectedType)
     "form" -> LetterFormContent(
         viewModel = viewModel,
         initialType = selectedType,
@@ -77,13 +79,15 @@ when (state) {
     )
     "all" -> AllTemplatesContent(
         onBack = { screenState = "hub" },
-        onPick = { _ -> Toast.makeText(context, "coming soon pa to luv🩵", Toast.LENGTH_SHORT).show() }
+        onPick = { type -> selectedType = type; screenState = "generic" }
     )
     else -> LettersHubContent(
         onPremiumTap = { Toast.makeText(context, "Premium -- Coming Soon!", Toast.LENGTH_SHORT).show() },
         onPopularTap = { _ -> Toast.makeText(context, "coming soon pa to luv🩵", Toast.LENGTH_SHORT).show() },
         onResignationTap = { screenState = "resignation" },
-        onPick = { _ -> Toast.makeText(context, "coming soon pa to luv🩵", Toast.LENGTH_SHORT).show() },
+        onLeaveTap = { screenState = "leave" },
+        onExcuseTap = { selectedType = findType("Excuse"); screenState = "generic" },
+        onPick = { type -> selectedType = type; screenState = "generic" },
         onMoreTemplates = { screenState = "all" },
         onNavigate = onNavigate
     )
@@ -310,6 +314,8 @@ private fun LettersHubContent(
     onPremiumTap: () -> Unit,
     onPopularTap: (String) -> Unit,
     onResignationTap: () -> Unit,
+    onLeaveTap: () -> Unit,
+    onExcuseTap: () -> Unit,
     onPick: (LetterType) -> Unit,
     onMoreTemplates: () -> Unit,
     onNavigate: (String) -> Unit
@@ -399,7 +405,7 @@ private fun LettersHubContent(
                 badge = { Icon(Icons.Filled.BeachAccess, contentDescription = null, tint = Color.Black, modifier = it) },
                 title = "Leave Letter",
                 subtitle = "Request for leave from work or school",
-                onClick = { onPopularTap("Leave") }
+                onClick = { onLeaveTap() }
             )
             Spacer(Modifier.height(12.dp))
             LetterCard(
@@ -415,7 +421,7 @@ private fun LettersHubContent(
                 badge = { Icon(Icons.Filled.Favorite, contentDescription = null, tint = Color.Black, modifier = it) },
                 title = "Excuse Letter",
                 subtitle = "Apology or reason for absence",
-                onClick = { onPopularTap("Excuse") }
+                onClick = { onExcuseTap() }
             )
 
             LetterType.entries
