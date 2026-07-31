@@ -71,7 +71,7 @@ private fun contentFor(type: LetterType): LetterContent = when (type) {
     LetterType.EXCUSE -> LetterContent(
         title = "EXCUSE LETTER",
         subject = "Excuse Letter",
-        salutation = "Dear Sir/Madam,",
+        salutation = "Dear maam/sir,",
         defaultBody =
             "Please be informed that my son/daughter was not able to attend his/her\n" +
             "class(es) on the date(s) stated above, due to the reason indicated below.\n\n" +
@@ -132,7 +132,7 @@ private fun contentFor(type: LetterType): LetterContent = when (type) {
     LetterType.APPLICATION -> LetterContent(
         title = "APPLICATION LETTER",
         subject = "Application",
-        salutation = "Dear Sir/Madam,",
+        salutation = "Dear maam/sir,",
         defaultBody =
             "I am writing to formally apply for the position/opportunity stated\n" +
             "above. I believe that my skills and experience make me a strong\n" +
@@ -318,7 +318,7 @@ private fun contentFor(type: LetterType): LetterContent = when (type) {
     LetterType.SCHOLARSHIP -> LetterContent(
         title = "SCHOLARSHIP APPLICATION LETTER",
         subject = "Scholarship Application",
-        salutation = "Dear Sir/Madam,",
+        salutation = "Dear maam/sir,",
         defaultBody =
             "I am writing to formally apply for the scholarship program stated\n" +
             "above. I believe that this opportunity would greatly help me continue\n" +
@@ -339,7 +339,7 @@ private fun contentFor(type: LetterType): LetterContent = when (type) {
     LetterType.OJT_INTERNSHIP -> LetterContent(
         title = "OJT/INTERNSHIP LETTER",
         subject = "OJT/Internship Application",
-        salutation = "Dear Sir/Madam,",
+        salutation = "Dear maam/sir,",
         defaultBody =
             "I am writing to formally apply for an On-the-Job Training/Internship\n" +
             "opportunity at your company, as required by my course/program.\n\n" +
