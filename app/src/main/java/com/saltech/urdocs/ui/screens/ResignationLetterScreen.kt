@@ -64,7 +64,7 @@ data class ResignationFields(
 @Composable
 fun ResignationLetterScreen() {
     val paperWidthDp = 850.dp
-    val paperHeightDp = 1800.dp
+    val paperHeightDp = 1780.dp
     val context = LocalContext.current
     var data by remember { mutableStateOf(ResignationFields()) }
     var offset by remember { mutableStateOf(Offset.Zero) }
@@ -135,9 +135,9 @@ fun ResignationLetterScreen() {
                         modifier = Modifier.fillMaxWidth()
                     )
 
-                    Spacer(Modifier.height(30.dp))
+                    Spacer(Modifier.height(18.dp))
 
-                    Spacer(Modifier.height(45.dp))
+                    Spacer(Modifier.height(50.dp))
 
         // Date
                     RLField("Date", data.date, fieldWidth = 150.dp) { data = data.copy(date = it) }
@@ -166,37 +166,46 @@ fun ResignationLetterScreen() {
                     Spacer(Modifier.height(14.dp))
 
                     // Flowing paragraph with two inline blanks - wraps like real text
-                    FlowRow(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(0.dp)
-                    ) {
-                        "I am writing to formally tender my resignation from my position as"
-                            .split(" ").forEach { RLWord(it) }
-                        RLInlineField(data.position, 180.dp) { data = data.copy(position = it) }
-                        RLWord(", effective")
-                        RLInlineField(data.effectiveDate, 180.dp) { data = data.copy(effectiveDate = it) }
-                        RLWord(".")
-                        "Please accept this letter as my official notice of resignation in accordance with the company's policy."
-                            .split(" ").forEach { RLWord(it) }
-                    }
+                    FlowRow(modifier = Modifier.fillMaxWidth()) {
+    "I am writing to formally tender my resignation from my position"
+        .split(" ").forEach { RLWord(it) }
+}
+
+FlowRow(modifier = Modifier.fillMaxWidth()) {
+    RLWord("as")
+    RLInlineField(data.position, 180.dp) { data = data.copy(position = it) }
+    RLWord(", effective")
+    RLInlineField(data.effectiveDate, 180.dp) { data = data.copy(effectiveDate = it) }
+    RLWord(".")
+}
+
+FlowRow(modifier = Modifier.fillMaxWidth()) {
+    "Please accept this letter as my official notice of resignation in accordance"
+        .split(" ").forEach { RLWord(it) }
+}
+
+FlowRow(modifier = Modifier.fillMaxWidth()) {
+    "with the company's policy."
+        .split(" ").forEach { RLWord(it) }
+}
 
                     Spacer(Modifier.height(16.dp))
 
-                    RLParagraph(
-                        "I have truly valued the opportunities for growth and development that I have gained during my time here. I am grateful for the support, guidance, and encouragement I have received from you and the entire team."
-                    )
+                        RLParagraph(
+    "I have truly valued the opportunities for growth and development\nthat I have gained during my time here. I am grateful for the support,\nguidance, and encouragement I have received from you and the entire\nteam."
+)
+
+                    Spacer(Modifier.height(14.dp))
+
+                        RLParagraph(
+    "I will do my best to ensure a smooth transition by completing my\nassigned tasks and assisting in the turnover process before my last day."
+)
 
                     Spacer(Modifier.height(14.dp))
 
                     RLParagraph(
-                        "I will do my best to ensure a smooth transition by completing my assigned tasks and assisting in the turnover process before my last day."
-                    )
-
-                    Spacer(Modifier.height(14.dp))
-
-                    RLParagraph(
-                        "Thank you once again for the experience and for everything I have learned during my tenure."
-                    )
+    "Thank you once again for the experience and for everything I have\nlearned during my tenure."
+)
 
                     Spacer(Modifier.height(60.dp))
 
@@ -308,7 +317,7 @@ private fun RLInlineField(value: String, width: androidx.compose.ui.unit.Dp, onC
     ) {
         BasicTextField(
             value = value, onValueChange = onChange,
-            textStyle = TextStyle(fontFamily = FontFamily.Serif, fontStyle = FontStyle.Italic, fontSize = 16.sp, color = RLBlue),
+            textStyle = TextStyle(fontFamily = FontFamily.Serif, fontStyle = FontStyle.Italic, fontSize = 20.sp, color = RLBlue),
             cursorBrush = SolidColor(RLBlue),
             interactionSource = interactionSource,
             modifier = Modifier.widthIn(min = width)
