@@ -14,6 +14,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -307,7 +310,7 @@ private fun LetterIllustration(modifier: Modifier = Modifier) {
     }
 }
 
-// ================== Main hub content ==================
+// ================== Main hub content (now LazyColumn for smooth scroll) ==================
 
 @Composable
 private fun LettersHubContent(
@@ -320,137 +323,146 @@ private fun LettersHubContent(
     onMoreTemplates: () -> Unit,
     onNavigate: (String) -> Unit
 ) {
+    // Precompute the "other" letter types once instead of filtering every recomposition.
+    val otherTypes = remember {
+        LetterType.entries.filter { it != LetterType.LEAVE && it != LetterType.RESIGNATION && it != LetterType.EXCUSE }
+    }
+
     Column(modifier = Modifier.fillMaxSize()) {
-        Column(
+        LazyColumn(
             modifier = Modifier
                 .weight(1f)
-                .verticalScroll(rememberScrollState())
                 .padding(horizontal = 20.dp)
         ) {
-            Spacer(Modifier.height(20.dp))
+            item { Spacer(Modifier.height(20.dp)) }
 
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(
-                    modifier = Modifier
-                        .size(52.dp)
-                        .shadow(16.dp, RoundedCornerShape(14.dp), ambientColor = UrPink, spotColor = UrPink)
-                        .clip(RoundedCornerShape(14.dp))
-                        .background(Brush.verticalGradient(listOf(Color(0xFF3B6FE0), Color(0xFF081024))))
-                        .border(1.dp, UrPink, RoundedCornerShape(14.dp)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    EnvelopeIcon(modifier = Modifier.size(26.dp), color = Color.White)
+            item {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Box(
+                        modifier = Modifier
+                            .size(52.dp)
+                            .shadow(8.dp, RoundedCornerShape(14.dp), ambientColor = UrPink, spotColor = UrPink)
+                            .clip(RoundedCornerShape(14.dp))
+                            .background(Brush.verticalGradient(listOf(Color(0xFF3B6FE0), Color(0xFF081024))))
+                            .border(1.dp, UrPink, RoundedCornerShape(14.dp)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        EnvelopeIcon(modifier = Modifier.size(26.dp), color = Color.White)
+                    }
+                    Spacer(Modifier.width(12.dp))
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text("LETTERS", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 22.sp)
+                        Text("Professional Letters Made Easy", color = UrGray, fontSize = 12.sp)
+                    }
+                    Row(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(20.dp))
+                            .background(Color(0xFF2A0A16))
+                            .border(1.dp, Brush.linearGradient(listOf(Color(0xFF4C8DFF), Color.Black)), RoundedCornerShape(20.dp))
+                            .clickable { onPremiumTap() }
+                            .padding(horizontal = 12.dp, vertical = 6.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        CrownIcon(modifier = Modifier.size(14.dp))
+                        Spacer(Modifier.width(4.dp))
+                        Text("PREMIUM", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 10.sp)
+                    }
                 }
-                Spacer(Modifier.width(12.dp))
-                Column(modifier = Modifier.weight(1f)) {
-                    Text("LETTERS", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 22.sp)
-                    Text("Professional Letters Made Easy", color = UrGray, fontSize = 12.sp)
-                }
-                Row(
-                    modifier = Modifier
-                        .shadow(10.dp, RoundedCornerShape(20.dp), ambientColor = UrPink, spotColor = UrPink)
-                        .clip(RoundedCornerShape(20.dp))
-                        .background(Color(0xFF2A0A16))
-                        .border(1.dp, Brush.linearGradient(listOf(Color(0xFF4C8DFF), Color.Black)), RoundedCornerShape(20.dp))
-                        .clickable { onPremiumTap() }
-                        .padding(horizontal = 12.dp, vertical = 6.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    CrownIcon(modifier = Modifier.size(14.dp))
-                    Spacer(Modifier.width(4.dp))
-                    Text("PREMIUM", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 10.sp)
-                }
+                Spacer(Modifier.height(20.dp))
             }
 
-            Spacer(Modifier.height(20.dp))
-
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .shadow(24.dp, RoundedCornerShape(18.dp), ambientColor = UrPink, spotColor = UrGreen)
-                    .clip(RoundedCornerShape(18.dp))
-                    .background(Color(0xFF0A0A0A))
-                    .border(
-                        BorderStroke(1.5.dp, Brush.linearGradient(listOf(UrPink, UrGreen))),
-                        RoundedCornerShape(18.dp)
-                    )
-                    .padding(20.dp)
-            ) {
-                Row(verticalAlignment = Alignment.Top) {
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text("Create Professional", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 20.sp)
-                        Row {
-                            Text("Letters", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 20.sp)
-                            Text(" in Minutes", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 20.sp)
+            item {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .shadow(10.dp, RoundedCornerShape(18.dp), ambientColor = UrPink, spotColor = UrGreen)
+                        .clip(RoundedCornerShape(18.dp))
+                        .background(Color(0xFF0A0A0A))
+                        .border(
+                            BorderStroke(1.5.dp, Brush.linearGradient(listOf(UrPink, UrGreen))),
+                            RoundedCornerShape(18.dp)
+                        )
+                        .padding(20.dp)
+                ) {
+                    Row(verticalAlignment = Alignment.Top) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text("Create Professional", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                            Row {
+                                Text("Letters", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                                Text(" in Minutes", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                            }
+                        }
+                        LetterIllustration(modifier = Modifier.size(width = 90.dp, height = 80.dp))
+                    }
+                    Spacer(Modifier.height(14.dp))
+                    listOf("Ready-to-print", "HR Friendly", "Philippine Format").forEach { line ->
+                        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(vertical = 3.dp)) {
+                            Icon(Icons.Filled.CheckCircle, contentDescription = null, tint = UrGreen, modifier = Modifier.size(16.dp))
+                            Spacer(Modifier.width(8.dp))
+                            Text(line, color = Color.White, fontSize = 13.sp)
                         }
                     }
-                    LetterIllustration(modifier = Modifier.size(width = 90.dp, height = 80.dp))
                 }
-                Spacer(Modifier.height(14.dp))
-                listOf("Ready-to-print", "HR Friendly", "Philippine Format").forEach { line ->
-                    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(vertical = 3.dp)) {
-                        Icon(Icons.Filled.CheckCircle, contentDescription = null, tint = UrGreen, modifier = Modifier.size(16.dp))
-                        Spacer(Modifier.width(8.dp))
-                        Text(line, color = Color.White, fontSize = 13.sp)
-                    }
-                }
+                Spacer(Modifier.height(22.dp))
+                SectionLabel("POPULAR LETTERS", UrGreen)
+                Spacer(Modifier.height(10.dp))
             }
 
-            Spacer(Modifier.height(22.dp))
-            SectionLabel("POPULAR LETTERS", UrGreen)
-            Spacer(Modifier.height(10.dp))
+            item {
+                LetterCard(
+                    icon = { BriefcaseIcon(modifier = it) },
+                    badge = { Icon(Icons.Filled.BeachAccess, contentDescription = null, tint = Color.Black, modifier = it) },
+                    title = "Leave Letter",
+                    subtitle = "Request for leave from work or school",
+                    onClick = { onLeaveTap() }
+                )
+                Spacer(Modifier.height(12.dp))
+            }
+            item {
+                LetterCard(
+                    icon = { PersonIcon(modifier = it) },
+                    badge = { Icon(Icons.Filled.ExitToApp, contentDescription = null, tint = Color.Black, modifier = it) },
+                    title = "Resignation Letter",
+                    subtitle = "Formal resignation from your position",
+                    onClick = { onResignationTap() }
+                )
+                Spacer(Modifier.height(12.dp))
+            }
+            item {
+                LetterCard(
+                    icon = { PencilIcon(modifier = it) },
+                    badge = { Icon(Icons.Filled.Favorite, contentDescription = null, tint = Color.Black, modifier = it) },
+                    title = "Excuse Letter",
+                    subtitle = "Apology or reason for absence",
+                    onClick = { onExcuseTap() }
+                )
+            }
 
-            LetterCard(
-                icon = { BriefcaseIcon(modifier = it) },
-                badge = { Icon(Icons.Filled.BeachAccess, contentDescription = null, tint = Color.Black, modifier = it) },
-                title = "Leave Letter",
-                subtitle = "Request for leave from work or school",
-                onClick = { onLeaveTap() }
-            )
-            Spacer(Modifier.height(12.dp))
-            LetterCard(
-                icon = { PersonIcon(modifier = it) },
-                badge = { Icon(Icons.Filled.ExitToApp, contentDescription = null, tint = Color.Black, modifier = it) },
-                title = "Resignation Letter",
-                subtitle = "Formal resignation from your position",
-                onClick = { onResignationTap() }
-            )
-            Spacer(Modifier.height(12.dp))
-            LetterCard(
-                icon = { PencilIcon(modifier = it) },
-                badge = { Icon(Icons.Filled.Favorite, contentDescription = null, tint = Color.Black, modifier = it) },
-                title = "Excuse Letter",
-                subtitle = "Apology or reason for absence",
-                onClick = { onExcuseTap() }
-            )
-
-            LetterType.entries
-                .filter { it != LetterType.LEAVE && it != LetterType.RESIGNATION && it != LetterType.EXCUSE }
-                .forEach { type ->
-                    val (mainIcon, badgeIcon) = when (type) {
-                        LetterType.GOVT_SSS -> Icons.Filled.AccountBalance to Icons.Filled.Description
-                        LetterType.GOVT_PAGIBIG -> Icons.Filled.Home to Icons.Filled.Description
-                        LetterType.APPLICATION -> Icons.Filled.Description to Icons.Filled.Send
-                        LetterType.AUTHORIZATION -> Icons.Filled.VerifiedUser to Icons.Filled.CheckCircle
-                        LetterType.REFERRAL -> Icons.Filled.ThumbUp to Icons.Filled.Star
-                        LetterType.FOLLOW_UP -> Icons.Filled.Refresh to Icons.Filled.Schedule
-                        LetterType.THANK_YOU -> Icons.Filled.Favorite to Icons.Filled.Star
-                        LetterType.JOB_OFFER -> Icons.Filled.Work to Icons.Filled.CheckCircle
-                        LetterType.SALARY_INCREASE -> Icons.Filled.AttachMoney to Icons.Filled.TrendingUp
-                        LetterType.COMPLAINT -> Icons.Filled.ReportProblem to Icons.Filled.Warning
-                        LetterType.BRGY_CITY_REQUEST -> Icons.Filled.LocationCity to Icons.Filled.Description
-                        LetterType.SCHOLARSHIP -> Icons.Filled.School to Icons.Filled.Star
-                        LetterType.OJT_INTERNSHIP -> Icons.Filled.Build to Icons.Filled.Description
-                        LetterType.OTHERS_REQUEST -> Icons.Filled.HelpOutline to Icons.Filled.Description
-                        LetterType.CUSTOM -> Icons.Filled.Edit to Icons.Filled.Description
-                        else -> Icons.Filled.Description to Icons.Filled.Description
-                    }
-                    Spacer(Modifier.height(12.dp))
-                    LetterCard(
-                        icon = { Icon(mainIcon, contentDescription = null, tint = UrPink, modifier = it) },
-                        badge = { Icon(badgeIcon, contentDescription = null, tint = Color.Black, modifier = it) },
-                        title = type.label,
-                        subtitle = when (type) {
+            items(otherTypes, key = { it.name }) { type ->
+                val (mainIcon, badgeIcon) = when (type) {
+                    LetterType.GOVT_SSS -> Icons.Filled.AccountBalance to Icons.Filled.Description
+                    LetterType.GOVT_PAGIBIG -> Icons.Filled.Home to Icons.Filled.Description
+                    LetterType.APPLICATION -> Icons.Filled.Description to Icons.Filled.Send
+                    LetterType.AUTHORIZATION -> Icons.Filled.VerifiedUser to Icons.Filled.CheckCircle
+                    LetterType.REFERRAL -> Icons.Filled.ThumbUp to Icons.Filled.Star
+                    LetterType.FOLLOW_UP -> Icons.Filled.Refresh to Icons.Filled.Schedule
+                    LetterType.THANK_YOU -> Icons.Filled.Favorite to Icons.Filled.Star
+                    LetterType.JOB_OFFER -> Icons.Filled.Work to Icons.Filled.CheckCircle
+                    LetterType.SALARY_INCREASE -> Icons.Filled.AttachMoney to Icons.Filled.TrendingUp
+                    LetterType.COMPLAINT -> Icons.Filled.ReportProblem to Icons.Filled.Warning
+                    LetterType.BRGY_CITY_REQUEST -> Icons.Filled.LocationCity to Icons.Filled.Description
+                    LetterType.SCHOLARSHIP -> Icons.Filled.School to Icons.Filled.Star
+                    LetterType.OJT_INTERNSHIP -> Icons.Filled.Build to Icons.Filled.Description
+                    LetterType.OTHERS_REQUEST -> Icons.Filled.HelpOutline to Icons.Filled.Description
+                    LetterType.CUSTOM -> Icons.Filled.Edit to Icons.Filled.Description
+                    else -> Icons.Filled.Description to Icons.Filled.Description
+                }
+                Spacer(Modifier.height(12.dp))
+                LetterCard(
+                    icon = { Icon(mainIcon, contentDescription = null, tint = UrPink, modifier = it) },
+                    badge = { Icon(badgeIcon, contentDescription = null, tint = Color.Black, modifier = it) },
+                    title = type.label,
+                    subtitle = when (type) {
     LetterType.GOVT_SSS -> "para sa gusto mong padalhan para maayos/ayusin"
     LetterType.GOVT_PAGIBIG -> "Request or inquiry letter para sa Pag-IBIG"
     LetterType.APPLICATION -> "Job or school application letter"
@@ -468,45 +480,45 @@ private fun LettersHubContent(
     LetterType.CUSTOM -> "Gumawa ng sarili mong klase ng letter"
     else -> "Tap to create this letter"
 },
-                        onClick = { onPick(type) }
-                    )
-                }
-
-            Spacer(Modifier.height(18.dp))
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .shadow(20.dp, RoundedCornerShape(16.dp), ambientColor = UrGreen, spotColor = UrPink)
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(Color(0xFF0A0A0A))
-                    .border(
-                        BorderStroke(1.5.dp, Brush.linearGradient(listOf(UrPink, UrGreen))),
-                        RoundedCornerShape(16.dp)
-                    )
-                    .padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                CrownIcon(modifier = Modifier.size(30.dp))
-                Spacer(Modifier.width(12.dp))
-                Column(modifier = Modifier.weight(1f)) {
-                    Text("Go Premium", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 15.sp)
-                    Text("Unlock all templates and premium features", color = UrGray, fontSize = 11.sp)
-                }
-                Row(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(20.dp))
-                        .background(UrPink)
-                        .clickable { onPremiumTap() }
-                        .padding(horizontal = 14.dp, vertical = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text("UPGRADE NOW", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 11.sp)
-                    Icon(Icons.Filled.ChevronRight, contentDescription = null, tint = Color.White, modifier = Modifier.size(16.dp))
-                }
+                    onClick = { onPick(type) }
+                )
             }
 
-            Spacer(Modifier.height(20.dp))
+            item {
+                Spacer(Modifier.height(18.dp))
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .shadow(8.dp, RoundedCornerShape(16.dp), ambientColor = UrGreen, spotColor = UrPink)
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(Color(0xFF0A0A0A))
+                        .border(
+                            BorderStroke(1.5.dp, Brush.linearGradient(listOf(UrPink, UrGreen))),
+                            RoundedCornerShape(16.dp)
+                        )
+                        .padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    CrownIcon(modifier = Modifier.size(30.dp))
+                    Spacer(Modifier.width(12.dp))
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text("Go Premium", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 15.sp)
+                        Text("Unlock all templates and premium features", color = UrGray, fontSize = 11.sp)
+                    }
+                    Row(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(20.dp))
+                            .background(UrPink)
+                            .clickable { onPremiumTap() }
+                            .padding(horizontal = 14.dp, vertical = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text("UPGRADE NOW", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 11.sp)
+                        Icon(Icons.Filled.ChevronRight, contentDescription = null, tint = Color.White, modifier = Modifier.size(16.dp))
+                    }
+                }
+                Spacer(Modifier.height(20.dp))
+            }
         }
 
         Row(
@@ -614,14 +626,13 @@ private fun AllTemplatesContent(onBack: () -> Unit, onPick: (LetterType) -> Unit
             Text("Lahat ng Templates", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 20.sp)
         }
         Spacer(Modifier.height(16.dp))
-        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-            LetterType.entries.forEach { type ->
+        LazyColumn {
+            items(LetterType.entries, key = { it.name }) { type ->
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(14.dp))
                         .background(UrCardBg)
-                        .border(1.dp, Brush.linearGradient(listOf(Color(0xFF4C8DFF), Color.Black)), RoundedCornerShape(14.dp))
                         .border(1.dp, Brush.linearGradient(listOf(Color(0xFF4C8DFF), Color.Black)), RoundedCornerShape(14.dp))
                         .clickable { onPick(type) }
                         .padding(16.dp),
