@@ -135,7 +135,7 @@ fun ResignationLetterScreen() {
                         modifier = Modifier.fillMaxWidth()
                     )
 
-                    Spacer(Modifier.weight(0.5f))
+                    Spacer(Modifier.weight(0.7f))
 
 // Date
 RLField("Date", data.date, fieldWidth = 130.dp) { data = data.copy(date = it) }
@@ -209,7 +209,7 @@ FlowRow(modifier = Modifier.fillMaxWidth()) {
 
                   Spacer(Modifier.padding(start = 60.dp)) // hindi ito gagana mag-isa, tignan sa baba
 
-Spacer(Modifier.weight(0.5f))
+Spacer(Modifier.weight(0.08f))
 
 Box(modifier = Modifier.padding(start = 60.dp)) {
     RLPlainText("Yours sincerely,")
