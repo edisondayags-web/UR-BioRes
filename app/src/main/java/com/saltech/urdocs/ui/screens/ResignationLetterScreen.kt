@@ -64,7 +64,7 @@ data class ResignationFields(
 @Composable
 fun ResignationLetterScreen() {
     val paperWidthDp = 850.dp
-    val paperHeightDp = 1780.dp
+    val paperHeightDp = 1600.dp
     val context = LocalContext.current
     var data by remember { mutableStateOf(ResignationFields()) }
     var offset by remember { mutableStateOf(Offset.Zero) }
@@ -175,7 +175,7 @@ fun ResignationLetterScreen() {
                     FlowRow(modifier = Modifier.fillMaxWidth()) {
                         RLWord("as")
                         RLInlineField(data.position, 180.dp) { data = data.copy(position = it) }
-                        RLWord(", effective")
+                        RLWord("effective")
                         RLInlineField(data.effectiveDate, 180.dp) { data = data.copy(effectiveDate = it) }
                         RLWord(".")
                     }
