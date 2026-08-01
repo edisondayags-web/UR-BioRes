@@ -58,35 +58,7 @@ fun JobResearcherScreen(
     onBack: () -> Unit,
     repository: GeminiRepository = remember { GeminiRepository() }
 ) {
-    Box(modifier = Modifier.fillMaxSize().background(Color.Black)) {
-        Column(
-            modifier = Modifier.fillMaxSize().padding(24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Icon(Icons.Filled.WorkOutline, contentDescription = null, tint = JrBlue, modifier = Modifier.size(64.dp))
-            Spacer(Modifier.height(16.dp))
-            Text(
-                "coming soon pa to luv🩵",
-                color = Color.White,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Medium,
-                textAlign = androidx.compose.ui.text.style.TextAlign.Center
-            )
-        }
-        Box(
-            modifier = Modifier
-                .padding(16.dp)
-                .size(40.dp)
-                .clip(RoundedCornerShape(12.dp))
-                .background(Color.White.copy(alpha = 0.06f))
-                .border(1.dp, Brush.verticalGradient(listOf(JrBlue, Color.Black)), RoundedCornerShape(12.dp))
-                .clickable { onBack() },
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(Icons.Filled.ArrowBack, contentDescription = "Back", tint = JrBlue)
-        }
-    }
+    JobResearcherScreenOriginal(onBack = onBack, repository = repository)
 }
 
 @Composable
