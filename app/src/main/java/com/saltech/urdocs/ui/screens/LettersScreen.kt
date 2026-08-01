@@ -738,22 +738,11 @@ private fun LetterFormContent(
 
         Spacer(modifier = Modifier.height(20.dp))
         Button(
-            onClick = {
-                viewModel.generate(
-                    LetterRequest(
-                        type = selectedType,
-                        fullName = fullName,
-                        position = position,
-                        company = company,
-                        reason = reason,
-                        dateNeeded = dateNeeded
-                    )
-                )
-            },
-            enabled = !uiState.isLoading && fullName.isNotBlank(),
+        onClick = { },
+            enabled = false,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(if (uiState.isLoading) "Ginagawa..." else "Generate Letter")
+            Text("Coming Soon")
         }
 
         uiState.error?.let {
