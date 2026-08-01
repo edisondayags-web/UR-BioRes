@@ -11,13 +11,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -154,23 +154,21 @@ private val govtCategories = listOf(
         9,
         "unknown",
         listOf(
-          GovtLink(41, "Police Clearance", "https://pnpclearance.ph/", "PNP"),
-          GovtLink(42, "National ID", "https://national-id.gov.ph/", "ID"),
-          GovtLink(43, "eGovPH", "https://egovph.ph/", "EGOV"),
-          GovtLink(44, "PSA Serbilis", "https://psaserbilis.com.ph/", "PSA")
-          
-          )
-     ),
+            GovtLink(41, "Police Clearance", "https://pnpclearance.ph/", "PNP"),
+            GovtLink(42, "National ID", "https://national-id.gov.ph/", "ID"),
+            GovtLink(43, "eGovPH", "https://egovph.ph/", "EGOV"),
+            GovtLink(44, "PSA Serbilis", "https://psaserbilis.com.ph/", "PSA")
+        )
+    ),
     GovtCategory(
         10,
         "unknown",
         listOf(
-           GovtLink(45, "DOJ", "https://doj.gov.ph/", "DOJ"),
-           GovtLink(46, "Supreme Court", "https://sc.judiciary.gov.ph/", "SC"),
-           GovtLink(47, "PAO", "https://pao.gov.ph/", "PAO")
-
-             )
-        ),
+            GovtLink(45, "DOJ", "https://doj.gov.ph/", "DOJ"),
+            GovtLink(46, "Supreme Court", "https://sc.judiciary.gov.ph/", "SC"),
+            GovtLink(47, "PAO", "https://pao.gov.ph/", "PAO")
+        )
+    ),
     GovtCategory(
         11,
         "unknown",
@@ -234,7 +232,7 @@ private val govtCategories = listOf(
         )
     ),
 )
-   
+
 private val categoryFilters = listOf(
     CategoryFilter("All", Icons.Filled.GridView, null, GGreen),
     CategoryFilter("Big 5", Icons.Filled.Star, 1, GPink),
@@ -264,163 +262,181 @@ fun GovtFormsScreen(
         }
     }
 
-    val filterCatIndex = categoryFilters[selectedFilter].categoryIndex
-    val baseCategories = if (filterCatIndex == null) {
-        govtCategories
-    } else {
-        govtCategories.filter { it.index == filterCatIndex }
-    }
-
-    val filteredCategories = if (query.isBlank()) {
-        baseCategories
-    } else {
-        baseCategories.mapNotNull { cat ->
-            val matches = cat.links.filter {
-                it.name.contains(query, ignoreCase = true)
+    // FIX: derivedStateOf so this list is only recalculated when query/selectedFilter
+    // actually change, not on every recomposition/scroll frame.
+    val filteredCategories by remember {
+        derivedStateOf {
+            val filterCatIndex = categoryFilters[selectedFilter].categoryIndex
+            val baseCategories = if (filterCatIndex == null) {
+                govtCategories
+            } else {
+                govtCategories.filter { it.index == filterCatIndex }
             }
-            if (matches.isNotEmpty()) cat.copy(links = matches) else null
+
+            if (query.isBlank()) {
+                baseCategories
+            } else {
+                baseCategories.mapNotNull { cat ->
+                    val matches = cat.links.filter {
+                        it.name.contains(query, ignoreCase = true)
+                    }
+                    if (matches.isNotEmpty()) cat.copy(links = matches) else null
+                }
+            }
         }
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
+    val suggestionMatches by remember {
+        derivedStateOf {
+            if (query.isBlank()) {
+                emptyList()
+            } else {
+                govtCategories.flatMap { it.links }
+                    .filter { it.name.contains(query, ignoreCase = true) }
+                    .take(5)
+            }
+        }
+    }
+
+    // FIX: single LazyColumn drives the ENTIRE screen now (header content as
+    // items + the category cards as items). Only what's on-screen gets
+    // composed/measured, instead of the old Column+verticalScroll building
+    // and keeping all 17 categories / 67 links alive at once.
+    LazyColumn(
+        modifier = Modifier.fillMaxSize()
     ) {
 
         // ---------- TOP ROW: back + search + heart ----------
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 12.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(40.dp)
-                    .clip(RoundedCornerShape(10.dp))
-                    .border(1.dp, Brush.linearGradient(listOf(Color(0xFF4C8DFF), Color.Black)), RoundedCornerShape(10.dp))
-                    .clickable { onNavigate("home") },
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    Icons.Filled.ArrowBack,
-                    contentDescription = "Back",
-                    tint = GPink
-                )
-            }
-            Spacer(Modifier.width(10.dp))
+        item {
             Row(
                 modifier = Modifier
-                    .weight(1f)
-                    .clip(RoundedCornerShape(24.dp))
-                    .background(GCardBg)
-                    .border(
-                        BorderStroke(1.5.dp, Brush.horizontalGradient(listOf(GPink, GGreen))),
-                        RoundedCornerShape(24.dp)
-                    )
-                    .padding(horizontal = 14.dp, vertical = 0.dp),
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-
-            Icon(
-                Icons.Filled.Search,
-                contentDescription = null,
-                tint = GGray,
-                modifier = Modifier.size(20.dp)
-            )
-            Spacer(Modifier.width(8.dp))
-            TextField(
-                value = query,
-                onValueChange = { query = it },
-                placeholder = {
-                    Text(
-                        "search🔍",
-                        color = GGray,
-                        fontSize = 13.sp
+                Box(
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(RoundedCornerShape(10.dp))
+                        .border(1.dp, Brush.linearGradient(listOf(Color(0xFF4C8DFF), Color.Black)), RoundedCornerShape(10.dp))
+                        .clickable { onNavigate("home") },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        Icons.Filled.ArrowBack,
+                        contentDescription = "Back",
+                        tint = GPink
                     )
-                },
-                modifier = Modifier.weight(1f),
-                colors = TextFieldDefaults.colors(
-                    focusedContainerColor = Color.Transparent,
-                    unfocusedContainerColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    focusedTextColor = Color.White,
-                    unfocusedTextColor = Color.White
-                ),
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search)
-            )
-            Icon(
-                Icons.Filled.Tune,
-                contentDescription = null,
-                tint = GPink,
-                modifier = Modifier.size(20.dp)
-            )
-        
-            }
-            Spacer(Modifier.width(10.dp))
-            Box(
-                modifier = Modifier
-                    .size(40.dp)
-                    .clip(RoundedCornerShape(10.dp))
-                    .border(1.dp, Brush.linearGradient(listOf(Color(0xFF4C8DFF), Color.Black)), RoundedCornerShape(10.dp)),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    Icons.Filled.Favorite,
-                    contentDescription = null,
-                    tint = GPink,
-                    modifier = Modifier.size(20.dp)
-                )
+                }
+                Spacer(Modifier.width(10.dp))
+                Row(
+                    modifier = Modifier
+                        .weight(1f)
+                        .clip(RoundedCornerShape(24.dp))
+                        .background(GCardBg)
+                        .border(
+                            BorderStroke(1.5.dp, Brush.horizontalGradient(listOf(GPink, GGreen))),
+                            RoundedCornerShape(24.dp)
+                        )
+                        .padding(horizontal = 14.dp, vertical = 0.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+
+                    Icon(
+                        Icons.Filled.Search,
+                        contentDescription = null,
+                        tint = GGray,
+                        modifier = Modifier.size(20.dp)
+                    )
+                    Spacer(Modifier.width(8.dp))
+                    TextField(
+                        value = query,
+                        onValueChange = { query = it },
+                        placeholder = {
+                            Text(
+                                "search\uD83D\uDD0D",
+                                color = GGray,
+                                fontSize = 13.sp
+                            )
+                        },
+                        modifier = Modifier.weight(1f),
+                        colors = TextFieldDefaults.colors(
+                            focusedContainerColor = Color.Transparent,
+                            unfocusedContainerColor = Color.Transparent,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            focusedTextColor = Color.White,
+                            unfocusedTextColor = Color.White
+                        ),
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search)
+                    )
+                    Icon(
+                        Icons.Filled.Tune,
+                        contentDescription = null,
+                        tint = GPink,
+                        modifier = Modifier.size(20.dp)
+                    )
+
+                }
+                Spacer(Modifier.width(10.dp))
+                Box(
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(RoundedCornerShape(10.dp))
+                        .border(1.dp, Brush.linearGradient(listOf(Color(0xFF4C8DFF), Color.Black)), RoundedCornerShape(10.dp)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        Icons.Filled.Favorite,
+                        contentDescription = null,
+                        tint = GPink,
+                        modifier = Modifier.size(20.dp)
+                    )
+                }
             }
         }
 
         // ---------- LIVE SEARCH SUGGESTIONS ----------
-        val suggestionMatches = if (query.isBlank()) {
-            emptyList()
-        } else {
-            govtCategories.flatMap { it.links }
-                .filter { it.name.contains(query, ignoreCase = true) }
-                .take(5)
-        }
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .heightIn(min = 50.dp)
-                .padding(horizontal = 16.dp)
-        ) {
-            if (suggestionMatches.isNotEmpty()) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
-                ) {
-                    suggestionMatches.forEach { link ->
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clip(RoundedCornerShape(10.dp))
-                                .clickable { openLink(link.url) }
-                                .padding(horizontal = 10.dp, vertical = 8.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Icon(Icons.Filled.Search, contentDescription = null, tint = GGray, modifier = Modifier.size(14.dp))
-                            Spacer(Modifier.width(8.dp))
-                            Text(link.name, color = Color.White, fontSize = 13.sp, modifier = Modifier.weight(1f))
-                            Icon(Icons.Filled.OpenInNew, contentDescription = null, tint = GPink, modifier = Modifier.size(14.dp))
+        item {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(min = 50.dp)
+                    .padding(horizontal = 16.dp)
+            ) {
+                if (suggestionMatches.isNotEmpty()) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                    ) {
+                        suggestionMatches.forEach { link ->
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clip(RoundedCornerShape(10.dp))
+                                    .clickable { openLink(link.url) }
+                                    .padding(horizontal = 10.dp, vertical = 8.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Icon(Icons.Filled.Search, contentDescription = null, tint = GGray, modifier = Modifier.size(14.dp))
+                                Spacer(Modifier.width(8.dp))
+                                Text(link.name, color = Color.White, fontSize = 13.sp, modifier = Modifier.weight(1f))
+                                Icon(Icons.Filled.OpenInNew, contentDescription = null, tint = GPink, modifier = Modifier.size(14.dp))
+                            }
                         }
                     }
                 }
             }
         }
-        // ---------- LOGO / TITLE ----------
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
 
+        // ---------- LOGO / TITLE ----------
+        item {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 Icon(
                     Icons.Filled.AccountBalance,
                     contentDescription = null,
@@ -453,265 +469,274 @@ fun GovtFormsScreen(
                     color = GGray,
                     fontSize = 10.sp
                 )
-            
-        }
+            }
 
-        Spacer(Modifier.height(12.dp))
+            Spacer(Modifier.height(12.dp))
+        }
 
         // ---------- FILTER CHIPS ----------
-        LazyRow(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            itemsIndexed(categoryFilters) { idx, filter ->
-                val isSelected = idx == selectedFilter
-                Column(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(14.dp))
-                        .background(if (isSelected) GCardBg else Color.Transparent)
-                        .border(
-                            1.dp,
-                            if (isSelected) Brush.linearGradient(listOf(Color(0xFF4C8DFF), Color.Black)) else Brush.linearGradient(listOf(Color.Transparent, Color.Transparent)),
-                            RoundedCornerShape(14.dp)
+        item {
+            LazyRow(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                itemsIndexed(categoryFilters) { idx, filter ->
+                    val isSelected = idx == selectedFilter
+                    Column(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(14.dp))
+                            .background(if (isSelected) GCardBg else Color.Transparent)
+                            .border(
+                                1.dp,
+                                if (isSelected) Brush.linearGradient(listOf(Color(0xFF4C8DFF), Color.Black)) else Brush.linearGradient(listOf(Color.Transparent, Color.Transparent)),
+                                RoundedCornerShape(14.dp)
+                            )
+                            .clickable {
+                                selectedFilter = idx
+                                expandedCategory = filter.categoryIndex
+                            }
+                            .padding(horizontal = 10.dp, vertical = 8.dp)
+                            .widthIn(min = 54.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Icon(
+                            filter.icon,
+                            contentDescription = null,
+                            tint = filter.iconColor,
+                            modifier = Modifier.size(16.dp)
                         )
-                        .clickable {
-                            selectedFilter = idx
-                            expandedCategory = filter.categoryIndex
-                        }
-                        .padding(horizontal = 10.dp, vertical = 8.dp)
-                        .widthIn(min = 54.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Icon(
-                        filter.icon,
-                        contentDescription = null,
-                        tint = filter.iconColor,
-                        modifier = Modifier.size(16.dp)
-                    )
-                    Spacer(Modifier.height(4.dp))
-                    Text(
-                        filter.label,
-                        color = if (isSelected) Color.White else GGray,
-                        fontSize = 9.sp,
-                        textAlign = TextAlign.Center
-                    )
+                        Spacer(Modifier.height(4.dp))
+                        Text(
+                            filter.label,
+                            color = if (isSelected) Color.White else GGray,
+                            fontSize = 9.sp,
+                            textAlign = TextAlign.Center
+                        )
+                    }
                 }
             }
-        }
 
-        Spacer(Modifier.height(14.dp))
+            Spacer(Modifier.height(14.dp))
+        }
 
         // ---------- COUNTER ROW ----------
-        val totalLinks = filteredCategories.sumOf { it.links.size }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Column {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        "$totalLinks",
-                        color = GGreen,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 15.sp
-                    )
-                    Spacer(Modifier.width(6.dp))
-                    Text(
-                        "OFFICIAL LINKS",
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 13.sp
-                    )
-                }
-                Spacer(Modifier.height(3.dp))
-                Box(
-                    modifier = Modifier
-                        .width(28.dp)
-                        .height(2.dp)
-                        .background(GGreen)
-                )
-            }
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    "Tap any link to open",
-                    color = GGray,
-                    fontSize = 11.sp
-                )
-                Spacer(Modifier.width(4.dp))
-                Icon(
-                    Icons.Filled.AutoAwesome,
-                    contentDescription = null,
-                    tint = GGreen,
-                    modifier = Modifier.size(12.dp)
-                )
-            }
-        }
-
-        Spacer(Modifier.height(10.dp))
-
-        // ---------- CATEGORY LIST ----------
-        Column(
-            modifier = Modifier
-                .weight(1f)
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 16.dp)
-        ) {
-            filteredCategories.forEach { category ->
-                val isExpanded = expandedCategory == category.index || query.isNotBlank()
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 12.dp)
-                        .clip(RoundedCornerShape(16.dp))
-                        .background(GCardBg)
-                        .border(
-                            BorderStroke(1.dp, Brush.horizontalGradient(listOf(GPink, GGreen))),
-                            RoundedCornerShape(16.dp)
-                        )
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-                                expandedCategory = if (expandedCategory == category.index) {
-                                    null
-                                } else {
-                                    category.index
-                                }
-                            }
-                            .padding(14.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        val badgeColor = if (category.index % 2 == 1) GPink else GGreen
-                        Box(
-                            modifier = Modifier
-                                .size(26.dp)
-                                .clip(CircleShape)
-                                .border(1.dp, badgeColor, CircleShape),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                "${category.index}",
-                                color = badgeColor,
-                                fontSize = 12.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                        Spacer(Modifier.width(10.dp))
-                        Text(
-                            category.title,
-                            color = Color.White,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 13.sp,
-                            modifier = Modifier.weight(1f)
-                        )
-                        Box(
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(50))
-                                .border(1.dp, if (category.index % 2 == 1) GGreen else GPink, RoundedCornerShape(50))
-                                .padding(horizontal = 10.dp, vertical = 3.dp)
-                        ) {
-                            Text(
-                                "${category.links.size}",
-                                color = if (category.index % 2 == 1) GGreen else GPink,
-                                fontSize = 11.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                        Spacer(Modifier.width(8.dp))
-                        Icon(
-                            Icons.Filled.KeyboardArrowDown,
-                            contentDescription = null,
-                            tint = GGray,
-                            modifier = Modifier
-                                .size(20.dp)
-                                .rotate(if (isExpanded) 180f else 0f)
-                        )
-                    }
-
-                    AnimatedVisibility(
-                        visible = isExpanded,
-                        enter = expandVertically(),
-                        exit = shrinkVertically()
-                    ) {
-                        Column(
-                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
-                        ) {
-                            category.links.forEach { link ->
-                                Row(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .clip(RoundedCornerShape(10.dp))
-                                        .clickable { openLink(link.url) }
-                                        .padding(vertical = 10.dp, horizontal = 8.dp),
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    // Logo circle (placeholder initials until real logos are added)
-                                    Box(
-                                        modifier = Modifier
-                                            .size(32.dp)
-                                            .clip(CircleShape)
-                                            .background(Color.White),
-                                        contentAlignment = Alignment.Center
-                                    ) {
-                                        Text(
-                                            link.initials,
-                                            color = Color.Black,
-                                            fontSize = 8.sp,
-                                            fontWeight = FontWeight.Bold
-                                        )
-                                    }
-                                    Spacer(Modifier.width(10.dp))
-                                    // ID badge — rounded square, green
-                                    Box(
-                                        modifier = Modifier
-                                            .size(22.dp)
-                                            .clip(RoundedCornerShape(6.dp))
-                                            .border(1.dp, GGreen, RoundedCornerShape(6.dp)),
-                                        contentAlignment = Alignment.Center
-                                    ) {
-                                        Text(
-                                            "${link.id}",
-                                            color = GGreen,
-                                            fontSize = 9.sp,
-                                            fontWeight = FontWeight.Bold
-                                        )
-                                    }
-                                    Spacer(Modifier.width(10.dp))
-                                    Column(modifier = Modifier.weight(1f)) {
-                                        Text(
-                                            link.name,
-                                            color = Color.White,
-                                            fontSize = 14.sp
-                                        )
-                                        Text(
-                                            link.url,
-                                            color = Color.White,
-                                            fontSize = 10.sp
-                                        )
-                                    }
-                                    Icon(
-                                        Icons.Filled.OpenInNew,
-                                        contentDescription = null,
-                                        tint = GPink,
-                                        modifier = Modifier.size(16.dp)
-                                    )
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            // ---------- DISCLAIMER ----------
+        item {
+            val totalLinks = filteredCategories.sumOf { it.links.size }
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            "$totalLinks",
+                            color = GGreen,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 15.sp
+                        )
+                        Spacer(Modifier.width(6.dp))
+                        Text(
+                            "OFFICIAL LINKS",
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 13.sp
+                        )
+                    }
+                    Spacer(Modifier.height(3.dp))
+                    Box(
+                        modifier = Modifier
+                            .width(28.dp)
+                            .height(2.dp)
+                            .background(GGreen)
+                    )
+                }
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        "Tap any link to open",
+                        color = GGray,
+                        fontSize = 11.sp
+                    )
+                    Spacer(Modifier.width(4.dp))
+                    Icon(
+                        Icons.Filled.AutoAwesome,
+                        contentDescription = null,
+                        tint = GGreen,
+                        modifier = Modifier.size(12.dp)
+                    )
+                }
+            }
+
+            Spacer(Modifier.height(10.dp))
+        }
+
+        // ---------- CATEGORY LIST ----------
+        // FIX: this is the part that was actually causing the lag. It's now
+        // `items(..., key = ...)` inside the LazyColumn above, so each category
+        // card is only composed when it's near the visible viewport, and Compose
+        // can track/reuse each card by its stable key instead of redrawing
+        // everything on every scroll tick.
+        items(
+            items = filteredCategories,
+            key = { it.index }
+        ) { category ->
+            val isExpanded = expandedCategory == category.index || query.isNotBlank()
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 0.dp)
+                    .padding(bottom = 12.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(GCardBg)
+                    .border(
+                        BorderStroke(1.dp, Brush.horizontalGradient(listOf(GPink, GGreen))),
+                        RoundedCornerShape(16.dp)
+                    )
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            expandedCategory = if (expandedCategory == category.index) {
+                                null
+                            } else {
+                                category.index
+                            }
+                        }
+                        .padding(14.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    val badgeColor = if (category.index % 2 == 1) GPink else GGreen
+                    Box(
+                        modifier = Modifier
+                            .size(26.dp)
+                            .clip(CircleShape)
+                            .border(1.dp, badgeColor, CircleShape),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            "${category.index}",
+                            color = badgeColor,
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                    Spacer(Modifier.width(10.dp))
+                    Text(
+                        category.title,
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 13.sp,
+                        modifier = Modifier.weight(1f)
+                    )
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(50))
+                            .border(1.dp, if (category.index % 2 == 1) GGreen else GPink, RoundedCornerShape(50))
+                            .padding(horizontal = 10.dp, vertical = 3.dp)
+                    ) {
+                        Text(
+                            "${category.links.size}",
+                            color = if (category.index % 2 == 1) GGreen else GPink,
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                    Spacer(Modifier.width(8.dp))
+                    Icon(
+                        Icons.Filled.KeyboardArrowDown,
+                        contentDescription = null,
+                        tint = GGray,
+                        modifier = Modifier
+                            .size(20.dp)
+                            .rotate(if (isExpanded) 180f else 0f)
+                    )
+                }
+
+                AnimatedVisibility(
+                    visible = isExpanded,
+                    enter = expandVertically(),
+                    exit = shrinkVertically()
+                ) {
+                    Column(
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
+                    ) {
+                        category.links.forEach { link ->
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clip(RoundedCornerShape(10.dp))
+                                    .clickable { openLink(link.url) }
+                                    .padding(vertical = 10.dp, horizontal = 8.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                // Logo circle (placeholder initials until real logos are added)
+                                Box(
+                                    modifier = Modifier
+                                        .size(32.dp)
+                                        .clip(CircleShape)
+                                        .background(Color.White),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Text(
+                                        link.initials,
+                                        color = Color.Black,
+                                        fontSize = 8.sp,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                }
+                                Spacer(Modifier.width(10.dp))
+                                // ID badge -- rounded square, green
+                                Box(
+                                    modifier = Modifier
+                                        .size(22.dp)
+                                        .clip(RoundedCornerShape(6.dp))
+                                        .border(1.dp, GGreen, RoundedCornerShape(6.dp)),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Text(
+                                        "${link.id}",
+                                        color = GGreen,
+                                        fontSize = 9.sp,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                }
+                                Spacer(Modifier.width(10.dp))
+                                Column(modifier = Modifier.weight(1f)) {
+                                    Text(
+                                        link.name,
+                                        color = Color.White,
+                                        fontSize = 14.sp
+                                    )
+                                    Text(
+                                        link.url,
+                                        color = Color.White,
+                                        fontSize = 10.sp
+                                    )
+                                }
+                                Icon(
+                                    Icons.Filled.OpenInNew,
+                                    contentDescription = null,
+                                    tint = GPink,
+                                    modifier = Modifier.size(16.dp)
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // ---------- DISCLAIMER ----------
+        item {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
                     .clip(RoundedCornerShape(14.dp))
                     .background(GCardBg)
                     .border(1.dp, GGreen, RoundedCornerShape(14.dp))
