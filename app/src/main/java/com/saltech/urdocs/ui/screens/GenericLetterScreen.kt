@@ -556,7 +556,7 @@ fun GenericLetterScreen(letterType: LetterType, onBack: () -> Unit = {}) {
 
     Column(modifier = Modifier.fillMaxSize()) {
         IconButton(onClick = onBack) {
-            Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
+            Icon(Icons.Filled.ArrowBack, contentDescription = "Back", tint = Color.White)
         }
         BoxWithConstraints(modifier = Modifier.weight(1f).background(Color.Black)) {
             val fitScale = minOf(maxWidth / paperWidthDp, maxHeight / paperHeightDp)
