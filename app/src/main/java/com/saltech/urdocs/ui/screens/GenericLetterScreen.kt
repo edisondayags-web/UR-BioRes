@@ -48,6 +48,10 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 
 private val GLBlue = Color(0xFF1D3FB5)
 
@@ -510,7 +514,7 @@ private fun contentFor(type: LetterType): LetterContent = when (type) {
 
 @OptIn(androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
 @Composable
-fun GenericLetterScreen(letterType: LetterType) {
+fun GenericLetterScreen(letterType: LetterType, onBack: () -> Unit = {}) {
     val content = remember(letterType) { contentFor(letterType) }
     val paperWidthDp = 850.dp
     val paperHeightDp = 1600.dp
@@ -551,6 +555,9 @@ fun GenericLetterScreen(letterType: LetterType) {
     val bodyFontStyle = if (isPlainMode) FontStyle.Normal else FontStyle.Italic
 
     Column(modifier = Modifier.fillMaxSize()) {
+        IconButton(onClick = onBack) {
+            Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
+        }
         BoxWithConstraints(modifier = Modifier.weight(1f).background(Color.Black)) {
             val fitScale = minOf(maxWidth / paperWidthDp, maxHeight / paperHeightDp)
             var scale by remember { mutableStateOf(fitScale) }
