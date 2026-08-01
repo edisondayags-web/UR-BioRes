@@ -19,6 +19,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Button
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.foundation.layout.fillMaxWidth
 
 /**
  * Reusable scaffold for the 4 detail screens -- same neon look
@@ -140,5 +148,63 @@ fun AboutDeveloperScreen(onBack: () -> Unit) {
 
         BodyHeading("Sal-Tech")
         BodyText("Sal-Tech is a startup currently preparing its papers and registration. UR BioRes is the first product under this brand.")
+    }
+}
+
+@Composable
+fun MyProfileScreen(onBack: () -> Unit) {
+    val context = LocalContext.current
+    val prefs = remember { context.getSharedPreferences("ur_profile", android.content.Context.MODE_PRIVATE) }
+
+    var fullName by remember { mutableStateOf(prefs.getString("full_name", "") ?: "") }
+    var address by remember { mutableStateOf(prefs.getString("address", "") ?: "") }
+    var age by remember { mutableStateOf(prefs.getString("age", "") ?: "") }
+    var contactNumber by remember { mutableStateOf(prefs.getString("contact_number", "") ?: "") }
+    var email by remember { mutableStateOf(prefs.getString("email", "") ?: "") }
+
+    DetailScreenScaffold(title = "My Profile", onBack = onBack) {
+        BodyHeading("Your Information")
+        BodyText("Fill this out once and it will be used to auto-fill your resumes, bio-data, and letters.")
+
+        Spacer(modifier = Modifier.height(16.dp))
+        OutlinedTextField(
+            value = fullName, onValueChange = { fullName = it },
+            label = { Text("Full Name") }, modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(12.dp))
+        OutlinedTextField(
+            value = address, onValueChange = { address = it },
+            label = { Text("Address") }, modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(12.dp))
+        OutlinedTextField(
+            value = age, onValueChange = { age = it },
+            label = { Text("Age") }, modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(12.dp))
+        OutlinedTextField(
+            value = contactNumber, onValueChange = { contactNumber = it },
+            label = { Text("Contact Number") }, modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(12.dp))
+        OutlinedTextField(
+            value = email, onValueChange = { email = it },
+            label = { Text("Email") }, modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(20.dp))
+        Button(
+            onClick = {
+                prefs.edit()
+                    .putString("full_name", fullName)
+                    .putString("address", address)
+                    .putString("age", age)
+                    .putString("contact_number", contactNumber)
+                    .putString("email", email)
+                    .apply()
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Save Profile")
+        }
     }
 }

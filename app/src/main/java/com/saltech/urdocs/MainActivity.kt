@@ -105,6 +105,9 @@ class MainActivity : ComponentActivity() {
                             onNavigate = { route -> navController.navigate(route) }
                         )
                     }
+                    composable(Screen.MyProfile.route) {
+                        MyProfileScreen(onBack = { navController.popBackStack() })
+                    }
                     composable(Screen.PrivacyPolicy.route) {
                         PrivacyPolicyScreen(onBack = { navController.popBackStack() })
                     }

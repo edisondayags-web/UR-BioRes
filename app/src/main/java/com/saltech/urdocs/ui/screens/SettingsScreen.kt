@@ -53,6 +53,7 @@ data class SettingsItemData(
  *   composable(SettingsRoutes.PRIVACY_POLICY) { PrivacyPolicyScreen(onBack = { navController.popBackStack() }) }
  */
 object SettingsRoutes {
+    const val MY_PROFILE = "my_profile"
     const val PRIVACY_POLICY = "privacy_policy"
     const val TERMS_CONDITIONS = "terms_conditions"
     const val DATA_PERMISSIONS = "data_permissions"
@@ -67,6 +68,9 @@ fun SettingsScreen(
     val context = LocalContext.current
 
     val sections = listOf(
+            "ACCOUNT" to listOf(
+                SettingsItemData("👤", "My Profile", "Set up your info for auto-fill", SettingsRoutes.MY_PROFILE, enabled = true),
+            ),
         "PRIVACY & SECURITY" to listOf(
             SettingsItemData("🔒", "Privacy Policy", "Learn how we protect your data", SettingsRoutes.PRIVACY_POLICY, enabled = true),
             SettingsItemData("📄", "Terms & Conditions", "Read our terms and conditions", SettingsRoutes.TERMS_CONDITIONS, enabled = true),
