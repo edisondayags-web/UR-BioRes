@@ -72,9 +72,9 @@ fun LettersScreen(
             label = "lettersScreenTransition"
         ) { state ->
 when (state) {
-    "resignation" -> ResignationLetterScreen()
-    "leave" -> LeaveLetterScreen()
-    "generic" -> GenericLetterScreen(letterType = selectedType)
+    "resignation" -> ResignationLetterScreen(onBack = { screenState = "hub" })
+    "leave" -> LeaveLetterScreen(onBack = { screenState = "hub" })
+    "generic" -> GenericLetterScreen(letterType = selectedType, onBack = { screenState = "hub" })
     "form" -> LetterFormContent(
         viewModel = viewModel,
         initialType = selectedType,

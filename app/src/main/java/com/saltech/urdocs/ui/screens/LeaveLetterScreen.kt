@@ -46,6 +46,10 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 
 private val LLBlue = Color(0xFF1D3FB5)
 
@@ -61,7 +65,7 @@ private const val DEFAULT_LEAVE_BODY_TEXT =
 
 @OptIn(androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
 @Composable
-fun LeaveLetterScreen() {
+fun LeaveLetterScreen(onBack: () -> Unit = {}) {
     val paperWidthDp = 850.dp
     val paperHeightDp = 1600.dp
     val context = LocalContext.current
@@ -107,6 +111,9 @@ fun LeaveLetterScreen() {
     val bodyFontStyle = if (isPlainMode) FontStyle.Normal else FontStyle.Italic
 
     Column(modifier = Modifier.fillMaxSize()) {
+        IconButton(onClick = onBack) {
+            Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
+        }
         BoxWithConstraints(modifier = Modifier.weight(1f).background(Color.Black)) {
             val fitScale = minOf(maxWidth / paperWidthDp, maxHeight / paperHeightDp)
             var scale by remember { mutableStateOf(fitScale) }
