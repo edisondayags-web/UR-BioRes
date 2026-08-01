@@ -1,4 +1,6 @@
 package com.saltech.urdocs.ui.screens
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.Dispatchers
 
 import android.content.ContentValues
 import android.graphics.Bitmap
@@ -324,15 +326,17 @@ fun ResignationLetterScreen() {
                     fun proceedDownload() {
                         coroutineScope.launch {
                             delay(100)
-                            val bitmap = Bitmap.createBitmap(
-                                picture.width.coerceAtLeast(1),
-                                picture.height.coerceAtLeast(1),
-                                Bitmap.Config.ARGB_8888
-                            )
-                            val canvas = android.graphics.Canvas(bitmap)
-                            canvas.drawColor(android.graphics.Color.WHITE)
-                            canvas.drawPicture(picture)
-                            saveResignationToGallery(context, bitmap)
+                            withContext(Dispatchers.Default) {
+                                tmap(
+                                    picture.width.coerceAtLeast(1),
+                                    picture.height.coerceAtLeast(1),
+                                    Bitmap.Config.ARGB_8888
+                                )
+                                val canvas = android.graphics.Canvas(bitmap)
+                                canvas.drawColor(android.graphics.Color.WHITE)
+                                canvas.drawPicture(picture)
+                                saveResignationToGallery(context, bitmap)
+                            }
                         }
                     }
                     if (activity != null && interstitialAd != null) {
