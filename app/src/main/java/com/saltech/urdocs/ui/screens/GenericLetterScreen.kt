@@ -398,6 +398,105 @@ private fun contentFor(type: LetterType): LetterContent = when (type) {
         fileNamePrefix = "Custom"
     )
 
+    // Researched: medical authorization needs patient info, grantor, authorized person,
+    // relationship, and emergency contact - not Employee ID/Department.
+    LetterType.MEDICAL_AUTHORIZATION -> LetterContent(
+        title = "MEDICAL AUTHORIZATION LETTER",
+        subject = "Medical Authorization",
+        salutation = "To Whom It May Concern,",
+        defaultBody =
+            "I, the undersigned, hereby authorize the person named below to make\n" +
+            "medical decisions and consent to treatment on behalf of the patient\n" +
+            "named below, in the event that I am unavailable or unable to do so\n" +
+            "myself.\n\n" +
+            "This authorization covers routine and emergency medical care, including\n" +
+            "consultations, procedures, and treatment as deemed necessary by the\n" +
+            "attending physician.\n\n" +
+            "Please contact me immediately using the information below regarding\n" +
+            "any medical decisions concerning the patient.",
+        closingLine = "Sincerely,",
+        closingFields = listOf(
+            ClosingField("Patient's Name", 180.dp),
+            ClosingField("Grantor's Name (Parent/Guardian)", 220.dp),
+            ClosingField("Authorized Person's Name", 190.dp),
+            ClosingField("Relationship to Patient", 170.dp),
+            ClosingField("Emergency Contact No.", 170.dp),
+            ClosingField("Signature", 130.dp)
+        ),
+        fileNamePrefix = "MedicalAuth"
+    )
+
+    // Researched: Affidavit of Loss is a sworn statement - needs affiant details + valid ID,
+    // and MUST be notarized afterward (letter alone has no legal effect until notarized).
+    LetterType.AFFIDAVIT_LOSS -> LetterContent(
+        title = "AFFIDAVIT OF LOSS",
+        subject = "Affidavit of Loss",
+        salutation = "To Whom It May Concern,",
+        defaultBody =
+            "I, the undersigned, after having been duly sworn in accordance with law,\n" +
+            "depose and state that:\n\n" +
+            "1. I am the lawful owner/holder of the document/item described above;\n\n" +
+            "2. Said document/item was lost under the circumstances stated above,\n" +
+            "despite diligent efforts to locate it;\n\n" +
+            "3. I am executing this affidavit to attest to the truth of the foregoing\n" +
+            "and for whatever legal purpose it may serve, such as requesting a\n" +
+            "replacement of the lost document/item.\n\n" +
+            "Note: This affidavit must be signed before a notary public to be legally\n" +
+            "valid. Please bring a valid government-issued ID when you have this\n" +
+            "notarized.",
+        closingLine = "Affiant,",
+        closingFields = listOf(
+            ClosingField("Affiant's Full Name", 190.dp),
+            ClosingField("Valid ID No.", 150.dp),
+            ClosingField("Signature", 130.dp)
+        ),
+        fileNamePrefix = "AffidavitOfLoss"
+    )
+
+    LetterType.MEDICAL_ASSISTANCE -> LetterContent(
+        title = "MEDICAL/FINANCIAL ASSISTANCE REQUEST",
+        subject = "Request for Medical/Financial Assistance",
+        salutation = "Dear Sir/Madam,",
+        defaultBody =
+            "I am writing to respectfully request financial or medical assistance\n" +
+            "for the hospitalization/treatment stated above.\n\n" +
+            "This request is urgent due to the immediate medical needs involved,\n" +
+            "and any support you can provide would greatly help ease this burden.\n" +
+            "Supporting documents (medical certificate, hospital bill, etc.) are\n" +
+            "attached for your reference.\n\n" +
+            "Thank you for your kind consideration and prompt attention to this\n" +
+            "request.",
+        closingLine = "Respectfully yours,",
+        closingFields = listOf(
+            ClosingField("Full Name", 180.dp),
+            ClosingField("Contact Number", 150.dp),
+            ClosingField("Signature", 130.dp)
+        ),
+        fileNamePrefix = "MedicalAssistance"
+    )
+
+    LetterType.PARENTAL_CONSENT -> LetterContent(
+        title = "PARENTAL/GUARDIAN CONSENT LETTER",
+        subject = "Parental/Guardian Consent",
+        salutation = "To Whom It May Concern,",
+        defaultBody =
+            "I, the undersigned parent/legal guardian, hereby give my full consent\n" +
+            "and permission for my child/ward named below to travel/undergo the\n" +
+            "activity stated above, accompanied by the person named below.\n\n" +
+            "I take full responsibility for this decision and trust that my\n" +
+            "child/ward will be well taken care of during this time.\n\n" +
+            "Please contact me should you need any further confirmation.",
+        closingLine = "Sincerely,",
+        closingFields = listOf(
+            ClosingField("Parent/Guardian Name", 190.dp),
+            ClosingField("Child's/Ward's Name", 180.dp),
+            ClosingField("Accompanying Adult", 170.dp),
+            ClosingField("Contact Number", 150.dp),
+            ClosingField("Signature", 130.dp)
+        ),
+        fileNamePrefix = "ParentalConsent"
+    )
+
     else -> LetterContent(
         title = "LETTER",
         subject = "Letter",
