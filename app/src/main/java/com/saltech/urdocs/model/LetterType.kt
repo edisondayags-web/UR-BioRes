@@ -18,6 +18,10 @@ enum class LetterType(val label: String) {
     SCHOLARSHIP("Scholarship Application Letter"),
     OJT_INTERNSHIP("OJT/Internship Letter"),
     OTHERS_REQUEST("Other Requests"),
+    MEDICAL_AUTHORIZATION("Medical Authorization Letter"),
+    AFFIDAVIT_LOSS("Affidavit of Loss"),
+    MEDICAL_ASSISTANCE("Medical/Financial Assistance Request"),
+    PARENTAL_CONSENT("Parental/Guardian Consent Letter"),
     CUSTOM("Custom / Iba pa")
 }
 
