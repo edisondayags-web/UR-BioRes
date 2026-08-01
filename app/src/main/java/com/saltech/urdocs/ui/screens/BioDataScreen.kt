@@ -108,6 +108,22 @@ fun BioDataScreen(
     var showPaymentDialog by remember { mutableStateOf(false) }
     var hasPaid by remember { mutableStateOf(false) }
     var data by remember { mutableStateOf(BioDataFields()) }
+    LaunchedEffect(Unit) {
+        if (data.name.isBlank()) {
+            val profile = context.getSharedPreferences("ur_profile", android.content.Context.MODE_PRIVATE)
+            val savedName = profile.getString("full_name", "") ?: ""
+            if (savedName.isNotBlank()) {
+                data = data.copy(
+                    name = savedName,
+                    currentAddress = profile.getString("address", "") ?: "",
+                    age = profile.getString("age", "") ?: "",
+                    cellphone = profile.getString("contact_number", "") ?: "",
+                    email = profile.getString("email", "") ?: ""
+                )
+                android.widget.Toast.makeText(context, "Welcome back, $savedName! Auto-filled from your profile.", android.widget.Toast.LENGTH_LONG).show()
+            }
+        }
+    }
     var offset by remember { mutableStateOf(Offset.Zero) }
 
   //  if (showPaymentDialog) {
