@@ -89,6 +89,26 @@ class GeminiRepository {
             "General Request Letter (kahit anong klase ng request na hindi pa nabanggit)",
             "buong pangalan, ang partikular na hinihiling, at kanino ipapadala"
         ),
+        LetterType.JOBSEEKER_OATH to LetterConfig(
+            "Oath of Undertaking (First-Time Jobseeker)",
+            "buong pangalan, address, edad, kailan una mag-a-apply ng trabaho -- ito ay pormal na sinumpaang salaysay (oath) na sumusunod sa RA 11261 (First-Time Jobseekers Assistance Act), nagsasaad na ito ang UNANG BESES ng requester na mag-aaplay ng trabaho at hindi pa sila nakinabang sa benepisyong ito dati; gamitin ang tamang legal na tono ng isang sinumpaang salaysay"
+        ),
+        LetterType.MEDICAL_AUTHORIZATION to LetterConfig(
+            "Medical Authorization Letter",
+            "buong pangalan ng pasyente, relasyon ng nagbibigay ng awtorisasyon, buong pangalan ng taong pinagkakatiwalaan/awtorisado, dahilan (hal. medical procedure, paggamot, o pagsama sa ospital), petsa o saklaw ng awtorisasyon"
+        ),
+        LetterType.AFFIDAVIT_LOSS to LetterConfig(
+            "Affidavit of Loss",
+            "buong pangalan ng nagsasalaysay, address, deskripsyon ng nawalang item/dokumento, kung kailan at saan ito nawala, layunin ng affidavit (hal. para sa palit ng ID, requirement sa insurance) -- gamitin ang tamang legal na tono ng isang sinumpaang salaysay"
+        ),
+        LetterType.MEDICAL_ASSISTANCE to LetterConfig(
+            "Medical/Financial Assistance Request",
+            "buong pangalan ng humihingi, address, dahilan ng kahilingan (uri ng sakit o pangangailangang medikal), tinatayang gastos kung meron, kanino ipapadala (hal. DSWD, ospital, LGU, ahensya)"
+        ),
+        LetterType.PARENTAL_CONSENT to LetterConfig(
+            "Parental/Guardian Consent Letter",
+            "buong pangalan ng magulang/guardian, buong pangalan ng anak/menor de edad, dahilan ng consent (hal. field trip, paglalakbay, medical procedure, trabaho), petsa o saklaw ng pahintulot"
+        ),
         LetterType.CUSTOM to LetterConfig(
             "Custom na letter base sa eksaktong sasabihin ng user",
             "buong pangalan, layunin ng letter, at kanino ipapadala"

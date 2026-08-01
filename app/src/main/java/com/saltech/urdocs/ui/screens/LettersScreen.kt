@@ -454,6 +454,7 @@ private fun LettersHubContent(
                     LetterType.SCHOLARSHIP -> Icons.Filled.School to Icons.Filled.Star
                     LetterType.OJT_INTERNSHIP -> Icons.Filled.Build to Icons.Filled.Description
                     LetterType.OTHERS_REQUEST -> Icons.Filled.HelpOutline to Icons.Filled.Description
+                    LetterType.JOBSEEKER_OATH -> Icons.Filled.Badge to Icons.Filled.Description
                     LetterType.CUSTOM -> Icons.Filled.Edit to Icons.Filled.Description
                     else -> Icons.Filled.Description to Icons.Filled.Description
                 }
@@ -477,6 +478,7 @@ private fun LettersHubContent(
     LetterType.SCHOLARSHIP -> "form para mag apply ng scholarship"
     LetterType.OJT_INTERNSHIP -> "Application letter para sa fresh grad na mag OJT"
     LetterType.OTHERS_REQUEST -> "other requests pa na gusto mo? tap mo lang luv"
+    LetterType.JOBSEEKER_OATH -> "Libreng oath para sa unang beses mag-a-apply ng trabaho (RA 11261)"
     LetterType.CUSTOM -> "Gumawa ng sarili mong klase ng letter"
     else -> "Tap to create this letter"
 },
