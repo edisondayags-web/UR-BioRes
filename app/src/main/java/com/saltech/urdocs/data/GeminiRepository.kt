@@ -109,6 +109,26 @@ class GeminiRepository {
             "Parental/Guardian Consent Letter",
             "buong pangalan ng magulang/guardian, buong pangalan ng anak/menor de edad, dahilan ng consent (hal. field trip, paglalakbay, medical procedure, trabaho), petsa o saklaw ng pahintulot"
         ),
+        LetterType.AFFIDAVIT_DISCREPANCY to LetterConfig(
+            "Affidavit of Discrepancy",
+            "buong pangalan ng nagsasalaysay, address, ang dalawang magkaibang detalye (hal. maling spelling ng pangalan o petsa ng kapanganakan) na lumalabas sa iba't ibang dokumento/ID, at pagpapatunay na iisang tao lang ang tinutukoy ng dalawang detalye -- gamitin ang tamang legal na tono ng isang sinumpaang salaysay"
+        ),
+        LetterType.SPA to LetterConfig(
+            "Special Power of Attorney",
+            "buong pangalan ng nagbibigay ng kapangyarihan (principal), buong pangalan ng kinatawan/ahente (attorney-in-fact), tiyak na gawain o transaksyon na ipinapahintulot (hal. mag-claim ng dokumento, mag-withdraw sa bangko, mag-representa sa gov't office), petsa o saklaw ng bisa -- gamitin ang pormal na legal na wika ng isang Special Power of Attorney"
+        ),
+        LetterType.DEMAND_LETTER to LetterConfig(
+            "Demand Letter (Simple/Personal)",
+            "buong pangalan ng humihingi, buong pangalan ng pinadadalhan, dahilan ng demand (hal. hindi nabayarang utang, hindi natupad na kasunduan), halaga o obligasyon, deadline para tumugon -- gamitin ang pormal, maigsi, at diretsahang tono; huwag magbanggit ng partikular na batas maliban kung nakalagay ang partikular na batayan"
+        ),
+        LetterType.AFFIDAVIT_DESISTANCE to LetterConfig(
+            "Affidavit of Desistance",
+            "buong pangalan ng nagsasalaysay, address, deskripsyon ng complaint o kaso na ninanais bawiin, dahilan ng pagbawi (hal. nakipag-areglo na, hindi na interesado ituloy) -- gamitin ang tamang legal na tono ng isang sinumpaang salaysay"
+        ),
+        LetterType.AFFIDAVIT_TWO_PERSONS to LetterConfig(
+            "Affidavit of Two Disinterested Persons",
+            "buong pangalan ng DALAWANG nagsasalaysay (hindi kamag-anak ng paksa), address nila, ano ang pinatutunayan nila (hal. tunay na tirahan o pagkakakilanlan ng isang tao), kaugnayan nila sa taong pinatutunayan (hal. kapitbahay) -- gamitin ang tamang legal na tono ng isang joint affidavit"
+        ),
         LetterType.CUSTOM to LetterConfig(
             "Custom na letter base sa eksaktong sasabihin ng user",
             "buong pangalan, layunin ng letter, at kanino ipapadala"

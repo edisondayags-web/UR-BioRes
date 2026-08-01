@@ -23,6 +23,11 @@ enum class LetterType(val label: String) {
     MEDICAL_ASSISTANCE("Medical/Financial Assistance Request"),
     PARENTAL_CONSENT("Parental/Guardian Consent Letter"),
     JOBSEEKER_OATH("Oath of Undertaking (First-Time Jobseeker)"),
+    AFFIDAVIT_DISCREPANCY("Affidavit of Discrepancy"),
+    SPA("Special Power of Attorney"),
+    DEMAND_LETTER("Demand Letter (Simple/Personal)"),
+    AFFIDAVIT_DESISTANCE("Affidavit of Desistance"),
+    AFFIDAVIT_TWO_PERSONS("Affidavit of Two Disinterested Persons"),
     CUSTOM("Custom / Iba pa")
 }
 

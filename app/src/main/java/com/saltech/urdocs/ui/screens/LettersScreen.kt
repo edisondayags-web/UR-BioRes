@@ -455,6 +455,11 @@ private fun LettersHubContent(
                     LetterType.OJT_INTERNSHIP -> Icons.Filled.Build to Icons.Filled.Description
                     LetterType.OTHERS_REQUEST -> Icons.Filled.HelpOutline to Icons.Filled.Description
                     LetterType.JOBSEEKER_OATH -> Icons.Filled.Badge to Icons.Filled.Description
+                    LetterType.AFFIDAVIT_DISCREPANCY -> Icons.Filled.Rule to Icons.Filled.Description
+                    LetterType.SPA -> Icons.Filled.Gavel to Icons.Filled.Description
+                    LetterType.DEMAND_LETTER -> Icons.Filled.Warning to Icons.Filled.Description
+                    LetterType.AFFIDAVIT_DESISTANCE -> Icons.Filled.RemoveCircle to Icons.Filled.Description
+                    LetterType.AFFIDAVIT_TWO_PERSONS -> Icons.Filled.Groups to Icons.Filled.Description
                     LetterType.CUSTOM -> Icons.Filled.Edit to Icons.Filled.Description
                     else -> Icons.Filled.Description to Icons.Filled.Description
                 }
@@ -479,6 +484,11 @@ private fun LettersHubContent(
     LetterType.OJT_INTERNSHIP -> "Application letter para sa fresh grad na mag OJT"
     LetterType.OTHERS_REQUEST -> "other requests pa na gusto mo? tap mo lang luv"
     LetterType.JOBSEEKER_OATH -> "Libreng oath para sa unang beses mag-a-apply ng trabaho (RA 11261)"
+            LetterType.AFFIDAVIT_DISCREPANCY -> "Para sa magkaibang detalye sa pangalan o birthdate sa iyong mga dokumento"
+            LetterType.SPA -> "Bigyan ng kapangyarihan ang iba na mag-transact para sa'yo"
+            LetterType.DEMAND_LETTER -> "Pormal na paghingi ng bayad o pagtupad sa obligasyon"
+            LetterType.AFFIDAVIT_DESISTANCE -> "Pagbawi sa isang complaint o kaso"
+            LetterType.AFFIDAVIT_TWO_PERSONS -> "Patunay mula sa dalawang testigo na hindi kamag-anak"
     LetterType.CUSTOM -> "Gumawa ng sarili mong klase ng letter"
     else -> "Tap to create this letter"
 },
