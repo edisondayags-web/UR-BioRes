@@ -214,6 +214,7 @@ fun MyProfileScreen(onBack: () -> Unit) {
                     .putString("contact_number", contactNumber)
                     .putString("email", email)
                     .apply()
+                android.widget.Toast.makeText(context, "Profile saved!", android.widget.Toast.LENGTH_SHORT).show()
             },
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(
