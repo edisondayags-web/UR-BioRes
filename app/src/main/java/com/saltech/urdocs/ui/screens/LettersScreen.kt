@@ -48,6 +48,11 @@ private val UrGreen = Color(0xFF0B1530)
 private val UrCardBg = Color(0xFF161616)
 private val UrGray = Color(0xFF9A9A9A)
 
+private val headerGradient = Brush.verticalGradient(listOf(Color(0xFF3B6FE0), Color(0xFF081024)))
+private val premiumBorderGradient = Brush.linearGradient(listOf(Color(0xFFF4C8FF), Color.Black))
+private val cardBorderGradient = Brush.linearGradient(listOf(UrPink, UrGreen))
+
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LettersScreen(
@@ -343,7 +348,7 @@ private fun LettersHubContent(
                             .size(52.dp)
                             .shadow(8.dp, RoundedCornerShape(14.dp), ambientColor = UrPink, spotColor = UrPink)
                             .clip(RoundedCornerShape(14.dp))
-                            .background(Brush.verticalGradient(listOf(Color(0xFF3B6FE0), Color(0xFF081024))))
+                            .background(headerGradient)
                             .border(1.dp, UrPink, RoundedCornerShape(14.dp)),
                         contentAlignment = Alignment.Center
                     ) {
@@ -358,7 +363,7 @@ private fun LettersHubContent(
                         modifier = Modifier
                             .clip(RoundedCornerShape(20.dp))
                             .background(Color(0xFF2A0A16))
-                            .border(1.dp, Brush.linearGradient(listOf(Color(0xFF4C8DFF), Color.Black)), RoundedCornerShape(20.dp))
+                            .border(1.dp, premiumBorderGradient, RoundedCornerShape(20.dp))
                             .clickable { onPremiumTap() }
                             .padding(horizontal = 12.dp, vertical = 6.dp),
                         verticalAlignment = Alignment.CenterVertically
@@ -379,7 +384,7 @@ private fun LettersHubContent(
                         .clip(RoundedCornerShape(18.dp))
                         .background(Color(0xFF0A0A0A))
                         .border(
-                            BorderStroke(1.5.dp, Brush.linearGradient(listOf(UrPink, UrGreen))),
+                            BorderStroke(1.5.dp, cardBorderGradient),
                             RoundedCornerShape(18.dp)
                         )
                         .padding(20.dp)
@@ -505,7 +510,7 @@ private fun LettersHubContent(
                         .clip(RoundedCornerShape(16.dp))
                         .background(Color(0xFF0A0A0A))
                         .border(
-                            BorderStroke(1.5.dp, Brush.linearGradient(listOf(UrPink, UrGreen))),
+                            BorderStroke(1.5.dp, cardBorderGradient),
                             RoundedCornerShape(16.dp)
                         )
                         .padding(16.dp),
@@ -540,7 +545,7 @@ private fun LettersHubContent(
                 .clip(RoundedCornerShape(24.dp))
                 .background(Color(0xFF0A0A0A))
                 .border(
-                    BorderStroke(1.5.dp, Brush.linearGradient(listOf(UrPink, UrGreen))),
+                    BorderStroke(1.5.dp, cardBorderGradient),
                     RoundedCornerShape(24.dp)
                 )
                 .padding(vertical = 10.dp),
@@ -578,7 +583,7 @@ private fun LetterCard(
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
             .background(UrCardBg)
-            .border(1.dp, Brush.linearGradient(listOf(Color(0xFF4C8DFF), Color.Black)), RoundedCornerShape(16.dp))
+            .border(1.dp, premiumBorderGradient, RoundedCornerShape(16.dp))
             .clickable { onClick() }
             .padding(14.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -588,7 +593,7 @@ private fun LetterCard(
                 .size(54.dp)
                 .clip(RoundedCornerShape(12.dp))
                 .background(Color(0xFF1F1F1F))
-                .border(1.dp, Brush.linearGradient(listOf(Color(0xFF4C8DFF), Color.Black)), RoundedCornerShape(12.dp)),
+                .border(1.dp, premiumBorderGradient, RoundedCornerShape(12.dp)),
             contentAlignment = Alignment.Center
         ) {
             icon(Modifier.size(24.dp))
@@ -645,7 +650,7 @@ private fun AllTemplatesContent(onBack: () -> Unit, onPick: (LetterType) -> Unit
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(14.dp))
                         .background(UrCardBg)
-                        .border(1.dp, Brush.linearGradient(listOf(Color(0xFF4C8DFF), Color.Black)), RoundedCornerShape(14.dp))
+                        .border(1.dp, premiumBorderGradient, RoundedCornerShape(14.dp))
                         .clickable { onPick(type) }
                         .padding(16.dp),
                     verticalAlignment = Alignment.CenterVertically
