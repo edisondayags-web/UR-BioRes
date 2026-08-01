@@ -21,6 +21,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
@@ -155,6 +157,17 @@ fun AboutDeveloperScreen(onBack: () -> Unit) {
 fun MyProfileScreen(onBack: () -> Unit) {
     val context = LocalContext.current
     val prefs = remember { context.getSharedPreferences("ur_profile", android.content.Context.MODE_PRIVATE) }
+    val fieldColors = OutlinedTextFieldDefaults.colors(
+        focusedTextColor = SettingsColors.TextWhite,
+        unfocusedTextColor = SettingsColors.TextWhite,
+        focusedBorderColor = SettingsColors.NeonPink,
+        unfocusedBorderColor = SettingsColors.NeonPink.copy(alpha = 0.5f),
+        focusedLabelColor = SettingsColors.NeonPink,
+        unfocusedLabelColor = SettingsColors.TextMuted,
+        cursorColor = SettingsColors.NeonPink,
+        focusedContainerColor = SettingsColors.Background,
+        unfocusedContainerColor = SettingsColors.Background
+    )
 
     var fullName by remember { mutableStateOf(prefs.getString("full_name", "") ?: "") }
     var address by remember { mutableStateOf(prefs.getString("address", "") ?: "") }
@@ -169,27 +182,27 @@ fun MyProfileScreen(onBack: () -> Unit) {
         Spacer(modifier = Modifier.height(16.dp))
         OutlinedTextField(
             value = fullName, onValueChange = { fullName = it },
-            label = { Text("Full Name") }, modifier = Modifier.fillMaxWidth()
+            label = { Text("Full Name") }, modifier = Modifier.fillMaxWidth(), colors = fieldColors
         )
         Spacer(modifier = Modifier.height(12.dp))
         OutlinedTextField(
             value = address, onValueChange = { address = it },
-            label = { Text("Address") }, modifier = Modifier.fillMaxWidth()
+            label = { Text("Address") }, modifier = Modifier.fillMaxWidth(), colors = fieldColors
         )
         Spacer(modifier = Modifier.height(12.dp))
         OutlinedTextField(
             value = age, onValueChange = { age = it },
-            label = { Text("Age") }, modifier = Modifier.fillMaxWidth()
+            label = { Text("Age") }, modifier = Modifier.fillMaxWidth(), colors = fieldColors
         )
         Spacer(modifier = Modifier.height(12.dp))
         OutlinedTextField(
             value = contactNumber, onValueChange = { contactNumber = it },
-            label = { Text("Contact Number") }, modifier = Modifier.fillMaxWidth()
+            label = { Text("Contact Number") }, modifier = Modifier.fillMaxWidth(), colors = fieldColors
         )
         Spacer(modifier = Modifier.height(12.dp))
         OutlinedTextField(
             value = email, onValueChange = { email = it },
-            label = { Text("Email") }, modifier = Modifier.fillMaxWidth()
+            label = { Text("Email") }, modifier = Modifier.fillMaxWidth(), colors = fieldColors
         )
         Spacer(modifier = Modifier.height(20.dp))
         Button(
@@ -202,7 +215,11 @@ fun MyProfileScreen(onBack: () -> Unit) {
                     .putString("email", email)
                     .apply()
             },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = SettingsColors.NeonPink,
+                contentColor = SettingsColors.TextWhite
+            )
         ) {
             Text("Save Profile")
         }
