@@ -1,6 +1,4 @@
 package com.saltech.urdocs.ui.screens
-import kotlinx.coroutines.withContext
-import kotlinx.coroutines.Dispatchers
 import com.saltech.urdocs.util.SecureScreen
 
 import android.content.ContentValues
@@ -470,17 +468,15 @@ fun BioDataScreen(
                             offset = Offset.Zero
                             coroutineScope.launch {
                                 delay(100)
-                                withContext(Dispatchers.Default) {
-                                    (
-                                        picture.width.coerceAtLeast(1),
-                                        picture.height.coerceAtLeast(1),
-                                        Bitmap.Config.ARGB_8888
-                                    )
-                                    val canvas = android.graphics.Canvas(bitmap)
-                                    canvas.drawColor(android.graphics.Color.WHITE)
-                                    canvas.drawPicture(picture)
-                                    saveBitmapToGallery(context, bitmap)
-                                }
+                                val bitmap = Bitmap.createBitmap(
+                                    picture.width.coerceAtLeast(1),
+                                    picture.height.coerceAtLeast(1),
+                                    Bitmap.Config.ARGB_8888
+                                )
+                                val canvas = android.graphics.Canvas(bitmap)
+                                canvas.drawColor(android.graphics.Color.WHITE)
+                                canvas.drawPicture(picture)
+                                saveBitmapToGallery(context, bitmap)
                             }
                         }
                         val activity = context as? android.app.Activity
