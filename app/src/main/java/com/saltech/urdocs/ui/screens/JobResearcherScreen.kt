@@ -109,6 +109,16 @@ private fun JobResearcherScreenOriginal(
     var blockedUntil by remember { mutableStateOf(prefs.getLong("blocked_until", 0L)) }
     var moderationNotice by remember { mutableStateOf<String?>(null) }
 
+    var rateWindowStart by remember { mutableStateOf(prefs.getLong("rate_window_start", 0L)) }
+    var rateMessageCount by remember { mutableStateOf(prefs.getInt("rate_message_count", 0)) }
+    val maxMessagesPerWindow = 50
+    val rateWindowDurationMillis = 24 * 60 * 60 * 1000L
+
+    fun formatUnblockTime(millis: Long): String {
+        val sdf = SimpleDateFormat("MMM d, h:mm a", Locale.getDefault())
+        return sdf.format(java.util.Date(millis))
+    }
+
     val badWords = listOf(
         "putangina", "putang ina", "tangina", "pakshet", "pakyu", "gago", "gaga",
         "tarantado", "ulol", "bobo", "inutil", "hayop", "hayup", "leche",
@@ -133,8 +143,7 @@ private fun JobResearcherScreenOriginal(
         if (text.isBlank() || isTyping) return
 
         if (isCurrentlyBlocked()) {
-            val hoursLeft = ((blockedUntil - System.currentTimeMillis()) / 3600000L) + 1
-            moderationNotice = "Naka-block ka pa para sa mensaheng ito. Subukan ulit pagkalipas ng ${hoursLeft} oras."
+            moderationNotice = "Naka-block ka pa hanggang ${formatUnblockTime(blockedUntil)}. Balik ka na lang dito luv pagdating ng oras na 'yan 🩵"
             return
         }
 
@@ -157,12 +166,27 @@ private fun JobResearcherScreenOriginal(
                         .putInt("strike_count", 0)
                         .apply()
                     strikeCount = 0
-                    moderationNotice = "Na-block ka na dahil sa paulit-ulit na pagmumura. Subukan ulit pagkalipas ng 2 araw."
+                    moderationNotice = "Balik ka na lang dito luv ng ${formatUnblockTime(blockedUntil)}, baka sa oras na 'yan ay maganda na ulit ang mood mo 🩵"
                 }
             }
             inputText = ""
             return
         }
+
+        val now = System.currentTimeMillis()
+        if (now - rateWindowStart > rateWindowDurationMillis) {
+            rateWindowStart = now
+            rateMessageCount = 0
+            prefs.edit().putLong("rate_window_start", rateWindowStart).putInt("rate_message_count", 0).apply()
+        }
+        if (rateMessageCount >= maxMessagesPerWindow) {
+            val resetTime = rateWindowStart + rateWindowDurationMillis
+            moderationNotice = "Marami ka nang tinatanong luv! Balik ka na lang dito ng ${formatUnblockTime(resetTime)} 🩵"
+            inputText = ""
+            return
+        }
+        rateMessageCount += 1
+        prefs.edit().putInt("rate_message_count", rateMessageCount).apply()
 
         moderationNotice = null
         addMessage(text, isUser = true)
