@@ -33,6 +33,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.saltech.urdocs.data.GeminiRepository
@@ -102,12 +103,68 @@ private fun JobResearcherScreenOriginal(
     var isTyping by remember { mutableStateOf(false) }
     var started by remember { mutableStateOf(false) }
 
+    val context = LocalContext.current
+    val prefs = remember { context.getSharedPreferences("jr_moderation", android.content.Context.MODE_PRIVATE) }
+    var strikeCount by remember { mutableStateOf(prefs.getInt("strike_count", 0)) }
+    var blockedUntil by remember { mutableStateOf(prefs.getLong("blocked_until", 0L)) }
+    var moderationNotice by remember { mutableStateOf<String?>(null) }
+
+    val badWords = listOf(
+        "putangina", "putang ina", "tangina", "pakshet", "pakyu", "gago", "gaga",
+        "tarantado", "ulol", "bobo", "inutil", "hayop", "hayup", "leche",
+        "puta", "kupal", "peste", "bwisit", "punyeta", "letse",
+        "fuck", "shit", "bitch", "asshole", "bastard", "cunt", "dick", "slut"
+    )
+
+    fun containsProfanity(text: String): Boolean {
+        val lower = text.lowercase()
+        return badWords.any { lower.contains(it) }
+    }
+
+    fun isCurrentlyBlocked(): Boolean {
+        return System.currentTimeMillis() < blockedUntil
+    }
+
     fun addMessage(text: String, isUser: Boolean) {
         messages = messages + JrChatMessage(text = text, isUser = isUser)
     }
 
     fun handleUserInput(text: String) {
         if (text.isBlank() || isTyping) return
+
+        if (isCurrentlyBlocked()) {
+            val hoursLeft = ((blockedUntil - System.currentTimeMillis()) / 3600000L) + 1
+            moderationNotice = "Naka-block ka pa para sa mensaheng ito. Subukan ulit pagkalipas ng ${hoursLeft} oras."
+            return
+        }
+
+        if (containsProfanity(text)) {
+            strikeCount += 1
+            prefs.edit().putInt("strike_count", strikeCount).apply()
+
+            when {
+                strikeCount == 1 -> {
+                    moderationNotice = "Mag-ingat sa pananalita luv. Ito ang unang warning mo."
+                }
+                strikeCount == 2 -> {
+                    moderationNotice = "Pangalawang warning na 'to. Kapag inulit mo pa, ma-block ka ng 2 araw."
+                }
+                strikeCount >= 3 -> {
+                    val blockDurationMillis = 2 * 24 * 60 * 60 * 1000L
+                    blockedUntil = System.currentTimeMillis() + blockDurationMillis
+                    prefs.edit()
+                        .putLong("blocked_until", blockedUntil)
+                        .putInt("strike_count", 0)
+                        .apply()
+                    strikeCount = 0
+                    moderationNotice = "Na-block ka na dahil sa paulit-ulit na pagmumura. Subukan ulit pagkalipas ng 2 araw."
+                }
+            }
+            inputText = ""
+            return
+        }
+
+        moderationNotice = null
         addMessage(text, isUser = true)
         val updatedHistory = history + ("user" to text)
         history = updatedHistory
@@ -195,6 +252,26 @@ private fun JobResearcherScreenOriginal(
             Icon(Icons.Filled.ArrowBack, contentDescription = "Back", tint = JrBlue)
         }
 
+        moderationNotice?.let { notice ->
+            Box(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 78.dp, start = 16.dp, end = 16.dp)
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(14.dp))
+                    .background(Color(0xFFB00020).copy(alpha = 0.92f))
+                    .padding(horizontal = 14.dp, vertical = 10.dp)
+            ) {
+                Text(
+                    notice,
+                    color = Color.White,
+                    fontSize = 12.sp,
+                    textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+        }
+
         Row(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
@@ -212,7 +289,8 @@ private fun JobResearcherScreenOriginal(
             TextField(
                 value = inputText,
                 onValueChange = { inputText = it },
-                placeholder = { Text("Type your message...", color = JrGray, fontSize = 13.sp) },
+                enabled = !isCurrentlyBlocked(),
+                placeholder = { Text(if (isCurrentlyBlocked()) "Naka-block ka pansamantala..." else "Type your message...", color = JrGray, fontSize = 13.sp) },
                 modifier = Modifier.weight(1f),
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = Color.Transparent,
@@ -228,8 +306,11 @@ private fun JobResearcherScreenOriginal(
                 modifier = Modifier
                     .size(34.dp)
                     .clip(CircleShape)
-                    .background(Brush.verticalGradient(listOf(JrBlue, JrBlueDeep)))
-                    .clickable { handleUserInput(inputText) },
+                    .background(
+                        if (isCurrentlyBlocked()) Brush.verticalGradient(listOf(Color.Gray, Color.DarkGray))
+                        else Brush.verticalGradient(listOf(JrBlue, JrBlueDeep))
+                    )
+                    .clickable(enabled = !isCurrentlyBlocked()) { handleUserInput(inputText) },
                 contentAlignment = Alignment.Center
             ) {
                 Icon(Icons.Filled.Send, contentDescription = "Send", tint = Color.White, modifier = Modifier.size(16.dp))
