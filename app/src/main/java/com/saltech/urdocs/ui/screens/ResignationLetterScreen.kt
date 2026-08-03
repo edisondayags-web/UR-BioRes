@@ -8,7 +8,6 @@ import android.provider.MediaStore
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.*
@@ -124,12 +123,6 @@ fun ResignationLetterScreen(onBack: () -> Unit = {}) {
             Box(
                 modifier = Modifier
                     .align(Alignment.Center)
-                    .pointerInput(Unit) {
-                        detectTransformGestures { _, pan, zoom, _ ->
-                            scale = (scale * zoom).coerceIn(fitScale, 4f)
-                            offset = if (scale <= fitScale) Offset.Zero else offset + pan
-                        }
-                    }
                     .graphicsLayer(
                         scaleX = scale, scaleY = scale,
                         translationX = offset.x, translationY = offset.y
