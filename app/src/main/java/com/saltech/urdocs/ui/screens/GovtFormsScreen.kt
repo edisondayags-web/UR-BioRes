@@ -41,6 +41,10 @@ private val GGreen = Color(0xFF0B1530)
 private val GGray = Color(0xFF9A9A9A)
 private val GCardBg = Color(0xFF0F0F0F)
 
+private val govtBorderGradient = Brush.linearGradient(listOf(Color(0xFF4C8DFF), Color.Black))
+private val govtHorizontalGradient = Brush.horizontalGradient(listOf(GPink, GGreen))
+private val govtTransparentGradient = Brush.linearGradient(listOf(Color.Transparent, Color.Transparent))
+
 data class GovtLink(
     val id: Int,
     val name: String,
@@ -318,7 +322,7 @@ fun GovtFormsScreen(
                     modifier = Modifier
                         .size(40.dp)
                         .clip(RoundedCornerShape(10.dp))
-                        .border(1.dp, Brush.linearGradient(listOf(Color(0xFF4C8DFF), Color.Black)), RoundedCornerShape(10.dp))
+                        .border(1.dp, govtBorderGradient, RoundedCornerShape(10.dp))
                         .clickable { onNavigate("home") },
                     contentAlignment = Alignment.Center
                 ) {
@@ -335,7 +339,7 @@ fun GovtFormsScreen(
                         .clip(RoundedCornerShape(24.dp))
                         .background(GCardBg)
                         .border(
-                            BorderStroke(1.5.dp, Brush.horizontalGradient(listOf(GPink, GGreen))),
+                            BorderStroke(1.5.dp, govtHorizontalGradient),
                             RoundedCornerShape(24.dp)
                         )
                         .padding(horizontal = 14.dp, vertical = 0.dp),
@@ -384,7 +388,7 @@ fun GovtFormsScreen(
                     modifier = Modifier
                         .size(40.dp)
                         .clip(RoundedCornerShape(10.dp))
-                        .border(1.dp, Brush.linearGradient(listOf(Color(0xFF4C8DFF), Color.Black)), RoundedCornerShape(10.dp)),
+                        .border(1.dp, govtBorderGradient, RoundedCornerShape(10.dp)),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
@@ -490,7 +494,7 @@ fun GovtFormsScreen(
                             .background(if (isSelected) GCardBg else Color.Transparent)
                             .border(
                                 1.dp,
-                                if (isSelected) Brush.linearGradient(listOf(Color(0xFF4C8DFF), Color.Black)) else Brush.linearGradient(listOf(Color.Transparent, Color.Transparent)),
+                                if (isSelected) govtBorderGradient else govtTransparentGradient,
                                 RoundedCornerShape(14.dp)
                             )
                             .clickable {
@@ -593,7 +597,7 @@ fun GovtFormsScreen(
                     .clip(RoundedCornerShape(16.dp))
                     .background(GCardBg)
                     .border(
-                        BorderStroke(1.dp, Brush.horizontalGradient(listOf(GPink, GGreen))),
+                        BorderStroke(1.dp, govtHorizontalGradient),
                         RoundedCornerShape(16.dp)
                     )
             ) {
