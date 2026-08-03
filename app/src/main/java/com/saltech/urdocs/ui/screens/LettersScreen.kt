@@ -49,7 +49,7 @@ private val UrCardBg = Color(0xFF161616)
 private val UrGray = Color(0xFF9A9A9A)
 
 private val headerGradient = Brush.verticalGradient(listOf(Color(0xFF3B6FE0), Color(0xFF081024)))
-private val premiumBorderGradient = Brush.linearGradient(listOf(Color(0xFFF4C8FF), Color.Black))
+private val premiumBorderGradient = Brush.linearGradient(listOf(Color(0xFF4C8DFF), Color.Black))
 private val cardBorderGradient = Brush.linearGradient(listOf(UrPink, UrGreen))
 
 
