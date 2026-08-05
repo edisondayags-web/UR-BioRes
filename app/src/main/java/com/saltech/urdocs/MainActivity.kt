@@ -94,6 +94,11 @@ class MainActivity : ComponentActivity() {
         onBack = { navController.popBackStack() }
     )
                     }
+                    composable(Screen.Interview.route) {
+                        InterviewScreen(
+                            onBack = { navController.popBackStack() }
+                        )
+                    }
                     composable(Screen.JobResearcher.route) {
                         JobResearcherScreen(
                             onBack = { navController.popBackStack() }
