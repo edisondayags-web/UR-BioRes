@@ -44,6 +44,8 @@ import com.saltech.urdocs.model.LetterType
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
@@ -51,6 +53,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.ui.viewinterop.AndroidView
 
 private val GLBlue = Color(0xFF1D3FB5)
 
@@ -535,6 +538,9 @@ fun GenericLetterScreen(letterType: LetterType, onBack: () -> Unit = {}) {
     var dateVal by remember { mutableStateOf("") }
     var to1Val by remember { mutableStateOf("") }
     var to2Val by remember { mutableStateOf("") }
+    var subjectVal by remember(letterType) { mutableStateOf(content.subject) }
+    var salutationVal by remember(letterType) { mutableStateOf(content.salutation) }
+    var closingVal by remember(letterType) { mutableStateOf(content.closingLine) }
 
     // Dynamic closing field values, keyed by label - each letter type only shows the fields
     // it actually needs (see closingFields above).
@@ -557,6 +563,20 @@ fun GenericLetterScreen(letterType: LetterType, onBack: () -> Unit = {}) {
         IconButton(onClick = onBack) {
             Icon(Icons.Filled.ArrowBack, contentDescription = "Back", tint = Color.White)
         }
+        AndroidView(
+            factory = { ctx ->
+                AdView(ctx).apply {
+                    val displayMetrics = ctx.resources.displayMetrics
+                    val adWidthPixels = displayMetrics.widthPixels.toFloat()
+                    val adDensity = displayMetrics.density
+                    val adWidth = (adWidthPixels / adDensity).toInt()
+                    setAdSize(AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(ctx, adWidth))
+                    adUnitId = "ca-app-pub-3134240485602899/5923255956"
+                    loadAd(AdRequest.Builder().build())
+                }
+            },
+            modifier = Modifier.fillMaxWidth()
+        )
         BoxWithConstraints(modifier = Modifier.weight(1f).background(Color.Black)) {
             val fitScale = minOf(maxWidth / paperWidthDp, maxHeight / paperHeightDp)
             var scale by remember { mutableStateOf(fitScale) }
@@ -650,12 +670,12 @@ fun GenericLetterScreen(letterType: LetterType, onBack: () -> Unit = {}) {
 
                     FlowRow(modifier = Modifier.fillMaxWidth()) {
                         GLWord("Subject:", bold = true, color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not())
-                        GLWord(content.subject, color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not())
+                        GLInlineField(subjectVal, 220.dp, color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not()) { subjectVal = it }
                     }
 
                     Spacer(Modifier.height(14.dp))
 
-                    GLPlainText(content.salutation, color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not())
+                    GLEditableText(salutationVal, { salutationVal = it }, color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not())
 
                     Spacer(Modifier.height(16.dp))
 
@@ -685,7 +705,7 @@ fun GenericLetterScreen(letterType: LetterType, onBack: () -> Unit = {}) {
                     Spacer(Modifier.height(45.dp))
 
                     Box(modifier = Modifier.padding(start = 60.dp)) {
-                        GLPlainText(content.closingLine, color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not())
+                        GLEditableText(closingVal, { closingVal = it }, color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not())
                     }
 
                     Spacer(Modifier.height(50.dp))
@@ -792,6 +812,34 @@ private fun GLPlainText(
         fontSize = 16.sp,
         color = color,
         modifier = Modifier.padding(vertical = 2.dp)
+    )
+}
+
+@Composable
+private fun GLEditableText(
+    value: String,
+    onChange: (String) -> Unit,
+    bold: Boolean = false,
+    color: Color = GLBlue,
+    fontFamily: FontFamily = FontFamily.Serif,
+    italic: Boolean = true
+) {
+    val interactionSource = remember { MutableInteractionSource() }
+    val isFocused by interactionSource.collectIsFocusedAsState()
+    BasicTextField(
+        value = value, onValueChange = onChange,
+        textStyle = TextStyle(
+            fontFamily = fontFamily,
+            fontStyle = if (italic) FontStyle.Italic else FontStyle.Normal,
+            fontWeight = if (bold) FontWeight.Bold else FontWeight.Normal,
+            fontSize = 16.sp,
+            color = color
+        ),
+        cursorBrush = SolidColor(color),
+        interactionSource = interactionSource,
+        modifier = Modifier
+            .background(if (isFocused) Color(0xFFEFF3FF) else Color.Transparent)
+            .padding(vertical = 2.dp)
     )
 }
 

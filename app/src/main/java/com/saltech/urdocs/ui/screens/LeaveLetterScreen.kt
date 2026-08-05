@@ -42,6 +42,8 @@ import com.saltech.urdocs.R
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
@@ -49,6 +51,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.ui.viewinterop.AndroidView
 
 private val LLBlue = Color(0xFF1D3FB5)
 
@@ -86,6 +89,10 @@ fun LeaveLetterScreen(onBack: () -> Unit = {}) {
     var dateVal by remember { mutableStateOf("") }
     var to1Val by remember { mutableStateOf("") }
     var to2Val by remember { mutableStateOf("") }
+    var recipientTitleVal by remember { mutableStateOf("The Manager / Principal") }
+    var salutationVal by remember { mutableStateOf("Dear Sir/Madam,") }
+    var subjectVal by remember { mutableStateOf("Leave Request") }
+    var closingVal by remember { mutableStateOf("Yours sincerely,") }
     var startDateVal by remember { mutableStateOf("") }
     var endDateVal by remember { mutableStateOf("") }
     var numDaysVal by remember { mutableStateOf("") }
@@ -113,6 +120,20 @@ fun LeaveLetterScreen(onBack: () -> Unit = {}) {
         IconButton(onClick = onBack) {
             Icon(Icons.Filled.ArrowBack, contentDescription = "Back", tint = Color.White)
         }
+        AndroidView(
+            factory = { ctx ->
+                AdView(ctx).apply {
+                    val displayMetrics = ctx.resources.displayMetrics
+                    val adWidthPixels = displayMetrics.widthPixels.toFloat()
+                    val adDensity = displayMetrics.density
+                    val adWidth = (adWidthPixels / adDensity).toInt()
+                    setAdSize(AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(ctx, adWidth))
+                    adUnitId = "ca-app-pub-3134240485602899/5923255956"
+                    loadAd(AdRequest.Builder().build())
+                }
+            },
+            modifier = Modifier.fillMaxWidth()
+        )
         BoxWithConstraints(modifier = Modifier.weight(1f).background(Color.Black)) {
             val fitScale = minOf(maxWidth / paperWidthDp, maxHeight / paperHeightDp)
             var scale by remember { mutableStateOf(fitScale) }
@@ -202,7 +223,7 @@ fun LeaveLetterScreen(onBack: () -> Unit = {}) {
                     Spacer(Modifier.height(35.dp))
 
                     LLPlainText("To,", color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not())
-                    LLPlainText("The Manager / Principal", color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not())
+                    LLEditableText(recipientTitleVal, { recipientTitleVal = it }, color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not())
                     Spacer(Modifier.height(10.dp))
                     LLUnderline(to1Val, color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not()) { to1Val = it }
                     Spacer(Modifier.height(10.dp))
@@ -213,12 +234,12 @@ fun LeaveLetterScreen(onBack: () -> Unit = {}) {
                     // Subject line
                     FlowRow(modifier = Modifier.fillMaxWidth()) {
                         LLWord("Subject:", bold = true, color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not())
-                        LLWord("Leave Request", color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not())
+                        LLInlineField(subjectVal, 220.dp, color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not()) { subjectVal = it }
                     }
 
                     Spacer(Modifier.height(14.dp))
 
-                    LLPlainText("Dear Sir/Madam,", color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not())
+                    LLEditableText(salutationVal, { salutationVal = it }, color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not())
 
                     Spacer(Modifier.height(14.dp))
 
@@ -266,7 +287,7 @@ fun LeaveLetterScreen(onBack: () -> Unit = {}) {
                     Spacer(Modifier.height(45.dp))
 
                     Box(modifier = Modifier.padding(start = 60.dp)) {
-                        LLPlainText("Yours sincerely,", color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not())
+                        LLEditableText(closingVal, { closingVal = it }, color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not())
                     }
 
                     Spacer(Modifier.height(50.dp))
@@ -368,6 +389,34 @@ private fun LLPlainText(
         fontSize = 16.sp,
         color = color,
         modifier = Modifier.padding(vertical = 2.dp)
+    )
+}
+
+@Composable
+private fun LLEditableText(
+    value: String,
+    onChange: (String) -> Unit,
+    bold: Boolean = false,
+    color: Color = LLBlue,
+    fontFamily: FontFamily = FontFamily.Serif,
+    italic: Boolean = true
+) {
+    val interactionSource = remember { MutableInteractionSource() }
+    val isFocused by interactionSource.collectIsFocusedAsState()
+    BasicTextField(
+        value = value, onValueChange = onChange,
+        textStyle = TextStyle(
+            fontFamily = fontFamily,
+            fontStyle = if (italic) FontStyle.Italic else FontStyle.Normal,
+            fontWeight = if (bold) FontWeight.Bold else FontWeight.Normal,
+            fontSize = 16.sp,
+            color = color
+        ),
+        cursorBrush = SolidColor(color),
+        interactionSource = interactionSource,
+        modifier = Modifier
+            .background(if (isFocused) Color(0xFFEFF3FF) else Color.Transparent)
+            .padding(vertical = 2.dp)
     )
 }
 

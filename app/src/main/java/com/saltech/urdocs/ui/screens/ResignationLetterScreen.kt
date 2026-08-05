@@ -45,6 +45,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import androidx.compose.ui.platform.LocalConfiguration
 import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
@@ -52,6 +54,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.ui.viewinterop.AndroidView
 
 private val RLBlue = Color(0xFF1D3FB5)
 
@@ -89,6 +92,10 @@ fun ResignationLetterScreen(onBack: () -> Unit = {}) {
     var dateVal by remember { mutableStateOf("") }
     var to1Val by remember { mutableStateOf("") }
     var to2Val by remember { mutableStateOf("") }
+    var recipientTitleVal by remember { mutableStateOf("The Manager / Principal") }
+    var salutationVal by remember { mutableStateOf("Respected Sir/Madam,") }
+    var subjectVal by remember { mutableStateOf("Resignation Letter") }
+    var closingVal by remember { mutableStateOf("Yours sincerely,") }
     var positionVal by remember { mutableStateOf("") }
     var effectiveDateVal by remember { mutableStateOf("") }
     var nameVal by remember { mutableStateOf("") }
@@ -116,6 +123,20 @@ fun ResignationLetterScreen(onBack: () -> Unit = {}) {
         IconButton(onClick = onBack) {
             Icon(Icons.Filled.ArrowBack, contentDescription = "Back", tint = Color.White)
         }
+        AndroidView(
+            factory = { ctx ->
+                AdView(ctx).apply {
+                    val displayMetrics = ctx.resources.displayMetrics
+                    val adWidthPixels = displayMetrics.widthPixels.toFloat()
+                    val adDensity = displayMetrics.density
+                    val adWidth = (adWidthPixels / adDensity).toInt()
+                    setAdSize(AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(ctx, adWidth))
+                    adUnitId = "ca-app-pub-3134240485602899/5923255956"
+                    loadAd(AdRequest.Builder().build())
+                }
+            },
+            modifier = Modifier.fillMaxWidth()
+        )
         BoxWithConstraints(modifier = Modifier.weight(1f).background(Color.Black)) {
             val fitScale = minOf(maxWidth / paperWidthDp, maxHeight / paperHeightDp)
             var scale by remember { mutableStateOf(fitScale) }
@@ -208,7 +229,7 @@ fun ResignationLetterScreen(onBack: () -> Unit = {}) {
                     Spacer(Modifier.height(35.dp))
 
                     RLPlainText("To,", color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not())
-                    RLPlainText("The Manager / Principal", color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not())
+                    RLEditableText(recipientTitleVal, { recipientTitleVal = it }, color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not())
                     Spacer(Modifier.height(10.dp))
                     RLUnderline(to1Val, color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not()) { to1Val = it }
                     Spacer(Modifier.height(10.dp))
@@ -219,12 +240,12 @@ fun ResignationLetterScreen(onBack: () -> Unit = {}) {
                     // Subject line - bold label, normal rest
                     FlowRow(modifier = Modifier.fillMaxWidth()) {
                         RLWord("Subject:", bold = true, color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not())
-                        RLWord("Resignation Letter", color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not())
+                        RLInlineField(subjectVal, 220.dp, color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not()) { subjectVal = it }
                     }
 
                     Spacer(Modifier.height(14.dp))
 
-                    RLPlainText("Respected Sir/Madam,", color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not())
+                    RLEditableText(salutationVal, { salutationVal = it }, color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not())
 
                     Spacer(Modifier.height(14.dp))
 
@@ -281,7 +302,7 @@ fun ResignationLetterScreen(onBack: () -> Unit = {}) {
                     Spacer(Modifier.height(45.dp))
 
                     Box(modifier = Modifier.padding(start = 60.dp)) {
-                        RLPlainText("Yours sincerely,", color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not())
+                        RLEditableText(closingVal, { closingVal = it }, color = textColor, fontFamily = bodyFontFamily, italic = isPlainMode.not())
                     }
 
                     Spacer(Modifier.height(50.dp))
@@ -389,6 +410,34 @@ private fun RLPlainText(
 }
 
 /** One paragraph that wraps naturally like the bond paper, with slight justification feel. */
+@Composable
+private fun RLEditableText(
+    value: String,
+    onChange: (String) -> Unit,
+    bold: Boolean = false,
+    color: Color = RLBlue,
+    fontFamily: FontFamily = FontFamily.Serif,
+    italic: Boolean = true
+) {
+    val interactionSource = remember { MutableInteractionSource() }
+    val isFocused by interactionSource.collectIsFocusedAsState()
+    BasicTextField(
+        value = value, onValueChange = onChange,
+        textStyle = TextStyle(
+            fontFamily = fontFamily,
+            fontStyle = if (italic) FontStyle.Italic else FontStyle.Normal,
+            fontWeight = if (bold) FontWeight.Bold else FontWeight.Normal,
+            fontSize = 16.sp,
+            color = color
+        ),
+        cursorBrush = SolidColor(color),
+        interactionSource = interactionSource,
+        modifier = Modifier
+            .background(if (isFocused) Color(0xFFEFF3FF) else Color.Transparent)
+            .padding(vertical = 2.dp)
+    )
+}
+
 @Composable
 private fun RLParagraph(
     text: String,
