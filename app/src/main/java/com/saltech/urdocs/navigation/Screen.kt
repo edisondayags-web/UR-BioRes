@@ -9,6 +9,9 @@ sealed class Screen(val route: String) {
     object GovtForms : Screen("govt_forms")
     object Letters : Screen("letters")
     object Interview : Screen("interview")
+    object InterviewSession : Screen("interview_session/{mode}") {
+      fun createRoute(mode: String) = "interview_session/$mode"
+    }
     object JobResearcher : Screen("job_researcher")
     object Settings : Screen("settings")
     object MyProfile : Screen("my_profile")

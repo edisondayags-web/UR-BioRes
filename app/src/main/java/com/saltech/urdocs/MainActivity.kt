@@ -96,6 +96,17 @@ class MainActivity : ComponentActivity() {
                     }
                     composable(Screen.Interview.route) {
                         InterviewScreen(
+                            onBack = { navController.popBackStack() },
+                            onSelect = { mode -> navController.navigate(Screen.InterviewSession.createRoute(mode)) }
+                        )
+                    }
+                    composable(
+                        route = Screen.InterviewSession.route,
+                        arguments = listOf(navArgument("mode") { type = NavType.StringType })
+                    ) { backStackEntry ->
+                        val mode = backStackEntry.arguments?.getString("mode") ?: "local_traditional"
+                        InterviewSessionScreen(
+                            mode = mode,
                             onBack = { navController.popBackStack() }
                         )
                     }
