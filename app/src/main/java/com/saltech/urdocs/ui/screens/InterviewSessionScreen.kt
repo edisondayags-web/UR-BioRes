@@ -98,8 +98,10 @@ fun InterviewSessionScreen(
         var qIndex by remember { mutableStateOf(0) }
         var phase by remember { mutableStateOf("prep") } // prep -> recording -> review -> (next q or done)
         var secondsLeft by remember { mutableStateOf(15) }
+        var asyncStarted by remember { mutableStateOf(false) }
 
-        LaunchedEffect(qIndex, phase) {
+        LaunchedEffect(qIndex, phase, asyncStarted) {
+            if (!asyncStarted) return@LaunchedEffect
             if (phase == "prep" || phase == "recording") {
                 val total = if (phase == "prep") 15 else 90
                 secondsLeft = total
@@ -122,6 +124,34 @@ fun InterviewSessionScreen(
                     Text("Tapos na luv 💙", color = UrPink, fontWeight = FontWeight.Bold, fontSize = 20.sp)
                     Spacer(Modifier.height(8.dp))
                     Text("Back para lumabas", color = UrGray, fontSize = 14.sp)
+                }
+                return@Box
+            }
+
+            if (!asyncStarted) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clickable(
+                            indication = null,
+                            interactionSource = remember { MutableInteractionSource() }
+                        ) { asyncStarted = true },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(
+                            text = "Go",
+                            style = TextStyle(
+                                brush = Brush.horizontalGradient(listOf(Color(0xFF2A5CE0), Color(0xFFE0245E))),
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 64.sp
+                            )
+                        )
+                        Spacer(Modifier.height(20.dp))
+                        Icon(Icons.Filled.KeyboardArrowDown, contentDescription = null, tint = Color(0xFFE0245E), modifier = Modifier.size(40.dp))
+                        Icon(Icons.Filled.KeyboardArrowDown, contentDescription = null, tint = Color(0xFF7B3FE4), modifier = Modifier.size(40.dp).offset(y = (-14).dp))
+                        Icon(Icons.Filled.KeyboardArrowDown, contentDescription = null, tint = Color(0xFF2A5CE0), modifier = Modifier.size(40.dp).offset(y = (-28).dp))
+                    }
                 }
                 return@Box
             }
