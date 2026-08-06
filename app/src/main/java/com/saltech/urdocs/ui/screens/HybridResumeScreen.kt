@@ -7,6 +7,8 @@ import android.graphics.Picture
 import android.graphics.Rect
 import android.os.Build
 import android.provider.MediaStore
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -22,7 +24,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -100,7 +101,7 @@ fun HybridResumeScreen(
 ) {
     //SecureScreen()
     val paperWidthDp = 850.dp
-    val paperHeightDp = 1250.dp
+    val paperHeightDp = 1700.dp
 
     var data by remember { mutableStateOf(HybridResumeFields()) }
     var offset by remember { mutableStateOf(Offset.Zero) }
@@ -111,6 +112,15 @@ fun HybridResumeScreen(
     var rawSource by remember { mutableStateOf<Bitmap?>(null) }
     var displaySelfie by remember { mutableStateOf<Bitmap?>(null) }
     var isProcessingPhoto by remember { mutableStateOf(false) }
+
+    val uploadLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.GetContent()
+    ) { uri ->
+        if (uri != null) {
+            val loaded = com.saltech.urdocs.util.ImageUtils.loadBitmapFromUri(context, uri)
+            if (loaded != null) rawSource = loaded
+        }
+    }
 
     LaunchedEffect(processedSelfie) {
         if (processedSelfie != null) rawSource = processedSelfie
@@ -380,48 +390,76 @@ fun HybridResumeScreen(
         }
         }
 
-        // Download button
-        Button(
-            onClick = {
-                fun doSave() {
-                    coroutineScope.launch {
-                        delay(100)
-                        val bitmap = Bitmap.createBitmap(
-                            picture.width.coerceAtLeast(1),
-                            picture.height.coerceAtLeast(1),
-                            Bitmap.Config.ARGB_8888
-                        )
-                        val canvas = android.graphics.Canvas(bitmap)
-                        canvas.drawColor(android.graphics.Color.WHITE)
-                        canvas.drawPicture(picture)
-                        saveBitmapToGalleryHybrid(context, bitmap)
-                    }
-                }
-                val activity = context as? android.app.Activity
-                if (activity != null && interstitialAd != null) {
-                    interstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
-                        override fun onAdDismissedFullScreenContent() {
-                            interstitialAd = null
-                            doSave()
-                        }
-                    }
-                    interstitialAd?.show(activity)
-                } else {
-                    doSave()
-                }
-            },
-            colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = Color.Transparent),
-            contentPadding = PaddingValues(0.dp),
+        // Upload + Download buttons
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 20.dp, vertical = 14.dp)
-                .clip(androidx.compose.foundation.shape.RoundedCornerShape(24.dp))
-                .background(
-                    androidx.compose.ui.graphics.Brush.horizontalGradient(
-                        listOf(Color(0xFF3B6FE0), Color(0xFF1A1A1A), Color(0xFF0B1530))
+                .background(Color.Black)
+                .padding(horizontal = 20.dp, vertical = 14.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .clip(androidx.compose.foundation.shape.RoundedCornerShape(24.dp))
+                    .border(1.5.dp, Color(0xFF0B1530), androidx.compose.foundation.shape.RoundedCornerShape(24.dp))
+                    .clickable { uploadLauncher.launch("image/*") }
+                    .padding(horizontal = 18.dp, vertical = 10.dp)
+            ) {
+                Text("📤", fontSize = 16.sp)
+                Spacer(Modifier.width(6.dp))
+                Text("Upload", fontSize = 14.sp, fontWeight = FontWeight.Bold, color = Color.White)
+                if (displaySelfie != null) {
+                    Spacer(Modifier.width(12.dp))
+                    Text("🔄 Retake", fontSize = 13.sp, color = Color(0xFF3B6FE0), modifier = Modifier.clickable { onTakeSelfie() })
+                }
+            }
+
+            Button(
+                onClick = {
+                    fun doSave() {
+                        coroutineScope.launch {
+                            delay(100)
+                            val bitmap = Bitmap.createBitmap(
+                                picture.width.coerceAtLeast(1),
+                                picture.height.coerceAtLeast(1),
+                                Bitmap.Config.ARGB_8888
+                            )
+                            val canvas = android.graphics.Canvas(bitmap)
+                            canvas.drawColor(android.graphics.Color.WHITE)
+                            canvas.drawPicture(picture)
+                            saveBitmapToGalleryHybrid(context, bitmap)
+                        }
+                    }
+                    val activity = context as? android.app.Activity
+                    if (activity != null && interstitialAd != null) {
+                        interstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
+                            override fun onAdDismissedFullScreenContent() {
+                                interstitialAd = null
+                                doSave()
+                            }
+                        }
+                        interstitialAd?.show(activity)
+                    } else {
+                        doSave()
+                    }
+                },
+                colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+                contentPadding = PaddingValues(0.dp),
+                modifier = Modifier
+                    .clip(androidx.compose.foundation.shape.RoundedCornerShape(24.dp))
+                    .background(
+                        androidx.compose.ui.graphics.Brush.horizontalGradient(
+                            listOf(Color(0xFF3B6FE0), Color(0xFF1A1A1A), Color(0xFF0B1530))
+                        )
                     )
-                )
-        ) { Text("Download", color = Color.White, fontWeight = FontWeight.Bold) }
+            ) {
+                Box(modifier = Modifier.padding(horizontal = 20.dp, vertical = 4.dp)) {
+                    Text("Download", color = Color.White, fontWeight = FontWeight.Bold)
+                }
+            }
+        }
     }
 }
 
@@ -565,4 +603,3 @@ private fun BulletLinesH(values: List<String>, onChange: (Int, String) -> Unit) 
         }
     }
 }
-
