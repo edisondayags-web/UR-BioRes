@@ -126,13 +126,12 @@ fun InterviewSessionScreen(
     DisposableEffect(Unit) {
         val t = TextToSpeech(context) { status ->
             if (status == TextToSpeech.SUCCESS) {
-                val result = tts.value?.setLanguage(Locale("fil", "PH"))
-                if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                    tts.value?.language = Locale.US
-                }
+                // Content is all in English, so use an English voice throughout -
+                // a Filipino voice was spelling out small English words like "us" letter by letter.
+                tts.value?.language = Locale.US
 
-                // Standard 1x speed
-                tts.value?.setSpeechRate(1.0f)
+                // Faster than 1.0x - default and 1.0x both sounded way too slow/dragging.
+                tts.value?.setSpeechRate(1.35f)
 
                 val currentLang = tts.value?.language?.language
                 val maleVoice = tts.value?.voices?.firstOrNull { voice ->
@@ -206,9 +205,9 @@ fun InterviewSessionScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(140.dp)
         ) {
-            // Pushes everything below the visible screen at the start, so the whole
-            // list truly begins off-screen at the bottom and scrolls up into view.
-            Spacer(Modifier.height(screenHeightDp))
+            // Starts the list a bit below the screen (not a full screen-height away) so the
+            // first text appears sooner - a full screen of blank black felt like a frozen app.
+            Spacer(Modifier.height(250.dp))
 
             qaList.forEachIndexed { index, qa ->
                 Column(
