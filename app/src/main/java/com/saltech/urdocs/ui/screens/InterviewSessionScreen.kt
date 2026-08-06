@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
@@ -121,6 +122,8 @@ fun InterviewSessionScreen(
     var ttsReady by remember { mutableStateOf(false) }
     val spokenIndices = remember { mutableStateListOf<Int>() }
     val exitedIndices = remember { mutableStateListOf<Int>() }
+    var firstRevealed by remember { mutableStateOf(false) }
+    val screenHeightDp = LocalConfiguration.current.screenHeightDp.dp
 
     DisposableEffect(Unit) {
         val t = TextToSpeech(context) { status ->
@@ -130,8 +133,8 @@ fun InterviewSessionScreen(
                     tts.value?.language = Locale.US
                 }
 
-                // Speed up (default 1.0 felt slow) and force a male-sounding voice.
-                tts.value?.setSpeechRate(1.5f)
+                // Standard 1x speed
+                tts.value?.setSpeechRate(1.0f)
 
                 val currentLang = tts.value?.language?.language
                 val maleVoice = tts.value?.voices?.firstOrNull { voice ->
@@ -156,13 +159,16 @@ fun InterviewSessionScreen(
 
     // Once a QA block's bottom scrolls above this line, it's considered fully gone from view.
     val exitLinePx = with(density) { 70.dp.toPx() }
+    // Once a QA block's top scrolls up to this line, it's considered visible/arrived.
+    val entryLinePx = with(density) { 260.dp.toPx() }
 
     // Speak the next unspoken question only once its predecessor has exited the screen.
-    // Index 0 speaks right away since nothing needs to exit before it.
-    LaunchedEffect(exitedIndices.size, ttsReady) {
+    // Index 0 waits until it has actually scrolled up into view (see firstRevealed below) -
+    // it no longer speaks the instant the screen opens, since content now starts off-screen at the bottom.
+    LaunchedEffect(exitedIndices.size, firstRevealed, ttsReady) {
         if (!ttsReady) return@LaunchedEffect
         for (i in qaList.indices) {
-            val canSpeak = i == 0 || (i - 1) in exitedIndices
+            val canSpeak = if (i == 0) firstRevealed else (i - 1) in exitedIndices
             if (canSpeak && i !in spokenIndices) {
                 spokenIndices.add(i)
                 val params = Bundle().apply {
@@ -177,7 +183,7 @@ fun InterviewSessionScreen(
     LaunchedEffect(scrollState.maxValue) {
         while (scrollState.value < scrollState.maxValue) {
             if (!isPaused) {
-                scrollState.scrollBy(7f)
+                scrollState.scrollBy(2.5f)
             }
             delay(16)
         }
@@ -209,11 +215,19 @@ fun InterviewSessionScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(36.dp)
         ) {
+            // Pushes everything below the visible screen at the start, so the whole
+            // list truly begins off-screen at the bottom and scrolls up into view.
+            Spacer(Modifier.height(screenHeightDp))
+
             qaList.forEachIndexed { index, qa ->
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.onGloballyPositioned { coords ->
+                        val top = coords.boundsInWindow().top
                         val bottom = coords.boundsInWindow().bottom
+                        if (index == 0 && !firstRevealed && top <= entryLinePx) {
+                            firstRevealed = true
+                        }
                         if (bottom < exitLinePx && index !in exitedIndices) {
                             exitedIndices.add(index)
                         }
@@ -236,7 +250,9 @@ fun InterviewSessionScreen(
                     )
                 }
             }
-            Spacer(Modifier.height(120.dp))
+            // Matches the top spacer - gives enough scroll room to carry the LAST
+            // question fully off the top of the screen instead of stopping while it's still visible.
+            Spacer(Modifier.height(screenHeightDp))
         }
 
         // Fade masks top/bottom so text appears/disappears smoothly
