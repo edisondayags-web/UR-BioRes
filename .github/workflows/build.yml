@@ -21,8 +21,11 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
+      # ⚡ 1. Opisyal at mas mabilis na Gradle Cache (Pinalitan ang actions/cache)
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-home-cache-cleanup: true
 
       - name: Decode google-services.json
         env:
@@ -37,19 +40,6 @@ jobs:
           echo "GEMINI_API_KEY=$GEMINI_API_KEY" >> local.properties
           echo "OPENROUTER_API_KEY=$OPENROUTER_API_KEY" >> local.properties
 
-      - name: Generate Gradle wrapper
-        run: gradle wrapper --gradle-version 8.7
-
-      - name: Cache Gradle packages
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: gradle-${{ runner.os }}-v1
-          restore-keys: |
-            gradle-${{ runner.os }}-
-
       - name: Grant execute permission
         run: chmod +x ./gradlew
 
@@ -59,8 +49,9 @@ jobs:
             -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 \
             -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
 
+      # ⚡ 2. Inalis ang --no-daemon, idinagdag ang --parallel at incremental Kotlin compilation
       - name: Build debug APK
-        run: ./gradlew assembleDebug --no-daemon --build-cache
+        run: ./gradlew assembleDebug --build-cache --parallel -Pkotlin.incremental=true
 
       - name: Create Release with APK
         uses: softprops/action-gh-release@v2
