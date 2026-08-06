@@ -110,12 +110,6 @@ fun InterviewSessionScreen(
         }
 
         Box(modifier = Modifier.fillMaxSize()) {
-            IconButton(
-                onClick = onBack,
-                modifier = Modifier.align(Alignment.TopStart).padding(top = 24.dp, start = 8.dp)
-            ) {
-                Icon(Icons.Filled.ArrowBack, contentDescription = "Back", tint = UrPink)
-            }
 
             if (phase == "done") {
                 Column(
@@ -374,13 +368,6 @@ fun InterviewSessionScreen(
                 .height(70.dp)
                 .background(Brush.verticalGradient(listOf(Color.Transparent, Color.Black)))
         )
-
-        IconButton(
-            onClick = onBack,
-            modifier = Modifier.align(Alignment.TopStart).padding(top = 24.dp, start = 8.dp)
-        ) {
-            Icon(Icons.Filled.ArrowBack, contentDescription = "Back", tint = UrPink)
-        }
 
         if (!countdownDone) {
             Box(
