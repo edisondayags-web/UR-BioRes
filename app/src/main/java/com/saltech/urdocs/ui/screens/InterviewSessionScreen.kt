@@ -170,6 +170,15 @@ fun InterviewSessionScreen(
         }
     }
 
+    // The first question speaks reliably as soon as the TTS engine is ready - it's essentially
+    // on-screen from the start (short spacer), so it no longer depends on catching the right
+    // scroll-position frame, which was sometimes missed.
+    LaunchedEffect(ttsReady) {
+        if (ttsReady) {
+            speakIfDue(0)
+        }
+    }
+
     LaunchedEffect(scrollState.maxValue) {
         while (scrollState.value < scrollState.maxValue) {
             if (!isPaused) {
@@ -207,7 +216,7 @@ fun InterviewSessionScreen(
         ) {
             // Starts the list a bit below the screen (not a full screen-height away) so the
             // first text appears sooner - a full screen of blank black felt like a frozen app.
-            Spacer(Modifier.height(250.dp))
+            Spacer(Modifier.height(290.dp))
 
             qaList.forEachIndexed { index, qa ->
                 Column(
