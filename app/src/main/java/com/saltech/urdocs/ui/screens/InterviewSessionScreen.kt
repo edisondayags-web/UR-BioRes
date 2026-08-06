@@ -155,8 +155,11 @@ fun InterviewSessionScreen(
         onDispose { t.stop(); t.shutdown() }
     }
 
-    // Trigger line: middle of the screen. Each question speaks the instant it reaches here.
+    // Trigger line: middle of the screen. Questions 2+ speak the instant they reach here.
     val midLinePx = with(density) { (screenHeightDp / 2).toPx() }
+    // The very first question speaks as soon as it enters the screen at all (bottom edge) -
+    // giving it a head start so it doesn't get cut off/overlapped by the next question later.
+    val screenHeightPx = with(density) { screenHeightDp.toPx() }
 
     fun speakIfDue(index: Int) {
         if (index !in spokenIndices) {
@@ -171,7 +174,7 @@ fun InterviewSessionScreen(
     LaunchedEffect(scrollState.maxValue) {
         while (scrollState.value < scrollState.maxValue) {
             if (!isPaused) {
-                scrollState.scrollBy(7f)
+                scrollState.scrollBy(8.5f)
             }
             delay(16)
         }
@@ -201,7 +204,7 @@ fun InterviewSessionScreen(
                 .verticalScroll(scrollState, enabled = false)
                 .padding(horizontal = 32.dp, vertical = 40.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(36.dp)
+            verticalArrangement = Arrangement.spacedBy(140.dp)
         ) {
             // Pushes everything below the visible screen at the start, so the whole
             // list truly begins off-screen at the bottom and scrolls up into view.
@@ -213,8 +216,13 @@ fun InterviewSessionScreen(
                     modifier = Modifier.onGloballyPositioned { coords ->
                         val top = coords.boundsInWindow().top
                         val bottom = coords.boundsInWindow().bottom
-                        if (ttsReady && top <= midLinePx && bottom >= midLinePx) {
-                            speakIfDue(index)
+                        if (ttsReady) {
+                            val due = if (index == 0) {
+                                top <= screenHeightPx
+                            } else {
+                                top <= midLinePx && bottom >= midLinePx
+                            }
+                            if (due) speakIfDue(index)
                         }
                     }
                 ) {
