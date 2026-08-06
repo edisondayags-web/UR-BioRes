@@ -1,4 +1,6 @@
 # UR Docs (Sal-Tech Software Services)
+//
+<img width="720" height="728" alt="1000054155" src="https://github.com/user-attachments/assets/1ef63c58-0752-48cb-b762-c5954e8ada62" />
 
 Skeleton project: Resume/Bio-Data/Gov't Forms/Letters maker app.
 - 2x2 ID photo: ML Kit (TFLite-based, Google) face detection + selfie segmentation, offline.
