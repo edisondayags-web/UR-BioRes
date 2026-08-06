@@ -30,6 +30,9 @@ import com.saltech.urdocs.ui.theme.UrPink
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.runtime.remember
 import com.saltech.urdocs.ui.theme.pressScale
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 
 data class HomeMenuItem(
     val emoji: String,
@@ -42,12 +45,16 @@ data class HomeMenuItem(
 fun HomeScreen(
     onNavigate: (String) -> Unit
 ) {
+    var showComingSoon by remember { mutableStateOf(false) }
     val items = listOf(
         HomeMenuItem("📄", "RESUME", "Pang BPO/Office etc • Professional CV", "resume"),
         HomeMenuItem("📝", "BIO-DATA", "Pang Company/Store etc. • PH Job Application", "biodata"),
         HomeMenuItem("🏛️", "GOV'T WEBSITES", "All Links You Want", "govt_forms"),
         HomeMenuItem("✉️", "LETTERS", "Leave, Excuse, Resign, etc.", "letters"),
+<<<<<<< HEAD
         HomeMenuItem("💬", "INTERVIEW", "Practice Office Interview (Q&A / Tips)", "interview"),
+=======
+>>>>>>> 82be101 (Add Coming Soon dialog for Job Researcher)
         HomeMenuItem("🔎", "JOB RESEARCHER", "Hahanapan ka ng work near you", "job_researcher"),
     )
 
@@ -86,7 +93,16 @@ fun HomeScreen(
 
             Column(verticalArrangement = Arrangement.spacedBy(18.dp)) {
                 items.forEach { item ->
-                    HomeMenuCard(item = item, onClick = { onNavigate(item.route) })
+                    HomeMenuCard(
+                        item = item,
+                        onClick = {
+                            if (item.route == "job_researcher") {
+                                showComingSoon = true
+                            } else {
+                                onNavigate(item.route)
+                            }
+                        }
+                    )
                 }
             }
 
@@ -96,6 +112,18 @@ fun HomeScreen(
                 text = "DEVELOPER: EDISON SUCLATAN DAYAGUIT",
                 color = UrGray,
                 fontSize = 10.sp
+            )
+        }
+        if (showComingSoon) {
+            AlertDialog(
+                onDismissRequest = { showComingSoon = false },
+                title = { Text("Coming Soon 🩵") },
+                text = { Text("Kasagsagan pa ng dev nito, balik ka na lang mahal!") },
+                confirmButton = {
+                    TextButton(onClick = { showComingSoon = false }) {
+                        Text("OK")
+                    }
+                }
             )
         }
     }
