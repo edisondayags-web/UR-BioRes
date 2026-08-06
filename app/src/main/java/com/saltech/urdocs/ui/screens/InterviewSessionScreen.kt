@@ -263,6 +263,14 @@ fun InterviewSessionScreen(
     // Manual start now - user taps "Go" when ready instead of an automatic 3-2-1 countdown,
     // so it no longer feels like a separate screen suddenly covering everything.
     var countdownDone by remember { mutableStateOf(false) }
+    var startRequested by remember { mutableStateOf(false) }
+
+    LaunchedEffect(ttsReady) {
+        if (ttsReady && startRequested && !countdownDone) {
+            countdownDone = true
+            speakIfDue(0)
+        }
+    }
 
     LaunchedEffect(scrollState.maxValue, countdownDone) {
         if (!countdownDone) return@LaunchedEffect
@@ -365,12 +373,15 @@ fun InterviewSessionScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .clickable(
-                        enabled = ttsReady,
+                        enabled = true,
                         indication = null,
                         interactionSource = remember { MutableInteractionSource() }
                     ) {
-                        countdownDone = true
-                        speakIfDue(0)
+                        startRequested = true
+                        if (ttsReady) {
+                            countdownDone = true
+                            speakIfDue(0)
+                        }
                     },
                 contentAlignment = Alignment.Center
             ) {
