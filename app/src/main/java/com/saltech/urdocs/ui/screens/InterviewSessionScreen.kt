@@ -170,8 +170,7 @@ fun InterviewSessionScreen(
         }
     }
 
-    LaunchedEffect(scrollState.maxValue, ttsReady) {
-        if (!ttsReady) return@LaunchedEffect
+    LaunchedEffect(scrollState.maxValue) {
         while (scrollState.value < scrollState.maxValue) {
             if (!isPaused) {
                 scrollState.scrollBy(8.5f)
