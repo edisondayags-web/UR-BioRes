@@ -21,9 +21,15 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      # ⚡ Setup Gradle (tinanggal ang cache-cleanup flag na nagdulot ng error)
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
+
+      # ⚡ Automatic check: Gagawan lang ng wrapper kung wala sa repo
+      - name: Ensure Gradle Wrapper
+        run: |
+          if [ ! -f ./gradlew ]; then
+            gradle wrapper --gradle-version 8.7
+          fi
 
       - name: Decode google-services.json
         env:
@@ -59,3 +65,4 @@ jobs:
           files: app/build/outputs/apk/debug/app-debug.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
