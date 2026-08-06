@@ -236,10 +236,8 @@ fun InterviewSessionScreen(
                 // 1.10x - readable pace, not too fast (1.35 felt rushed), not default-slow either.
                 tts.value?.setSpeechRate(1.10f)
 
-                // Name-based "male" voice matching is unreliable across devices/engines,
-                // so always apply a lower pitch instead - consistently reads as a deeper,
-                // more male-sounding voice regardless of which underlying voice is picked.
-                tts.value?.setPitch(0.62f)
+                // Use the engine's natural default voice/pitch.
+                tts.value?.setPitch(1.0f)
 
                 ttsReady = true
             }
@@ -267,13 +265,22 @@ fun InterviewSessionScreen(
     // The first question speaks reliably as soon as the TTS engine is ready - it's essentially
     // on-screen from the start (short spacer), so it no longer depends on catching the right
     // scroll-position frame, which was sometimes missed.
+    var countdownDone by remember { mutableStateOf(false) }
+    var countdownText by remember { mutableStateOf("3") }
+
     LaunchedEffect(ttsReady) {
         if (ttsReady) {
+            for (n in listOf("3", "2", "1", "GO")) {
+                countdownText = n
+                delay(700)
+            }
+            countdownDone = true
             speakIfDue(0)
         }
     }
 
-    LaunchedEffect(scrollState.maxValue) {
+    LaunchedEffect(scrollState.maxValue, countdownDone) {
+        if (!countdownDone) return@LaunchedEffect
         while (scrollState.value < scrollState.maxValue) {
             if (!isPaused) {
                 scrollState.scrollBy(8.5f)
@@ -373,6 +380,15 @@ fun InterviewSessionScreen(
             modifier = Modifier.align(Alignment.TopStart).padding(top = 24.dp, start = 8.dp)
         ) {
             Icon(Icons.Filled.ArrowBack, contentDescription = "Back", tint = UrPink)
+        }
+
+        if (!countdownDone) {
+            Box(
+                modifier = Modifier.fillMaxSize().background(Color.Black),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(countdownText, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 64.sp)
+            }
         }
     }
 }
