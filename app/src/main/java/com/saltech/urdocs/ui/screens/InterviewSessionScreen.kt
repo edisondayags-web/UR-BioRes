@@ -379,7 +379,7 @@ fun InterviewSessionScreen(
             }
     ) {
         // Animated Background
-        AnimatedBackground()
+        AnimatedBackground
 
         Column(
             modifier = Modifier
