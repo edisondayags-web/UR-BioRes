@@ -379,7 +379,7 @@ fun InterviewSessionScreen(
             }
     ) {
         // Animated Background
-        AnimatedBackground
+        PremiumWaveBackground()
 
         Column(
             modifier = Modifier
