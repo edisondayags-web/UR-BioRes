@@ -49,3 +49,4 @@ Skeleton project: Resume/Bio-Data/Gov't Forms/Letters maker app.
   mula sa UR Call theme file para consistent ang branding.
 - selfie segmentation loop sa BackgroundHelper.kt ay per-pixel (functional
   pero pwede pang i-optimize gamit ang RenderScript/Bitmap.setPixels batch).
+<img width="720" height="728" alt="1000054155" src="https://github.com/user-attachments/assets/1ef63c58-0752-48cb-b762-c5954e8ada62" />
