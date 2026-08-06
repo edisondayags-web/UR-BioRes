@@ -1,20 +1,22 @@
 package com.saltech.urdocs.ui.screens
 
-import android.widget.Toast
 import android.content.Intent
 import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -26,9 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 /**
- * ================== NEON THEME (galing sa Canva mockup) ==================
- * Black background + neon pink/magenta + neon green accents.
- * Ginamit sa buong Settings screen at sa 4 na functional sub-screens.
+ * ================== NEON THEME ==================
  */
 object SettingsColors {
     val Background = Color(0xFF0A0A0A)
@@ -37,21 +37,20 @@ object SettingsColors {
     val NeonGreen = Color(0xFF0B1530)
     val TextWhite = Color(0xFFF5F5F5)
     val TextMuted = Color(0xFFB0B0B0)
+    
+    // Cached Brushes para hindi paulit-ulit na gawan ng gradient memory ang GPU
+    val CardBorderBrush = Brush.linearGradient(listOf(Color(0xFF4C8DFF), Color.Black))
+    val HeaderBorderBrush = Brush.linearGradient(listOf(NeonPink, NeonGreen))
 }
 
 data class SettingsItemData(
     val icon: String,
     val title: String,
     val subtitle: String,
-    val route: String? = null,   // non-null = functional, may destination
-    val enabled: Boolean = false // false = "Coming soon" lang, walang navigation
+    val route: String? = null,
+    val enabled: Boolean = false
 )
 
-/**
- * Route constants -- ikonekta mo 'to sa NavHost mo.
- * Halimbawa:
- *   composable(SettingsRoutes.PRIVACY_POLICY) { PrivacyPolicyScreen(onBack = { navController.popBackStack() }) }
- */
 object SettingsRoutes {
     const val MY_PROFILE = "my_profile"
     const val PRIVACY_POLICY = "privacy_policy"
@@ -67,41 +66,42 @@ fun SettingsScreen(
 ) {
     val context = LocalContext.current
 
-    val sections = listOf(
+    // Naka-remember ang buong data list para isang beses lang ilagay sa memory
+    val sections = remember {
+        listOf(
             "ACCOUNT" to listOf(
                 SettingsItemData("👤", "My Profile", "Set up your info for auto-fill", SettingsRoutes.MY_PROFILE, enabled = true),
             ),
-        "PRIVACY & SECURITY" to listOf(
-            SettingsItemData("🔒", "Privacy Policy", "Learn how we protect your data", SettingsRoutes.PRIVACY_POLICY, enabled = true),
-            SettingsItemData("📄", "Terms & Conditions", "Read our terms and conditions", SettingsRoutes.TERMS_CONDITIONS, enabled = true),
-            SettingsItemData("🛡️", "Data & Permissions", "Understand why we need access", SettingsRoutes.DATA_PERMISSIONS, enabled = true),
-        ),
-        "APP" to listOf(
-            SettingsItemData("⭐", "Rate UR BioRes", "Show your support", enabled = true),
-            SettingsItemData("🔗", "Share UR BioRes", "Share the app with your friends", enabled = true),
-            SettingsItemData("⬇️", "Check for Updates", "Get the latest version", enabled = true),
-        ),
-        "SUPPORT" to listOf(
-            SettingsItemData("✉️", "Contact Support", "We're here to help you"),
-            SettingsItemData("🐞", "Report a Bug", "Help us improve the app"),
-            SettingsItemData("💡", "Suggest a Feature", "Share your ideas with us"),
-        ),
-        "ABOUT" to listOf(
-            SettingsItemData("👤", "About Developer", "Meet the developer", SettingsRoutes.ABOUT_DEVELOPER, enabled = true),
-            SettingsItemData("</>", "Open Source Licenses", "Third-party libraries used", enabled = true),
-            SettingsItemData("ℹ️", "Version", "UR BioRes v1.0.0"),
+            "PRIVACY & SECURITY" to listOf(
+                SettingsItemData("🔒", "Privacy Policy", "Learn how we protect your data", SettingsRoutes.PRIVACY_POLICY, enabled = true),
+                SettingsItemData("📄", "Terms & Conditions", "Read our terms and conditions", SettingsRoutes.TERMS_CONDITIONS, enabled = true),
+                SettingsItemData("🛡️", "Data & Permissions", "Understand why we need access", SettingsRoutes.DATA_PERMISSIONS, enabled = true),
+            ),
+            "APP" to listOf(
+                SettingsItemData("⭐", "Rate UR BioRes", "Show your support", enabled = true),
+                SettingsItemData("🔗", "Share UR BioRes", "Share the app with your friends", enabled = true),
+                SettingsItemData("⬇️", "Check for Updates", "Get the latest version", enabled = true),
+            ),
+            "SUPPORT" to listOf(
+                SettingsItemData("✉️", "Contact Support", "We're here to help you"),
+                SettingsItemData("🐞", "Report a Bug", "Help us improve the app"),
+                SettingsItemData("💡", "Suggest a Feature", "Share your ideas with us"),
+            ),
+            "ABOUT" to listOf(
+                SettingsItemData("👤", "About Developer", "Meet the developer", SettingsRoutes.ABOUT_DEVELOPER, enabled = true),
+                SettingsItemData("</>", "Open Source Licenses", "Third-party libraries used", enabled = true),
+                SettingsItemData("ℹ️", "Version", "UR BioRes v1.0.0"),
+            )
         )
-    )
+    }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
+    Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(20.dp, 24.dp, 20.dp, 100.dp)
+            contentPadding = PaddingValues(start = 20.dp, top = 24.dp, end = 20.dp, bottom = 100.dp)
         ) {
-            item {
+            // Header Section
+            item(key = "header_section") {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     IconButton(onClick = onBack) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = SettingsColors.NeonPink)
@@ -121,66 +121,76 @@ fun SettingsScreen(
                 Spacer(Modifier.height(24.dp))
             }
 
+            // High-Performance Section Rendering
             sections.forEach { (sectionTitle, sectionItems) ->
-                item {
+                item(key = "header_$sectionTitle") {
                     SettingsSectionHeader(sectionTitle)
                 }
-                sectionItems.forEach { itemData ->
-                    item {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clip(RoundedCornerShape(16.dp))
-                                .background(Color.Black.copy(alpha = 0.55f))
-                                .border(1.dp, Brush.linearGradient(listOf(Color(0xFF4C8DFF), Color.Black)), RoundedCornerShape(16.dp))
-                        ) {
-                            SettingsItemRow(
-                                item = itemData,
-                                accentColor = Color.White,
-                                onClick = {
-                                    val emailItems = setOf("Contact Support", "Report a Bug", "Suggest a Feature")
-                                    if (itemData.title in emailItems) {
-                                        val subject = when (itemData.title) {
-                                            "Contact Support" -> "UR BioRes Support"
-                                            "Report a Bug" -> "UR BioRes Bug Report"
-                                            else -> "UR BioRes Feature Suggestion"
-                                        }
-                                        val intent = Intent(Intent.ACTION_SENDTO).apply {
-                                            data = Uri.parse("mailto:")
-                                            putExtra(Intent.EXTRA_EMAIL, arrayOf("edisondayags@gmail.com"))
-                                            putExtra(Intent.EXTRA_SUBJECT, subject)
-                                        }
-                                        context.startActivity(Intent.createChooser(intent, "Send Email"))
-                                    } else if (itemData.title == "Rate UR BioRes") {
-     val intent = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.saltech.urdocs"))
-     try { context.startActivity(intent) } catch (e: Exception) {
-         context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.saltech.urdocs")))
-     }
- } else if (itemData.title == "Share UR BioRes") {
-     val shareIntent = Intent(Intent.ACTION_SEND).apply {
-         type = "text/plain"
-         putExtra(Intent.EXTRA_TEXT, "Check out UR BioRes! https://play.google.com/store/apps/details?id=com.saltech.urdocs")
-     }
-     context.startActivity(Intent.createChooser(shareIntent, "Share UR BioRes"))
- } else if (itemData.title == "Check for Updates") {
-     context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.saltech.urdocs")))
- } else if (itemData.title == "Open Source Licenses") {
-     Toast.makeText(context, "Built with Jetpack Compose, AndroidX, Material3", Toast.LENGTH_LONG).show()
- } else if (itemData.enabled && itemData.route != null) {
-                                        onNavigate(itemData.route)
-                                    } else {
-                                        Toast.makeText(context, "Coming soon \uD83E\uDEB5", Toast.LENGTH_SHORT).show()
+
+                items(
+                    items = sectionItems,
+                    key = { it.title } // Mabilis na memory recycling sa Compose Engine
+                ) { itemData ->
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(16.dp))
+                            .background(Color.Black.copy(alpha = 0.55f))
+                            .border(1.dp, SettingsColors.CardBorderBrush, RoundedCornerShape(16.dp))
+                    ) {
+                        SettingsItemRow(
+                            item = itemData,
+                            accentColor = Color.White,
+                            onClick = {
+                                val emailItems = setOf("Contact Support", "Report a Bug", "Suggest a Feature")
+                                if (itemData.title in emailItems) {
+                                    val subject = when (itemData.title) {
+                                        "Contact Support" -> "UR BioRes Support"
+                                        "Report a Bug" -> "UR BioRes Bug Report"
+                                        else -> "UR BioRes Feature Suggestion"
                                     }
+                                    val intent = Intent(Intent.ACTION_SENDTO).apply {
+                                        data = Uri.parse("mailto:")
+                                        putExtra(Intent.EXTRA_EMAIL, arrayOf("edisondayags@gmail.com"))
+                                        putExtra(Intent.EXTRA_SUBJECT, subject)
+                                    }
+                                    context.startActivity(Intent.createChooser(intent, "Send Email"))
+                                } else if (itemData.title == "Rate UR BioRes") {
+                                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.saltech.urdocs"))
+                                    try { 
+                                        context.startActivity(intent) 
+                                    } catch (e: Exception) {
+                                        context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.saltech.urdocs")))
+                                    }
+                                } else if (itemData.title == "Share UR BioRes") {
+                                    val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                                        type = "text/plain"
+                                        putExtra(Intent.EXTRA_TEXT, "Check out UR BioRes! https://play.google.com/store/apps/details?id=com.saltech.urdocs")
+                                    }
+                                    context.startActivity(Intent.createChooser(shareIntent, "Share UR BioRes"))
+                                } else if (itemData.title == "Check for Updates") {
+                                    context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.saltech.urdocs")))
+                                } else if (itemData.title == "Open Source Licenses") {
+                                    Toast.makeText(context, "Built with Jetpack Compose, AndroidX, Material3", Toast.LENGTH_LONG).show()
+                                } else if (itemData.enabled && itemData.route != null) {
+                                    onNavigate(itemData.route)
+                                } else {
+                                    Toast.makeText(context, "Coming soon \uD83E\uDEB5", Toast.LENGTH_SHORT).show()
                                 }
-                            )
-                        }
-                        Spacer(Modifier.height(10.dp))
+                            }
+                        )
                     }
+                    Spacer(Modifier.height(10.dp))
                 }
-                item { Spacer(Modifier.height(14.dp)) }
+
+                item(key = "spacer_$sectionTitle") { 
+                    Spacer(Modifier.height(14.dp)) 
+                }
             }
 
-            item { SettingsQuoteFooter() }
+            item(key = "footer_quote") { 
+                SettingsQuoteFooter() 
+            }
         }
     }
 }
@@ -194,7 +204,7 @@ private fun SettingsHeaderCard() {
             .background(SettingsColors.CardBg)
             .border(
                 width = 1.dp,
-                brush = Brush.linearGradient(listOf(SettingsColors.NeonPink, SettingsColors.NeonGreen)),
+                brush = SettingsColors.HeaderBorderBrush,
                 shape = RoundedCornerShape(20.dp)
             )
             .padding(18.dp),
@@ -204,7 +214,7 @@ private fun SettingsHeaderCard() {
             modifier = Modifier
                 .size(56.dp)
                 .clip(RoundedCornerShape(14.dp))
-                .border(1.dp, Brush.linearGradient(listOf(SettingsColors.NeonPink, SettingsColors.NeonGreen)), RoundedCornerShape(14.dp)),
+                .border(1.dp, SettingsColors.HeaderBorderBrush, RoundedCornerShape(14.dp)),
             contentAlignment = Alignment.Center
         ) {
             Text("UR\nBioRes", color = Color.White, fontSize = 11.sp, fontWeight = FontWeight.Bold, textAlign = androidx.compose.ui.text.style.TextAlign.Center)
@@ -258,7 +268,7 @@ private fun SettingsItemRow(item: SettingsItemData, accentColor: Color = Setting
                 .size(40.dp)
                 .clip(RoundedCornerShape(10.dp))
                 .background(Color(0xFF1A1A1A))
-                .border(1.dp, Brush.linearGradient(listOf(Color(0xFF4C8DFF), Color.Black)), RoundedCornerShape(10.dp)),
+                .border(1.dp, SettingsColors.CardBorderBrush, RoundedCornerShape(10.dp)),
             contentAlignment = Alignment.Center
         ) {
             Text(item.icon, fontSize = 16.sp)
@@ -271,6 +281,7 @@ private fun SettingsItemRow(item: SettingsItemData, accentColor: Color = Setting
         Text("›", color = accentColor, fontSize = 22.sp, fontWeight = FontWeight.Bold)
     }
 }
+
 @Composable
 private fun SettingsQuoteFooter() {
     Column(
@@ -278,7 +289,7 @@ private fun SettingsQuoteFooter() {
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
             .background(SettingsColors.CardBg)
-            .border(1.dp, Brush.linearGradient(listOf(Color(0xFF4C8DFF), Color.Black)), RoundedCornerShape(16.dp))
+            .border(1.dp, SettingsColors.CardBorderBrush, RoundedCornerShape(16.dp))
             .padding(16.dp)
     ) {
         Text("❝ ", color = Color.White, fontSize = 18.sp)
