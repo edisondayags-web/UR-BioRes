@@ -100,7 +100,7 @@ fun BioDataScreen(
     onTakeSelfie: () -> Unit = {}
 ) {
     //SecureScreen()
-    val paperWidthDp = 750.dp
+    val paperWidthDp = 850.dp
     val paperHeightDp = 1250.dp
 
     val context = LocalContext.current
