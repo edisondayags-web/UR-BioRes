@@ -319,8 +319,8 @@ fun InterviewSessionScreen(
                     modifier = Modifier.onGloballyPositioned { coords ->
                         val top = coords.boundsInWindow().top
                         val bottom = coords.boundsInWindow().bottom
-                        if (ttsReady) {
-                            val due = if (index == 0) {
+                        if (ttsReady && countdownDone) {
+                             val due = if (index == 0) {                            
                                 top <= screenHeightPx
                             } else {
                                 top <= (midLinePx + triggerBufferPx)
