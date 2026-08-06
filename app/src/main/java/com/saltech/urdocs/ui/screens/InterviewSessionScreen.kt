@@ -13,6 +13,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -28,10 +29,12 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.offset
 import com.saltech.urdocs.ui.theme.UrGray
 import com.saltech.urdocs.ui.theme.UrPink
 import kotlinx.coroutines.delay
@@ -256,22 +259,9 @@ fun InterviewSessionScreen(
         }
     }
 
-    // The first question speaks reliably as soon as the TTS engine is ready - it's essentially
-    // on-screen from the start (short spacer), so it no longer depends on catching the right
-    // scroll-position frame, which was sometimes missed.
+    // Manual start now - user taps "Go" when ready instead of an automatic 3-2-1 countdown,
+    // so it no longer feels like a separate screen suddenly covering everything.
     var countdownDone by remember { mutableStateOf(false) }
-    var countdownText by remember { mutableStateOf("3") }
-
-    LaunchedEffect(ttsReady) {
-        if (ttsReady) {
-            for (n in listOf("3", "2", "1", "GO")) {
-                countdownText = n
-                delay(700)
-            }
-            countdownDone = true
-            speakIfDue(0)
-        }
-    }
 
     LaunchedEffect(scrollState.maxValue, countdownDone) {
         if (!countdownDone) return@LaunchedEffect
@@ -371,10 +361,32 @@ fun InterviewSessionScreen(
 
         if (!countdownDone) {
             Box(
-                modifier = Modifier.fillMaxSize().background(Color.Black),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clickable(
+                        enabled = ttsReady,
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() }
+                    ) {
+                        countdownDone = true
+                        speakIfDue(0)
+                    },
                 contentAlignment = Alignment.Center
             ) {
-                Text(countdownText, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 64.sp)
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        text = "Go",
+                        style = TextStyle(
+                            brush = Brush.horizontalGradient(listOf(Color(0xFF2A5CE0), Color(0xFFE0245E))),
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 64.sp
+                        )
+                    )
+                    Spacer(Modifier.height(20.dp))
+                    Icon(Icons.Filled.KeyboardArrowDown, contentDescription = null, tint = Color(0xFFE0245E), modifier = Modifier.size(40.dp))
+                    Icon(Icons.Filled.KeyboardArrowDown, contentDescription = null, tint = Color(0xFF7B3FE4), modifier = Modifier.size(40.dp).offset(y = (-14).dp))
+                    Icon(Icons.Filled.KeyboardArrowDown, contentDescription = null, tint = Color(0xFF2A5CE0), modifier = Modifier.size(40.dp).offset(y = (-28).dp))
+                }
             }
         }
     }
