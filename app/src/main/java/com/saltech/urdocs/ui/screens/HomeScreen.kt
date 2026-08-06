@@ -51,10 +51,7 @@ fun HomeScreen(
         HomeMenuItem("📝", "BIO-DATA", "Pang Company/Store etc. • PH Job Application", "biodata"),
         HomeMenuItem("🏛️", "GOV'T WEBSITES", "All Links You Want", "govt_forms"),
         HomeMenuItem("✉️", "LETTERS", "Leave, Excuse, Resign, etc.", "letters"),
-<<<<<<< HEAD
         HomeMenuItem("💬", "INTERVIEW", "Practice Office Interview (Q&A / Tips)", "interview"),
-=======
->>>>>>> 82be101 (Add Coming Soon dialog for Job Researcher)
         HomeMenuItem("🔎", "JOB RESEARCHER", "Hahanapan ka ng work near you", "job_researcher"),
     )
 
