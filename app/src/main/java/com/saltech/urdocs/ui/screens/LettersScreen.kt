@@ -1,3 +1,4 @@
+
 package com.saltech.urdocs.ui.screens
 
 import android.widget.Toast
@@ -9,13 +10,11 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -28,6 +27,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
@@ -39,7 +39,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.saltech.urdocs.model.LetterRequest
 import com.saltech.urdocs.model.LetterType
 import com.saltech.urdocs.viewmodel.LettersViewModel
 
@@ -76,246 +75,282 @@ fun LettersScreen(
             },
             label = "lettersScreenTransition"
         ) { state ->
-when (state) {
-    "resignation" -> ResignationLetterScreen(onBack = { screenState = "hub" })
-    "leave" -> LeaveLetterScreen(onBack = { screenState = "hub" })
-    "generic" -> GenericLetterScreen(letterType = selectedType, onBack = { screenState = "hub" })
-    "form" -> LetterFormContent(
-        viewModel = viewModel,
-        initialType = selectedType,
-        onBack = { screenState = "hub" }
-    )
-    "all" -> AllTemplatesContent(
-        onBack = { screenState = "hub" },
-        onPick = { type -> selectedType = type; screenState = "generic" }
-    )
-    else -> LettersHubContent(
-        onPremiumTap = { Toast.makeText(context, "Premium -- Coming Soon!", Toast.LENGTH_SHORT).show() },
-        onPopularTap = { _ -> Toast.makeText(context, "coming soon pa to luv🩵", Toast.LENGTH_SHORT).show() },
-        onResignationTap = { screenState = "resignation" },
-        onLeaveTap = { screenState = "leave" },
-        onExcuseTap = { selectedType = findType("Excuse"); screenState = "generic" },
-        onPick = { type -> selectedType = type; screenState = "generic" },
-        onMoreTemplates = { screenState = "all" },
-        onNavigate = onNavigate
-    )
-}
-}
+            when (state) {
+                "resignation" -> ResignationLetterScreen(onBack = { screenState = "hub" })
+                "leave" -> LeaveLetterScreen(onBack = { screenState = "hub" })
+                "generic" -> GenericLetterScreen(letterType = selectedType, onBack = { screenState = "hub" })
+                "form" -> LetterFormContent(
+                    viewModel = viewModel,
+                    initialType = selectedType,
+                    onBack = { screenState = "hub" }
+                )
+                "all" -> AllTemplatesContent(
+                    onBack = { screenState = "hub" },
+                    onPick = { type -> selectedType = type; screenState = "generic" }
+                )
+                else -> LettersHubContent(
+                    onPremiumTap = { Toast.makeText(context, "Premium -- Coming Soon!", Toast.LENGTH_SHORT).show() },
+                    onPopularTap = { _ -> Toast.makeText(context, "coming soon pa to luv🩵", Toast.LENGTH_SHORT).show() },
+                    onResignationTap = { screenState = "resignation" },
+                    onLeaveTap = { screenState = "leave" },
+                    onExcuseTap = { selectedType = findType("Excuse"); screenState = "generic" },
+                    onPick = { type -> selectedType = type; screenState = "generic" },
+                    onMoreTemplates = { screenState = "all" },
+                    onNavigate = onNavigate
+                )
+            }
+        }
     }
 }
-// ================== Custom vector icons (hindi Material icon, sariling guhit) ==================
+
+// ================== Custom vector icons (Optimized drawWithCache para walang lag sa scroll) ==================
 
 @Composable
 private fun CrownIcon(modifier: Modifier = Modifier, color: Color = UrPink) {
-    Canvas(modifier = modifier) {
-        val w = size.width
-        val h = size.height
-        val path = Path().apply {
-            moveTo(w * 0.05f, h * 0.85f)
-            lineTo(w * 0.05f, h * 0.45f)
-            lineTo(w * 0.28f, h * 0.62f)
-            lineTo(w * 0.5f, h * 0.15f)
-            lineTo(w * 0.72f, h * 0.62f)
-            lineTo(w * 0.95f, h * 0.45f)
-            lineTo(w * 0.95f, h * 0.85f)
-            close()
+    Spacer(
+        modifier = modifier.drawWithCache {
+            val w = size.width
+            val h = size.height
+            val path = Path().apply {
+                moveTo(w * 0.05f, h * 0.85f)
+                lineTo(w * 0.05f, h * 0.45f)
+                lineTo(w * 0.28f, h * 0.62f)
+                lineTo(w * 0.5f, h * 0.15f)
+                lineTo(w * 0.72f, h * 0.62f)
+                lineTo(w * 0.95f, h * 0.45f)
+                lineTo(w * 0.95f, h * 0.85f)
+                close()
+            }
+            onDrawBehind {
+                drawPath(path, color = color, style = Stroke(width = w * 0.07f))
+                drawCircle(color = color, radius = w * 0.05f, center = Offset(w * 0.5f, h * 0.12f))
+                drawCircle(color = color, radius = w * 0.04f, center = Offset(w * 0.05f, h * 0.42f))
+                drawCircle(color = color, radius = w * 0.04f, center = Offset(w * 0.95f, h * 0.42f))
+            }
         }
-        drawPath(path, color = color, style = Stroke(width = w * 0.07f))
-        drawCircle(color = color, radius = w * 0.05f, center = Offset(w * 0.5f, h * 0.12f))
-        drawCircle(color = color, radius = w * 0.04f, center = Offset(w * 0.05f, h * 0.42f))
-        drawCircle(color = color, radius = w * 0.04f, center = Offset(w * 0.95f, h * 0.42f))
-    }
+    )
 }
 
 @Composable
 private fun BriefcaseIcon(modifier: Modifier = Modifier, color: Color = UrPink) {
-    Canvas(modifier = modifier) {
-        val w = size.width
-        val h = size.height
-        val strokeW = w * 0.07f
-        drawRoundRect(
-            color = color,
-            topLeft = Offset(w * 0.1f, h * 0.32f),
-            size = androidx.compose.ui.geometry.Size(w * 0.8f, h * 0.55f),
-            cornerRadius = androidx.compose.ui.geometry.CornerRadius(w * 0.08f),
-            style = Stroke(width = strokeW)
-        )
-        val handle = Path().apply {
-            moveTo(w * 0.35f, h * 0.32f)
-            lineTo(w * 0.35f, h * 0.18f)
-            quadraticBezierTo(w * 0.35f, h * 0.1f, w * 0.5f, h * 0.1f)
-            quadraticBezierTo(w * 0.65f, h * 0.1f, w * 0.65f, h * 0.18f)
-            lineTo(w * 0.65f, h * 0.32f)
+    Spacer(
+        modifier = modifier.drawWithCache {
+            val w = size.width
+            val h = size.height
+            val strokeW = w * 0.07f
+            val handle = Path().apply {
+                moveTo(w * 0.35f, h * 0.32f)
+                lineTo(w * 0.35f, h * 0.18f)
+                quadraticBezierTo(w * 0.35f, h * 0.1f, w * 0.5f, h * 0.1f)
+                quadraticBezierTo(w * 0.65f, h * 0.1f, w * 0.65f, h * 0.18f)
+                lineTo(w * 0.65f, h * 0.32f)
+            }
+            onDrawBehind {
+                drawRoundRect(
+                    color = color,
+                    topLeft = Offset(w * 0.1f, h * 0.32f),
+                    size = androidx.compose.ui.geometry.Size(w * 0.8f, h * 0.55f),
+                    cornerRadius = androidx.compose.ui.geometry.CornerRadius(w * 0.08f),
+                    style = Stroke(width = strokeW)
+                )
+                drawPath(handle, color = color, style = Stroke(width = strokeW))
+                drawLine(color, Offset(w * 0.1f, h * 0.58f), Offset(w * 0.9f, h * 0.58f), strokeWidth = strokeW * 0.7f)
+            }
         }
-        drawPath(handle, color = color, style = Stroke(width = strokeW))
-        drawLine(color, Offset(w * 0.1f, h * 0.58f), Offset(w * 0.9f, h * 0.58f), strokeWidth = strokeW * 0.7f)
-    }
+    )
 }
 
 @Composable
 private fun PersonIcon(modifier: Modifier = Modifier, color: Color = UrPink) {
-    Canvas(modifier = modifier) {
-        val w = size.width
-        val h = size.height
-        val strokeW = w * 0.08f
-        drawCircle(color = color, radius = w * 0.18f, center = Offset(w * 0.5f, h * 0.3f), style = Stroke(width = strokeW))
-        val body = Path().apply {
-            moveTo(w * 0.2f, h * 0.9f)
-            quadraticBezierTo(w * 0.2f, h * 0.55f, w * 0.5f, h * 0.55f)
-            quadraticBezierTo(w * 0.8f, h * 0.55f, w * 0.8f, h * 0.9f)
+    Spacer(
+        modifier = modifier.drawWithCache {
+            val w = size.width
+            val h = size.height
+            val strokeW = w * 0.08f
+            val body = Path().apply {
+                moveTo(w * 0.2f, h * 0.9f)
+                quadraticBezierTo(w * 0.2f, h * 0.55f, w * 0.5f, h * 0.55f)
+                quadraticBezierTo(w * 0.8f, h * 0.55f, w * 0.8f, h * 0.9f)
+            }
+            onDrawBehind {
+                drawCircle(color = color, radius = w * 0.18f, center = Offset(w * 0.5f, h * 0.3f), style = Stroke(width = strokeW))
+                drawPath(body, color = color, style = Stroke(width = strokeW))
+            }
         }
-        drawPath(body, color = color, style = Stroke(width = strokeW))
-    }
+    )
 }
 
 @Composable
 private fun PencilIcon(modifier: Modifier = Modifier, color: Color = UrPink) {
-    Canvas(modifier = modifier) {
-        val w = size.width
-        val h = size.height
-        val strokeW = w * 0.07f
-        val path = Path().apply {
-            moveTo(w * 0.2f, h * 0.8f)
-            lineTo(w * 0.15f, h * 0.9f)
-            lineTo(w * 0.25f, h * 0.85f)
-            lineTo(w * 0.75f, h * 0.2f)
-            lineTo(w * 0.65f, h * 0.1f)
-            lineTo(w * 0.2f, h * 0.8f)
-            close()
+    Spacer(
+        modifier = modifier.drawWithCache {
+            val w = size.width
+            val h = size.height
+            val strokeW = w * 0.07f
+            val path = Path().apply {
+                moveTo(w * 0.2f, h * 0.8f)
+                lineTo(w * 0.15f, h * 0.9f)
+                lineTo(w * 0.25f, h * 0.85f)
+                lineTo(w * 0.75f, h * 0.2f)
+                lineTo(w * 0.65f, h * 0.1f)
+                lineTo(w * 0.2f, h * 0.8f)
+                close()
+            }
+            onDrawBehind {
+                drawPath(path, color = color, style = Stroke(width = strokeW))
+                drawLine(color, Offset(w * 0.6f, h * 0.28f), Offset(w * 0.72f, h * 0.4f), strokeWidth = strokeW * 0.7f)
+            }
         }
-        drawPath(path, color = color, style = Stroke(width = strokeW))
-        drawLine(color, Offset(w * 0.6f, h * 0.28f), Offset(w * 0.72f, h * 0.4f), strokeWidth = strokeW * 0.7f)
-    }
+    )
 }
 
 @Composable
 private fun GridIcon(modifier: Modifier = Modifier, color: Color = UrPink) {
-    Canvas(modifier = modifier) {
-        val w = size.width
-        val h = size.height
-        val boxSize = w * 0.35f
-        val gap = w * 0.12f
-        val strokeW = w * 0.06f
-        val positions = listOf(
-            Offset(w * 0.08f, h * 0.08f),
-            Offset(w * 0.08f + boxSize + gap, h * 0.08f),
-            Offset(w * 0.08f, h * 0.08f + boxSize + gap),
-            Offset(w * 0.08f + boxSize + gap, h * 0.08f + boxSize + gap)
-        )
-        positions.forEach { pos ->
-            drawRoundRect(
-                color = color,
-                topLeft = pos,
-                size = androidx.compose.ui.geometry.Size(boxSize, boxSize),
-                cornerRadius = androidx.compose.ui.geometry.CornerRadius(boxSize * 0.2f),
-                style = Stroke(width = strokeW)
+    Spacer(
+        modifier = modifier.drawWithCache {
+            val w = size.width
+            val h = size.height
+            val boxSize = w * 0.35f
+            val gap = w * 0.12f
+            val strokeW = w * 0.06f
+            val positions = listOf(
+                Offset(w * 0.08f, h * 0.08f),
+                Offset(w * 0.08f + boxSize + gap, h * 0.08f),
+                Offset(w * 0.08f, h * 0.08f + boxSize + gap),
+                Offset(w * 0.08f + boxSize + gap, h * 0.08f + boxSize + gap)
             )
+            onDrawBehind {
+                positions.forEach { pos ->
+                    drawRoundRect(
+                        color = color,
+                        topLeft = pos,
+                        size = androidx.compose.ui.geometry.Size(boxSize, boxSize),
+                        cornerRadius = androidx.compose.ui.geometry.CornerRadius(boxSize * 0.2f),
+                        style = Stroke(width = strokeW)
+                    )
+                }
+            }
         }
-    }
+    )
 }
 
 @Composable
 private fun EnvelopeIcon(modifier: Modifier = Modifier, color: Color = Color.White) {
-    Canvas(modifier = modifier) {
-        val w = size.width
-        val h = size.height
-        val strokeW = w * 0.07f
-        drawRoundRect(
-            color = color,
-            topLeft = Offset(w * 0.08f, h * 0.2f),
-            size = androidx.compose.ui.geometry.Size(w * 0.84f, h * 0.6f),
-            cornerRadius = androidx.compose.ui.geometry.CornerRadius(w * 0.06f),
-            style = Stroke(width = strokeW)
-        )
-        val flap = Path().apply {
-            moveTo(w * 0.1f, h * 0.24f)
-            lineTo(w * 0.5f, h * 0.55f)
-            lineTo(w * 0.9f, h * 0.24f)
+    Spacer(
+        modifier = modifier.drawWithCache {
+            val w = size.width
+            val h = size.height
+            val strokeW = w * 0.07f
+            val flap = Path().apply {
+                moveTo(w * 0.1f, h * 0.24f)
+                lineTo(w * 0.5f, h * 0.55f)
+                lineTo(w * 0.9f, h * 0.24f)
+            }
+            onDrawBehind {
+                drawRoundRect(
+                    color = color,
+                    topLeft = Offset(w * 0.08f, h * 0.2f),
+                    size = androidx.compose.ui.geometry.Size(w * 0.84f, h * 0.6f),
+                    cornerRadius = androidx.compose.ui.geometry.CornerRadius(w * 0.06f),
+                    style = Stroke(width = strokeW)
+                )
+                drawPath(flap, color = color, style = Stroke(width = strokeW))
+            }
         }
-        drawPath(flap, color = color, style = Stroke(width = strokeW))
-    }
+    )
 }
 
-/** Guhit na paper + pen + envelope, aproximate sa hero illustration ng design. */
+/** Guhit na paper + pen + envelope */
 @Composable
 private fun LetterIllustration(modifier: Modifier = Modifier) {
-    Canvas(modifier = modifier) {
-        val w = size.width
-        val h = size.height
+    Spacer(
+        modifier = modifier.drawWithCache {
+            val w = size.width
+            val h = size.height
 
-        val envW = w * 0.55f
-        val envH = h * 0.42f
-        val envLeft = 0f
-        val envTop = h * 0.5f
-        drawRoundRect(
-            color = UrPink,
-            topLeft = Offset(envLeft, envTop),
-            size = androidx.compose.ui.geometry.Size(envW, envH),
-            cornerRadius = androidx.compose.ui.geometry.CornerRadius(6f),
-            style = Stroke(width = 3f)
-        )
-        val flap = Path().apply {
-            moveTo(envLeft, envTop)
-            lineTo(envLeft + envW / 2f, envTop + envH * 0.55f)
-            lineTo(envLeft + envW, envTop)
-        }
-        drawPath(flap, color = UrPink, style = Stroke(width = 3f))
+            val envW = w * 0.55f
+            val envH = h * 0.42f
+            val envLeft = 0f
+            val envTop = h * 0.5f
 
-        val paperW = w * 0.55f
-        val paperH = h * 0.85f
-        val paperLeft = w * 0.42f
-        val paperTop = 0f
-        drawRoundRect(
-            color = Color(0xFF1A1A1A),
-            topLeft = Offset(paperLeft, paperTop),
-            size = androidx.compose.ui.geometry.Size(paperW, paperH),
-            cornerRadius = androidx.compose.ui.geometry.CornerRadius(8f)
-        )
-        drawRoundRect(
-            color = UrGreen,
-            topLeft = Offset(paperLeft, paperTop),
-            size = androidx.compose.ui.geometry.Size(paperW, paperH),
-            cornerRadius = androidx.compose.ui.geometry.CornerRadius(8f),
-            style = Stroke(width = 2f)
-        )
-        val fold = Path().apply {
-            moveTo(paperLeft + paperW - 22f, paperTop)
-            lineTo(paperLeft + paperW, paperTop)
-            lineTo(paperLeft + paperW, paperTop + 22f)
-            close()
-        }
-        drawPath(fold, color = UrPink)
+            val flap = Path().apply {
+                moveTo(envLeft, envTop)
+                lineTo(envLeft + envW / 2f, envTop + envH * 0.55f)
+                lineTo(envLeft + envW, envTop)
+            }
 
-        val lineX = paperLeft + paperW * 0.15f
-        val lineWidth = paperW * 0.65f
-        listOf(0.28f, 0.42f, 0.56f).forEach { frac ->
-            drawLine(
-                color = UrPink,
-                start = Offset(lineX, paperTop + paperH * frac),
-                end = Offset(lineX + lineWidth, paperTop + paperH * frac),
-                strokeWidth = 4f
-            )
-        }
-        val sig = Path().apply {
-            moveTo(lineX, paperTop + paperH * 0.72f)
-            quadraticBezierTo(lineX + lineWidth * 0.2f, paperTop + paperH * 0.62f, lineX + lineWidth * 0.4f, paperTop + paperH * 0.72f)
-            quadraticBezierTo(lineX + lineWidth * 0.6f, paperTop + paperH * 0.82f, lineX + lineWidth * 0.8f, paperTop + paperH * 0.7f)
-        }
-        drawPath(sig, color = UrPink, style = Stroke(width = 3f))
+            val paperW = w * 0.55f
+            val paperH = h * 0.85f
+            val paperLeft = w * 0.42f
+            val paperTop = 0f
 
-        val penPath = Path().apply {
-            moveTo(paperLeft + paperW * 0.55f, paperTop + paperH * 0.95f)
-            lineTo(paperLeft + paperW * 0.85f, paperTop + paperH * 0.45f)
-            lineTo(paperLeft + paperW * 0.95f, paperTop + paperH * 0.55f)
-            lineTo(paperLeft + paperW * 0.65f, paperTop + paperH)
-            close()
+            val fold = Path().apply {
+                moveTo(paperLeft + paperW - 22f, paperTop)
+                lineTo(paperLeft + paperW, paperTop)
+                lineTo(paperLeft + paperW, paperTop + 22f)
+                close()
+            }
+
+            val lineX = paperLeft + paperW * 0.15f
+            val lineWidth = paperW * 0.65f
+
+            val sig = Path().apply {
+                moveTo(lineX, paperTop + paperH * 0.72f)
+                quadraticBezierTo(lineX + lineWidth * 0.2f, paperTop + paperH * 0.62f, lineX + lineWidth * 0.4f, paperTop + paperH * 0.72f)
+                quadraticBezierTo(lineX + lineWidth * 0.6f, paperTop + paperH * 0.82f, lineX + lineWidth * 0.8f, paperTop + paperH * 0.7f)
+            }
+
+            val penPath = Path().apply {
+                moveTo(paperLeft + paperW * 0.55f, paperTop + paperH * 0.95f)
+                lineTo(paperLeft + paperW * 0.85f, paperTop + paperH * 0.45f)
+                lineTo(paperLeft + paperW * 0.95f, paperTop + paperH * 0.55f)
+                lineTo(paperLeft + paperW * 0.65f, paperTop + paperH)
+                close()
+            }
+
+            onDrawBehind {
+                drawRoundRect(
+                    color = UrPink,
+                    topLeft = Offset(envLeft, envTop),
+                    size = androidx.compose.ui.geometry.Size(envW, envH),
+                    cornerRadius = androidx.compose.ui.geometry.CornerRadius(6f),
+                    style = Stroke(width = 3f)
+                )
+                drawPath(flap, color = UrPink, style = Stroke(width = 3f))
+
+                drawRoundRect(
+                    color = Color(0xFF1A1A1A),
+                    topLeft = Offset(paperLeft, paperTop),
+                    size = androidx.compose.ui.geometry.Size(paperW, paperH),
+                    cornerRadius = androidx.compose.ui.geometry.CornerRadius(8f)
+                )
+                drawRoundRect(
+                    color = UrGreen,
+                    topLeft = Offset(paperLeft, paperTop),
+                    size = androidx.compose.ui.geometry.Size(paperW, paperH),
+                    cornerRadius = androidx.compose.ui.geometry.CornerRadius(8f),
+                    style = Stroke(width = 2f)
+                )
+                drawPath(fold, color = UrPink)
+
+                listOf(0.28f, 0.42f, 0.56f).forEach { frac ->
+                    drawLine(
+                        color = UrPink,
+                        start = Offset(lineX, paperTop + paperH * frac),
+                        end = Offset(lineX + lineWidth, paperTop + paperH * frac),
+                        strokeWidth = 4f
+                    )
+                }
+                drawPath(sig, color = UrPink, style = Stroke(width = 3f))
+
+                drawPath(penPath, color = Color(0xFF0D0D0D))
+                drawPath(penPath, color = UrPink, style = Stroke(width = 3f))
+            }
         }
-        drawPath(penPath, color = Color(0xFF0D0D0D))
-        drawPath(penPath, color = UrPink, style = Stroke(width = 3f))
-    }
+    )
 }
 
-// ================== Main hub content (now LazyColumn for smooth scroll) ==================
+// ================== Main hub content ==================
 
 @Composable
 private fun LettersHubContent(
@@ -328,7 +363,6 @@ private fun LettersHubContent(
     onMoreTemplates: () -> Unit,
     onNavigate: (String) -> Unit
 ) {
-    // Precompute the "other" letter types once instead of filtering every recomposition.
     val otherTypes = remember {
         LetterType.entries.filter { it != LetterType.LEAVE && it != LetterType.RESIGNATION && it != LetterType.EXCUSE }
     }
@@ -444,59 +478,66 @@ private fun LettersHubContent(
             }
 
             items(otherTypes, key = { it.name }) { type ->
-                val (mainIcon, badgeIcon) = when (type) {
-                    LetterType.GOVT_SSS -> Icons.Filled.AccountBalance to Icons.Filled.Description
-                    LetterType.GOVT_PAGIBIG -> Icons.Filled.Home to Icons.Filled.Description
-                    LetterType.APPLICATION -> Icons.Filled.Description to Icons.Filled.Send
-                    LetterType.AUTHORIZATION -> Icons.Filled.VerifiedUser to Icons.Filled.CheckCircle
-                    LetterType.REFERRAL -> Icons.Filled.ThumbUp to Icons.Filled.Star
-                    LetterType.FOLLOW_UP -> Icons.Filled.Refresh to Icons.Filled.Schedule
-                    LetterType.THANK_YOU -> Icons.Filled.Favorite to Icons.Filled.Star
-                    LetterType.JOB_OFFER -> Icons.Filled.Work to Icons.Filled.CheckCircle
-                    LetterType.SALARY_INCREASE -> Icons.Filled.AttachMoney to Icons.Filled.TrendingUp
-                    LetterType.COMPLAINT -> Icons.Filled.ReportProblem to Icons.Filled.Warning
-                    LetterType.BRGY_CITY_REQUEST -> Icons.Filled.LocationCity to Icons.Filled.Description
-                    LetterType.SCHOLARSHIP -> Icons.Filled.School to Icons.Filled.Star
-                    LetterType.OJT_INTERNSHIP -> Icons.Filled.Build to Icons.Filled.Description
-                    LetterType.OTHERS_REQUEST -> Icons.Filled.HelpOutline to Icons.Filled.Description
-                    LetterType.JOBSEEKER_OATH -> Icons.Filled.Badge to Icons.Filled.Description
-                    LetterType.AFFIDAVIT_DISCREPANCY -> Icons.Filled.Rule to Icons.Filled.Description
-                    LetterType.SPA -> Icons.Filled.Gavel to Icons.Filled.Description
-                    LetterType.DEMAND_LETTER -> Icons.Filled.Warning to Icons.Filled.Description
-                    LetterType.AFFIDAVIT_DESISTANCE -> Icons.Filled.RemoveCircle to Icons.Filled.Description
-                    LetterType.AFFIDAVIT_TWO_PERSONS -> Icons.Filled.Groups to Icons.Filled.Description
-                    LetterType.CUSTOM -> Icons.Filled.Edit to Icons.Filled.Description
-                    else -> Icons.Filled.Description to Icons.Filled.Description
+                val (mainIcon, badgeIcon) = remember(type) {
+                    when (type) {
+                        LetterType.GOVT_SSS -> Icons.Filled.AccountBalance to Icons.Filled.Description
+                        LetterType.GOVT_PAGIBIG -> Icons.Filled.Home to Icons.Filled.Description
+                        LetterType.APPLICATION -> Icons.Filled.Description to Icons.Filled.Send
+                        LetterType.AUTHORIZATION -> Icons.Filled.VerifiedUser to Icons.Filled.CheckCircle
+                        LetterType.REFERRAL -> Icons.Filled.ThumbUp to Icons.Filled.Star
+                        LetterType.FOLLOW_UP -> Icons.Filled.Refresh to Icons.Filled.Schedule
+                        LetterType.THANK_YOU -> Icons.Filled.Favorite to Icons.Filled.Star
+                        LetterType.JOB_OFFER -> Icons.Filled.Work to Icons.Filled.CheckCircle
+                        LetterType.SALARY_INCREASE -> Icons.Filled.AttachMoney to Icons.Filled.TrendingUp
+                        LetterType.COMPLAINT -> Icons.Filled.ReportProblem to Icons.Filled.Warning
+                        LetterType.BRGY_CITY_REQUEST -> Icons.Filled.LocationCity to Icons.Filled.Description
+                        LetterType.SCHOLARSHIP -> Icons.Filled.School to Icons.Filled.Star
+                        LetterType.OJT_INTERNSHIP -> Icons.Filled.Build to Icons.Filled.Description
+                        LetterType.OTHERS_REQUEST -> Icons.Filled.HelpOutline to Icons.Filled.Description
+                        LetterType.JOBSEEKER_OATH -> Icons.Filled.Badge to Icons.Filled.Description
+                        LetterType.AFFIDAVIT_DISCREPANCY -> Icons.Filled.Rule to Icons.Filled.Description
+                        LetterType.SPA -> Icons.Filled.Gavel to Icons.Filled.Description
+                        LetterType.DEMAND_LETTER -> Icons.Filled.Warning to Icons.Filled.Description
+                        LetterType.AFFIDAVIT_DESISTANCE -> Icons.Filled.RemoveCircle to Icons.Filled.Description
+                        LetterType.AFFIDAVIT_TWO_PERSONS -> Icons.Filled.Groups to Icons.Filled.Description
+                        LetterType.CUSTOM -> Icons.Filled.Edit to Icons.Filled.Description
+                        else -> Icons.Filled.Description to Icons.Filled.Description
+                    }
                 }
+
+                val subtitleText = remember(type) {
+                    when (type) {
+                        LetterType.GOVT_SSS -> "para sa gusto mong padalhan para maayos/ayusin"
+                        LetterType.GOVT_PAGIBIG -> "Request or inquiry letter para sa Pag-IBIG"
+                        LetterType.APPLICATION -> "Job or school application letter"
+                        LetterType.AUTHORIZATION -> "para sa hindi makadalo at ibang tao lang ipadalo mo for you"
+                        LetterType.REFERRAL -> "kung may gusto kang e-recommend na tao"
+                        LetterType.FOLLOW_UP -> "kung may gusto kang i-follow-up kaso mahiyain ka"
+                        LetterType.THANK_YOU -> "Pasasalamat para sa gusto mong pasalamatan"
+                        LetterType.JOB_OFFER -> "if may gusto kang offeran ng trabaho via letter"
+                        LetterType.SALARY_INCREASE -> "letter request para sa dagdag sweldo"
+                        LetterType.COMPLAINT -> "Reklamo tungkol sa isyu or need mo i-settle"
+                        LetterType.BRGY_CITY_REQUEST -> "Request letter sa barangay o city hall para sa lugar nyo"
+                        LetterType.SCHOLARSHIP -> "form para mag apply ng scholarship"
+                        LetterType.OJT_INTERNSHIP -> "Application letter para sa fresh grad na mag OJT"
+                        LetterType.OTHERS_REQUEST -> "other requests pa na gusto mo? tap mo lang luv"
+                        LetterType.JOBSEEKER_OATH -> "Libreng oath para sa unang beses mag-a-apply ng trabaho (RA 11261)"
+                        LetterType.AFFIDAVIT_DISCREPANCY -> "Para sa magkaibang detalye sa pangalan o birthdate sa iyong mga dokumento"
+                        LetterType.SPA -> "Bigyan ng kapangyarihan ang iba na mag-transact para sa'yo"
+                        LetterType.DEMAND_LETTER -> "Pormal na paghingi ng bayad o pagtupad sa obligasyon"
+                        LetterType.AFFIDAVIT_DESISTANCE -> "Pagbawi sa isang complaint o kaso"
+                        LetterType.AFFIDAVIT_TWO_PERSONS -> "Patunay mula sa dalawang testigo na hindi kamag-anak"
+                        LetterType.CUSTOM -> "Gumawa ng sarili mong klase ng letter"
+                        else -> "Tap to create this letter"
+                    }
+                }
+
                 Spacer(Modifier.height(12.dp))
                 LetterCard(
                     icon = { Icon(mainIcon, contentDescription = null, tint = UrPink, modifier = it) },
                     badge = { Icon(badgeIcon, contentDescription = null, tint = Color.Black, modifier = it) },
                     title = type.label,
-                    subtitle = when (type) {
-    LetterType.GOVT_SSS -> "para sa gusto mong padalhan para maayos/ayusin"
-    LetterType.GOVT_PAGIBIG -> "Request or inquiry letter para sa Pag-IBIG"
-    LetterType.APPLICATION -> "Job or school application letter"
-    LetterType.AUTHORIZATION -> "para sa hindi makadalo at ibang tao lang ipadalo mo for you"
-    LetterType.REFERRAL -> "kung may gusto kang e-recommend na tao"
-    LetterType.FOLLOW_UP -> "kung may gusto kang i-follow-up kaso mahiyain ka"
-    LetterType.THANK_YOU -> "Pasasalamat para sa gusto mong pasalamatan"
-    LetterType.JOB_OFFER -> "if may gusto kang offeran ng trabaho via letter"
-    LetterType.SALARY_INCREASE -> "letter request para sa dagdag sweldo"
-    LetterType.COMPLAINT -> "Reklamo tungkol sa isyu or need mo i-settle"
-    LetterType.BRGY_CITY_REQUEST -> "Request letter sa barangay o city hall para sa lugar nyo"
-    LetterType.SCHOLARSHIP -> "form para mag apply ng scholarship"
-    LetterType.OJT_INTERNSHIP -> "Application letter para sa fresh grad na mag OJT"
-    LetterType.OTHERS_REQUEST -> "other requests pa na gusto mo? tap mo lang luv"
-    LetterType.JOBSEEKER_OATH -> "Libreng oath para sa unang beses mag-a-apply ng trabaho (RA 11261)"
-            LetterType.AFFIDAVIT_DISCREPANCY -> "Para sa magkaibang detalye sa pangalan o birthdate sa iyong mga dokumento"
-            LetterType.SPA -> "Bigyan ng kapangyarihan ang iba na mag-transact para sa'yo"
-            LetterType.DEMAND_LETTER -> "Pormal na paghingi ng bayad o pagtupad sa obligasyon"
-            LetterType.AFFIDAVIT_DESISTANCE -> "Pagbawi sa isang complaint o kaso"
-            LetterType.AFFIDAVIT_TWO_PERSONS -> "Patunay mula sa dalawang testigo na hindi kamag-anak"
-    LetterType.CUSTOM -> "Gumawa ng sarili mong klase ng letter"
-    else -> "Tap to create this letter"
-},
+                    subtitle = subtitleText,
                     onClick = { onPick(type) }
                 )
             }
@@ -743,7 +784,7 @@ private fun LetterFormContent(
 
         Spacer(modifier = Modifier.height(20.dp))
         Button(
-        onClick = { },
+            onClick = { },
             enabled = false,
             modifier = Modifier.fillMaxWidth()
         ) {
