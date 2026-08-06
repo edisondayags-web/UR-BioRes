@@ -503,6 +503,159 @@ private fun contentFor(type: LetterType): LetterContent = when (type) {
         fileNamePrefix = "ParentalConsent"
     )
 
+    LetterType.JOBSEEKER_OATH -> LetterContent(
+        title = "OATH OF UNDERTAKING",
+        subject = "First-Time Jobseeker Oath (RA 11261)",
+        salutation = "To Whom It May Concern,",
+        defaultBody =
+            "I, the undersigned, being a first-time jobseeker availing of the benefits of\n" +
+            "Republic Act No. 11261, otherwise known as the First-Time Jobseekers\n" +
+            "Assistance Act, do hereby declare and undertake the following:\n\n" +
+            "1. This is the first time that I will actively look for a job, and I am\n" +
+            "requesting that a Barangay Certification be issued in my favor;\n\n" +
+            "2. I understand that this benefit is valid for one (1) year from the date\n" +
+            "of issuance, and may only be availed of once;\n\n" +
+            "3. I will inform the Barangay once I am employed, and I will not use this\n" +
+            "certification for any fraudulent purpose.\n\n" +
+            "I am executing this oath voluntarily and in accordance with the Data\n" +
+            "Privacy Act and other applicable laws.",
+        closingLine = "Signed by,",
+        closingFields = listOf(
+            ClosingField("First-Time Jobseeker Name", 190.dp),
+            ClosingField("Age", 90.dp),
+            ClosingField("Barangay", 150.dp),
+            ClosingField("Signature", 130.dp),
+            ClosingField("Witnessed by (Brgy. Official)", 200.dp)
+        ),
+        fileNamePrefix = "JobseekerOath"
+    )
+
+    LetterType.AFFIDAVIT_DISCREPANCY -> LetterContent(
+        title = "AFFIDAVIT OF DISCREPANCY",
+        subject = "Affidavit of Discrepancy",
+        salutation = "To Whom It May Concern,",
+        defaultBody =
+            "I, the undersigned, after having been duly sworn in accordance with law,\n" +
+            "depose and state that:\n\n" +
+            "1. My name appears differently across my documents/records, specifically\n" +
+            "between the name/details stated above;\n\n" +
+            "2. Said discrepancy was due to a clerical or typographical error, and\n" +
+            "both names/details refer to one and the same person, myself;\n\n" +
+            "3. I am executing this affidavit to attest to the truth of the foregoing\n" +
+            "and for whatever legal purpose it may serve.\n\n" +
+            "Note: This affidavit must be signed before a notary public to be legally\n" +
+            "valid. Please bring a valid government-issued ID when you have this\n" +
+            "notarized.",
+        closingLine = "Affiant,",
+        closingFields = listOf(
+            ClosingField("Affiant's Full Name", 190.dp),
+            ClosingField("Valid ID No.", 150.dp),
+            ClosingField("Signature", 130.dp)
+        ),
+        fileNamePrefix = "AffidavitDiscrepancy"
+    )
+
+    LetterType.SPA -> LetterContent(
+        title = "SPECIAL POWER OF ATTORNEY",
+        subject = "Special Power of Attorney",
+        salutation = "KNOW ALL MEN BY THESE PRESENTS:",
+        defaultBody =
+            "I, the Principal named above, of legal age, and a resident of the\n" +
+            "address stated, do hereby name, constitute, and appoint the\n" +
+            "Attorney-in-Fact named below to be my true and lawful representative,\n" +
+            "for me and in my name, place, and stead, to do and perform the\n" +
+            "specific act described above.\n\n" +
+            "I hereby give and grant unto my said Attorney-in-Fact full power and\n" +
+            "authority to do and perform every act necessary or proper to carry\n" +
+            "out the foregoing, as fully as I might or could do if personally present.\n\n" +
+            "Note: A Special Power of Attorney must be signed before a notary\n" +
+            "public to be legally valid, especially for transactions involving real\n" +
+            "property, banking, or other significant legal matters.",
+        closingLine = "Principal,",
+        closingFields = listOf(
+            ClosingField("Principal's Name", 180.dp),
+            ClosingField("Principal's Valid ID No.", 170.dp),
+            ClosingField("Attorney-in-Fact's Name", 180.dp),
+            ClosingField("Attorney-in-Fact's Valid ID No.", 180.dp),
+            ClosingField("Signature", 130.dp)
+        ),
+        fileNamePrefix = "SPA"
+    )
+
+    LetterType.DEMAND_LETTER -> LetterContent(
+        title = "DEMAND LETTER",
+        subject = "Formal Demand",
+        salutation = "Dear Sir/Madam,",
+        defaultBody =
+            "This letter serves as formal demand regarding the matter stated above.\n\n" +
+            "Despite previous attempts to settle this matter amicably, it remains\n" +
+            "unresolved. I am therefore demanding that appropriate action be taken\n" +
+            "within a reasonable period from receipt of this letter.\n\n" +
+            "Should this matter remain unresolved, I may be constrained to pursue\n" +
+            "further legal remedies available to me under the law.\n\n" +
+            "I trust that this matter will be given your prompt and serious attention.",
+        closingLine = "Sincerely,",
+        closingFields = listOf(
+            ClosingField("Full Name", 180.dp),
+            ClosingField("Contact Number", 150.dp),
+            ClosingField("Signature", 130.dp)
+        ),
+        fileNamePrefix = "DemandLetter"
+    )
+
+    LetterType.AFFIDAVIT_DESISTANCE -> LetterContent(
+        title = "AFFIDAVIT OF DESISTANCE",
+        subject = "Affidavit of Desistance",
+        salutation = "To Whom It May Concern,",
+        defaultBody =
+            "I, the undersigned complainant, after having been duly sworn in\n" +
+            "accordance with law, depose and state that:\n\n" +
+            "1. I am the complainant in the case/matter stated above;\n\n" +
+            "2. After careful consideration, I have voluntarily decided to withdraw\n" +
+            "and desist from further pursuing this case/complaint;\n\n" +
+            "3. This desistance is made freely and voluntarily, without any force,\n" +
+            "threat, or intimidation from any party.\n\n" +
+            "Note: This affidavit must be signed before a notary public to be legally\n" +
+            "valid. Please bring a valid government-issued ID when you have this\n" +
+            "notarized.",
+        closingLine = "Affiant,",
+        closingFields = listOf(
+            ClosingField("Complainant's Full Name", 190.dp),
+            ClosingField("Valid ID No.", 150.dp),
+            ClosingField("Signature", 130.dp)
+        ),
+        fileNamePrefix = "AffidavitDesistance"
+    )
+
+    LetterType.AFFIDAVIT_TWO_PERSONS -> LetterContent(
+        title = "AFFIDAVIT OF TWO DISINTERESTED PERSONS",
+        subject = "Affidavit of Two Disinterested Persons",
+        salutation = "To Whom It May Concern,",
+        defaultBody =
+            "We, the undersigned, both of legal age and residents of the addresses\n" +
+            "stated below, after having been duly sworn in accordance with law,\n" +
+            "depose and state that:\n\n" +
+            "1. We personally know the person named above for a considerable\n" +
+            "length of time;\n\n" +
+            "2. We are executing this affidavit to attest to the truth of the matter\n" +
+            "stated above, based on our personal knowledge;\n\n" +
+            "3. We are not related to the said person by consanguinity or affinity,\n" +
+            "and we are executing this affidavit voluntarily and without any\n" +
+            "consideration.\n\n" +
+            "Note: This affidavit must be signed before a notary public to be legally\n" +
+            "valid. Both affiants must bring valid government-issued IDs when\n" +
+            "having this notarized.",
+        closingLine = "Affiants,",
+        closingFields = listOf(
+            ClosingField("First Affiant's Name", 180.dp),
+            ClosingField("First Affiant's Valid ID No.", 170.dp),
+            ClosingField("Second Affiant's Name", 180.dp),
+            ClosingField("Second Affiant's Valid ID No.", 170.dp),
+            ClosingField("Signatures", 130.dp)
+        ),
+        fileNamePrefix = "AffidavitTwoPersons"
+    )
+
     else -> LetterContent(
         title = "LETTER",
         subject = "Letter",
