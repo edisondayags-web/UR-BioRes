@@ -130,8 +130,8 @@ fun InterviewSessionScreen(
                 // a Filipino voice was spelling out small English words like "us" letter by letter.
                 tts.value?.language = Locale.US
 
-                // Faster than 1.0x - default and 1.0x both sounded way too slow/dragging.
-                tts.value?.setSpeechRate(1.35f)
+                // 1.10x - readable pace, not too fast (1.35 felt rushed), not default-slow either.
+                tts.value?.setSpeechRate(1.10f)
 
                 val currentLang = tts.value?.language?.language
                 val maleVoice = tts.value?.voices?.firstOrNull { voice ->
@@ -212,7 +212,9 @@ fun InterviewSessionScreen(
                 .verticalScroll(scrollState, enabled = false)
                 .padding(horizontal = 32.dp, vertical = 40.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(140.dp)
+            // Widened from 140.dp - previous gap was too tight, next question was arriving
+            // before the user finished reading the current answer.
+            verticalArrangement = Arrangement.spacedBy(260.dp)
         ) {
             // Starts the list a bit below the screen (not a full screen-height away) so the
             // first text appears sooner - a full screen of blank black felt like a frozen app.
