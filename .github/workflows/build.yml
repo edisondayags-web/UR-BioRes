@@ -21,11 +21,9 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      # ⚡ 1. Opisyal at mas mabilis na Gradle Cache (Pinalitan ang actions/cache)
+      # ⚡ Setup Gradle (tinanggal ang cache-cleanup flag na nagdulot ng error)
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
-        with:
-          gradle-home-cache-cleanup: true
 
       - name: Decode google-services.json
         env:
@@ -49,7 +47,7 @@ jobs:
             -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 \
             -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
 
-      # ⚡ 2. Inalis ang --no-daemon, idinagdag ang --parallel at incremental Kotlin compilation
+      # ⚡ Parallel execution at incremental Kotlin compilation para sa bilis
       - name: Build debug APK
         run: ./gradlew assembleDebug --build-cache --parallel -Pkotlin.incremental=true
 
