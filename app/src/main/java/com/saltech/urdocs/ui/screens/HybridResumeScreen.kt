@@ -102,7 +102,7 @@ fun HybridResumeScreen(
 ) {
     //SecureScreen()
     val paperWidthDp = 850.dp
-    val paperHeightDp = 1700.dp
+    val paperHeightDp = 1350.dp
 
     var data by remember { mutableStateOf(HybridResumeFields()) }
     var offset by remember { mutableStateOf(Offset.Zero) }
