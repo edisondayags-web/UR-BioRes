@@ -121,8 +121,6 @@ fun InterviewSessionScreen(
     val tts = remember { mutableStateOf<TextToSpeech?>(null) }
     var ttsReady by remember { mutableStateOf(false) }
     val spokenIndices = remember { mutableStateListOf<Int>() }
-    val exitedIndices = remember { mutableStateListOf<Int>() }
-    var firstRevealed by remember { mutableStateOf(false) }
     val screenHeightDp = LocalConfiguration.current.screenHeightDp.dp
 
     DisposableEffect(Unit) {
@@ -157,33 +155,23 @@ fun InterviewSessionScreen(
         onDispose { t.stop(); t.shutdown() }
     }
 
-    // Once a QA block's bottom scrolls above this line, it's considered fully gone from view.
-    val exitLinePx = with(density) { 70.dp.toPx() }
-    // Once a QA block's top scrolls up to this line, it's considered visible/arrived.
-    val entryLinePx = with(density) { 260.dp.toPx() }
+    // Trigger line: middle of the screen. Each question speaks the instant it reaches here.
+    val midLinePx = with(density) { (screenHeightDp / 2).toPx() }
 
-    // Speak the next unspoken question only once its predecessor has exited the screen.
-    // Index 0 waits until it has actually scrolled up into view (see firstRevealed below) -
-    // it no longer speaks the instant the screen opens, since content now starts off-screen at the bottom.
-    LaunchedEffect(exitedIndices.size, firstRevealed, ttsReady) {
-        if (!ttsReady) return@LaunchedEffect
-        for (i in qaList.indices) {
-            val canSpeak = if (i == 0) firstRevealed else (i - 1) in exitedIndices
-            if (canSpeak && i !in spokenIndices) {
-                spokenIndices.add(i)
-                val params = Bundle().apply {
-                    putFloat(TextToSpeech.Engine.KEY_PARAM_VOLUME, 1.0f)
-                }
-                tts.value?.speak(qaList[i].question, TextToSpeech.QUEUE_FLUSH, params, null)
-                break
+    fun speakIfDue(index: Int) {
+        if (index !in spokenIndices) {
+            spokenIndices.add(index)
+            val params = Bundle().apply {
+                putFloat(TextToSpeech.Engine.KEY_PARAM_VOLUME, 1.0f)
             }
+            tts.value?.speak(qaList[index].question, TextToSpeech.QUEUE_FLUSH, params, null)
         }
     }
 
     LaunchedEffect(scrollState.maxValue) {
         while (scrollState.value < scrollState.maxValue) {
             if (!isPaused) {
-                scrollState.scrollBy(2.5f)
+                scrollState.scrollBy(7f)
             }
             delay(16)
         }
@@ -225,11 +213,8 @@ fun InterviewSessionScreen(
                     modifier = Modifier.onGloballyPositioned { coords ->
                         val top = coords.boundsInWindow().top
                         val bottom = coords.boundsInWindow().bottom
-                        if (index == 0 && !firstRevealed && top <= entryLinePx) {
-                            firstRevealed = true
-                        }
-                        if (bottom < exitLinePx && index !in exitedIndices) {
-                            exitedIndices.add(index)
+                        if (ttsReady && top <= midLinePx && bottom >= midLinePx) {
+                            speakIfDue(index)
                         }
                     }
                 ) {
