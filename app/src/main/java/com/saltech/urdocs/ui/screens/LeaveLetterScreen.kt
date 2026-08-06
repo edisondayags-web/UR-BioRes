@@ -117,9 +117,6 @@ fun LeaveLetterScreen(onBack: () -> Unit = {}) {
     val bodyFontStyle = if (isPlainMode) FontStyle.Normal else FontStyle.Italic
 
     Column(modifier = Modifier.fillMaxSize()) {
-        IconButton(onClick = onBack) {
-            Icon(Icons.Filled.ArrowBack, contentDescription = "Back", tint = Color.White)
-        }
         AndroidView(
             factory = { ctx ->
                 AdView(ctx).apply {
