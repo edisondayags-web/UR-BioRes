@@ -184,6 +184,7 @@ fun HybridResumeScreen(
                 }
             },
             modifier = Modifier.fillMaxWidth()
+                               .heightIn(min = 50.dp)
         )
 
         BoxWithConstraints(
