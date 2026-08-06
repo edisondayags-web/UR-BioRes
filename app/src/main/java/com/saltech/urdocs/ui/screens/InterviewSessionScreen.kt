@@ -285,7 +285,6 @@ fun InterviewSessionScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black)
             .pointerInput(Unit) {
                 detectDragGestures(
                     onDragStart = { isPaused = true },
