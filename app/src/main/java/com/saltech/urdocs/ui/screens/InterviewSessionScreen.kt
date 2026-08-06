@@ -112,13 +112,16 @@ fun InterviewSessionScreen(
     val tts = remember { mutableStateOf<TextToSpeech?>(null) }
 
     DisposableEffect(Unit) {
-        val t = TextToSpeech(context) { status ->
-            if (status == TextToSpeech.SUCCESS) {
-                tts.value?.language = Locale("fil", "PH")
+    val t = TextToSpeech(context) { status ->
+        if (status == TextToSpeech.SUCCESS) {
+            val result = tts.value?.setLanguage(Locale("fil", "PH"))
+            if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                tts.value?.language = Locale.US
             }
         }
-        tts.value = t
-        onDispose { t.shutdown() }
+    }
+    tts.value = t
+    onDispose { t.stop(); t.shutdown() }
     }
 
     LaunchedEffect(tts.value) {
@@ -132,7 +135,7 @@ fun InterviewSessionScreen(
     LaunchedEffect(scrollState.maxValue) {
         while (scrollState.value < scrollState.maxValue) {
             if (!isPaused) {
-                scrollState.scrollBy(2.2f)
+                scrollState.scrollBy(5f)
             }
             delay(16)
         }
