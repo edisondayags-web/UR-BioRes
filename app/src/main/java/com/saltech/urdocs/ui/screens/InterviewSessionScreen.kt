@@ -34,7 +34,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.offset
 import com.saltech.urdocs.ui.theme.UrGray
 import com.saltech.urdocs.ui.theme.UrPink
 import kotlinx.coroutines.delay
