@@ -36,6 +36,7 @@ class MainActivity : ComponentActivity() {
                 var pendingSelfieTarget by remember { mutableStateOf<String?>(null) }
                 var resumeSelfie by remember { mutableStateOf<Bitmap?>(null) }
                 var biodataSelfie by remember { mutableStateOf<Bitmap?>(null) }
+                var hybridSelfie by remember { mutableStateOf<Bitmap?>(null) }
                 val isConnected by rememberConnectivityState()
 
                 if (isConnected) {
@@ -46,10 +47,10 @@ class MainActivity : ComponentActivity() {
                     composable(Screen.Resume.route) {
                         ResumeChoiceScreen(
                             onChoose = { choice ->
-                                if (choice == "traditional") {
-                                    navController.navigate(Screen.ResumeTraditional.route)
-                                } else {
-                                    navController.navigate(Screen.ResumeChronological.route)
+                                when (choice) {
+                                    "traditional" -> navController.navigate(Screen.ResumeTraditional.route)
+                                    "hybrid" -> navController.navigate(Screen.ResumeHybrid.route)
+                                    else -> navController.navigate(Screen.ResumeChronological.route)
                                 }
                             }
                         )
@@ -66,6 +67,16 @@ class MainActivity : ComponentActivity() {
                     }
                     composable(Screen.ResumeChronological.route) {
                         ChronologicalResumeScreen()
+                    }
+                    composable(Screen.ResumeHybrid.route) {
+                        HybridResumeScreen(
+                            processedSelfie = hybridSelfie,
+                            onTakeSelfie = {
+                                pendingSelfieTarget = "resume_hybrid"
+                                navController.navigate(Screen.SelfieCapture.createRoute("resume_hybrid"))
+                            },
+                            onBack = { navController.popBackStack() }
+                        )
                     }
                     composable(Screen.BioData.route) {
                         BioDataScreen(
@@ -144,6 +155,7 @@ class MainActivity : ComponentActivity() {
                         SelfieCaptureScreen(
                             onProcessed = { bitmap ->
                                 if (returnTo == "resume") resumeSelfie = bitmap
+                                else if (returnTo == "resume_hybrid") hybridSelfie = bitmap
                                 else biodataSelfie = bitmap
                                 navController.popBackStack()
                             },

@@ -10,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Description
+import androidx.compose.material.icons.filled.Layers
 import androidx.compose.material.icons.filled.Work
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -106,6 +107,15 @@ fun ResumeChoiceScreen(onChoose: (String) -> Unit) {
                 title = "Chronological Resume",
                 subtitle = "(walang photo, tech/CV style)",
                 onClick = { onChoose("chronological") }
+            )
+
+            Spacer(Modifier.height(16.dp))
+
+            ResumeChoiceCard(
+                icon = { Icon(Icons.Filled.Layers, contentDescription = null, tint = Color.White, modifier = it) },
+                title = "Hybrid Resume",
+                subtitle = "(work history + project highlights)",
+                onClick = { onChoose("hybrid") }
             )
         }
     }
