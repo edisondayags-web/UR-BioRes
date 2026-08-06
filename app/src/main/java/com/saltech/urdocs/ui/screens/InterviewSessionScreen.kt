@@ -136,7 +136,7 @@ fun InterviewSessionScreen(
                 // Name-based "male" voice matching is unreliable across devices/engines,
                 // so always apply a lower pitch instead - consistently reads as a deeper,
                 // more male-sounding voice regardless of which underlying voice is picked.
-                tts.value?.setPitch(0.72f)
+                tts.value?.setPitch(0.62f)
 
                 ttsReady = true
             }
