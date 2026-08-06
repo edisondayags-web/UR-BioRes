@@ -119,7 +119,7 @@ class MainActivity : ComponentActivity() {
                                 InterviewScreen(
                                 onBack = { navController.popBackStack() },
                                  onSelect = { selectedMode -> }
-                                  )
+                               )
                                 
                     }
                     composable(Screen.JobResearcher.route) {
