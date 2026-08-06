@@ -4,23 +4,23 @@ import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.ui.draw.clip
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.scrollBy
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
@@ -37,52 +37,31 @@ import androidx.compose.ui.unit.sp
 import com.saltech.urdocs.ui.theme.UrGray
 import com.saltech.urdocs.ui.theme.UrPink
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import java.util.Locale
 
 private data class QA(val question: String, val answer: String)
 
-// Local (BPO) track - researched: mix of universal HR questions +
-// BPO-specific ones (night shift, CSAT/FCR/QA familiarity), each with a sample answer.
 private val LOCAL_QA = listOf(
-    QA("Tell me something about yourself.",
-        "I'm hardworking, a fast learner, and I always give my best in every task given to me."),
-    QA("Why do you want to work in the BPO industry?",
-        "I enjoy helping people and solving problems, and I like the fast-paced, dynamic environment of a call center."),
-    QA("What are your strengths and weaknesses?",
-        "My strength is staying patient under pressure. My weakness is I used to overthink, but I've learned to focus on taking action instead."),
-    QA("Are you willing to work night shifts or a graveyard schedule?",
-        "Yes, I'm flexible and willing to work any shift, including nights, to meet the needs of the business."),
-    QA("How do you handle an angry or difficult customer?",
-        "I stay calm, listen carefully, and focus on finding a solution instead of taking it personally."),
-    QA("What do you know about CSAT, FCR, and QA in a call center setting?",
-        "CSAT measures customer satisfaction, FCR means resolving an issue on the first call, and QA checks call quality against company standards."),
-    QA("Tell me about a time you performed well under pressure.",
-        "During a high-volume shift, I stayed organized and prioritized urgent tasks, which helped me meet all my targets."),
-    QA("Where do you see yourself five years from now?",
-        "I see myself growing within the company, taking on more responsibilities, and becoming a team lead or specialist."),
-    QA("Do you have any questions for us?",
-        "Yes — what does success look like in this role during the first three months?")
+    QA("Tell me something about yourself.", "I'm hardworking, a fast learner, and I always give my best in every task given to me."),
+    QA("Why do you want to work in the BPO industry?", "I enjoy helping people and solving problems, and I like the fast-paced, dynamic environment of a call center."),
+    QA("What are your strengths and weaknesses?", "My strength is staying patient under pressure. My weakness is I used to overthink, but I've learned to focus on taking action instead."),
+    QA("Are you willing to work night shifts or a graveyard schedule?", "Yes, I'm flexible and willing to work any shift, including nights, to meet the needs of the business."),
+    QA("How do you handle an angry or difficult customer?", "I stay calm, listen carefully, and focus on finding a solution instead of taking it personally."),
+    QA("What do you know about CSAT, FCR, and QA in a call center setting?", "CSAT measures customer satisfaction, FCR means resolving an issue on the first call, and QA checks call quality against company standards."),
+    QA("Tell me about a time you performed well under pressure.", "During a high-volume shift, I stayed organized and prioritized urgent tasks, which helped me meet all my targets."),
+    QA("Where do you see yourself five years from now?", "I see myself growing within the company, taking on more responsibilities, and becoming a team lead or specialist."),
+    QA("Do you have any questions for us?", "Yes — what does success look like in this role during the first three months?")
 )
 
-// International/corporate track - researched: standard global HR/behavioral set.
 private val INTL_QA = listOf(
-    QA("Tell me about yourself.",
-        "I'm focused, motivated, and always eager to learn. I love contributing to meaningful work and growing through new challenges."),
-    QA("What do you know about our company, and why do you want to work here?",
-        "I've researched your company's mission and values, and I believe my skills align well with what you're building."),
-    QA("What is your greatest strength, and what is your greatest weakness?",
-        "My greatest strength is adaptability. My weakness is I used to overthink, but now I focus on taking action and trusting my preparation."),
-    QA("Tell me about a time you failed or made a mistake. How did you handle it?",
-        "I once missed a deadline early in my career. I learned from it by improving how I plan and communicate timelines."),
-    QA("What motivates you in your professional life?",
-        "I'm motivated by solving problems and seeing the impact of my work on the team's success."),
-    QA("Where do you see yourself in five years?",
-        "I see myself growing, continuing to learn, and leading exciting new projects that make an impact."),
-    QA("What are your salary expectations?",
-        "I'm looking for a fair offer based on the role and my experience, and I'm open to discussing details."),
-    QA("Do you have any questions for us?",
-        "Yes — what does a typical day look like for someone in this role?")
+    QA("Tell me about yourself.", "I'm focused, motivated, and always eager to learn. I love contributing to meaningful work and growing through new challenges."),
+    QA("What do you know about our company, and why do you want to work here?", "I've researched your company's mission and values, and I believe my skills align well with what you're building."),
+    QA("What is your greatest strength, and what is your greatest weakness?", "My greatest strength is adaptability. My weakness is I used to overthink, but now I focus on taking action and trusting my preparation."),
+    QA("Tell me about a time you failed or made a mistake. How did you handle it?", "I once missed a deadline early in my career. I learned from it by improving how I plan and communicate timelines."),
+    QA("What motivates you in your professional life?", "I'm motivated by solving problems and seeing the impact of my work on the team's success."),
+    QA("Where do you see yourself in five years?", "I see myself growing, continuing to learn, and leading exciting new projects that make an impact."),
+    QA("What are your salary expectations?", "I'm looking for a fair offer based on the role and my experience, and I'm open to discussing details."),
+    QA("Do you have any questions for us?", "Yes — what does a typical day look like for someone in this role?")
 )
 
 @Composable
@@ -92,12 +71,12 @@ fun InterviewSessionScreen(
 ) {
     val isAsync = mode.endsWith("_async")
 
-    // ===== Async / Video mode: timed prep + record, per question (HireVue-style, timer only) =====
+    // ===== Async / Video mode =====
     if (isAsync) {
         val asyncQaList = remember(mode) { if (mode.startsWith("local")) LOCAL_QA else INTL_QA }
-        var qIndex by remember { mutableStateOf(0) }
-        var phase by remember { mutableStateOf("prep") } // prep -> recording -> review -> (next q or done)
-        var secondsLeft by remember { mutableStateOf(15) }
+        var qIndex by remember { mutableIntStateOf(0) }
+        var phase by remember { mutableStateOf("prep") }
+        var secondsLeft by remember { mutableIntStateOf(15) }
         var asyncStarted by remember { mutableStateOf(false) }
 
         LaunchedEffect(qIndex, phase, asyncStarted) {
@@ -114,6 +93,15 @@ fun InterviewSessionScreen(
         }
 
         Box(modifier = Modifier.fillMaxSize()) {
+            IconButton(
+                onClick = onBack,
+                modifier = Modifier
+                    .statusBarsPadding()
+                    .padding(8.dp)
+                    .align(Alignment.TopStart)
+            ) {
+                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = Color.White)
+            }
 
             if (phase == "done") {
                 Column(
@@ -123,7 +111,7 @@ fun InterviewSessionScreen(
                 ) {
                     Text("Tapos na luv 💙", color = UrPink, fontWeight = FontWeight.Bold, fontSize = 20.sp)
                     Spacer(Modifier.height(8.dp))
-                    Text("Back para lumabas", color = UrGray, fontSize = 14.sp)
+                    Text("Pindutin ang back para lumabas", color = UrGray, fontSize = 14.sp)
                 }
                 return@Box
             }
@@ -195,7 +183,7 @@ fun InterviewSessionScreen(
                                 .background(Color(0xFFE0245E))
                         )
                         Spacer(Modifier.height(10.dp))
-                        Text("Recording... $secondsLeft" + "s", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 28.sp)
+                        Text("Recording... ${secondsLeft}s", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 28.sp)
                         Spacer(Modifier.height(6.dp))
                         Text("(i-tap ang screen kung tapos ka na)", color = UrGray, fontSize = 12.sp)
                     }
@@ -237,53 +225,39 @@ fun InterviewSessionScreen(
         return
     }
 
-    // ===== Traditional mode: continuous auto-scroll, drag to scroll/pause =====
+    // ===== Traditional Teleprompter Mode =====
     val qaList = remember(mode) { if (mode.startsWith("local")) LOCAL_QA else INTL_QA }
     val scrollState = rememberScrollState()
     var isPaused by remember { mutableStateOf(false) }
-    val coroutineScope = rememberCoroutineScope()
-    val density = LocalDensity.current
 
-    // TTS setup - engine only here. Actual speak() calls happen per-question below,
-    // one at a time, only after the PREVIOUS question+answer has fully scrolled off screen.
     val context = LocalContext.current
-    val tts = remember { mutableStateOf<TextToSpeech?>(null) }
+    val density = LocalDensity.current
+    var ttsInstance by remember { mutableStateOf<TextToSpeech?>(null) }
     var ttsReady by remember { mutableStateOf(false) }
-    val spokenIndices = remember { mutableStateListOf<Int>() }
+    val spokenIndices = remember { mutableSetOf<Int>() }
     val screenHeightDp = LocalConfiguration.current.screenHeightDp.dp
 
     DisposableEffect(Unit) {
-        val t = TextToSpeech(context) { status ->
+        var textToSpeech: TextToSpeech? = null
+        textToSpeech = TextToSpeech(context) { status ->
             if (status == TextToSpeech.SUCCESS) {
-                // Content is all in English, so use an English voice throughout -
-                // a Filipino voice was spelling out small English words like "us" letter by letter.
-                tts.value?.language = Locale.US
-
-                // 1.10x - readable pace, not too fast (1.35 felt rushed), not default-slow either.
-                tts.value?.setSpeechRate(1.10f)
-
-                // Use the engine's natural default voice/pitch.
-                tts.value?.setPitch(1.0f)
-
-                // Warm-up utterance: Android TTS engines often clip the very
-                // first real speak() after init (only the tail word is heard).
-                // Speaking a throwaway space absorbs that clip.
-                tts.value?.speak(" ", TextToSpeech.QUEUE_FLUSH, null, "warmup")
-
-                ttsReady = true
+                textToSpeech?.language = Locale.US
+                textToSpeech?.setSpeechRate(1.10f)
+                textToSpeech?.setPitch(1.0f)
             }
+            ttsReady = true
         }
-        tts.value = t
-        onDispose { t.stop(); t.shutdown() }
+        ttsInstance = textToSpeech
+
+        onDispose {
+            textToSpeech?.stop()
+            textToSpeech?.shutdown()
+        }
     }
 
-    // Trigger line: middle of the screen. Questions 2+ speak the instant they reach here.
-    val midLinePx = with(density) { (screenHeightDp / 2).toPx() }
-    // The very first question speaks as soon as it enters the screen at all (bottom edge) -
-    // giving it a head start so it doesn't get cut off/overlapped by the next question later.
     val screenHeightPx = with(density) { screenHeightDp.toPx() }
-    // Buffer para mag-trigger ang speech bago pa umabot sa eksaktong gitna
-    val triggerBufferPx = with(density) { 150.dp.toPx() }
+    // BAGONG TRIGGER POINT: 85% ng screen height (nasa ibabang bahagi pa lang ng screen ay babasahin na agad, hindi na maghihintay sa gitna)
+    val earlyTriggerPx = screenHeightPx * 0.85f
 
     fun speakIfDue(index: Int) {
         if (index !in spokenIndices) {
@@ -291,17 +265,24 @@ fun InterviewSessionScreen(
             val params = Bundle().apply {
                 putFloat(TextToSpeech.Engine.KEY_PARAM_VOLUME, 1.0f)
             }
-            tts.value?.speak(qaList[index].question, TextToSpeech.QUEUE_FLUSH, params, null)
+            
+            if (index == 0) {
+                // UNANG TANONG: QUEUE_FLUSH para linisin ang lumang sound at magsalita agad
+                ttsInstance?.playSilentUtterance(200L, TextToSpeech.QUEUE_FLUSH, "silence_0")
+                ttsInstance?.speak(qaList[0].question, TextToSpeech.QUEUE_ADD, params, "q_0")
+            } else {
+                // SUSUNOD NA MGA TANONG: QUEUE_ADD para hindi ma-cut/ma-abort ang kasalukuyang binabasang tanong
+                ttsInstance?.speak(qaList[index].question, TextToSpeech.QUEUE_ADD, params, "q_$index")
+            }
         }
     }
 
-    // Manual start now - user taps "Go" when ready instead of an automatic 3-2-1 countdown,
-    // so it no longer feels like a separate screen suddenly covering everything.
     var countdownDone by remember { mutableStateOf(false) }
     var startRequested by remember { mutableStateOf(false) }
 
-    LaunchedEffect(ttsReady) {
-        if (ttsReady && startRequested && !countdownDone) {
+    // INAYOS ANG "GO" BUTTON: Sa unang tap pa lang, kapag ready na ang TTS ay agad babasahin ang Unang Tanong (#1)
+    LaunchedEffect(startRequested, ttsReady) {
+        if (startRequested && ttsReady && !countdownDone) {
             countdownDone = true
             speakIfDue(0)
         }
@@ -326,13 +307,11 @@ fun InterviewSessionScreen(
                     onDragEnd = { isPaused = false },
                     onDragCancel = { isPaused = false }
                 ) { change, dragAmount ->
-                    coroutineScope.launch {
-                        scrollState.scrollBy(-dragAmount.y)
-                    }
+                    change.consume()
+                    scrollState.dispatchRawDelta(-dragAmount.y)
                 }
             }
     ) {
-        // Reserved top space - banner ad goes here later (ads pass)
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -340,12 +319,8 @@ fun InterviewSessionScreen(
                 .verticalScroll(scrollState, enabled = false)
                 .padding(horizontal = 32.dp, vertical = 40.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            // Widened from 140.dp - previous gap was too tight, next question was arriving
-            // before the user finished reading the current answer.
             verticalArrangement = Arrangement.spacedBy(260.dp)
         ) {
-            // Starts the list a bit below the screen (not a full screen-height away) so the
-            // first text appears sooner - a full screen of blank black felt like a frozen app.
             Spacer(Modifier.height(290.dp))
 
             qaList.forEachIndexed { index, qa ->
@@ -353,12 +328,13 @@ fun InterviewSessionScreen(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.onGloballyPositioned { coords ->
                         val top = coords.boundsInWindow().top
-                        val bottom = coords.boundsInWindow().bottom
                         if (ttsReady && countdownDone) {
-                             val due = if (index == 0) {                            
-                                top <= screenHeightPx
+                            val isPlaced = top > 0f
+                            val due = if (index == 0) {
+                                isPlaced && top <= screenHeightPx
                             } else {
-                                top <= (midLinePx + triggerBufferPx)
+                                // Babasahin na habang nasa ibaba pa lang ng screen (malayo pa sa gitna)
+                                isPlaced && top <= earlyTriggerPx
                             }
                             if (due) speakIfDue(index)
                         }
@@ -381,12 +357,9 @@ fun InterviewSessionScreen(
                     )
                 }
             }
-            // Matches the top spacer - gives enough scroll room to carry the LAST
-            // question fully off the top of the screen instead of stopping while it's still visible.
             Spacer(Modifier.height(screenHeightDp))
         }
 
-        // Fade masks top/bottom so text appears/disappears smoothly
         Box(
             modifier = Modifier
                 .align(Alignment.TopCenter)
@@ -402,6 +375,16 @@ fun InterviewSessionScreen(
                 .background(Brush.verticalGradient(listOf(Color.Transparent, Color.Black)))
         )
 
+        IconButton(
+            onClick = onBack,
+            modifier = Modifier
+                .statusBarsPadding()
+                .padding(8.dp)
+                .align(Alignment.TopStart)
+        ) {
+            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = Color.White)
+        }
+
         if (!countdownDone) {
             Box(
                 modifier = Modifier
@@ -411,11 +394,8 @@ fun InterviewSessionScreen(
                         indication = null,
                         interactionSource = remember { MutableInteractionSource() }
                     ) {
+                        // Isang tap na lang dito sa Go button!
                         startRequested = true
-                        if (ttsReady) {
-                            countdownDone = true
-                            speakIfDue(0)
-                        }
                     },
                 contentAlignment = Alignment.Center
             ) {
