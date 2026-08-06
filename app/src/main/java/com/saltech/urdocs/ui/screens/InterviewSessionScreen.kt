@@ -1,478 +1,275 @@
 package com.saltech.urdocs.ui.screens
 
-import android.os.Bundle
+import android.media.MediaPlayer
+import android.media.MediaRecorder
 import android.speech.tts.TextToSpeech
-import androidx.compose.animation.core.*
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.detectDragGestures
-import androidx.compose.foundation.gestures.scrollBy
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.layout.boundsInWindow
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.saltech.urdocs.ui.theme.UrGray
-import com.saltech.urdocs.ui.theme.UrPink
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import java.io.File
 import java.util.Locale
 
-private data class QA(val question: String, val answer: String)
-
-private val LOCAL_QA = listOf(
-    QA("Tell me something about yourself.", "I'm hardworking, a fast learner, and I always give my best in every task given to me."),
-    QA("Why do you want to work in the BPO industry?", "I enjoy helping people and solving problems, and I like the fast-paced, dynamic environment of a call center."),
-    QA("What are your strengths and weaknesses?", "My strength is staying patient under pressure. My weakness is I used to overthink, but I've learned to focus on taking action instead."),
-    QA("Are you willing to work night shifts or a graveyard schedule?", "Yes, I'm flexible and willing to work any shift, including nights, to meet the needs of the business."),
-    QA("How do you handle an angry or difficult customer?", "I stay calm, listen carefully, and focus on finding a solution instead of taking it personally."),
-    QA("What do you know about CSAT, FCR, and QA in a call center setting?", "CSAT measures customer satisfaction, FCR means resolving an issue on the first call, and QA checks call quality against company standards."),
-    QA("Tell me about a time you performed well under pressure.", "During a high-volume shift, I stayed organized and prioritized urgent tasks, which helped me meet all my targets."),
-    QA("Where do you see yourself five years from now?", "I see myself growing within the company, taking on more responsibilities, and becoming a team lead or specialist."),
-    QA("Do you have any questions for us?", "Yes — what does success look like in this role during the first three months?")
-)
-
-private val INTL_QA = listOf(
-    QA("Tell me about yourself.", "I'm focused, motivated, and always eager to learn. I love contributing to meaningful work and growing through new challenges."),
-    QA("What do you know about our company, and why do you want to work here?", "I've researched your company's mission and values, and I believe my skills align well with what you're building."),
-    QA("What is your greatest strength, and what is your greatest weakness?", "My greatest strength is adaptability. My weakness is I used to overthink, but now I focus on taking action and trusting my preparation."),
-    QA("Tell me about a time you failed or made a mistake. How did you handle it?", "I once missed a deadline early in my career. I learned from it by improving how I plan and communicate timelines."),
-    QA("What motivates you in your professional life?", "I'm motivated by solving problems and seeing the impact of my work on the team's success."),
-    QA("Where do you see yourself in five years?", "I see myself growing, continuing to learn, and leading exciting new projects that make an impact."),
-    QA("What are your salary expectations?", "I'm looking for a fair offer based on the role and my experience, and I'm open to discussing details."),
-    QA("Do you have any questions for us?", "Yes — what does a typical day look like for someone in this role?")
-)
-
-// ===== Subtle Ambient Animated Background Composable =====
-@Composable
-fun AnimatedBackground(modifier: Modifier = Modifier) {
-    val infiniteTransition = rememberInfiniteTransition(label = "bg_anim")
-
-    // Mabagal na paggalaw ng Blue at Red glow centers (Smooth Floating Effect)
-    val floatX1 by infiniteTransition.animateFloat(
-        initialValue = -30f,
-        targetValue = 40f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 7000, easing = LinearEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "floatX1"
-    )
-
-    val floatY1 by infiniteTransition.animateFloat(
-        initialValue = -20f,
-        targetValue = 50f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 9000, easing = LinearEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "floatY1"
-    )
-
-    val floatX2 by infiniteTransition.animateFloat(
-        initialValue = 30f,
-        targetValue = -40f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 8000, easing = LinearEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "floatX2"
-    )
-
-    // Mahinhin na pag-pulse ng liwanag (Di-distracting alpha pulsing)
-    val alphaGlow by infiniteTransition.animateFloat(
-        initialValue = 0.35f,
-        targetValue = 0.60f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 5000, easing = FastOutSlowInEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "alphaGlow"
-    )
-
-    Canvas(modifier = modifier.fillMaxSize().background(Color.Black)) {
-        val width = size.width
-        val height = size.height
-
-        // Top-Left Glowing Blue Ambient (Tulad sa screenshot)
-        drawCircle(
-            brush = Brush.radialGradient(
-                colors = listOf(
-                    Color(0xFF1E52D6).copy(alpha = alphaGlow),
-                    Color(0xFF0D256B).copy(alpha = alphaGlow * 0.4f),
-                    Color.Transparent
-                ),
-                center = Offset(width * 0.1f + floatX1, height * 0.15f + floatY1),
-                radius = width * 0.85f
-            )
-        )
-
-        // Bottom-Right Glowing Red/Pink Ambient (Tulad sa screenshot)
-        drawCircle(
-            brush = Brush.radialGradient(
-                colors = listOf(
-                    Color(0xFFE0245E).copy(alpha = alphaGlow * 0.85f),
-                    Color(0xFF7A0C2E).copy(alpha = alphaGlow * 0.35f),
-                    Color.Transparent
-                ),
-                center = Offset(width * 0.9f + floatX2, height * 0.85f - floatY1),
-                radius = width * 0.9f
-            )
-        )
-    }
+enum class RecordingState {
+    IDLE,       // Bago mag-"Go"
+    RECORDING,  // Nagre-record
+    PAUSED,     // Naka-pause ang recording
+    STOPPED     // Tapos na mag-record, ready for Playback
 }
 
 @Composable
-fun InterviewSessionScreen(
-    mode: String,
-    onBack: () -> Unit
+fun AsyncInterviewSessionContent(
+    questionText: String,
+    questionIndex: Int,
+    totalQuestions: Int,
+    onNextQuestion: () -> Unit
 ) {
-    val isAsync = mode.endsWith("_async")
-
-    // ===== Async / Video mode =====
-    if (isAsync) {
-        val asyncQaList = remember(mode) { if (mode.startsWith("local")) LOCAL_QA else INTL_QA }
-        var qIndex by remember { mutableStateOf(0) }
-        var phase by remember { mutableStateOf("prep") }
-        var secondsLeft by remember { mutableStateOf(15) }
-        var asyncStarted by remember { mutableStateOf(false) }
-
-        LaunchedEffect(qIndex, phase, asyncStarted) {
-            if (!asyncStarted) return@LaunchedEffect
-            if (phase == "prep" || phase == "recording") {
-                val total = if (phase == "prep") 15 else 90
-                secondsLeft = total
-                while (secondsLeft > 0) {
-                    delay(1000)
-                    secondsLeft -= 1
-                }
-                phase = if (phase == "prep") "recording" else "review"
-            }
-        }
-
-        Box(modifier = Modifier.fillMaxSize()) {
-            // Animated Background na may halong Blue at Red Glow
-            AnimatedBackground()
-
-            if (phase == "done") {
-                Column(
-                    modifier = Modifier.fillMaxSize().padding(24.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Text("Tapos na luv 💙", color = UrPink, fontWeight = FontWeight.Bold, fontSize = 20.sp)
-                    Spacer(Modifier.height(8.dp))
-                    Text("Back para lumabas", color = UrGray, fontSize = 14.sp)
-                }
-                return@Box
-            }
-
-            if (!asyncStarted) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .clickable(
-                            indication = null,
-                            interactionSource = remember { MutableInteractionSource() }
-                        ) { asyncStarted = true },
-                    contentAlignment = Alignment.Center
-                ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text(
-                            text = "Go",
-                            style = TextStyle(
-                                brush = Brush.horizontalGradient(listOf(Color(0xFF2A5CE0), Color(0xFFE0245E))),
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 64.sp
-                            )
-                        )
-                        Spacer(Modifier.height(20.dp))
-                        Icon(Icons.Filled.KeyboardArrowDown, contentDescription = null, tint = Color(0xFFE0245E), modifier = Modifier.size(40.dp))
-                        Icon(Icons.Filled.KeyboardArrowDown, contentDescription = null, tint = Color(0xFF7B3FE4), modifier = Modifier.size(40.dp).offset(y = (-14).dp))
-                        Icon(Icons.Filled.KeyboardArrowDown, contentDescription = null, tint = Color(0xFF2A5CE0), modifier = Modifier.size(40.dp).offset(y = (-28).dp))
-                    }
-                }
-                return@Box
-            }
-
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 32.dp)
-                    .clickable(indication = null, interactionSource = remember { MutableInteractionSource() }) {
-                        if (phase == "recording") phase = "review"
-                    },
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Text(
-                    text = "Question ${qIndex + 1} / ${asyncQaList.size}",
-                    color = UrGray,
-                    fontSize = 13.sp
-                )
-                Spacer(Modifier.height(16.dp))
-                Text(
-                    text = asyncQaList[qIndex].question,
-                    color = Color(0xFFE0245E),
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 24.sp,
-                    textAlign = TextAlign.Center
-                )
-                Spacer(Modifier.height(28.dp))
-
-                when (phase) {
-                    "prep" -> {
-                        Text("Prepare your answer...", color = UrGray, fontSize = 15.sp)
-                        Spacer(Modifier.height(10.dp))
-                        Text("$secondsLeft", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 40.sp)
-                    }
-                    "recording" -> {
-                        Box(
-                            modifier = Modifier
-                                .size(14.dp)
-                                .clip(RoundedCornerShape(50))
-                                .background(Color(0xFFE0245E))
-                        )
-                        Spacer(Modifier.height(10.dp))
-                        Text("Recording... ${secondsLeft}s", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 28.sp)
-                        Spacer(Modifier.height(6.dp))
-                        Text("(i-tap ang screen kung tapos ka na)", color = UrGray, fontSize = 12.sp)
-                    }
-                    "review" -> {
-                        Text("Sample Answer:", color = UrGray, fontSize = 13.sp)
-                        Spacer(Modifier.height(8.dp))
-                        Text(
-                            text = asyncQaList[qIndex].answer,
-                            color = Color(0xFF2A5CE0),
-                            fontSize = 18.sp,
-                            textAlign = TextAlign.Center,
-                            lineHeight = 26.sp
-                        )
-                        Spacer(Modifier.height(24.dp))
-                        Box(
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(14.dp))
-                                .background(Color(0xFF1D3FB5))
-                                .clickable {
-                                    if (qIndex < asyncQaList.lastIndex) {
-                                        qIndex += 1
-                                        phase = "prep"
-                                    } else {
-                                        phase = "done"
-                                    }
-                                }
-                                .padding(horizontal = 28.dp, vertical = 14.dp)
-                        ) {
-                            Text(
-                                if (qIndex < asyncQaList.lastIndex) "Susunod" else "Tapos na",
-                                color = Color.White,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                    }
-                }
-            }
-        }
-        return
-    }
-
-    // ===== Traditional Teleprompter Mode =====
-    val qaList = remember(mode) { if (mode.startsWith("local")) LOCAL_QA else INTL_QA }
-    val scrollState = rememberScrollState()
-    var isPaused by remember { mutableStateOf(false) }
-    val coroutineScope = rememberCoroutineScope()
-    val density = LocalDensity.current
-
     val context = LocalContext.current
-    val tts = remember { mutableStateOf<TextToSpeech?>(null) }
-    var ttsReady by remember { mutableStateOf(false) }
-    val spokenIndices = remember { mutableStateListOf<Int>() }
-    val screenHeightDp = LocalConfiguration.current.screenHeightDp.dp
 
-    DisposableEffect(Unit) {
-        val t = TextToSpeech(context) { status ->
+    // State Holders
+    var recordingState by remember { mutableStateOf(RecordingState.IDLE) }
+    var isPlayingAudio by remember { mutableStateOf(false) }
+    var audioFile by remember { mutableStateOf<File?>(null) }
+
+    // Media Controllers
+    var mediaRecorder by remember { mutableStateOf<MediaRecorder?>(null) }
+    var mediaPlayer by remember { mutableStateOf<MediaPlayer?>(null) }
+    
+    // Text-To-Speech Engine
+    var tts by remember { mutableStateOf<TextToSpeech?>(null) }
+
+    // Initialize TTS and Speak Question automatically
+    DisposableEffect(questionText) {
+        tts = TextToSpeech(context) { status ->
             if (status == TextToSpeech.SUCCESS) {
-                tts.value?.language = Locale.US
-                tts.value?.setSpeechRate(1.10f)
-                tts.value?.setPitch(1.0f)
-                ttsReady = true
+                tts?.language = Locale.US
+                tts?.speak(questionText, TextToSpeech.QUEUE_FLUSH, null, "QuestionTTS")
             }
         }
-        tts.value = t
-        onDispose { t.stop(); t.shutdown() }
-    }
-
-    val screenHeightPx = with(density) { screenHeightDp.toPx() }
-    val earlyTriggerPx = screenHeightPx * 0.85f
-
-    fun speakIfDue(index: Int) {
-        if (index !in spokenIndices) {
-            spokenIndices.add(index)
-            val params = Bundle().apply {
-                putFloat(TextToSpeech.Engine.KEY_PARAM_VOLUME, 1.0f)
-            }
-            if (index == 0) {
-                tts.value?.playSilentUtterance(200L, TextToSpeech.QUEUE_FLUSH, "silence_0")
-                tts.value?.speak(qaList[0].question, TextToSpeech.QUEUE_ADD, params, "q_0")
-            } else {
-                tts.value?.speak(qaList[index].question, TextToSpeech.QUEUE_ADD, params, "q_$index")
-            }
+        onDispose {
+            tts?.stop()
+            tts?.shutdown()
+            mediaRecorder?.release()
+            mediaPlayer?.release()
         }
     }
 
-    var countdownDone by remember { mutableStateOf(false) }
-    var startRequested by remember { mutableStateOf(false) }
-
-    LaunchedEffect(startRequested, ttsReady) {
-        if (startRequested && ttsReady && !countdownDone) {
-            countdownDone = true
-            speakIfDue(0)
-        }
-    }
-
-    LaunchedEffect(scrollState.maxValue, countdownDone) {
-        if (!countdownDone) return@LaunchedEffect
-        while (scrollState.value < scrollState.maxValue) {
-            if (!isPaused) {
-                scrollState.scrollBy(8.5f)
-            }
-            delay(16)
-        }
-    }
-
-    Box(
+    Column(
         modifier = Modifier
             .fillMaxSize()
-            .pointerInput(Unit) {
-                detectDragGestures(
-                    onDragStart = { isPaused = true },
-                    onDragEnd = { isPaused = false },
-                    onDragCancel = { isPaused = false }
-                ) { change, dragAmount ->
-                    coroutineScope.launch {
-                        scrollState.scrollBy(-dragAmount.y)
-                    }
-                }
-            }
+            .background(Color(0xFF070B19))
+            .padding(24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.SpaceBetween
     ) {
-        // Animated Background
-        PremiumWaveBackground()
+        // Top Bar: Question Counter
+        Text(
+            text = "Question $questionIndex / $totalQuestions",
+            color = Color.Gray,
+            fontSize = 16.sp
+        )
 
+        // Question Display + Speaker Button
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 90.dp) // Reserbado para sa Ads Banner
-                .verticalScroll(scrollState, enabled = false)
-                .padding(horizontal = 32.dp, vertical = 40.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(260.dp)
+            modifier = Modifier.padding(horizontal = 16.dp)
         ) {
-            Spacer(Modifier.height(290.dp))
+            Text(
+                text = questionText,
+                color = Color(0xFFFF4D6D),
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center
+            )
 
-            qaList.forEachIndexed { index, qa ->
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.onGloballyPositioned { coords ->
-                        val top = coords.boundsInWindow().top
-                        if (ttsReady && countdownDone) {
-                            val isPlaced = top > 0f
-                            val due = if (index == 0) {
-                                isPlaced && top <= screenHeightPx
-                            } else {
-                                isPlaced && top <= earlyTriggerPx
-                            }
-                            if (due) speakIfDue(index)
-                        }
-                    }
-                ) {
-                    Text(
-                        text = qa.question,
-                        color = Color(0xFFE0245E),
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 22.sp,
-                        textAlign = TextAlign.Center
-                    )
-                    Spacer(Modifier.height(10.dp))
-                    Text(
-                        text = qa.answer,
-                        color = Color(0xFF2A5CE0),
-                        fontSize = 20.sp,
-                        textAlign = TextAlign.Center,
-                        lineHeight = 28.sp
-                    )
-                }
+            Spacer(modifier = Modifier.height(12.dp))
+
+            // Re-play Question TTS Voice
+            IconButton(
+                onClick = {
+                    tts?.speak(questionText, TextToSpeech.QUEUE_FLUSH, null, "QuestionTTS")
+                },
+                modifier = Modifier
+                    .background(Color.White.copy(alpha = 0.1f), CircleShape)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.VolumeUp,
+                    contentDescription = "Listen Question",
+                    tint = Color.White
+                )
             }
-            Spacer(Modifier.height(screenHeightDp))
         }
 
-        // Smooth Fade Shadows sa Top at Bottom
-        Box(
-            modifier = Modifier
-                .align(Alignment.TopCenter)
-                .fillMaxWidth()
-                .height(90.dp)
-                .background(Brush.verticalGradient(listOf(Color.Black, Color.Transparent)))
-        )
-        Box(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-                .height(70.dp)
-                .background(Brush.verticalGradient(listOf(Color.Transparent, Color.Black)))
-        )
-
-        // Go Overlay
-        if (!countdownDone) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .clickable(
-                        enabled = true,
-                        indication = null,
-                        interactionSource = remember { MutableInteractionSource() }
+        // Recording & Audio Playback Controls Box
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            when (recordingState) {
+                RecordingState.IDLE -> {
+                    // Step 1: "Go" Button to start recording
+                    Button(
+                        onClick = {
+                            val outputFile = File(context.cacheDir, "response_$questionIndex.mp3")
+                            audioFile = outputFile
+                            mediaRecorder = MediaRecorder(context).apply {
+                                setAudioSource(MediaRecorder.AudioSource.MIC)
+                                setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
+                                setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
+                                setOutputFile(outputFile.absolutePath)
+                                prepare()
+                                start()
+                            }
+                            recordingState = RecordingState.RECORDING
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF00E676)),
+                        shape = CircleShape,
+                        modifier = Modifier.size(100.dp)
                     ) {
-                        startRequested = true
-                    },
-                contentAlignment = Alignment.Center
-            ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text("GO", fontSize = 24.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text("Tap GO to start recording", color = Color.Gray, fontSize = 14.sp)
+                }
+
+                RecordingState.RECORDING, RecordingState.PAUSED -> {
+                    // Step 2: Active REC Indicator & Pause/Stop controls
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        // Pause / Resume Button
+                        IconButton(
+                            onClick = {
+                                if (recordingState == RecordingState.RECORDING) {
+                                    mediaRecorder?.pause()
+                                    recordingState = RecordingState.PAUSED
+                                } else {
+                                    mediaRecorder?.resume()
+                                    recordingState = RecordingState.RECORDING
+                                }
+                            },
+                            modifier = Modifier
+                                .size(60.dp)
+                                .background(Color(0xFFFFB703), CircleShape)
+                        ) {
+                            Icon(
+                                imageVector = if (recordingState == RecordingState.RECORDING) Icons.Default.Pause else Icons.Default.PlayArrow,
+                                contentDescription = "Pause/Resume",
+                                tint = Color.Black
+                            )
+                        }
+
+                        // Stop Recording Button
+                        IconButton(
+                            onClick = {
+                                mediaRecorder?.apply {
+                                    stop()
+                                    release()
+                                }
+                                mediaRecorder = null
+                                recordingState = RecordingState.STOPPED
+                            },
+                            modifier = Modifier
+                                .size(70.dp)
+                                .background(Color(0xFFFF0055), CircleShape)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Stop,
+                                contentDescription = "Stop",
+                                tint = Color.White
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(12.dp))
                     Text(
-                        text = "Go",
-                        style = TextStyle(
-                            brush = Brush.horizontalGradient(listOf(Color(0xFF2A5CE0), Color(0xFFE0245E))),
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 64.sp
-                        )
+                        text = if (recordingState == RecordingState.RECORDING) "🔴 Recording..." else "⏸️ Paused",
+                        color = Color.White,
+                        fontSize = 16.sp
                     )
-                    Spacer(Modifier.height(20.dp))
-                    Icon(Icons.Filled.KeyboardArrowDown, contentDescription = null, tint = Color(0xFFE0245E), modifier = Modifier.size(40.dp))
-                    Icon(Icons.Filled.KeyboardArrowDown, contentDescription = null, tint = Color(0xFF7B3FE4), modifier = Modifier.size(40.dp).offset(y = (-14).dp))
-                    Icon(Icons.Filled.KeyboardArrowDown, contentDescription = null, tint = Color(0xFF2A5CE0), modifier = Modifier.size(40.dp).offset(y = (-28).dp))
+                }
+
+                RecordingState.STOPPED -> {
+                    // Step 3: Play recorded boses & Next Question
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        // Playback Recorded Voice Button
+                        Button(
+                            onClick = {
+                                if (isPlayingAudio) {
+                                    mediaPlayer?.stop()
+                                    mediaPlayer?.release()
+                                    mediaPlayer = null
+                                    isPlayingAudio = false
+                                } else {
+                                    audioFile?.let { file ->
+                                        mediaPlayer = MediaPlayer().apply {
+                                            setDataSource(file.absolutePath)
+                                            prepare()
+                                            start()
+                                            setOnCompletionListener {
+                                                isPlayingAudio = false
+                                            }
+                                        }
+                                        isPlayingAudio = true
+                                    }
+                                }
+                            },
+                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF2196F3)),
+                            shape = RoundedCornerShape(12.dp)
+                        ) {
+                            Icon(
+                                imageVector = if (isPlayingAudio) Icons.Default.Stop else Icons.Default.PlayArrow,
+                                contentDescription = "Play Voice"
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(if (isPlayingAudio) "Stop Playback" else "Listen to My Voice")
+                        }
+
+                        // Re-record Button
+                        OutlinedButton(
+                            onClick = {
+                                recordingState = RecordingState.IDLE
+                            },
+                            shape = RoundedCornerShape(12.dp)
+                        ) {
+                            Text("Retake", color = Color.White)
+                        }
+                    }
                 }
             }
+        }
+
+        // Bottom Action Button
+        Button(
+            onClick = {
+                // Stop any playback before proceeding
+                mediaPlayer?.stop()
+                recordingState = RecordingState.IDLE
+                onNextQuestion()
+            },
+            enabled = recordingState == RecordingState.STOPPED || recordingState == RecordingState.IDLE,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(50.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6C5CE7))
+        ) {
+            Text("Next Question", fontSize = 16.sp)
         }
     }
 }
