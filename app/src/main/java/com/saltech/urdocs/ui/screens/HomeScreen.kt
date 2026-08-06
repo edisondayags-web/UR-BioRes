@@ -114,8 +114,8 @@ fun HomeScreen(
         if (showComingSoon) {
             AlertDialog(
                 onDismissRequest = { showComingSoon = false },
-                title = { Text("Coming Soon 🩵") },
-                text = { Text("Kasagsagan pa ng dev nito, balik ka na lang mahal!") },
+                title = { Text("Coming Soon pato Luv❤️🩵") },
+                text = { Text("baka next day or weeek ok nato🩵") },
                 confirmButton = {
                     TextButton(onClick = { showComingSoon = false }) {
                         Text("OK")
