@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Language
@@ -24,7 +25,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.material.icons.filled.ArrowBack
 import com.saltech.urdocs.ui.theme.UrPink
 
 private val IPink = Color(0xFF3B6FE0)
@@ -38,6 +38,9 @@ fun InterviewScreen(
     onSelect: (String) -> Unit
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
+        // BAGONG BACKGROUND HERE
+        PremiumWaveBackground()
+
         IconButton(
             onClick = onBack,
             modifier = Modifier
