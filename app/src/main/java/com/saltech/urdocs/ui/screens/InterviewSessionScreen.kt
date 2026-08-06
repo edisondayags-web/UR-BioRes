@@ -1,8 +1,9 @@
 package com.saltech.urdocs.ui.screens
 
+import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -17,8 +18,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.consume
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.boundsInWindow
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -26,6 +31,7 @@ import androidx.compose.ui.unit.sp
 import com.saltech.urdocs.ui.theme.UrGray
 import com.saltech.urdocs.ui.theme.UrPink
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.Locale
 
 private data class QA(val question: String, val answer: String)
@@ -102,16 +108,20 @@ fun InterviewSessionScreen(
         return
     }
 
-    // ===== Traditional mode: continuous auto-scroll, hold to pause =====
+    // ===== Traditional mode: continuous auto-scroll, drag to scroll/pause =====
     val qaList = remember(mode) { if (mode.startsWith("local")) LOCAL_QA else INTL_QA }
     val scrollState = rememberScrollState()
     var isPaused by remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
+    val density = LocalDensity.current
 
-    // TTS setup - reads the red (AI/question) text aloud.
-    // speak() is called INSIDE the init callback, once the engine is confirmed ready -
-    // calling it from a separate LaunchedEffect(tts.value) fired too early and got dropped silently.
+    // TTS setup - engine only here. Actual speak() calls happen per-question below,
+    // one at a time, only after the PREVIOUS question+answer has fully scrolled off screen.
     val context = LocalContext.current
     val tts = remember { mutableStateOf<TextToSpeech?>(null) }
+    var ttsReady by remember { mutableStateOf(false) }
+    val spokenIndices = remember { mutableStateListOf<Int>() }
+    val exitedIndices = remember { mutableStateListOf<Int>() }
 
     DisposableEffect(Unit) {
         val t = TextToSpeech(context) { status ->
@@ -120,19 +130,37 @@ fun InterviewSessionScreen(
                 if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                     tts.value?.language = Locale.US
                 }
-                qaList.forEach { qa ->
-                    tts.value?.speak(qa.question, TextToSpeech.QUEUE_ADD, null, null)
-                }
+                ttsReady = true
             }
         }
         tts.value = t
         onDispose { t.stop(); t.shutdown() }
     }
 
+    // Once a QA block's bottom scrolls above this line, it's considered fully gone from view.
+    val exitLinePx = with(density) { 70.dp.toPx() }
+
+    // Speak the next unspoken question only once its predecessor has exited the screen.
+    // Index 0 speaks right away since nothing needs to exit before it.
+    LaunchedEffect(exitedIndices.size, ttsReady) {
+        if (!ttsReady) return@LaunchedEffect
+        for (i in qaList.indices) {
+            val canSpeak = i == 0 || (i - 1) in exitedIndices
+            if (canSpeak && i !in spokenIndices) {
+                spokenIndices.add(i)
+                val params = Bundle().apply {
+                    putFloat(TextToSpeech.Engine.KEY_PARAM_VOLUME, 1.0f)
+                }
+                tts.value?.speak(qaList[i].question, TextToSpeech.QUEUE_FLUSH, params, null)
+                break
+            }
+        }
+    }
+
     LaunchedEffect(scrollState.maxValue) {
         while (scrollState.value < scrollState.maxValue) {
             if (!isPaused) {
-                scrollState.scrollBy(5f)
+                scrollState.scrollBy(2.5f)
             }
             delay(16)
         }
@@ -143,13 +171,16 @@ fun InterviewSessionScreen(
             .fillMaxSize()
             .background(Color.Black)
             .pointerInput(Unit) {
-                detectTapGestures(
-                    onPress = {
-                        isPaused = true
-                        tryAwaitRelease()
-                        isPaused = false
+                detectDragGestures(
+                    onDragStart = { isPaused = true },
+                    onDragEnd = { isPaused = false },
+                    onDragCancel = { isPaused = false }
+                ) { change, dragAmount ->
+                    change.consume()
+                    coroutineScope.launch {
+                        scrollState.scrollBy(-dragAmount.y)
                     }
-                )
+                }
             }
     ) {
         // Reserved top space - banner ad goes here later (ads pass)
@@ -162,8 +193,16 @@ fun InterviewSessionScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(36.dp)
         ) {
-            qaList.forEach { qa ->
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            qaList.forEachIndexed { index, qa ->
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.onGloballyPositioned { coords ->
+                        val bottom = coords.boundsInWindow().bottom
+                        if (bottom < exitLinePx && index !in exitedIndices) {
+                            exitedIndices.add(index)
+                        }
+                    }
+                ) {
                     Text(
                         text = qa.question,
                         color = Color(0xFFE0245E),
