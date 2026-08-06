@@ -265,6 +265,11 @@ fun InterviewSessionScreen(
                 // Use the engine's natural default voice/pitch.
                 tts.value?.setPitch(1.0f)
 
+                // Warm-up utterance: Android TTS engines often clip the very
+                // first real speak() after init (only the tail word is heard).
+                // Speaking a throwaway space absorbs that clip.
+                tts.value?.speak(" ", TextToSpeech.QUEUE_FLUSH, null, "warmup")
+
                 ttsReady = true
             }
         }
