@@ -3,6 +3,9 @@ package com.saltech.urdocs.ui.screens
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.draw.clip
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.*
@@ -14,6 +17,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -86,8 +90,25 @@ fun InterviewSessionScreen(
 ) {
     val isAsync = mode.endsWith("_async")
 
-    // ===== Async / Video mode not built yet - show placeholder =====
+    // ===== Async / Video mode: timed prep + record, per question (HireVue-style, timer only) =====
     if (isAsync) {
+        val asyncQaList = remember(mode) { if (mode.startsWith("local")) LOCAL_QA else INTL_QA }
+        var qIndex by remember { mutableStateOf(0) }
+        var phase by remember { mutableStateOf("prep") } // prep -> recording -> review -> (next q or done)
+        var secondsLeft by remember { mutableStateOf(15) }
+
+        LaunchedEffect(qIndex, phase) {
+            if (phase == "prep" || phase == "recording") {
+                val total = if (phase == "prep") 15 else 90
+                secondsLeft = total
+                while (secondsLeft > 0) {
+                    delay(1000)
+                    secondsLeft -= 1
+                }
+                phase = if (phase == "prep") "recording" else "review"
+            }
+        }
+
         Box(modifier = Modifier.fillMaxSize().background(Color.Black)) {
             IconButton(
                 onClick = onBack,
@@ -95,14 +116,96 @@ fun InterviewSessionScreen(
             ) {
                 Icon(Icons.Filled.ArrowBack, contentDescription = "Back", tint = UrPink)
             }
+
+            if (phase == "done") {
+                Column(
+                    modifier = Modifier.fillMaxSize().padding(24.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text("Tapos na luv 💙", color = UrPink, fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                    Spacer(Modifier.height(8.dp))
+                    Text("Back para lumabas", color = UrGray, fontSize = 14.sp)
+                }
+                return@Box
+            }
+
             Column(
-                modifier = Modifier.fillMaxSize().padding(24.dp),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 32.dp)
+                    .clickable(indication = null, interactionSource = remember { MutableInteractionSource() }) {
+                        if (phase == "recording") phase = "review"
+                    },
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                Text("ASYNC VIDEO", color = UrPink, fontWeight = FontWeight.Bold, fontSize = 20.sp)
-                Spacer(Modifier.height(8.dp))
-                Text("Coming soon luv 💙", color = UrGray, fontSize = 14.sp)
+                Text(
+                    text = "Question ${qIndex + 1} / ${asyncQaList.size}",
+                    color = UrGray,
+                    fontSize = 13.sp
+                )
+                Spacer(Modifier.height(16.dp))
+                Text(
+                    text = asyncQaList[qIndex].question,
+                    color = Color(0xFFE0245E),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 24.sp,
+                    textAlign = TextAlign.Center
+                )
+                Spacer(Modifier.height(28.dp))
+
+                when (phase) {
+                    "prep" -> {
+                        Text("Prepare your answer...", color = UrGray, fontSize = 15.sp)
+                        Spacer(Modifier.height(10.dp))
+                        Text("$secondsLeft", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 40.sp)
+                    }
+                    "recording" -> {
+                        Box(
+                            modifier = Modifier
+                                .size(14.dp)
+                                .clip(RoundedCornerShape(50))
+                                .background(Color(0xFFE0245E))
+                        )
+                        Spacer(Modifier.height(10.dp))
+                        Text("Recording... $secondsLeft" + "s", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 28.sp)
+                        Spacer(Modifier.height(6.dp))
+                        Text("(i-tap ang screen kung tapos ka na)", color = UrGray, fontSize = 12.sp)
+                    }
+                    "review" -> {
+                        Text("Sample Answer:", color = UrGray, fontSize = 13.sp)
+                        Spacer(Modifier.height(8.dp))
+                        Text(
+                            text = asyncQaList[qIndex].answer,
+                            color = Color(0xFF2A5CE0),
+                            fontSize = 18.sp,
+                            textAlign = TextAlign.Center,
+                            lineHeight = 26.sp
+                        )
+                        Spacer(Modifier.height(24.dp))
+                        Box(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(14.dp))
+                                .background(Color(0xFF1D3FB5))
+                                .clickable {
+                                    if (qIndex < asyncQaList.lastIndex) {
+                                        qIndex += 1
+                                        phase = "prep"
+                                    } else {
+                                        phase = "done"
+                                    }
+                                }
+                                .padding(horizontal = 28.dp, vertical = 14.dp)
+                        ) {
+                            Text(
+                                if (qIndex < asyncQaList.lastIndex) "Susunod" else "Tapos na",
+                                color = Color.White,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
+                }
             }
         }
         return
