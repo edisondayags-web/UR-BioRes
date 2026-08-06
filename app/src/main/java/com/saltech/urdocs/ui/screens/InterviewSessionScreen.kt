@@ -133,19 +133,10 @@ fun InterviewSessionScreen(
                 // 1.10x - readable pace, not too fast (1.35 felt rushed), not default-slow either.
                 tts.value?.setSpeechRate(1.10f)
 
-                val currentLang = tts.value?.language?.language
-                val maleVoice = tts.value?.voices?.firstOrNull { voice ->
-                    voice.locale.language == currentLang &&
-                        voice.name.contains("male", ignoreCase = true) &&
-                        !voice.name.contains("female", ignoreCase = true)
-                }
-                if (maleVoice != null) {
-                    tts.value?.voice = maleVoice
-                } else {
-                    // Fallback if the engine doesn't expose a labeled male voice:
-                    // a lower pitch reads as a deeper, more male-sounding voice.
-                    tts.value?.setPitch(0.75f)
-                }
+                // Name-based "male" voice matching is unreliable across devices/engines,
+                // so always apply a lower pitch instead - consistently reads as a deeper,
+                // more male-sounding voice regardless of which underlying voice is picked.
+                tts.value?.setPitch(0.72f)
 
                 ttsReady = true
             }
