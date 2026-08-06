@@ -2,6 +2,8 @@ package com.saltech.urdocs.ui.screens
 
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
+import androidx.compose.animation.core.*
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
@@ -12,15 +14,14 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
@@ -37,6 +38,7 @@ import androidx.compose.ui.unit.sp
 import com.saltech.urdocs.ui.theme.UrGray
 import com.saltech.urdocs.ui.theme.UrPink
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.Locale
 
 private data class QA(val question: String, val answer: String)
@@ -64,6 +66,85 @@ private val INTL_QA = listOf(
     QA("Do you have any questions for us?", "Yes — what does a typical day look like for someone in this role?")
 )
 
+// ===== Subtle Ambient Animated Background Composable =====
+@Composable
+fun AnimatedBackground(modifier: Modifier = Modifier) {
+    val infiniteTransition = rememberInfiniteTransition(label = "bg_anim")
+
+    // Mabagal na paggalaw ng Blue at Red glow centers (Smooth Floating Effect)
+    val floatX1 by infiniteTransition.animateFloat(
+        initialValue = -30f,
+        targetValue = 40f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 7000, easing = LinearEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "floatX1"
+    )
+
+    val floatY1 by infiniteTransition.animateFloat(
+        initialValue = -20f,
+        targetValue = 50f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 9000, easing = LinearEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "floatY1"
+    )
+
+    val floatX2 by infiniteTransition.animateFloat(
+        initialValue = 30f,
+        targetValue = -40f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 8000, easing = LinearEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "floatX2"
+    )
+
+    // Mahinhin na pag-pulse ng liwanag (Di-distracting alpha pulsing)
+    val alphaGlow by infiniteTransition.animateFloat(
+        initialValue = 0.35f,
+        targetValue = 0.60f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 5000, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "alphaGlow"
+    )
+
+    Canvas(modifier = modifier.fillMaxSize().background(Color.Black)) {
+        val width = size.width
+        val height = size.height
+
+        // Top-Left Glowing Blue Ambient (Tulad sa screenshot)
+        drawCircle(
+            brush = Brush.radialGradient(
+                colors = listOf(
+                    Color(0xFF1E52D6).copy(alpha = alphaGlow),
+                    Color(0xFF0D256B).copy(alpha = alphaGlow * 0.4f),
+                    Color.Transparent
+                ),
+                center = Offset(width * 0.1f + floatX1, height * 0.15f + floatY1),
+                radius = width * 0.85f
+            )
+        )
+
+        // Bottom-Right Glowing Red/Pink Ambient (Tulad sa screenshot)
+        drawCircle(
+            brush = Brush.radialGradient(
+                colors = listOf(
+                    Color(0xFFE0245E).copy(alpha = alphaGlow * 0.85f),
+                    Color(0xFF7A0C2E).copy(alpha = alphaGlow * 0.35f),
+                    Color.Transparent
+                ),
+                center = Offset(width * 0.9f + floatX2, height * 0.85f - floatY1),
+                radius = width * 0.9f
+            )
+        )
+    }
+}
+
 @Composable
 fun InterviewSessionScreen(
     mode: String,
@@ -74,9 +155,9 @@ fun InterviewSessionScreen(
     // ===== Async / Video mode =====
     if (isAsync) {
         val asyncQaList = remember(mode) { if (mode.startsWith("local")) LOCAL_QA else INTL_QA }
-        var qIndex by remember { mutableIntStateOf(0) }
+        var qIndex by remember { mutableStateOf(0) }
         var phase by remember { mutableStateOf("prep") }
-        var secondsLeft by remember { mutableIntStateOf(15) }
+        var secondsLeft by remember { mutableStateOf(15) }
         var asyncStarted by remember { mutableStateOf(false) }
 
         LaunchedEffect(qIndex, phase, asyncStarted) {
@@ -93,15 +174,8 @@ fun InterviewSessionScreen(
         }
 
         Box(modifier = Modifier.fillMaxSize()) {
-            IconButton(
-                onClick = onBack,
-                modifier = Modifier
-                    .statusBarsPadding()
-                    .padding(8.dp)
-                    .align(Alignment.TopStart)
-            ) {
-                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = Color.White)
-            }
+            // Animated Background na may halong Blue at Red Glow
+            AnimatedBackground()
 
             if (phase == "done") {
                 Column(
@@ -111,7 +185,7 @@ fun InterviewSessionScreen(
                 ) {
                     Text("Tapos na luv 💙", color = UrPink, fontWeight = FontWeight.Bold, fontSize = 20.sp)
                     Spacer(Modifier.height(8.dp))
-                    Text("Pindutin ang back para lumabas", color = UrGray, fontSize = 14.sp)
+                    Text("Back para lumabas", color = UrGray, fontSize = 14.sp)
                 }
                 return@Box
             }
@@ -229,34 +303,29 @@ fun InterviewSessionScreen(
     val qaList = remember(mode) { if (mode.startsWith("local")) LOCAL_QA else INTL_QA }
     val scrollState = rememberScrollState()
     var isPaused by remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
+    val density = LocalDensity.current
 
     val context = LocalContext.current
-    val density = LocalDensity.current
-    var ttsInstance by remember { mutableStateOf<TextToSpeech?>(null) }
+    val tts = remember { mutableStateOf<TextToSpeech?>(null) }
     var ttsReady by remember { mutableStateOf(false) }
-    val spokenIndices = remember { mutableSetOf<Int>() }
+    val spokenIndices = remember { mutableStateListOf<Int>() }
     val screenHeightDp = LocalConfiguration.current.screenHeightDp.dp
 
     DisposableEffect(Unit) {
-        var textToSpeech: TextToSpeech? = null
-        textToSpeech = TextToSpeech(context) { status ->
+        val t = TextToSpeech(context) { status ->
             if (status == TextToSpeech.SUCCESS) {
-                textToSpeech?.language = Locale.US
-                textToSpeech?.setSpeechRate(1.10f)
-                textToSpeech?.setPitch(1.0f)
+                tts.value?.language = Locale.US
+                tts.value?.setSpeechRate(1.10f)
+                tts.value?.setPitch(1.0f)
+                ttsReady = true
             }
-            ttsReady = true
         }
-        ttsInstance = textToSpeech
-
-        onDispose {
-            textToSpeech?.stop()
-            textToSpeech?.shutdown()
-        }
+        tts.value = t
+        onDispose { t.stop(); t.shutdown() }
     }
 
     val screenHeightPx = with(density) { screenHeightDp.toPx() }
-    // BAGONG TRIGGER POINT: 85% ng screen height (nasa ibabang bahagi pa lang ng screen ay babasahin na agad, hindi na maghihintay sa gitna)
     val earlyTriggerPx = screenHeightPx * 0.85f
 
     fun speakIfDue(index: Int) {
@@ -265,14 +334,11 @@ fun InterviewSessionScreen(
             val params = Bundle().apply {
                 putFloat(TextToSpeech.Engine.KEY_PARAM_VOLUME, 1.0f)
             }
-            
             if (index == 0) {
-                // UNANG TANONG: QUEUE_FLUSH para linisin ang lumang sound at magsalita agad
-                ttsInstance?.playSilentUtterance(200L, TextToSpeech.QUEUE_FLUSH, "silence_0")
-                ttsInstance?.speak(qaList[0].question, TextToSpeech.QUEUE_ADD, params, "q_0")
+                tts.value?.playSilentUtterance(200L, TextToSpeech.QUEUE_FLUSH, "silence_0")
+                tts.value?.speak(qaList[0].question, TextToSpeech.QUEUE_ADD, params, "q_0")
             } else {
-                // SUSUNOD NA MGA TANONG: QUEUE_ADD para hindi ma-cut/ma-abort ang kasalukuyang binabasang tanong
-                ttsInstance?.speak(qaList[index].question, TextToSpeech.QUEUE_ADD, params, "q_$index")
+                tts.value?.speak(qaList[index].question, TextToSpeech.QUEUE_ADD, params, "q_$index")
             }
         }
     }
@@ -280,7 +346,6 @@ fun InterviewSessionScreen(
     var countdownDone by remember { mutableStateOf(false) }
     var startRequested by remember { mutableStateOf(false) }
 
-    // INAYOS ANG "GO" BUTTON: Sa unang tap pa lang, kapag ready na ang TTS ay agad babasahin ang Unang Tanong (#1)
     LaunchedEffect(startRequested, ttsReady) {
         if (startRequested && ttsReady && !countdownDone) {
             countdownDone = true
@@ -307,15 +372,19 @@ fun InterviewSessionScreen(
                     onDragEnd = { isPaused = false },
                     onDragCancel = { isPaused = false }
                 ) { change, dragAmount ->
-                    change.consume()
-                    scrollState.dispatchRawDelta(-dragAmount.y)
+                    coroutineScope.launch {
+                        scrollState.scrollBy(-dragAmount.y)
+                    }
                 }
             }
     ) {
+        // Animated Background
+        AnimatedBackground()
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 90.dp)
+                .padding(top = 90.dp) // Reserbado para sa Ads Banner
                 .verticalScroll(scrollState, enabled = false)
                 .padding(horizontal = 32.dp, vertical = 40.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -333,7 +402,6 @@ fun InterviewSessionScreen(
                             val due = if (index == 0) {
                                 isPlaced && top <= screenHeightPx
                             } else {
-                                // Babasahin na habang nasa ibaba pa lang ng screen (malayo pa sa gitna)
                                 isPlaced && top <= earlyTriggerPx
                             }
                             if (due) speakIfDue(index)
@@ -360,6 +428,7 @@ fun InterviewSessionScreen(
             Spacer(Modifier.height(screenHeightDp))
         }
 
+        // Smooth Fade Shadows sa Top at Bottom
         Box(
             modifier = Modifier
                 .align(Alignment.TopCenter)
@@ -375,16 +444,7 @@ fun InterviewSessionScreen(
                 .background(Brush.verticalGradient(listOf(Color.Transparent, Color.Black)))
         )
 
-        IconButton(
-            onClick = onBack,
-            modifier = Modifier
-                .statusBarsPadding()
-                .padding(8.dp)
-                .align(Alignment.TopStart)
-        ) {
-            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = Color.White)
-        }
-
+        // Go Overlay
         if (!countdownDone) {
             Box(
                 modifier = Modifier
@@ -394,7 +454,6 @@ fun InterviewSessionScreen(
                         indication = null,
                         interactionSource = remember { MutableInteractionSource() }
                     ) {
-                        // Isang tap na lang dito sa Go button!
                         startRequested = true
                     },
                 contentAlignment = Alignment.Center
