@@ -129,6 +129,24 @@ fun InterviewSessionScreen(
                 if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                     tts.value?.language = Locale.US
                 }
+
+                // Speed up (default 1.0 felt slow) and force a male-sounding voice.
+                tts.value?.setSpeechRate(1.25f)
+
+                val currentLang = tts.value?.language?.language
+                val maleVoice = tts.value?.voices?.firstOrNull { voice ->
+                    voice.locale.language == currentLang &&
+                        voice.name.contains("male", ignoreCase = true) &&
+                        !voice.name.contains("female", ignoreCase = true)
+                }
+                if (maleVoice != null) {
+                    tts.value?.voice = maleVoice
+                } else {
+                    // Fallback if the engine doesn't expose a labeled male voice:
+                    // a lower pitch reads as a deeper, more male-sounding voice.
+                    tts.value?.setPitch(0.75f)
+                }
+
                 ttsReady = true
             }
         }
@@ -159,7 +177,7 @@ fun InterviewSessionScreen(
     LaunchedEffect(scrollState.maxValue) {
         while (scrollState.value < scrollState.maxValue) {
             if (!isPaused) {
-                scrollState.scrollBy(2.5f)
+                scrollState.scrollBy(4.5f)
             }
             delay(16)
         }
