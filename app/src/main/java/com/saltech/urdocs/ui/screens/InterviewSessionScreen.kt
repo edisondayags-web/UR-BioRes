@@ -107,29 +107,26 @@ fun InterviewSessionScreen(
     val scrollState = rememberScrollState()
     var isPaused by remember { mutableStateOf(false) }
 
-    // TTS setup - reads the red (AI/question) text aloud
+    // TTS setup - reads the red (AI/question) text aloud.
+    // speak() is called INSIDE the init callback, once the engine is confirmed ready -
+    // calling it from a separate LaunchedEffect(tts.value) fired too early and got dropped silently.
     val context = LocalContext.current
     val tts = remember { mutableStateOf<TextToSpeech?>(null) }
 
     DisposableEffect(Unit) {
-    val t = TextToSpeech(context) { status ->
-        if (status == TextToSpeech.SUCCESS) {
-            val result = tts.value?.setLanguage(Locale("fil", "PH"))
-            if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                tts.value?.language = Locale.US
+        val t = TextToSpeech(context) { status ->
+            if (status == TextToSpeech.SUCCESS) {
+                val result = tts.value?.setLanguage(Locale("fil", "PH"))
+                if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                    tts.value?.language = Locale.US
+                }
+                qaList.forEach { qa ->
+                    tts.value?.speak(qa.question, TextToSpeech.QUEUE_ADD, null, null)
+                }
             }
         }
-    }
-    tts.value = t
-    onDispose { t.stop(); t.shutdown() }
-    }
-
-    LaunchedEffect(tts.value) {
-        if (tts.value != null) {
-            qaList.forEach { qa ->
-                tts.value?.speak(qa.question, TextToSpeech.QUEUE_ADD, null, null)
-            }
-        }
+        tts.value = t
+        onDispose { t.stop(); t.shutdown() }
     }
 
     LaunchedEffect(scrollState.maxValue) {
