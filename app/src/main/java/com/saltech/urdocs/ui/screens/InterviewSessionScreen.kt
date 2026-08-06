@@ -18,7 +18,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.consume
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -176,7 +175,6 @@ fun InterviewSessionScreen(
                     onDragEnd = { isPaused = false },
                     onDragCancel = { isPaused = false }
                 ) { change, dragAmount ->
-                    change.consume()
                     coroutineScope.launch {
                         scrollState.scrollBy(-dragAmount.y)
                     }
