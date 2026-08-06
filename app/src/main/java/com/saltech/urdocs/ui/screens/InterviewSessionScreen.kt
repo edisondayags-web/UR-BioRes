@@ -177,7 +177,7 @@ fun InterviewSessionScreen(
     LaunchedEffect(scrollState.maxValue) {
         while (scrollState.value < scrollState.maxValue) {
             if (!isPaused) {
-                scrollState.scrollBy(5f)
+                scrollState.scrollBy(7f)
             }
             delay(16)
         }
