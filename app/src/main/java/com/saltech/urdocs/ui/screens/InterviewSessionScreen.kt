@@ -247,6 +247,8 @@ fun InterviewSessionScreen(
     // The very first question speaks as soon as it enters the screen at all (bottom edge) -
     // giving it a head start so it doesn't get cut off/overlapped by the next question later.
     val screenHeightPx = with(density) { screenHeightDp.toPx() }
+    // Buffer para mag-trigger ang speech bago pa umabot sa eksaktong gitna
+    val triggerBufferPx = with(density) { 150.dp.toPx() }
 
     fun speakIfDue(index: Int) {
         if (index !in spokenIndices) {
@@ -314,7 +316,7 @@ fun InterviewSessionScreen(
                             val due = if (index == 0) {
                                 top <= screenHeightPx
                             } else {
-                                top <= midLinePx && bottom >= midLinePx
+                                top <= (midLinePx + triggerBufferPx)
                             }
                             if (due) speakIfDue(index)
                         }
