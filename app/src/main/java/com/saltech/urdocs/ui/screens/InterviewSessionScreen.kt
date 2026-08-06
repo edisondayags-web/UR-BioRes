@@ -131,7 +131,7 @@ fun InterviewSessionScreen(
                 }
 
                 // Speed up (default 1.0 felt slow) and force a male-sounding voice.
-                tts.value?.setSpeechRate(1.25f)
+                tts.value?.setSpeechRate(1.5f)
 
                 val currentLang = tts.value?.language?.language
                 val maleVoice = tts.value?.voices?.firstOrNull { voice ->
@@ -177,7 +177,7 @@ fun InterviewSessionScreen(
     LaunchedEffect(scrollState.maxValue) {
         while (scrollState.value < scrollState.maxValue) {
             if (!isPaused) {
-                scrollState.scrollBy(4.5f)
+                scrollState.scrollBy(5f)
             }
             delay(16)
         }
