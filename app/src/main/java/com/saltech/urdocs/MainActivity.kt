@@ -98,8 +98,13 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                     composable(Screen.BioDataPhForm.route) {
-                        // idadagdag pa natin dito yung bagong PH Form screen composable
-                        // pagkatapos nating i-code yun
+                        BioDataPhFormScreen(
+                            processedSelfie = biodataSelfie,
+                            onTakeSelfie = {
+                                pendingSelfieTarget = "biodata"
+                                navController.navigate(Screen.SelfieCapture.createRoute("biodata"))
+                            }
+                        )
                     }
                     composable(Screen.GovtForms.route) {
                         GovtFormsScreen(onNavigate = { route -> navController.navigate(route) })
