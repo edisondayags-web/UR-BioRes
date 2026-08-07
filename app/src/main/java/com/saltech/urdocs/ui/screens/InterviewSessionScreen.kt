@@ -2,20 +2,26 @@ package com.saltech.urdocs.ui.screens
 
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
+import androidx.compose.animation.core.*
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.scrollBy
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
@@ -24,6 +30,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -37,44 +44,106 @@ import java.util.Locale
 private data class QA(val question: String, val answer: String)
 
 private val LOCAL_QA = listOf(
-    QA("Tell me something about yourself.",
-        "I'm hardworking, a fast learner, and I always give my best in every task given to me."),
-    QA("Why do you want to work in the BPO industry?",
-        "I enjoy helping people and solving problems, and I like the fast-paced, dynamic environment of a call center."),
-    QA("What are your strengths and weaknesses?",
-        "My strength is staying patient under pressure. My weakness is I used to overthink, but I've learned to focus on taking action instead."),
-    QA("Are you willing to work night shifts or a graveyard schedule?",
-        "Yes, I'm flexible and willing to work any shift, including nights, to meet the needs of the business."),
-    QA("How do you handle an angry or difficult customer?",
-        "I stay calm, listen carefully, and focus on finding a solution instead of taking it personally."),
-    QA("What do you know about CSAT, FCR, and QA in a call center setting?",
-        "CSAT measures customer satisfaction, FCR means resolving an issue on the first call, and QA checks call quality against company standards."),
-    QA("Tell me about a time you performed well under pressure.",
-        "During a high-volume shift, I stayed organized and prioritized urgent tasks, which helped me meet all my targets."),
-    QA("Where do you see yourself five years from now?",
-        "I see myself growing within the company, taking on more responsibilities, and becoming a team lead or specialist."),
-    QA("Do you have any questions for us?",
-        "Yes — what does success look like in this role during the first three months?")
+    QA("Tell me something about yourself.", "I'm hardworking, a fast learner, and I always give my best in every task given to me."),
+    QA("Why do you want to work in the BPO industry?", "I enjoy helping people and solving problems, and I like the fast-paced, dynamic environment of a call center."),
+    QA("What are your strengths and weaknesses?", "My strength is staying patient under pressure. My weakness is I used to overthink, but I've learned to focus on taking action instead."),
+    QA("Are you willing to work night shifts or a graveyard schedule?", "Yes, I'm flexible and willing to work any shift, including nights, to meet the needs of the business."),
+    QA("How do you handle an angry or difficult customer?", "I stay calm, listen carefully, and focus on finding a solution instead of taking it personally."),
+    QA("What do you know about CSAT, FCR, and QA in a call center setting?", "CSAT measures customer satisfaction, FCR means resolving an issue on the first call, and QA checks call quality against company standards."),
+    QA("Tell me about a time you performed well under pressure.", "During a high-volume shift, I stayed organized and prioritized urgent tasks, which helped me meet all my targets."),
+    QA("Where do you see yourself five years from now?", "I see myself growing within the company, taking on more responsibilities, and becoming a team lead or specialist."),
+    QA("Do you have any questions for us?", "Yes — what does success look like in this role during the first three months?")
 )
 
 private val INTL_QA = listOf(
-    QA("Tell me about yourself.",
-        "I'm focused, motivated, and always eager to learn. I love contributing to meaningful work and growing through new challenges."),
-    QA("What do you know about our company, and why do you want to work here?",
-        "I've researched your company's mission and values, and I believe my skills align well with what you're building."),
-    QA("What is your greatest strength, and what is your greatest weakness?",
-        "My greatest strength is adaptability. My weakness is I used to overthink, but now I focus on taking action and trusting my preparation."),
-    QA("Tell me about a time you failed or made a mistake. How did you handle it?",
-        "I once missed a deadline early in my career. I learned from it by improving how I plan and communicate timelines."),
-    QA("What motivates you in your professional life?",
-        "I'm motivated by solving problems and seeing the impact of my work on the team's success."),
-    QA("Where do you see yourself in five years?",
-        "I see myself growing, continuing to learn, and leading exciting new projects that make an impact."),
-    QA("What are your salary expectations?",
-        "I'm looking for a fair offer based on the role and my experience, and I'm open to discussing details."),
-    QA("Do you have any questions for us?",
-        "Yes — what does a typical day look like for someone in this role?")
+    QA("Tell me about yourself.", "I'm focused, motivated, and always eager to learn. I love contributing to meaningful work and growing through new challenges."),
+    QA("What do you know about our company, and why do you want to work here?", "I've researched your company's mission and values, and I believe my skills align well with what you're building."),
+    QA("What is your greatest strength, and what is your greatest weakness?", "My greatest strength is adaptability. My weakness is I used to overthink, but now I focus on taking action and trusting my preparation."),
+    QA("Tell me about a time you failed or made a mistake. How did you handle it?", "I once missed a deadline early in my career. I learned from it by improving how I plan and communicate timelines."),
+    QA("What motivates you in your professional life?", "I'm motivated by solving problems and seeing the impact of my work on the team's success."),
+    QA("Where do you see yourself in five years?", "I see myself growing, continuing to learn, and leading exciting new projects that make an impact."),
+    QA("What are your salary expectations?", "I'm looking for a fair offer based on the role and my experience, and I'm open to discussing details."),
+    QA("Do you have any questions for us?", "Yes — what does a typical day look like for someone in this role?")
 )
+
+// ===== Subtle Ambient Animated Background Composable =====
+@Composable
+fun AnimatedBackground(modifier: Modifier = Modifier) {
+    val infiniteTransition = rememberInfiniteTransition(label = "bg_anim")
+
+    // Mabagal na paggalaw ng Blue at Red glow centers (Smooth Floating Effect)
+    val floatX1 by infiniteTransition.animateFloat(
+        initialValue = -30f,
+        targetValue = 40f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 7000, easing = LinearEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "floatX1"
+    )
+
+    val floatY1 by infiniteTransition.animateFloat(
+        initialValue = -20f,
+        targetValue = 50f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 9000, easing = LinearEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "floatY1"
+    )
+
+    val floatX2 by infiniteTransition.animateFloat(
+        initialValue = 30f,
+        targetValue = -40f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 8000, easing = LinearEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "floatX2"
+    )
+
+    // Mahinhin na pag-pulse ng liwanag (Di-distracting alpha pulsing)
+    val alphaGlow by infiniteTransition.animateFloat(
+        initialValue = 0.35f,
+        targetValue = 0.60f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 5000, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "alphaGlow"
+    )
+
+    Canvas(modifier = modifier.fillMaxSize().background(Color.Black)) {
+        val width = size.width
+        val height = size.height
+
+        // Top-Left Glowing Blue Ambient (Tulad sa screenshot)
+        drawCircle(
+            brush = Brush.radialGradient(
+                colors = listOf(
+                    Color(0xFF1E52D6).copy(alpha = alphaGlow),
+                    Color(0xFF0D256B).copy(alpha = alphaGlow * 0.4f),
+                    Color.Transparent
+                ),
+                center = Offset(width * 0.1f + floatX1, height * 0.15f + floatY1),
+                radius = width * 0.85f
+            )
+        )
+
+        // Bottom-Right Glowing Red/Pink Ambient (Tulad sa screenshot)
+        drawCircle(
+            brush = Brush.radialGradient(
+                colors = listOf(
+                    Color(0xFFE0245E).copy(alpha = alphaGlow * 0.85f),
+                    Color(0xFF7A0C2E).copy(alpha = alphaGlow * 0.35f),
+                    Color.Transparent
+                ),
+                center = Offset(width * 0.9f + floatX2, height * 0.85f - floatY1),
+                radius = width * 0.9f
+            )
+        )
+    }
+}
 
 @Composable
 fun InterviewSessionScreen(
@@ -83,27 +152,154 @@ fun InterviewSessionScreen(
 ) {
     val isAsync = mode.endsWith("_async")
 
+    // ===== Async / Video mode =====
     if (isAsync) {
-        Box(modifier = Modifier.fillMaxSize().background(Color.Black)) {
-            IconButton(
-                onClick = onBack,
-                modifier = Modifier.align(Alignment.TopStart).padding(top = 24.dp, start = 8.dp)
-            ) {
-                Icon(Icons.Filled.ArrowBack, contentDescription = "Back", tint = UrPink)
+        val asyncQaList = remember(mode) { if (mode.startsWith("local")) LOCAL_QA else INTL_QA }
+        var qIndex by remember { mutableStateOf(0) }
+        var phase by remember { mutableStateOf("prep") }
+        var secondsLeft by remember { mutableStateOf(15) }
+        var asyncStarted by remember { mutableStateOf(false) }
+
+        LaunchedEffect(qIndex, phase, asyncStarted) {
+            if (!asyncStarted) return@LaunchedEffect
+            if (phase == "prep" || phase == "recording") {
+                val total = if (phase == "prep") 15 else 90
+                secondsLeft = total
+                while (secondsLeft > 0) {
+                    delay(1000)
+                    secondsLeft -= 1
+                }
+                phase = if (phase == "prep") "recording" else "review"
             }
+        }
+
+        Box(modifier = Modifier.fillMaxSize()) {
+            // Animated Background na may halong Blue at Red Glow
+            AnimatedBackground()
+
+            if (phase == "done") {
+                Column(
+                    modifier = Modifier.fillMaxSize().padding(24.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text("Tapos na luv 💙", color = UrPink, fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                    Spacer(Modifier.height(8.dp))
+                    Text("Back para lumabas", color = UrGray, fontSize = 14.sp)
+                }
+                return@Box
+            }
+
+            if (!asyncStarted) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clickable(
+                            indication = null,
+                            interactionSource = remember { MutableInteractionSource() }
+                        ) { asyncStarted = true },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(
+                            text = "Go",
+                            style = TextStyle(
+                                brush = Brush.horizontalGradient(listOf(Color(0xFF2A5CE0), Color(0xFFE0245E))),
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 64.sp
+                            )
+                        )
+                        Spacer(Modifier.height(20.dp))
+                        Icon(Icons.Filled.KeyboardArrowDown, contentDescription = null, tint = Color(0xFFE0245E), modifier = Modifier.size(40.dp))
+                        Icon(Icons.Filled.KeyboardArrowDown, contentDescription = null, tint = Color(0xFF7B3FE4), modifier = Modifier.size(40.dp).offset(y = (-14).dp))
+                        Icon(Icons.Filled.KeyboardArrowDown, contentDescription = null, tint = Color(0xFF2A5CE0), modifier = Modifier.size(40.dp).offset(y = (-28).dp))
+                    }
+                }
+                return@Box
+            }
+
             Column(
-                modifier = Modifier.fillMaxSize().padding(24.dp),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 32.dp)
+                    .clickable(indication = null, interactionSource = remember { MutableInteractionSource() }) {
+                        if (phase == "recording") phase = "review"
+                    },
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                Text("ASYNC VIDEO", color = UrPink, fontWeight = FontWeight.Bold, fontSize = 20.sp)
-                Spacer(Modifier.height(8.dp))
-                Text("Coming soon luv 💙", color = UrGray, fontSize = 14.sp)
+                Text(
+                    text = "Question ${qIndex + 1} / ${asyncQaList.size}",
+                    color = UrGray,
+                    fontSize = 13.sp
+                )
+                Spacer(Modifier.height(16.dp))
+                Text(
+                    text = asyncQaList[qIndex].question,
+                    color = Color(0xFFE0245E),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 24.sp,
+                    textAlign = TextAlign.Center
+                )
+                Spacer(Modifier.height(28.dp))
+
+                when (phase) {
+                    "prep" -> {
+                        Text("Prepare your answer...", color = UrGray, fontSize = 15.sp)
+                        Spacer(Modifier.height(10.dp))
+                        Text("$secondsLeft", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 40.sp)
+                    }
+                    "recording" -> {
+                        Box(
+                            modifier = Modifier
+                                .size(14.dp)
+                                .clip(RoundedCornerShape(50))
+                                .background(Color(0xFFE0245E))
+                        )
+                        Spacer(Modifier.height(10.dp))
+                        Text("Recording... ${secondsLeft}s", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 28.sp)
+                        Spacer(Modifier.height(6.dp))
+                        Text("(i-tap ang screen kung tapos ka na)", color = UrGray, fontSize = 12.sp)
+                    }
+                    "review" -> {
+                        Text("Sample Answer:", color = UrGray, fontSize = 13.sp)
+                        Spacer(Modifier.height(8.dp))
+                        Text(
+                            text = asyncQaList[qIndex].answer,
+                            color = Color(0xFF2A5CE0),
+                            fontSize = 18.sp,
+                            textAlign = TextAlign.Center,
+                            lineHeight = 26.sp
+                        )
+                        Spacer(Modifier.height(24.dp))
+                        Box(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(14.dp))
+                                .background(Color(0xFF1D3FB5))
+                                .clickable {
+                                    if (qIndex < asyncQaList.lastIndex) {
+                                        qIndex += 1
+                                        phase = "prep"
+                                    } else {
+                                        phase = "done"
+                                    }
+                                }
+                                .padding(horizontal = 28.dp, vertical = 14.dp)
+                        ) {
+                            Text(
+                                if (qIndex < asyncQaList.lastIndex) "Susunod" else "Tapos na",
+                                color = Color.White,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
+                }
             }
         }
         return
     }
 
+    // ===== Traditional Teleprompter Mode =====
     val qaList = remember(mode) { if (mode.startsWith("local")) LOCAL_QA else INTL_QA }
     val scrollState = rememberScrollState()
     var isPaused by remember { mutableStateOf(false) }
@@ -120,20 +316,8 @@ fun InterviewSessionScreen(
         val t = TextToSpeech(context) { status ->
             if (status == TextToSpeech.SUCCESS) {
                 tts.value?.language = Locale.US
-                tts.value?.setSpeechRate(1.35f)
-
-                val currentLang = tts.value?.language?.language
-                val maleVoice = tts.value?.voices?.firstOrNull { voice ->
-                    voice.locale.language == currentLang &&
-                        voice.name.contains("male", ignoreCase = true) &&
-                        !voice.name.contains("female", ignoreCase = true)
-                }
-                if (maleVoice != null) {
-                    tts.value?.voice = maleVoice
-                } else {
-                    tts.value?.setPitch(0.75f)
-                }
-
+                tts.value?.setSpeechRate(1.10f)
+                tts.value?.setPitch(1.0f)
                 ttsReady = true
             }
         }
@@ -142,6 +326,7 @@ fun InterviewSessionScreen(
     }
 
     val screenHeightPx = with(density) { screenHeightDp.toPx() }
+    val earlyTriggerPx = screenHeightPx * 0.85f
 
     fun speakIfDue(index: Int) {
         if (index !in spokenIndices) {
@@ -149,17 +334,27 @@ fun InterviewSessionScreen(
             val params = Bundle().apply {
                 putFloat(TextToSpeech.Engine.KEY_PARAM_VOLUME, 1.0f)
             }
-            tts.value?.speak(qaList[index].question, TextToSpeech.QUEUE_FLUSH, params, null)
+            if (index == 0) {
+                tts.value?.playSilentUtterance(200L, TextToSpeech.QUEUE_FLUSH, "silence_0")
+                tts.value?.speak(qaList[0].question, TextToSpeech.QUEUE_ADD, params, "q_0")
+            } else {
+                tts.value?.speak(qaList[index].question, TextToSpeech.QUEUE_ADD, params, "q_$index")
+            }
         }
     }
 
-    LaunchedEffect(ttsReady) {
-        if (ttsReady) {
+    var countdownDone by remember { mutableStateOf(false) }
+    var startRequested by remember { mutableStateOf(false) }
+
+    LaunchedEffect(startRequested, ttsReady) {
+        if (startRequested && ttsReady && !countdownDone) {
+            countdownDone = true
             speakIfDue(0)
         }
     }
 
-    LaunchedEffect(scrollState.maxValue) {
+    LaunchedEffect(scrollState.maxValue, countdownDone) {
+        if (!countdownDone) return@LaunchedEffect
         while (scrollState.value < scrollState.maxValue) {
             if (!isPaused) {
                 scrollState.scrollBy(8.5f)
@@ -171,39 +366,44 @@ fun InterviewSessionScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black)
             .pointerInput(Unit) {
                 detectDragGestures(
                     onDragStart = { isPaused = true },
                     onDragEnd = { isPaused = false },
                     onDragCancel = { isPaused = false }
-                ) { _, dragAmount ->
+                ) { change, dragAmount ->
                     coroutineScope.launch {
                         scrollState.scrollBy(-dragAmount.y)
                     }
                 }
             }
     ) {
+        // Animated Background
+        AnimatedBackground()
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 90.dp)
+                .padding(top = 90.dp) // Reserbado para sa Ads Banner
                 .verticalScroll(scrollState, enabled = false)
                 .padding(horizontal = 32.dp, vertical = 40.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(140.dp)
+            verticalArrangement = Arrangement.spacedBy(260.dp)
         ) {
-            Spacer(Modifier.height(250.dp))
+            Spacer(Modifier.height(290.dp))
 
             qaList.forEachIndexed { index, qa ->
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.onGloballyPositioned { coords ->
                         val top = coords.boundsInWindow().top
-                        if (ttsReady) {
-                            // Binago ko para mag-trigger agad pagpasok na pagpasok pa lang
-                            // sa ibabang bahagi ng screen (hindi na naghihintay umabot sa gitna)
-                            val due = top <= screenHeightPx
+                        if (ttsReady && countdownDone) {
+                            val isPlaced = top > 0f
+                            val due = if (index == 0) {
+                                isPlaced && top <= screenHeightPx
+                            } else {
+                                isPlaced && top <= earlyTriggerPx
+                            }
                             if (due) speakIfDue(index)
                         }
                     }
@@ -228,6 +428,7 @@ fun InterviewSessionScreen(
             Spacer(Modifier.height(screenHeightDp))
         }
 
+        // Smooth Fade Shadows sa Top at Bottom
         Box(
             modifier = Modifier
                 .align(Alignment.TopCenter)
@@ -243,11 +444,35 @@ fun InterviewSessionScreen(
                 .background(Brush.verticalGradient(listOf(Color.Transparent, Color.Black)))
         )
 
-        IconButton(
-            onClick = onBack,
-            modifier = Modifier.align(Alignment.TopStart).padding(top = 24.dp, start = 8.dp)
-        ) {
-            Icon(Icons.Filled.ArrowBack, contentDescription = "Back", tint = UrPink)
+        // Go Overlay
+        if (!countdownDone) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clickable(
+                        enabled = true,
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() }
+                    ) {
+                        startRequested = true
+                    },
+                contentAlignment = Alignment.Center
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        text = "Go",
+                        style = TextStyle(
+                            brush = Brush.horizontalGradient(listOf(Color(0xFF2A5CE0), Color(0xFFE0245E))),
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 64.sp
+                        )
+                    )
+                    Spacer(Modifier.height(20.dp))
+                    Icon(Icons.Filled.KeyboardArrowDown, contentDescription = null, tint = Color(0xFFE0245E), modifier = Modifier.size(40.dp))
+                    Icon(Icons.Filled.KeyboardArrowDown, contentDescription = null, tint = Color(0xFF7B3FE4), modifier = Modifier.size(40.dp).offset(y = (-14).dp))
+                    Icon(Icons.Filled.KeyboardArrowDown, contentDescription = null, tint = Color(0xFF2A5CE0), modifier = Modifier.size(40.dp).offset(y = (-28).dp))
+                }
+            }
         }
     }
 }
