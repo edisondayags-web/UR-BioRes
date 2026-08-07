@@ -138,9 +138,6 @@ private fun InterviewChoiceCard(
             .border(1.5.dp, IGradient, RoundedCornerShape(20.dp))
             .clickable { onClick() }
     ) {
-        // Wave background sits behind the card content, clipped to the card's rounded corners.
-        PremiumWaveBackground()
-
         Row(
             modifier = Modifier
                 .fillMaxWidth()
