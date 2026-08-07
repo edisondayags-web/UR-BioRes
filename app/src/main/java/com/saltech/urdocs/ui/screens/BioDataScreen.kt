@@ -270,22 +270,21 @@ fun BioDataScreen(
             modifier = Modifier
                 .weight(1f)
         ) {
-        val fitScaleX = maxWidth / paperWidthDp
-        val fitScaleY = maxHeight / paperHeightDp
-        var zoomFactor by remember { mutableStateOf(1f) }
+        val fitScale = minOf(maxWidth / paperWidthDp, maxHeight / paperHeightDp)
+            var scale by remember { mutableStateOf(fitScale) }
 
         Box(
             modifier = Modifier
                 .align(Alignment.Center)
                 .pointerInput(Unit) {
                     detectTransformGestures { _, pan, zoom, _ ->
-                        zoomFactor = (zoomFactor * zoom).coerceIn(1f, 4f)
-                        offset = if (zoomFactor <= 1f) Offset.Zero else offset + pan
+                        scale = (scale * zoom).coerceIn(fitScale, 4f)
+                        offset = if (scale <= fitScale) Offset.Zero else offset + pan
                     }
                 }
                 .graphicsLayer(
-                    scaleX = fitScaleX * zoomFactor,
-                    scaleY = fitScaleY * zoomFactor,
+                    scaleX = scale,
+                    scaleY = scale,
                     translationX = offset.x,
                     translationY = offset.y
                 )
@@ -481,7 +480,7 @@ fun BioDataScreen(
                 Button(
                     onClick = {
                         fun doSave() {
-                            zoomFactor = 1f
+                            scale = fitScale
                             offset = Offset.Zero
                             coroutineScope.launch {
                                 delay(100)
