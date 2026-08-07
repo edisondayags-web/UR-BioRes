@@ -58,11 +58,11 @@ fun ResumeChoiceScreen(onChoose: (String) -> Unit) {
             }
             Spacer(Modifier.height(10.dp))
             Row {
-                Text("Piliin ang ", color = RGray, fontSize = 14.sp)
+                Text("Pili ka ng ", color = RGray, fontSize = 14.sp)
                 Text("gusto", color = Color.White, fontSize = 14.sp)
                 Text(" mong ", color = RGray, fontSize = 14.sp)
                 Text("format", color = Color.White, fontSize = 14.sp)
-                Text(" ng resume.", color = RGray, fontSize = 14.sp)
+                Text(" Luv🩵.", color = RGray, fontSize = 14.sp)
             }
 
             Spacer(Modifier.height(16.dp))
