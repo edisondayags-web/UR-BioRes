@@ -52,11 +52,11 @@ fun BiodataChoiceScreen(onChoose: (String) -> Unit) {
             }
             Spacer(Modifier.height(10.dp))
             Row {
-                Text("Piliin ang ", color = BGray, fontSize = 14.sp)
+                Text("Pili ka mg ", color = BGray, fontSize = 14.sp)
                 Text("gusto", color = Color.White, fontSize = 14.sp)
                 Text(" mong ", color = BGray, fontSize = 14.sp)
                 Text("format", color = Color.White, fontSize = 14.sp)
-                Text(" ng bio-data.", color = BGray, fontSize = 14.sp)
+                Text(" luv🩵.", color = BGray, fontSize = 14.sp)
             }
 
             Spacer(Modifier.height(16.dp))
@@ -90,7 +90,7 @@ fun BiodataChoiceScreen(onChoose: (String) -> Unit) {
             BiodataChoiceCard(
                 icon = { Icon(Icons.Filled.EditNote, contentDescription = null, tint = Color.White, modifier = it) },
                 title = "Standard Bio-Data",
-                subtitle = "(dating format)",
+                subtitle = "(Standard)",
                 onClick = { onChoose("standard") }
             )
 
@@ -99,7 +99,7 @@ fun BiodataChoiceScreen(onChoose: (String) -> Unit) {
             BiodataChoiceCard(
                 icon = { Icon(Icons.Filled.Badge, contentDescription = null, tint = Color.White, modifier = it) },
                 title = "PH Job Application Bio-Data",
-                subtitle = "(A4 form, Personal/Educational/Employment/Character Reference)",
+                subtitle = "(Traditional)",
                 onClick = { onChoose("ph_form") }
             )
         }
