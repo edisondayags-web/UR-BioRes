@@ -79,6 +79,16 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                     composable(Screen.BioData.route) {
+                        BiodataChoiceScreen(
+                            onChoose = { choice ->
+                                when (choice) {
+                                    "ph_form" -> navController.navigate(Screen.BioDataPhForm.route)
+                                    else -> navController.navigate(Screen.BioDataStandard.route)
+                                }
+                            }
+                        )
+                    }
+                    composable(Screen.BioDataStandard.route) {
                         BioDataScreen(
                             processedSelfie = biodataSelfie,
                             onTakeSelfie = {
@@ -86,6 +96,10 @@ class MainActivity : ComponentActivity() {
                                 navController.navigate(Screen.SelfieCapture.createRoute("biodata"))
                             }
                         )
+                    }
+                    composable(Screen.BioDataPhForm.route) {
+                        // idadagdag pa natin dito yung bagong PH Form screen composable
+                        // pagkatapos nating i-code yun
                     }
                     composable(Screen.GovtForms.route) {
                         GovtFormsScreen(onNavigate = { route -> navController.navigate(route) })
