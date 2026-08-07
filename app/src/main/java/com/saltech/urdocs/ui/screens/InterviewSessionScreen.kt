@@ -1,275 +1,253 @@
 package com.saltech.urdocs.ui.screens
 
-import android.media.MediaPlayer
-import android.media.MediaRecorder
+import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material3.*
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.boundsInWindow
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import java.io.File
+import com.saltech.urdocs.ui.theme.UrGray
+import com.saltech.urdocs.ui.theme.UrPink
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.Locale
 
-enum class RecordingState {
-    IDLE,       // Bago mag-"Go"
-    RECORDING,  // Nagre-record
-    PAUSED,     // Naka-pause ang recording
-    STOPPED     // Tapos na mag-record, ready for Playback
-}
+private data class QA(val question: String, val answer: String)
+
+private val LOCAL_QA = listOf(
+    QA("Tell me something about yourself.",
+        "I'm hardworking, a fast learner, and I always give my best in every task given to me."),
+    QA("Why do you want to work in the BPO industry?",
+        "I enjoy helping people and solving problems, and I like the fast-paced, dynamic environment of a call center."),
+    QA("What are your strengths and weaknesses?",
+        "My strength is staying patient under pressure. My weakness is I used to overthink, but I've learned to focus on taking action instead."),
+    QA("Are you willing to work night shifts or a graveyard schedule?",
+        "Yes, I'm flexible and willing to work any shift, including nights, to meet the needs of the business."),
+    QA("How do you handle an angry or difficult customer?",
+        "I stay calm, listen carefully, and focus on finding a solution instead of taking it personally."),
+    QA("What do you know about CSAT, FCR, and QA in a call center setting?",
+        "CSAT measures customer satisfaction, FCR means resolving an issue on the first call, and QA checks call quality against company standards."),
+    QA("Tell me about a time you performed well under pressure.",
+        "During a high-volume shift, I stayed organized and prioritized urgent tasks, which helped me meet all my targets."),
+    QA("Where do you see yourself five years from now?",
+        "I see myself growing within the company, taking on more responsibilities, and becoming a team lead or specialist."),
+    QA("Do you have any questions for us?",
+        "Yes — what does success look like in this role during the first three months?")
+)
+
+private val INTL_QA = listOf(
+    QA("Tell me about yourself.",
+        "I'm focused, motivated, and always eager to learn. I love contributing to meaningful work and growing through new challenges."),
+    QA("What do you know about our company, and why do you want to work here?",
+        "I've researched your company's mission and values, and I believe my skills align well with what you're building."),
+    QA("What is your greatest strength, and what is your greatest weakness?",
+        "My greatest strength is adaptability. My weakness is I used to overthink, but now I focus on taking action and trusting my preparation."),
+    QA("Tell me about a time you failed or made a mistake. How did you handle it?",
+        "I once missed a deadline early in my career. I learned from it by improving how I plan and communicate timelines."),
+    QA("What motivates you in your professional life?",
+        "I'm motivated by solving problems and seeing the impact of my work on the team's success."),
+    QA("Where do you see yourself in five years?",
+        "I see myself growing, continuing to learn, and leading exciting new projects that make an impact."),
+    QA("What are your salary expectations?",
+        "I'm looking for a fair offer based on the role and my experience, and I'm open to discussing details."),
+    QA("Do you have any questions for us?",
+        "Yes — what does a typical day look like for someone in this role?")
+)
 
 @Composable
-fun AsyncInterviewSessionContent(
-    questionText: String,
-    questionIndex: Int,
-    totalQuestions: Int,
-    onNextQuestion: () -> Unit
+fun InterviewSessionScreen(
+    mode: String,
+    onBack: () -> Unit
 ) {
-    val context = LocalContext.current
+    val isAsync = mode.endsWith("_async")
 
-    // State Holders
-    var recordingState by remember { mutableStateOf(RecordingState.IDLE) }
-    var isPlayingAudio by remember { mutableStateOf(false) }
-    var audioFile by remember { mutableStateOf<File?>(null) }
-
-    // Media Controllers
-    var mediaRecorder by remember { mutableStateOf<MediaRecorder?>(null) }
-    var mediaPlayer by remember { mutableStateOf<MediaPlayer?>(null) }
-    
-    // Text-To-Speech Engine
-    var tts by remember { mutableStateOf<TextToSpeech?>(null) }
-
-    // Initialize TTS and Speak Question automatically
-    DisposableEffect(questionText) {
-        tts = TextToSpeech(context) { status ->
-            if (status == TextToSpeech.SUCCESS) {
-                tts?.language = Locale.US
-                tts?.speak(questionText, TextToSpeech.QUEUE_FLUSH, null, "QuestionTTS")
+    if (isAsync) {
+        Box(modifier = Modifier.fillMaxSize().background(Color.Black)) {
+            IconButton(
+                onClick = onBack,
+                modifier = Modifier.align(Alignment.TopStart).padding(top = 24.dp, start = 8.dp)
+            ) {
+                Icon(Icons.Filled.ArrowBack, contentDescription = "Back", tint = UrPink)
+            }
+            Column(
+                modifier = Modifier.fillMaxSize().padding(24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text("ASYNC VIDEO", color = UrPink, fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                Spacer(Modifier.height(8.dp))
+                Text("Coming soon luv 💙", color = UrGray, fontSize = 14.sp)
             }
         }
-        onDispose {
-            tts?.stop()
-            tts?.shutdown()
-            mediaRecorder?.release()
-            mediaPlayer?.release()
+        return
+    }
+
+    val qaList = remember(mode) { if (mode.startsWith("local")) LOCAL_QA else INTL_QA }
+    val scrollState = rememberScrollState()
+    var isPaused by remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
+    val density = LocalDensity.current
+
+    val context = LocalContext.current
+    val tts = remember { mutableStateOf<TextToSpeech?>(null) }
+    var ttsReady by remember { mutableStateOf(false) }
+    val spokenIndices = remember { mutableStateListOf<Int>() }
+    val screenHeightDp = LocalConfiguration.current.screenHeightDp.dp
+
+    DisposableEffect(Unit) {
+        val t = TextToSpeech(context) { status ->
+            if (status == TextToSpeech.SUCCESS) {
+                tts.value?.language = Locale.US
+                tts.value?.setSpeechRate(1.35f)
+
+                val currentLang = tts.value?.language?.language
+                val maleVoice = tts.value?.voices?.firstOrNull { voice ->
+                    voice.locale.language == currentLang &&
+                        voice.name.contains("male", ignoreCase = true) &&
+                        !voice.name.contains("female", ignoreCase = true)
+                }
+                if (maleVoice != null) {
+                    tts.value?.voice = maleVoice
+                } else {
+                    tts.value?.setPitch(0.75f)
+                }
+
+                ttsReady = true
+            }
+        }
+        tts.value = t
+        onDispose { t.stop(); t.shutdown() }
+    }
+
+    val screenHeightPx = with(density) { screenHeightDp.toPx() }
+
+    fun speakIfDue(index: Int) {
+        if (index !in spokenIndices) {
+            spokenIndices.add(index)
+            val params = Bundle().apply {
+                putFloat(TextToSpeech.Engine.KEY_PARAM_VOLUME, 1.0f)
+            }
+            tts.value?.speak(qaList[index].question, TextToSpeech.QUEUE_FLUSH, params, null)
         }
     }
 
-    Column(
+    LaunchedEffect(ttsReady) {
+        if (ttsReady) {
+            speakIfDue(0)
+        }
+    }
+
+    LaunchedEffect(scrollState.maxValue) {
+        while (scrollState.value < scrollState.maxValue) {
+            if (!isPaused) {
+                scrollState.scrollBy(8.5f)
+            }
+            delay(16)
+        }
+    }
+
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF070B19))
-            .padding(24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceBetween
-    ) {
-        // Top Bar: Question Counter
-        Text(
-            text = "Question $questionIndex / $totalQuestions",
-            color = Color.Gray,
-            fontSize = 16.sp
-        )
-
-        // Question Display + Speaker Button
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(horizontal = 16.dp)
-        ) {
-            Text(
-                text = questionText,
-                color = Color(0xFFFF4D6D),
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            // Re-play Question TTS Voice
-            IconButton(
-                onClick = {
-                    tts?.speak(questionText, TextToSpeech.QUEUE_FLUSH, null, "QuestionTTS")
-                },
-                modifier = Modifier
-                    .background(Color.White.copy(alpha = 0.1f), CircleShape)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.VolumeUp,
-                    contentDescription = "Listen Question",
-                    tint = Color.White
-                )
-            }
-        }
-
-        // Recording & Audio Playback Controls Box
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            when (recordingState) {
-                RecordingState.IDLE -> {
-                    // Step 1: "Go" Button to start recording
-                    Button(
-                        onClick = {
-                            val outputFile = File(context.cacheDir, "response_$questionIndex.mp3")
-                            audioFile = outputFile
-                            mediaRecorder = MediaRecorder(context).apply {
-                                setAudioSource(MediaRecorder.AudioSource.MIC)
-                                setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
-                                setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
-                                setOutputFile(outputFile.absolutePath)
-                                prepare()
-                                start()
-                            }
-                            recordingState = RecordingState.RECORDING
-                        },
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF00E676)),
-                        shape = CircleShape,
-                        modifier = Modifier.size(100.dp)
-                    ) {
-                        Text("GO", fontSize = 24.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+            .background(Color.Black)
+            .pointerInput(Unit) {
+                detectDragGestures(
+                    onDragStart = { isPaused = true },
+                    onDragEnd = { isPaused = false },
+                    onDragCancel = { isPaused = false }
+                ) { _, dragAmount ->
+                    coroutineScope.launch {
+                        scrollState.scrollBy(-dragAmount.y)
                     }
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text("Tap GO to start recording", color = Color.Gray, fontSize = 14.sp)
                 }
+            }
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 90.dp)
+                .verticalScroll(scrollState, enabled = false)
+                .padding(horizontal = 32.dp, vertical = 40.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(140.dp)
+        ) {
+            Spacer(Modifier.height(250.dp))
 
-                RecordingState.RECORDING, RecordingState.PAUSED -> {
-                    // Step 2: Active REC Indicator & Pause/Stop controls
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(16.dp)
-                    ) {
-                        // Pause / Resume Button
-                        IconButton(
-                            onClick = {
-                                if (recordingState == RecordingState.RECORDING) {
-                                    mediaRecorder?.pause()
-                                    recordingState = RecordingState.PAUSED
-                                } else {
-                                    mediaRecorder?.resume()
-                                    recordingState = RecordingState.RECORDING
-                                }
-                            },
-                            modifier = Modifier
-                                .size(60.dp)
-                                .background(Color(0xFFFFB703), CircleShape)
-                        ) {
-                            Icon(
-                                imageVector = if (recordingState == RecordingState.RECORDING) Icons.Default.Pause else Icons.Default.PlayArrow,
-                                contentDescription = "Pause/Resume",
-                                tint = Color.Black
-                            )
-                        }
-
-                        // Stop Recording Button
-                        IconButton(
-                            onClick = {
-                                mediaRecorder?.apply {
-                                    stop()
-                                    release()
-                                }
-                                mediaRecorder = null
-                                recordingState = RecordingState.STOPPED
-                            },
-                            modifier = Modifier
-                                .size(70.dp)
-                                .background(Color(0xFFFF0055), CircleShape)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Stop,
-                                contentDescription = "Stop",
-                                tint = Color.White
-                            )
+            qaList.forEachIndexed { index, qa ->
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.onGloballyPositioned { coords ->
+                        val top = coords.boundsInWindow().top
+                        if (ttsReady) {
+                            // Binago ko para mag-trigger agad pagpasok na pagpasok pa lang
+                            // sa ibabang bahagi ng screen (hindi na naghihintay umabot sa gitna)
+                            val due = top <= screenHeightPx
+                            if (due) speakIfDue(index)
                         }
                     }
-                    Spacer(modifier = Modifier.height(12.dp))
+                ) {
                     Text(
-                        text = if (recordingState == RecordingState.RECORDING) "🔴 Recording..." else "⏸️ Paused",
-                        color = Color.White,
-                        fontSize = 16.sp
+                        text = qa.question,
+                        color = Color(0xFFE0245E),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 22.sp,
+                        textAlign = TextAlign.Center
+                    )
+                    Spacer(Modifier.height(10.dp))
+                    Text(
+                        text = qa.answer,
+                        color = Color(0xFF2A5CE0),
+                        fontSize = 20.sp,
+                        textAlign = TextAlign.Center,
+                        lineHeight = 28.sp
                     )
                 }
-
-                RecordingState.STOPPED -> {
-                    // Step 3: Play recorded boses & Next Question
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(16.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        // Playback Recorded Voice Button
-                        Button(
-                            onClick = {
-                                if (isPlayingAudio) {
-                                    mediaPlayer?.stop()
-                                    mediaPlayer?.release()
-                                    mediaPlayer = null
-                                    isPlayingAudio = false
-                                } else {
-                                    audioFile?.let { file ->
-                                        mediaPlayer = MediaPlayer().apply {
-                                            setDataSource(file.absolutePath)
-                                            prepare()
-                                            start()
-                                            setOnCompletionListener {
-                                                isPlayingAudio = false
-                                            }
-                                        }
-                                        isPlayingAudio = true
-                                    }
-                                }
-                            },
-                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF2196F3)),
-                            shape = RoundedCornerShape(12.dp)
-                        ) {
-                            Icon(
-                                imageVector = if (isPlayingAudio) Icons.Default.Stop else Icons.Default.PlayArrow,
-                                contentDescription = "Play Voice"
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(if (isPlayingAudio) "Stop Playback" else "Listen to My Voice")
-                        }
-
-                        // Re-record Button
-                        OutlinedButton(
-                            onClick = {
-                                recordingState = RecordingState.IDLE
-                            },
-                            shape = RoundedCornerShape(12.dp)
-                        ) {
-                            Text("Retake", color = Color.White)
-                        }
-                    }
-                }
             }
+            Spacer(Modifier.height(screenHeightDp))
         }
 
-        // Bottom Action Button
-        Button(
-            onClick = {
-                // Stop any playback before proceeding
-                mediaPlayer?.stop()
-                recordingState = RecordingState.IDLE
-                onNextQuestion()
-            },
-            enabled = recordingState == RecordingState.STOPPED || recordingState == RecordingState.IDLE,
+        Box(
             modifier = Modifier
+                .align(Alignment.TopCenter)
                 .fillMaxWidth()
-                .height(50.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6C5CE7))
+                .height(90.dp)
+                .background(Brush.verticalGradient(listOf(Color.Black, Color.Transparent)))
+        )
+        Box(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .fillMaxWidth()
+                .height(70.dp)
+                .background(Brush.verticalGradient(listOf(Color.Transparent, Color.Black)))
+        )
+
+        IconButton(
+            onClick = onBack,
+            modifier = Modifier.align(Alignment.TopStart).padding(top = 24.dp, start = 8.dp)
         ) {
-            Text("Next Question", fontSize = 16.sp)
+            Icon(Icons.Filled.ArrowBack, contentDescription = "Back", tint = UrPink)
         }
     }
 }
