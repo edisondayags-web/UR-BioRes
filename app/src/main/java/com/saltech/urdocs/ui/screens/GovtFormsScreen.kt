@@ -306,7 +306,9 @@ fun GovtFormsScreen(
     // items + the category cards as items). Only what's on-screen gets
     // composed/measured, instead of the old Column+verticalScroll building
     // and keeping all 17 categories / 67 links alive at once.
-    LazyColumn(
+    Box(modifier = Modifier.fillMaxSize()) {
+        PremiumWaveBackground()
+        LazyColumn(
         modifier = Modifier.fillMaxSize()
     ) {
 
@@ -776,5 +778,6 @@ fun GovtFormsScreen(
             }
             Spacer(Modifier.height(20.dp))
         }
+    }
     }
 }

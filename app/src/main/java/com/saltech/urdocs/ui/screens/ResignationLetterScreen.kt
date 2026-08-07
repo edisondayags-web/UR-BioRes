@@ -119,7 +119,9 @@ fun ResignationLetterScreen(onBack: () -> Unit = {}) {
     val bodyFontFamily = if (isPlainMode) FontFamily.Default else FontFamily.Serif
     val bodyFontStyle = if (isPlainMode) FontStyle.Normal else FontStyle.Italic
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier.fillMaxSize()) {
+        PremiumWaveBackground()
+        Column(modifier = Modifier.fillMaxSize()) {
         AndroidView(
             factory = { ctx ->
                 AdView(ctx).apply {
@@ -380,6 +382,7 @@ fun ResignationLetterScreen(onBack: () -> Unit = {}) {
                 }
             }
         }
+    }
     }
 }
 

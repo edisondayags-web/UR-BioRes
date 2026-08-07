@@ -232,7 +232,9 @@ fun TraditionalResumeScreen(
         )
     }
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier.fillMaxSize()) {
+        PremiumWaveBackground()
+        Column(modifier = Modifier.fillMaxSize()) {
         AndroidView(
             factory = { ctx ->
                 AdView(ctx).apply {
@@ -523,6 +525,7 @@ fun TraditionalResumeScreen(
                 }
             }
         }
+    }
     }
     }
 }

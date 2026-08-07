@@ -45,6 +45,7 @@ private fun DetailScreenScaffold(
             .fillMaxSize()
             .background(Color.Transparent)
     ) {
+        PremiumWaveBackground()
         Column(
             modifier = Modifier
                 .fillMaxSize()

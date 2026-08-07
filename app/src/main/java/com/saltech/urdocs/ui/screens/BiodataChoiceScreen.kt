@@ -30,6 +30,7 @@ private val BGradient = Brush.horizontalGradient(listOf(BPink, BGreen))
 @Composable
 fun BiodataChoiceScreen(onChoose: (String) -> Unit) {
     Box(modifier = Modifier.fillMaxSize().background(Color.Transparent)) {
+        PremiumWaveBackground()
 
         Box(
             modifier = Modifier

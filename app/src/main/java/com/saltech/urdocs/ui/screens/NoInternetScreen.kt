@@ -15,10 +15,10 @@ import androidx.compose.ui.unit.sp
 fun NoInternetScreen(onRetry: () -> Unit) {
     Box(
         modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Black),
+            .fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
+        PremiumWaveBackground()
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(16.dp),
