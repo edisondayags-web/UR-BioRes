@@ -203,7 +203,6 @@ fun InterviewSessionScreen(
         val asyncQaList = remember(mode) { if (mode.startsWith("local")) LOCAL_QA else INTL_QA }
         var qIndex by remember { mutableStateOf(0) }
         var phase by remember { mutableStateOf("prep") }
-        var secondsLeft by remember { mutableStateOf(15) }
         var asyncStarted by remember { mutableStateOf(false) }
 
         val context = LocalContext.current
@@ -342,16 +341,8 @@ fun InterviewSessionScreen(
         }
 
         LaunchedEffect(qIndex, phase, asyncStarted) {
-            if (!asyncStarted) return@LaunchedEffect
-            if (phase == "prep") {
-                secondsLeft = 15
-                while (secondsLeft > 0) {
-                    delay(1000)
-                    secondsLeft -= 1
-                }
-                phase = "recording"
-            }
-            // "recording" phase is now manual (REC/mic button) - no auto timer/auto-advance here.
+            // "prep" now waits for a manual "Go" tap instead of an auto countdown -
+            // "recording" is manual too (REC/mic button), so no timers needed here anymore.
         }
 
         Box(modifier = Modifier.fillMaxSize()) {
@@ -473,9 +464,28 @@ fun InterviewSessionScreen(
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     when (phase) {
                         "prep" -> {
-                            Text("Prepare your answer...", color = UrGray, fontSize = 15.sp)
-                            Spacer(Modifier.height(10.dp))
-                            Text("$secondsLeft", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 40.sp)
+                            Text("Handa ka na?", color = UrGray, fontSize = 15.sp)
+                            Spacer(Modifier.height(14.dp))
+                            Box(
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(50))
+                                    .border(
+                                        2.dp,
+                                        Brush.horizontalGradient(listOf(Color(0xFF2A5CE0), Color(0xFFE0245E))),
+                                        RoundedCornerShape(50)
+                                    )
+                                    .clickable { phase = "recording" }
+                                    .padding(horizontal = 40.dp, vertical = 14.dp)
+                            ) {
+                                Text(
+                                    text = "Go",
+                                    style = TextStyle(
+                                        brush = Brush.horizontalGradient(listOf(Color(0xFF2A5CE0), Color(0xFFE0245E))),
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 28.sp
+                                    )
+                                )
+                            }
                             Spacer(Modifier.height(24.dp))
                         }
                         "recording" -> {
