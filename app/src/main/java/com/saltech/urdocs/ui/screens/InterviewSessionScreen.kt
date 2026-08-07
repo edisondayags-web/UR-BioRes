@@ -28,6 +28,8 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.SkipNext
+import androidx.compose.material.icons.filled.SkipPrevious
 import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -312,16 +314,7 @@ fun InterviewSessionScreen(
             }
         }
 
-        fun seekPlayback(deltaMs: Int) {
-            mediaPlayer.value?.let { p ->
-                try {
-                    val newPos = (p.currentPosition + deltaMs).coerceIn(0, p.duration)
-                    p.seekTo(newPos)
-                } catch (e: Exception) {
-                    // ignore
-                }
-            }
-        }
+
 
         // Live amplitude polling while recording, for the waveform
         LaunchedEffect(isRecording) {
@@ -338,6 +331,15 @@ fun InterviewSessionScreen(
                 try { mediaRecorder.value?.release() } catch (e: Exception) { }
                 try { mediaPlayer.value?.release() } catch (e: Exception) { }
             }
+        }
+
+        fun goToQuestion(newIndex: Int) {
+            if (newIndex !in asyncQaList.indices) return
+            if (isRecording) stopRecording()
+            stopPlayback()
+            qIndex = newIndex
+            phase = "review"
+            lastSpokenQIndex = -1
         }
 
         LaunchedEffect(qIndex, phase, asyncStarted) {
@@ -408,40 +410,32 @@ fun InterviewSessionScreen(
                     WaveformDisplay(amplitudes = amplitudes, modifier = Modifier.padding(horizontal = 40.dp))
                     Spacer(Modifier.height(12.dp))
 
-                    Row(horizontalArrangement = Arrangement.spacedBy(40.dp)) {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            IconButton(
-                                onClick = { if (isRecording) stopRecording() else startRecording() },
-                                modifier = Modifier
-                                    .size(44.dp)
-                                    .clip(RoundedCornerShape(50))
-                                    .border(1.5.dp, Color(0xFFE0245E), RoundedCornerShape(50))
-                            ) {
-                                Icon(
-                                    imageVector = if (isRecording) Icons.Filled.Stop else Icons.Filled.FiberManualRecord,
-                                    contentDescription = "Record",
-                                    tint = Color(0xFFE0245E)
-                                )
-                            }
-                            Text("REC", color = Color(0xFFE0245E), fontSize = 11.sp)
+                    // Single toggle button: cycles REC -> STOP -> PLAY -> PAUSE automatically
+                    // based on state, instead of two separate buttons the user has to switch between.
+                    val (topIcon, topLabel, topTint) = when {
+                        isRecording -> Triple(Icons.Filled.Stop, "STOP", Color(0xFFE0245E))
+                        isPlaying -> Triple(Icons.Filled.Pause, "PAUSE", Color(0xFF2A5CE0))
+                        hasRecording -> Triple(Icons.Filled.PlayArrow, "PLAY", Color(0xFF2A5CE0))
+                        else -> Triple(Icons.Filled.FiberManualRecord, "REC", Color(0xFFE0245E))
+                    }
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        IconButton(
+                            onClick = {
+                                when {
+                                    isRecording -> stopRecording()
+                                    isPlaying -> stopPlayback()
+                                    hasRecording -> playRecording()
+                                    else -> startRecording()
+                                }
+                            },
+                            modifier = Modifier
+                                .size(52.dp)
+                                .clip(RoundedCornerShape(50))
+                                .border(1.5.dp, topTint, RoundedCornerShape(50))
+                        ) {
+                            Icon(imageVector = topIcon, contentDescription = topLabel, tint = topTint)
                         }
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            IconButton(
-                                onClick = { if (isPlaying) stopPlayback() else playRecording() },
-                                enabled = hasRecording,
-                                modifier = Modifier
-                                    .size(44.dp)
-                                    .clip(RoundedCornerShape(50))
-                                    .border(1.5.dp, Color(0xFF2A5CE0), RoundedCornerShape(50))
-                            ) {
-                                Icon(
-                                    imageVector = if (isPlaying) Icons.Filled.Pause else Icons.Filled.PlayArrow,
-                                    contentDescription = "Play",
-                                    tint = Color(0xFF2A5CE0)
-                                )
-                            }
-                            Text("PLAY", color = Color(0xFF2A5CE0), fontSize = 11.sp)
-                        }
+                        Text(topLabel, color = topTint, fontSize = 11.sp)
                     }
                 }
 
@@ -468,14 +462,19 @@ fun InterviewSessionScreen(
                             Spacer(Modifier.height(14.dp))
                             Box(
                                 modifier = Modifier
+                                    .defaultMinSize(minWidth = 160.dp, minHeight = 64.dp)
                                     .clip(RoundedCornerShape(50))
                                     .border(
                                         2.dp,
                                         Brush.horizontalGradient(listOf(Color(0xFF2A5CE0), Color(0xFFE0245E))),
                                         RoundedCornerShape(50)
                                     )
-                                    .clickable { phase = "recording" }
-                                    .padding(horizontal = 40.dp, vertical = 14.dp)
+                                    .clickable(
+                                        indication = null,
+                                        interactionSource = remember { MutableInteractionSource() }
+                                    ) { phase = "recording" }
+                                    .padding(horizontal = 40.dp, vertical = 14.dp),
+                                contentAlignment = Alignment.Center
                             ) {
                                 Text(
                                     text = "Go",
@@ -510,27 +509,28 @@ fun InterviewSessionScreen(
                         }
                     }
 
-                    // Bottom controls: BACK 2s / TAP TO SPEAK (mic) / FORWARD 2s - kept small.
+                    // Bottom controls: PREV question / TAP TO SPEAK (mic) / NEXT question.
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(28.dp)
                     ) {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             IconButton(
-                                onClick = { seekPlayback(-2000) },
+                                onClick = { goToQuestion(qIndex - 1) },
+                                enabled = qIndex > 0,
                                 modifier = Modifier
-                                    .size(38.dp)
+                                    .size(44.dp)
                                     .clip(RoundedCornerShape(50))
                                     .border(1.dp, Color(0xFF2A5CE0), RoundedCornerShape(50))
                             ) {
                                 Icon(
-                                    Icons.Filled.FastRewind,
-                                    contentDescription = "Back 2s",
+                                    Icons.Filled.SkipPrevious,
+                                    contentDescription = "Previous question",
                                     tint = Color(0xFF2A5CE0),
-                                    modifier = Modifier.size(16.dp)
+                                    modifier = Modifier.size(20.dp)
                                 )
                             }
-                            Text("2s", color = Color(0xFF2A5CE0), fontSize = 9.sp)
+                            Text("PREV", color = Color(0xFF2A5CE0), fontSize = 9.sp)
                         }
 
                         IconButton(
@@ -564,22 +564,23 @@ fun InterviewSessionScreen(
 
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             IconButton(
-                                onClick = { seekPlayback(2000) },
+                                onClick = { goToQuestion(qIndex + 1) },
+                                enabled = qIndex < asyncQaList.lastIndex,
                                 modifier = Modifier
-                                    .size(38.dp)
+                                    .size(44.dp)
                                     .clip(RoundedCornerShape(50))
                                     .border(1.dp, Color(0xFFE0245E), RoundedCornerShape(50))
                             ) {
                                 Icon(
-                                    Icons.Filled.FastForward,
-                                    contentDescription = "Forward 2s",
+                                    Icons.Filled.SkipNext,
+                                    contentDescription = "Next question",
                                     tint = Color(0xFFE0245E),
-                                    modifier = Modifier.size(16.dp)
+                                    modifier = Modifier.size(20.dp)
                                 )
                             }
-                            Text("2s", color = Color(0xFFE0245E), fontSize = 9.sp)
+                            Text("NEXT", color = Color(0xFFE0245E), fontSize = 9.sp)
                         }
-                    }
+                        }
                     Spacer(Modifier.height(6.dp))
                     Text("TAP TO SPEAK", color = UrGray, fontSize = 11.sp)
 
