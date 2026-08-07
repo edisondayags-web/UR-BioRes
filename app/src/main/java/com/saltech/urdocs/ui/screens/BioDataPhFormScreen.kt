@@ -40,6 +40,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
@@ -106,6 +108,16 @@ fun BioDataPhFormScreen(
     var offset by remember { mutableStateOf(Offset.Zero) }
     val picture = remember { Picture() }
     val coroutineScope = rememberCoroutineScope()
+    var uploadedPhoto by remember { mutableStateOf<Bitmap?>(null) }
+    val displaySelfie = uploadedPhoto ?: processedSelfie
+    val uploadLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.GetContent()
+    ) { uri ->
+        if (uri != null) {
+            val loaded = com.saltech.urdocs.util.ImageUtils.loadBitmapFromUri(context, uri)
+            if (loaded != null) uploadedPhoto = loaded
+        }
+    }
 
     Column(modifier = Modifier.fillMaxSize()) {
         AndroidView(
@@ -174,11 +186,11 @@ fun BioDataPhFormScreen(
                             modifier = Modifier
                                 .size(110.dp, 110.dp)
                                 .border(1.dp, Color.Black)
-                                .clickable(enabled = processedSelfie == null) { onTakeSelfie() }
+                                .clickable(enabled = displaySelfie == null) { onTakeSelfie() }
                         ) {
-                            if (processedSelfie != null) {
+                            if (displaySelfie != null) {
                                 androidx.compose.foundation.Image(
-                                    bitmap = processedSelfie.asImageBitmap(),
+                                    bitmap = displaySelfie.asImageBitmap(),
                                     contentDescription = "Photo",
                                     modifier = Modifier.fillMaxSize()
                                 )
@@ -317,9 +329,21 @@ fun BioDataPhFormScreen(
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End,
+                    horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(24.dp))
+                            .border(1.5.dp, Color(0xFF0B1530), RoundedCornerShape(24.dp))
+                            .clickable { uploadLauncher.launch("image/*") }
+                            .padding(horizontal = 18.dp, vertical = 10.dp)
+                    ) {
+                        Text("\uD83D\uDCE4", fontSize = 16.sp)
+                        Spacer(Modifier.width(6.dp))
+                        Text("Upload", fontSize = 14.sp, fontWeight = FontWeight.Bold, color = Color.White)
+                    }
                     Button(
                         onClick = {
                             scale = fitScale
