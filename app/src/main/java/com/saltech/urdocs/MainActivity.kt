@@ -116,12 +116,10 @@ class MainActivity : ComponentActivity() {
                         arguments = listOf(navArgument("mode") { type = NavType.StringType })
                     ) { backStackEntry ->
                         val mode = backStackEntry.arguments?.getString("mode") ?: "local_traditional"
-                                        InterviewScreen(
-            onBack = { navController.popBackStack() },
-            onSelect = { mode -> navController.navigate(Screen.InterviewSession.createRoute(mode)) }
-        )
-                                        
-                                
+                        InterviewSessionScreen(
+                            mode = mode,
+                            onBack = { navController.popBackStack() }
+                        )
                     }
                     composable(Screen.JobResearcher.route) {
                         JobResearcherScreen(
