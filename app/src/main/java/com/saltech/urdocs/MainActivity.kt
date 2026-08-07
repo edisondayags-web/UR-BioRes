@@ -89,7 +89,7 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                     composable(Screen.BioDataStandard.route) {
-                        BioDataScreen(
+                        BioDataPhFormScreen(
                             processedSelfie = biodataSelfie,
                             onTakeSelfie = {
                                 pendingSelfieTarget = "biodata"
