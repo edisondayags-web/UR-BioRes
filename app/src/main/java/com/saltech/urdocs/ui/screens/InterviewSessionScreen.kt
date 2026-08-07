@@ -132,7 +132,7 @@ fun AnimatedBackground(modifier: Modifier = Modifier) {
         label = "alphaGlow"
     )
 
-    Canvas(modifier = modifier.fillMaxSize().background(Color.Black)) {
+    Canvas(modifier = modifier.fillMaxSize()) {
         val width = size.width
         val height = size.height
 
@@ -694,6 +694,7 @@ fun InterviewSessionScreen(
                 }
             }
     ) {
+        PremiumWaveBackground()
         AnimatedBackground()
 
         Column(

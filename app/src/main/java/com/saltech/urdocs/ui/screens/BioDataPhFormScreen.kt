@@ -101,7 +101,7 @@ fun BioDataPhFormScreen(
     onTakeSelfie: () -> Unit = {}
 ) {
     val paperWidthDp = 850.dp
-    val paperHeightDp = 1250.dp
+    val paperHeightDp = 1500.dp
 
     val context = LocalContext.current
     var data by remember { mutableStateOf(BioDataPhFormFields()) }
