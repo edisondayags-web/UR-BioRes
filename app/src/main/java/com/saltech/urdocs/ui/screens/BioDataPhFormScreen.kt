@@ -45,6 +45,7 @@ import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import androidx.compose.ui.draw.clip
 
 data class BioDataPhFormFields(
     val positionDesired: String = "",
