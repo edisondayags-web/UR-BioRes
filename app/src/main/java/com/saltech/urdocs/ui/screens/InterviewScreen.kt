@@ -130,31 +130,39 @@ private fun InterviewChoiceCard(
     subtitle: String,
     onClick: () -> Unit
 ) {
-    Row(
+    Box(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(20.dp))
             .background(Color.Black.copy(alpha = 0.55f))
             .border(1.5.dp, IGradient, RoundedCornerShape(20.dp))
             .clickable { onClick() }
-            .padding(18.dp),
-        verticalAlignment = Alignment.CenterVertically
     ) {
-        Box(
+        // Wave background sits behind the card content, clipped to the card's rounded corners.
+        PremiumWaveBackground()
+
+        Row(
             modifier = Modifier
-                .size(56.dp)
-                .clip(RoundedCornerShape(16.dp))
-                .background(Color.Black.copy(alpha = 0.4f))
-                .border(1.5.dp, IGradient, RoundedCornerShape(16.dp)),
-            contentAlignment = Alignment.Center
+                .fillMaxWidth()
+                .padding(18.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            icon(Modifier.size(26.dp))
+            Box(
+                modifier = Modifier
+                    .size(56.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(Color.Black.copy(alpha = 0.4f))
+                    .border(1.5.dp, IGradient, RoundedCornerShape(16.dp)),
+                contentAlignment = Alignment.Center
+            ) {
+                icon(Modifier.size(26.dp))
+            }
+            Spacer(Modifier.width(16.dp))
+            Column(modifier = Modifier.weight(1f)) {
+                Text(title, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 17.sp)
+                Text(subtitle, color = IGray, fontSize = 13.sp)
+            }
+            Icon(Icons.Filled.ChevronRight, contentDescription = null, tint = IGreen, modifier = Modifier.size(24.dp))
         }
-        Spacer(Modifier.width(16.dp))
-        Column(modifier = Modifier.weight(1f)) {
-            Text(title, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 17.sp)
-            Text(subtitle, color = IGray, fontSize = 13.sp)
-        }
-        Icon(Icons.Filled.ChevronRight, contentDescription = null, tint = IGreen, modifier = Modifier.size(24.dp))
     }
 }
