@@ -301,8 +301,8 @@ private fun SettingsQuoteFooter() {
             color = SettingsColors.TextMuted,
             fontSize = 12.sp
         )
-        Text("SAL-TECH. 😁", color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+        Text("SAL-TECH. 😎", color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.Bold)
         Spacer(Modifier.height(6.dp))
-        Text("Ayg pataka diha ka inspirasyon basig walopon ko na imong sampot! ✌️", color = SettingsColors.TextMuted, fontSize = 11.sp)
+        Text("mayabang ba or nayayabangan lang kayo❤️", color = SettingsColors.TextMuted, fontSize = 11.sp)
     }
 }
