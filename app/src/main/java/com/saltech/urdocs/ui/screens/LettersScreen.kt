@@ -67,6 +67,7 @@ fun LettersScreen(
             ?: LetterType.entries.first()
 
     Box(modifier = Modifier.fillMaxSize()) {
+        PremiumWaveBackground()
         AnimatedContent(
             targetState = screenState,
             transitionSpec = {

@@ -151,6 +151,7 @@ fun LetterAssistantScreen(
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
+        PremiumWaveBackground()
 
         // ---------- Full-bleed pulsing gradient background, Gemini-style: dark on top, blue glow at bottom ----------
         AnimatedChatBackground(isTyping)

@@ -188,6 +188,7 @@ private fun JobResearcherScreenOriginal(
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
+        PremiumWaveBackground()
         JrAnimatedChatBackground(isTyping)
 
         AnimatedVisibility(

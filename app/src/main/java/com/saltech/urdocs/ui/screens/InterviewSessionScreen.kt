@@ -348,6 +348,7 @@ fun InterviewSessionScreen(
         }
 
         Box(modifier = Modifier.fillMaxSize()) {
+        PremiumWaveBackground()
             AnimatedBackground()
 
             if (phase == "done") {

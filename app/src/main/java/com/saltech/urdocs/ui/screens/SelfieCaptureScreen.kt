@@ -154,6 +154,7 @@ fun SelfieCaptureScreen(
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
+        PremiumWaveBackground()
         AndroidView(
             factory = { ctx ->
                 val previewView = PreviewView(ctx)
