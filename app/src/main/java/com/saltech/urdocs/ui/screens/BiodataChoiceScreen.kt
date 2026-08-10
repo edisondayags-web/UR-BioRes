@@ -89,19 +89,28 @@ fun BiodataChoiceScreen(onChoose: (String) -> Unit) {
             Spacer(Modifier.height(20.dp))
 
             BiodataChoiceCard(
-                icon = { Icon(Icons.Filled.EditNote, contentDescription = null, tint = Color.White, modifier = it) },
-                title = "Standard Bio-Data",
-                subtitle = "(Standard)",
-                onClick = { onChoose("standard") }
+                icon = { Icon(Icons.Filled.Badge, contentDescription = null, tint = Color.White, modifier = it) },
+                title = "PH Job Application Bio-Data",
+                subtitle = "(Traditional)",
+                onClick = { onChoose("ph_form") }
             )
 
             Spacer(Modifier.height(16.dp))
 
             BiodataChoiceCard(
-                icon = { Icon(Icons.Filled.Badge, contentDescription = null, tint = Color.White, modifier = it) },
-                title = "PH Job Application Bio-Data",
-                subtitle = "(Traditional)",
-                onClick = { onChoose("ph_form") }
+                icon = { Icon(Icons.Filled.EditNote, contentDescription = null, tint = Color.White, modifier = it) },
+                title = "Bio-Data (Black)",
+                subtitle = "(Modern)",
+                onClick = { onChoose("black") }
+            )
+
+            Spacer(Modifier.height(16.dp))
+
+            BiodataChoiceCard(
+                icon = { Icon(Icons.Filled.EditNote, contentDescription = null, tint = Color.White, modifier = it) },
+                title = "Bio-Data (Blue)",
+                subtitle = "(Modern)",
+                onClick = { onChoose("blue") }
             )
         }
     }

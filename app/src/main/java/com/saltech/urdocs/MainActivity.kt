@@ -83,6 +83,8 @@ class MainActivity : ComponentActivity() {
                             onChoose = { choice ->
                                 when (choice) {
                                     "ph_form" -> navController.navigate(Screen.BioDataPhForm.route)
+                                    "black" -> navController.navigate(Screen.BioDataBlack.route)
+                                    "blue" -> navController.navigate(Screen.BioDataBlue.route)
                                     else -> navController.navigate(Screen.BioDataStandard.route)
                                 }
                             }
@@ -99,6 +101,26 @@ class MainActivity : ComponentActivity() {
                     }
                     composable(Screen.BioDataPhForm.route) {
                         BioDataPhFormScreen(
+                            processedSelfie = biodataSelfie,
+                            onTakeSelfie = {
+                                pendingSelfieTarget = "biodata"
+                                navController.navigate(Screen.SelfieCapture.createRoute("biodata"))
+                            }
+                        )
+                    }
+                    composable(Screen.BioDataBlack.route) {
+                        BioDataV2Screen(
+                            isBlack = true,
+                            processedSelfie = biodataSelfie,
+                            onTakeSelfie = {
+                                pendingSelfieTarget = "biodata"
+                                navController.navigate(Screen.SelfieCapture.createRoute("biodata"))
+                            }
+                        )
+                    }
+                    composable(Screen.BioDataBlue.route) {
+                        BioDataV2Screen(
+                            isBlack = false,
                             processedSelfie = biodataSelfie,
                             onTakeSelfie = {
                                 pendingSelfieTarget = "biodata"
