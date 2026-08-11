@@ -100,7 +100,7 @@ fun BiodataChoiceScreen(onChoose: (String) -> Unit) {
             BiodataChoiceCard(
                 icon = { Icon(Icons.Filled.EditNote, contentDescription = null, tint = Color.White, modifier = it) },
                 title = "Bio-Data (Black)",
-                subtitle = "(Modern)",
+                subtitle = "(Modern black)",
                 onClick = { onChoose("black") }
             )
 
@@ -109,7 +109,7 @@ fun BiodataChoiceScreen(onChoose: (String) -> Unit) {
             BiodataChoiceCard(
                 icon = { Icon(Icons.Filled.EditNote, contentDescription = null, tint = Color.White, modifier = it) },
                 title = "Bio-Data (Blue)",
-                subtitle = "(Modern)",
+                subtitle = "(Modern blue)",
                 onClick = { onChoose("blue") }
             )
         }
