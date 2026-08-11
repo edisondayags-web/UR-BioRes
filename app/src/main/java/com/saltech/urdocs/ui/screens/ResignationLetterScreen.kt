@@ -72,7 +72,7 @@ private const val DEFAULT_BODY_TEXT =
 @Composable
 fun ResignationLetterScreen(onBack: () -> Unit = {}) {
     val paperWidthDp = 850.dp
-    val paperHeightDp = 1600.dp
+    val paperHeightDp = 1250.dp
     val context = LocalContext.current
     var interstitialAd by remember { mutableStateOf<InterstitialAd?>(null) }
     LaunchedEffect(Unit) {
