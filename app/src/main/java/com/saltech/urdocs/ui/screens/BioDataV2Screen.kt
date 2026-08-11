@@ -89,7 +89,7 @@ fun BioDataV2Screen(
 ) {
     val accent = if (isBlack) Color.Black else Color(0xFF1D6FE0)
     val paperWidthDp = 850.dp
-    val paperHeightDp = 1500.dp
+    val paperHeightDp = 1250.dp
 
     val context = LocalContext.current
     var data by remember { mutableStateOf(BioDataV2Fields()) }
