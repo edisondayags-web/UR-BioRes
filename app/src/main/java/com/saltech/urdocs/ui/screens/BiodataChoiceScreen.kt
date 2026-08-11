@@ -53,7 +53,7 @@ fun BiodataChoiceScreen(onChoose: (String) -> Unit) {
             }
             Spacer(Modifier.height(10.dp))
             Row {
-                Text("Pili ka mg ", color = BGray, fontSize = 14.sp)
+                Text("Pili ka ng", color = BGray, fontSize = 14.sp)
                 Text("gusto", color = Color.White, fontSize = 14.sp)
                 Text(" mong ", color = BGray, fontSize = 14.sp)
                 Text("format", color = Color.White, fontSize = 14.sp)
