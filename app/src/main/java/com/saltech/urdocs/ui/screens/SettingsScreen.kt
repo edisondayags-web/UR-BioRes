@@ -296,13 +296,13 @@ private fun SettingsQuoteFooter() {
         Text("❝ ", color = Color.White, fontSize = 18.sp)
         Text(
             buildString {
-                append("WALANG KWENTA PAGIGING MATALINO NYO KONG TATAWANAN LANG YAN NG SALTIK... este ")
+                append("WALANG KWENTA PAGIGING MATALINO NYO KONG TATAWANAN LANG YAN NG SALTIK este ")
             },
             color = SettingsColors.TextMuted,
             fontSize = 12.sp
         )
         Text("SAL-TECH. 😎", color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.Bold)
         Spacer(Modifier.height(6.dp))
-        Text("mayabang ba or nayayabangan lang kayo❤️", color = SettingsColors.TextMuted, fontSize = 11.sp)
+        Text("mayabang ba or nayayabangan lang kayo😎", color = SettingsColors.TextMuted, fontSize = 11.sp)
     }
 }
