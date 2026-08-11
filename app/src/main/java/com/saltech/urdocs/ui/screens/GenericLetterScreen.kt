@@ -672,7 +672,7 @@ private fun contentFor(type: LetterType): LetterContent = when (type) {
 fun GenericLetterScreen(letterType: LetterType, onBack: () -> Unit = {}) {
     val content = remember(letterType) { contentFor(letterType) }
     val paperWidthDp = 850.dp
-    val paperHeightDp = 1600.dp
+    val paperHeightDp = 1250.dp
     val context = LocalContext.current
     var interstitialAd by remember { mutableStateOf<InterstitialAd?>(null) }
     LaunchedEffect(Unit) {
