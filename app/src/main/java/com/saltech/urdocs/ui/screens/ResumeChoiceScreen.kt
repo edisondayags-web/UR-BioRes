@@ -11,10 +11,17 @@ import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.Layers
+import androidx.compose.material.icons.filled.GridView
 import androidx.compose.material.icons.filled.Work
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,6 +42,7 @@ private val RGradient = Brush.horizontalGradient(listOf(RPink, RGreen))
 
 @Composable
 fun ResumeChoiceScreen(onChoose: (String) -> Unit) {
+    var showComingSoon by remember { mutableStateOf(false) }
     Box(modifier = Modifier.fillMaxSize().background(Color.Transparent)) {
         PremiumWaveBackground()
         
@@ -117,6 +125,26 @@ fun ResumeChoiceScreen(onChoose: (String) -> Unit) {
                 title = "Hybrid Resume",
                 subtitle = "(work history + project highlights)",
                 onClick = { onChoose("hybrid") }
+            )
+
+            Spacer(Modifier.height(16.dp))
+
+            ResumeChoiceCard(
+                icon = { Icon(Icons.Filled.GridView, contentDescription = null, tint = Color.White, modifier = it) },
+                title = "More Templates",
+                subtitle = "(iba pang formats)",
+                onClick = { showComingSoon = true }
+            )
+        }
+
+        if (showComingSoon) {
+            AlertDialog(
+                onDismissRequest = { showComingSoon = false },
+                title = { Text("Coming Soon \uD83E\uDD99") },
+                text = { Text("Kasagsagan pa ng dev nito, balik ka na lang mahal!") },
+                confirmButton = {
+                    Button(onClick = { showComingSoon = false }) { Text("OK") }
+                }
             )
         }
     }
