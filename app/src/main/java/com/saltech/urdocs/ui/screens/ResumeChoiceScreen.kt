@@ -11,6 +11,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Description
+import androidx.compose.material.icons.filled.GridView
 import androidx.compose.material.icons.filled.Layers
 import androidx.compose.material.icons.filled.GridView
 import androidx.compose.material.icons.filled.Work
@@ -44,7 +45,6 @@ private val RGradient = Brush.horizontalGradient(listOf(RPink, RGreen))
 
 @Composable
 fun ResumeChoiceScreen(onChoose: (String) -> Unit, onBack: () -> Unit = {}) {
-    var showComingSoon by remember { mutableStateOf(false) }
     Box(modifier = Modifier.fillMaxSize().background(Color.Transparent)) {
         IconButton(
             onClick = onBack,
@@ -142,19 +142,8 @@ fun ResumeChoiceScreen(onChoose: (String) -> Unit, onBack: () -> Unit = {}) {
             ResumeChoiceCard(
                 icon = { Icon(Icons.Filled.GridView, contentDescription = null, tint = Color.White, modifier = it) },
                 title = "More Templates",
-                subtitle = "(iba pang formats)",
-                onClick = { showComingSoon = true }
-            )
-        }
-
-        if (showComingSoon) {
-            AlertDialog(
-                onDismissRequest = { showComingSoon = false },
-                title = { Text("Coming Soon \uD83E\uDD99") },
-                text = { Text("Kasagsagan pa ng dev nito, balik ka na lang mahal!") },
-                confirmButton = {
-                    Button(onClick = { showComingSoon = false }) { Text("OK") }
-                }
+                subtitle = "(browse full gallery, 19 designs)",
+                onClick = { onChoose("gallery") }
             )
         }
     }
