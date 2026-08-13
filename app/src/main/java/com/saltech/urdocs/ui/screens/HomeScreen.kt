@@ -49,7 +49,6 @@ fun HomeScreen(
     val items = listOf(
         HomeMenuItem("📄", "RESUME", "Pang BPO/Office etc • Professional CV", "resume"),
         HomeMenuItem("📝", "BIO-DATA", "Pang Company/Store etc. • PH Job Application", "biodata"),
-        HomeMenuItem("🏛️", "GOV'T WEBSITES", "All Links You Want", "govt_forms"),
         HomeMenuItem("✉️", "LETTERS", "Leave, Excuse, Resign, etc.", "letters"),
         HomeMenuItem("💬", "INTERVIEW", "Practice Office Interview (Q&A / Tips)", "interview"),
         HomeMenuItem("🔎", "JOB RESEARCHER", "Hahanapan ka ng work near you", "job_researcher"),
