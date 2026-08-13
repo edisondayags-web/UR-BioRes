@@ -160,6 +160,7 @@ fun BioDataV2Screen(
                                 Image(
                                     bitmap = processedSelfie.asImageBitmap(),
                                     contentDescription = "Photo",
+                                    contentScale = androidx.compose.ui.layout.ContentScale.Crop,
                                     modifier = Modifier.fillMaxSize()
                                 )
                             } else {
@@ -191,13 +192,27 @@ fun BioDataV2Screen(
                     Row(modifier = Modifier.fillMaxWidth().padding(top = 8.dp)) {
                         Column(Modifier.weight(1f)) {
                             Text("Present Address", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = Color.Black)
-                            Spacer(Modifier.height(18.dp))
+                            Spacer(Modifier.height(4.dp))
+                            BasicTextField(
+                                value = data.presentAddress, onValueChange = { data = data.copy(presentAddress = it) },
+                                textStyle = TextStyle(fontSize = 11.sp, color = Color.Black),
+                                cursorBrush = SolidColor(Color.Black),
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                            Spacer(Modifier.height(2.dp))
                             Spacer(Modifier.fillMaxWidth().v2Line(accent))
                         }
                         Spacer(Modifier.width(16.dp))
                         Column(Modifier.weight(1f)) {
                             Text("Permanent Address", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = Color.Black)
-                            Spacer(Modifier.height(18.dp))
+                            Spacer(Modifier.height(4.dp))
+                            BasicTextField(
+                                value = data.permanentAddress, onValueChange = { data = data.copy(permanentAddress = it) },
+                                textStyle = TextStyle(fontSize = 11.sp, color = Color.Black),
+                                cursorBrush = SolidColor(Color.Black),
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                            Spacer(Modifier.height(2.dp))
                             Spacer(Modifier.fillMaxWidth().v2Line(accent))
                         }
                     }
