@@ -118,12 +118,12 @@ fun BiodataChoiceScreen(onChoose: (String) -> Unit, onBack: () -> Unit = {}) {
                 onClick = { onChoose("more_templates") }
             )
 
-            Spacer(Modifier.height(40.dp))
+            Spacer(Modifier.weight(1f))
 
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 24.dp)
+                    .padding(horizontal = 24.dp, vertical = 16.dp)
                     .clip(RoundedCornerShape(16.dp))
                     .border(
                         1.dp,
@@ -141,7 +141,7 @@ fun BiodataChoiceScreen(onChoose: (String) -> Unit, onBack: () -> Unit = {}) {
                             append("Sal-Tech")
                         }
                     },
-                    fontSize = 12.sp,
+                    fontSize = 9.sp,
                     color = Color(0xFF9A9A9A),
                     textAlign = TextAlign.Center,
                     modifier = Modifier.align(Alignment.Center).padding(horizontal = 16.dp)
