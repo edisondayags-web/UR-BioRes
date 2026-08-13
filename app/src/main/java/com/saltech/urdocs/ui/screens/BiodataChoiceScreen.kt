@@ -36,6 +36,7 @@ private val BGradient = Brush.horizontalGradient(listOf(BPink, BGreen))
 @Composable
 fun BiodataChoiceScreen(onChoose: (String) -> Unit, onBack: () -> Unit = {}) {
     Box(modifier = Modifier.fillMaxSize().background(Color.Transparent)) {
+        PremiumWaveBackground()
         IconButton(
             onClick = onBack,
             modifier = Modifier
@@ -44,7 +45,6 @@ fun BiodataChoiceScreen(onChoose: (String) -> Unit, onBack: () -> Unit = {}) {
         ) {
             Icon(Icons.Filled.ArrowBack, contentDescription = "Back", tint = Color.White)
         }
-        PremiumWaveBackground()
 
         Box(
             modifier = Modifier
