@@ -19,6 +19,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -122,6 +125,36 @@ fun BiodataChoiceScreen(onChoose: (String) -> Unit, onBack: () -> Unit = {}) {
                 subtitle = "(Modern blue)",
                 onClick = { onChoose("blue") }
             )
+
+            Spacer(Modifier.height(40.dp))
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .border(
+                        1.dp,
+                        Brush.linearGradient(listOf(Color(0xFF3B6FE0), Color(0xFFE0245E))),
+                        RoundedCornerShape(16.dp)
+                    )
+                    .padding(16.dp)
+            ) {
+                Text("“", fontSize = 20.sp, color = Color(0xFF3B6FE0), modifier = Modifier.align(Alignment.TopStart))
+                Text("”", fontSize = 20.sp, color = Color(0xFFE0245E), modifier = Modifier.align(Alignment.BottomEnd))
+                Text(
+                    buildAnnotatedString {
+                        append("Walang kwenta pagiging matalino nyo kung tatawanan lang yan ng saltik Este ")
+                        withStyle(SpanStyle(color = Color(0xFF3B6FE0), fontWeight = FontWeight.Bold)) {
+                            append("Sal-Tech")
+                        }
+                    },
+                    fontSize = 12.sp,
+                    color = Color(0xFF9A9A9A),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.align(Alignment.Center).padding(horizontal = 16.dp)
+                )
+            }
         }
     }
 }
