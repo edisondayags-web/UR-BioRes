@@ -141,8 +141,18 @@ class MainActivity : ComponentActivity() {
                     composable(Screen.BioDataMoreTemplates.route) {
                         BioDataMoreTemplatesScreen(
                             onTemplateSelected = { templateName ->
-                                navController.navigate(Screen.BioDataPhForm.route)
+                                navController.navigate(Screen.BioDataTemplateForm.createRoute(templateName))
                             },
+                            onBack = { navController.popBackStack() }
+                        )
+                    }
+                    composable(
+                        Screen.BioDataTemplateForm.route,
+                        arguments = listOf(navArgument("templateName") { type = NavType.StringType })
+                    ) { backStackEntry ->
+                        val templateName = backStackEntry.arguments?.getString("templateName") ?: ""
+                        BioDataTemplateFormScreen(
+                            templateName = templateName,
                             onBack = { navController.popBackStack() }
                         )
                     }
