@@ -58,9 +58,10 @@ fun BioDataMoreTemplatesScreen(
                         Image(
                             painter = painterResource(id = resId),
                             contentDescription = name,
-                            contentScale = ContentScale.Fit,
+                            contentScale = ContentScale.Crop,
                             modifier = Modifier
                                 .padding(6.dp)
+                                .aspectRatio(0.75f)
                                 .clip(RoundedCornerShape(12.dp))
                                 .border(1.dp, Color.White.copy(alpha = 0.3f), RoundedCornerShape(12.dp))
                                 .clickable { onTemplateSelected(name) }
