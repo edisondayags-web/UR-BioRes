@@ -52,7 +52,8 @@ class MainActivity : ComponentActivity() {
                                     "hybrid" -> navController.navigate(Screen.ResumeHybrid.route)
                                     else -> navController.navigate(Screen.ResumeChronological.route)
                                 }
-                            }
+                            },
+                            onBack = { navController.popBackStack() }
                         )
                     }
                     composable(Screen.ResumeTraditional.route) {

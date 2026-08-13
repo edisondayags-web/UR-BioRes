@@ -7,6 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Description
@@ -16,6 +17,7 @@ import androidx.compose.material.icons.filled.Work
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -41,9 +43,17 @@ private val RGray = Color(0xFF9A9A9A)
 private val RGradient = Brush.horizontalGradient(listOf(RPink, RGreen))
 
 @Composable
-fun ResumeChoiceScreen(onChoose: (String) -> Unit) {
+fun ResumeChoiceScreen(onChoose: (String) -> Unit, onBack: () -> Unit = {}) {
     var showComingSoon by remember { mutableStateOf(false) }
     Box(modifier = Modifier.fillMaxSize().background(Color.Transparent)) {
+        IconButton(
+            onClick = onBack,
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(top = 24.dp, start = 8.dp)
+        ) {
+            Icon(Icons.Filled.ArrowBack, contentDescription = "Back", tint = Color.White)
+        }
         PremiumWaveBackground()
         
         Box(
