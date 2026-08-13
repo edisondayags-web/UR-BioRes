@@ -11,6 +11,7 @@ sealed class Screen(val route: String) {
     object BioDataPhForm : Screen("biodata_ph_form")
     object BioDataBlack : Screen("biodata_black")
     object BioDataBlue : Screen("biodata_blue")
+    object BioDataMoreTemplates : Screen("biodata_more_templates")
     object GovtForms : Screen("govt_forms")
     object Letters : Screen("letters")
     object Interview : Screen("interview")

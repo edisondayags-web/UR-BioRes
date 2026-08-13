@@ -84,8 +84,7 @@ class MainActivity : ComponentActivity() {
                             onChoose = { choice ->
                                 when (choice) {
                                     "ph_form" -> navController.navigate(Screen.BioDataPhForm.route)
-                                    "black" -> navController.navigate(Screen.BioDataBlack.route)
-                                    "blue" -> navController.navigate(Screen.BioDataBlue.route)
+                                    "more_templates" -> navController.navigate(Screen.BioDataMoreTemplates.route)
                                     else -> navController.navigate(Screen.BioDataStandard.route)
                                 }
                             },
@@ -129,6 +128,9 @@ class MainActivity : ComponentActivity() {
                                 navController.navigate(Screen.SelfieCapture.createRoute("biodata"))
                             }
                         )
+                    }
+                    composable(Screen.BioDataMoreTemplates.route) {
+                        BioDataMoreTemplatesScreen(onBack = { navController.popBackStack() })
                     }
                     composable(Screen.GovtForms.route) {
                         GovtFormsScreen(onNavigate = { route -> navController.navigate(route) })
