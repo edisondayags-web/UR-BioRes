@@ -56,6 +56,7 @@ private val cardBorderGradient = Brush.linearGradient(listOf(UrPink, UrGreen))
 @Composable
 fun LettersScreen(
     onNavigate: (String) -> Unit = {},
+    onBack: () -> Unit = {},
     viewModel: LettersViewModel = viewModel()
 ) {
     var screenState by remember { mutableStateOf("hub") }
@@ -97,7 +98,8 @@ fun LettersScreen(
                     onExcuseTap = { selectedType = findType("Excuse"); screenState = "generic" },
                     onPick = { type -> selectedType = type; screenState = "generic" },
                     onMoreTemplates = { screenState = "all" },
-                    onNavigate = onNavigate
+                    onNavigate = onNavigate,
+                    onBack = onBack
                 )
             }
         }
@@ -362,7 +364,8 @@ private fun LettersHubContent(
     onExcuseTap: () -> Unit,
     onPick: (LetterType) -> Unit,
     onMoreTemplates: () -> Unit,
-    onNavigate: (String) -> Unit
+    onNavigate: (String) -> Unit,
+    onBack: () -> Unit = {}
 ) {
     val otherTypes = remember {
         LetterType.entries.filter { it != LetterType.LEAVE && it != LetterType.RESIGNATION && it != LetterType.EXCUSE }
@@ -378,6 +381,9 @@ private fun LettersHubContent(
 
             item {
                 Row(verticalAlignment = Alignment.CenterVertically) {
+                    IconButton(onClick = onBack) {
+                        Icon(Icons.Filled.ArrowBack, contentDescription = "Back", tint = Color.White)
+                    }
                     Box(
                         modifier = Modifier
                             .size(52.dp)

@@ -150,7 +150,10 @@ class MainActivity : ComponentActivity() {
                         GovtFormsScreen(onNavigate = { route -> navController.navigate(route) })
                     }
                     composable(Screen.Letters.route) {
-                        LettersScreen(onNavigate = { route -> navController.navigate(route) })
+                        LettersScreen(
+                            onNavigate = { route -> navController.navigate(route) },
+                            onBack = { navController.popBackStack() }
+                        )
                     }
                     composable(
     route = Screen.LetterAssistant.route,
