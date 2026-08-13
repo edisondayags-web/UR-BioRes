@@ -6,6 +6,7 @@ sealed class Screen(val route: String) {
     object ResumeTraditional : Screen("resume_traditional")
     object ResumeChronological : Screen("resume_chronological")
     object ResumeHybrid : Screen("resume_hybrid")
+    object ResumeMoreTemplates : Screen("resume_more_templates")
     object BioData : Screen("biodata")
     object BioDataStandard : Screen("biodata_standard")
     object BioDataPhForm : Screen("biodata_ph_form")

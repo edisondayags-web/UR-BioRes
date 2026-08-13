@@ -50,6 +50,7 @@ class MainActivity : ComponentActivity() {
                                 when (choice) {
                                     "traditional" -> navController.navigate(Screen.ResumeTraditional.route)
                                     "hybrid" -> navController.navigate(Screen.ResumeHybrid.route)
+                                    "gallery" -> navController.navigate(Screen.ResumeMoreTemplates.route)
                                     else -> navController.navigate(Screen.ResumeChronological.route)
                                 }
                             },
@@ -75,6 +76,14 @@ class MainActivity : ComponentActivity() {
                             onTakeSelfie = {
                                 pendingSelfieTarget = "resume_hybrid"
                                 navController.navigate(Screen.SelfieCapture.createRoute("resume_hybrid"))
+                            },
+                            onBack = { navController.popBackStack() }
+                        )
+                    }
+                    composable(Screen.ResumeMoreTemplates.route) {
+                        ResumeTemplateGalleryScreen(
+                            onTemplateSelected = { templateName ->
+                                navController.navigate(Screen.ResumeTraditional.route)
                             },
                             onBack = { navController.popBackStack() }
                         )
