@@ -7,6 +7,9 @@ sealed class Screen(val route: String) {
     object ResumeChronological : Screen("resume_chronological")
     object ResumeHybrid : Screen("resume_hybrid")
     object ResumeMoreTemplates : Screen("resume_more_templates")
+    object ResumeTemplateForm : Screen("resume_template_form/{templateName}") {
+      fun createRoute(templateName: String) = "resume_template_form/$templateName"
+    }
     object BioData : Screen("biodata")
     object BioDataStandard : Screen("biodata_standard")
     object BioDataPhForm : Screen("biodata_ph_form")

@@ -83,8 +83,18 @@ class MainActivity : ComponentActivity() {
                     composable(Screen.ResumeMoreTemplates.route) {
                         ResumeTemplateGalleryScreen(
                             onTemplateSelected = { templateName ->
-                                navController.navigate(Screen.ResumeTraditional.route)
+                                navController.navigate(Screen.ResumeTemplateForm.createRoute(templateName))
                             },
+                            onBack = { navController.popBackStack() }
+                        )
+                    }
+                    composable(
+                        Screen.ResumeTemplateForm.route,
+                        arguments = listOf(navArgument("templateName") { type = NavType.StringType })
+                    ) { backStackEntry ->
+                        val templateName = backStackEntry.arguments?.getString("templateName") ?: ""
+                        ResumeTemplateFormScreen(
+                            templateName = templateName,
                             onBack = { navController.popBackStack() }
                         )
                     }
