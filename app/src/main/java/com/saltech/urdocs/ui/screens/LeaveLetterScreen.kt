@@ -119,8 +119,20 @@ fun LeaveLetterScreen(onBack: () -> Unit = {}) {
     Box(modifier = Modifier.fillMaxSize()) {
         PremiumWaveBackground()
         Column(modifier = Modifier.fillMaxSize()) {
-        // Reserved space for a bigger/video-capable ad - actual ad wiring comes in the ads pass.
-        Box(modifier = Modifier.fillMaxWidth().height(220.dp))
+        AndroidView(
+            factory = { ctx ->
+                AdView(ctx).apply {
+                    val displayMetrics = ctx.resources.displayMetrics
+                    val adWidthPixels = displayMetrics.widthPixels.toFloat()
+                    val density = displayMetrics.density
+                    val adWidth = (adWidthPixels / density).toInt()
+                    setAdSize(AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(ctx, adWidth))
+                    adUnitId = "ca-app-pub-3134240485602899/5923255956"
+                    loadAd(AdRequest.Builder().build())
+                }
+            },
+            modifier = Modifier.fillMaxWidth()
+        )
         BoxWithConstraints(modifier = Modifier.weight(1f).background(Color.Black)) {
             val fitScale = minOf(maxWidth / paperWidthDp, maxHeight / paperHeightDp)
             var scale by remember { mutableStateOf(fitScale) }
