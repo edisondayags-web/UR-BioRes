@@ -139,7 +139,12 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                     composable(Screen.BioDataMoreTemplates.route) {
-                        BioDataMoreTemplatesScreen(onBack = { navController.popBackStack() })
+                        BioDataMoreTemplatesScreen(
+                            onTemplateSelected = { templateName ->
+                                navController.navigate(Screen.BioDataPhForm.route)
+                            },
+                            onBack = { navController.popBackStack() }
+                        )
                     }
                     composable(Screen.GovtForms.route) {
                         GovtFormsScreen(onNavigate = { route -> navController.navigate(route) })
