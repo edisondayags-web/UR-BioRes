@@ -6,11 +6,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.Badge
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.EditNote
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -28,8 +30,16 @@ private val BGray = Color(0xFF9A9A9A)
 private val BGradient = Brush.horizontalGradient(listOf(BPink, BGreen))
 
 @Composable
-fun BiodataChoiceScreen(onChoose: (String) -> Unit) {
+fun BiodataChoiceScreen(onChoose: (String) -> Unit, onBack: () -> Unit = {}) {
     Box(modifier = Modifier.fillMaxSize().background(Color.Transparent)) {
+        IconButton(
+            onClick = onBack,
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(top = 24.dp, start = 8.dp)
+        ) {
+            Icon(Icons.Filled.ArrowBack, contentDescription = "Back", tint = Color.White)
+        }
         PremiumWaveBackground()
 
         Box(

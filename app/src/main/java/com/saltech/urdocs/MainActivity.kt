@@ -88,7 +88,8 @@ class MainActivity : ComponentActivity() {
                                     "blue" -> navController.navigate(Screen.BioDataBlue.route)
                                     else -> navController.navigate(Screen.BioDataStandard.route)
                                 }
-                            }
+                            },
+                            onBack = { navController.popBackStack() }
                         )
                     }
                     composable(Screen.BioDataStandard.route) {
