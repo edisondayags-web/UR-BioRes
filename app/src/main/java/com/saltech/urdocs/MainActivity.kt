@@ -93,7 +93,7 @@ class MainActivity : ComponentActivity() {
                         arguments = listOf(navArgument("templateName") { type = NavType.StringType })
                     ) { backStackEntry ->
                         val templateName = backStackEntry.arguments?.getString("templateName") ?: ""
-                        ResumeTemplateFormScreen(
+                        MoreTemplatesScreen()
                             templateName = templateName,
                             onBack = { navController.popBackStack() }
                         )
