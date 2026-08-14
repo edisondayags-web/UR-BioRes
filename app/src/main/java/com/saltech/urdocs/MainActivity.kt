@@ -89,16 +89,16 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                     composable(
-                        Screen.ResumeTemplateForm.route,
-                        arguments = listOf(navArgument("templateName") { type = NavType.StringType })
-                    ) { backStackEntry ->
-                        val templateName = backStackEntry.arguments?.getString("templateName") ?: ""
-                        MoreTemplatesScreen()
-                            templateName = templateName,
-                            onBack = { navController.popBackStack() }
-                        )
-                    }
-                    composable(Screen.BioData.route) {
+    Screen.ResumeTemplateForm.route,
+    arguments = listOf(navArgument("templateName") { type = NavType.StringType })
+) { backStackEntry ->
+    val templateName = backStackEntry.arguments?.getString("templateName") ?: ""
+    MoreTemplatesScreen(
+        templateName = templateName,
+        onBack = { navController.popBackStack() }
+    )
+                    }                    
+                  composable(Screen.BioData.route) {
                         BiodataChoiceScreen(
                             onChoose = { choice ->
                                 when (choice) {
