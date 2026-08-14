@@ -522,13 +522,14 @@ internal fun BaseResumeTemplateScreenV2(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF1A1A1A)),
-        contentAlignment = Alignment.Center
+            .background(Color(0xFF1A1A1A))
+            .verticalScroll(rememberScrollState()),
+        contentAlignment = Alignment.TopCenter
     ) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .aspectRatio(0.7071f)
+            .defaultMinSize(minHeight = 700.dp)
             .background(backgroundColor)
             .padding(20.dp)
     ) {
@@ -558,7 +559,7 @@ internal fun BaseResumeTemplateScreenV2(
         Box(modifier = Modifier.fillMaxWidth().height(1.dp).background(accentColor.copy(alpha = 0.4f)))
         Spacer(Modifier.height(16.dp))
 
-        Row(modifier = Modifier.fillMaxWidth().weight(1f)) {
+        Row(modifier = Modifier.fillMaxWidth()) {
             Column(modifier = Modifier.weight(0.4f).padding(end = 12.dp)) {
                 SidebarHeader("CONTACT", accentColor)
                 ContactRow(Icons.Filled.Phone, data.phone, "+63 XXX XXX XXXX", accentColor) { onFieldChange(data.copy(phone = it)) }
