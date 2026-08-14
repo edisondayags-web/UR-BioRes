@@ -2,6 +2,7 @@ package com.saltech.urdocs.ui.screens
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -10,6 +11,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Place
@@ -81,6 +83,14 @@ fun ResumeTemplateFormScreen(
             "resume_template_10" -> ResumeTemplate10Screen(data, { data = it })
             "resume_template_11" -> ResumeTemplate11Screen(data, { data = it })
             "resume_template_12" -> ResumeTemplate12Screen(data, { data = it })
+            "resume_template_13" -> ResumeTemplate13Screen(data, { data = it })
+            "resume_template_14" -> ResumeTemplate14Screen(data, { data = it })
+            "resume_template_15" -> ResumeTemplate15Screen(data, { data = it })
+            "resume_template_16" -> ResumeTemplate16Screen(data, { data = it })
+            "resume_template_17" -> ResumeTemplate17Screen(data, { data = it })
+            "resume_template_18" -> ResumeTemplate18Screen(data, { data = it })
+            "resume_template_19" -> ResumeTemplate19Screen(data, { data = it })
+            "resume_template_20" -> ResumeTemplate20Screen(data, { data = it })
             else -> ResumeTemplate01Screen(data, { data = it })
         }
     }
@@ -221,6 +231,48 @@ fun ResumeTemplate12Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTem
 }
 
 // ===== REUSABLE BASE ENGINE & COMPONENTS =====
+
+// ===== V2 TEMPLATES (13 to 20) - photo circle layout =====
+
+@Composable
+fun ResumeTemplate13Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
+    BaseResumeTemplateScreenV2(Color(0xFFFDF8F0), Color(0xFF6B8E4E), Color(0xFF2B2B2B), Color(0xFF6E6E6E), "13", true, data, onFieldChange)
+}
+
+@Composable
+fun ResumeTemplate14Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
+    BaseResumeTemplateScreenV2(Color(0xFF1A0F2E), Color(0xFFB794F6), Color.White, Color(0xFFBBBBBB), "14", true, data, onFieldChange)
+}
+
+@Composable
+fun ResumeTemplate15Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
+    BaseResumeTemplateScreenV2(Color.White, Color(0xFF1B3358), Color(0xFF1B1B1B), Color(0xFF777777), "15", false, data, onFieldChange)
+}
+
+@Composable
+fun ResumeTemplate16Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
+    BaseResumeTemplateScreenV2(Color(0xFF0D0D0D), Color(0xFFD4AF37), Color.White, Color(0xFFAAAAAA), "16", false, data, onFieldChange)
+}
+
+@Composable
+fun ResumeTemplate17Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
+    BaseResumeTemplateScreenV2(Color(0xFF071A1A), Color(0xFF33CCCC), Color.White, Color(0xFFAAAAAA), "17", true, data, onFieldChange)
+}
+
+@Composable
+fun ResumeTemplate18Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
+    BaseResumeTemplateScreenV2(Color(0xFFFBF3E7), Color(0xFFB8860B), Color(0xFF2B2B2B), Color(0xFF6E6E6E), "18", true, data, onFieldChange)
+}
+
+@Composable
+fun ResumeTemplate19Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
+    BaseResumeTemplateScreenV2(Color(0xFF1A0808), Color(0xFFCC3355), Color.White, Color(0xFFAAAAAA), "19", false, data, onFieldChange)
+}
+
+@Composable
+fun ResumeTemplate20Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
+    BaseResumeTemplateScreenV2(Color(0xFFF3FAF9), Color(0xFF2E7D6B), Color(0xFF1B1B1B), Color(0xFF666666), "20", false, data, onFieldChange)
+}
 
 @Composable
 internal fun BaseResumeTemplateScreen(
@@ -523,5 +575,161 @@ private fun PlaceholderText(
             maxLines = if (multiline) Int.MAX_VALUE else 1,
             modifier = Modifier.fillMaxWidth()
         )
+    }
+}
+
+
+@Composable
+internal fun BaseResumeTemplateScreenV2(
+    backgroundColor: Color,
+    accentColor: Color,
+    textColor: Color,
+    subTextColor: Color,
+    badgeNumber: String,
+    useDotSkills: Boolean,
+    data: ResumeTemplateFields,
+    onFieldChange: (ResumeTemplateFields) -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFF1A1A1A)),
+        contentAlignment = Alignment.Center
+    ) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .aspectRatio(0.7071f)
+            .background(backgroundColor)
+            .padding(20.dp)
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Box(
+                modifier = Modifier
+                    .size(56.dp)
+                    .clip(RoundedCornerShape(50))
+                    .background(accentColor.copy(alpha = 0.2f))
+                    .border(2.dp, accentColor, RoundedCornerShape(50)),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(Icons.Filled.Person, contentDescription = null, tint = accentColor, modifier = Modifier.size(30.dp))
+            }
+            Spacer(Modifier.width(14.dp))
+            Column {
+                PlaceholderText(data.fullName, "YOUR NAME", textColor, 22.sp, FontWeight.Bold) {
+                    onFieldChange(data.copy(fullName = it))
+                }
+                PlaceholderText(data.professionalTitle, "PROFESSIONAL TITLE", accentColor, 12.sp) {
+                    onFieldChange(data.copy(professionalTitle = it))
+                }
+            }
+        }
+
+        Spacer(Modifier.height(16.dp))
+        Box(modifier = Modifier.fillMaxWidth().height(1.dp).background(accentColor.copy(alpha = 0.4f)))
+        Spacer(Modifier.height(16.dp))
+
+        Row(modifier = Modifier.fillMaxWidth().weight(1f)) {
+            Column(modifier = Modifier.weight(0.4f).padding(end = 12.dp)) {
+                SidebarHeader("CONTACT", accentColor)
+                ContactRow(Icons.Filled.Phone, data.phone, "+63 XXX XXX XXXX", accentColor) { onFieldChange(data.copy(phone = it)) }
+                ContactRow(Icons.Filled.Email, data.email, "youremail@email.com", accentColor) { onFieldChange(data.copy(email = it)) }
+                ContactRow(Icons.Filled.Place, data.location, "City, State, Country", accentColor) { onFieldChange(data.copy(location = it)) }
+                LinkedInRow(data.linkedin, accentColor) { onFieldChange(data.copy(linkedin = it)) }
+
+                Spacer(Modifier.height(14.dp))
+                SidebarHeader("SKILLS", accentColor)
+                val skills = listOf(
+                    Pair(data.skill1, "Problem Solving"),
+                    Pair(data.skill2, "Communication"),
+                    Pair(data.skill3, "Teamwork"),
+                    Pair(data.skill4, "Leadership"),
+                    Pair(data.skill5, "Time Management"),
+                    Pair(data.skill6, "Creativity")
+                )
+                skills.forEachIndexed { index, pair ->
+                    if (useDotSkills) {
+                        SkillDotRow(pair.first, pair.second, accentColor) { newVal ->
+                            onFieldChange(
+                                when (index) {
+                                    0 -> data.copy(skill1 = newVal)
+                                    1 -> data.copy(skill2 = newVal)
+                                    2 -> data.copy(skill3 = newVal)
+                                    3 -> data.copy(skill4 = newVal)
+                                    4 -> data.copy(skill5 = newVal)
+                                    else -> data.copy(skill6 = newVal)
+                                }
+                            )
+                        }
+                    } else {
+                        SkillBarRow(pair.first, pair.second, accentColor) { newVal ->
+                            onFieldChange(
+                                when (index) {
+                                    0 -> data.copy(skill1 = newVal)
+                                    1 -> data.copy(skill2 = newVal)
+                                    2 -> data.copy(skill3 = newVal)
+                                    3 -> data.copy(skill4 = newVal)
+                                    4 -> data.copy(skill5 = newVal)
+                                    else -> data.copy(skill6 = newVal)
+                                }
+                            )
+                        }
+                    }
+                }
+
+                Spacer(Modifier.height(14.dp))
+                SidebarHeader("REFERENCES", accentColor)
+                PlaceholderText(data.refName, "Reference Name", subTextColor, 11.sp) {
+                    onFieldChange(data.copy(refName = it))
+                }
+                PlaceholderText(data.refPositionCompany, "Job Position / Company", subTextColor, 10.sp) {
+                    onFieldChange(data.copy(refPositionCompany = it))
+                }
+                PlaceholderText(data.refContact, "email@email.com", subTextColor, 10.sp) {
+                    onFieldChange(data.copy(refContact = it))
+                }
+            }
+
+            Box(modifier = Modifier.width(1.dp).fillMaxHeight().background(accentColor.copy(alpha = 0.3f)))
+
+            Column(modifier = Modifier.weight(0.6f).padding(start = 12.dp)) {
+                SectionHeader("ABOUT ME", accentColor)
+                PlaceholderText(data.aboutMe, "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", subTextColor, 11.sp, multiline = true) {
+                    onFieldChange(data.copy(aboutMe = it))
+                }
+
+                Spacer(Modifier.height(14.dp))
+                SectionHeader("EDUCATION", accentColor)
+                PlaceholderText(data.edu1Degree, "DEGREE NAME / MAJOR", textColor, 12.sp, FontWeight.Bold) {
+                    onFieldChange(data.copy(edu1Degree = it))
+                }
+                PlaceholderText(data.edu1School, "University Name", subTextColor, 11.sp) {
+                    onFieldChange(data.copy(edu1School = it))
+                }
+                PlaceholderText(data.edu1Years, "2018 - 2022", subTextColor, 11.sp) {
+                    onFieldChange(data.copy(edu1Years = it))
+                }
+
+                Spacer(Modifier.height(14.dp))
+                SectionHeader("EXPERIENCE", accentColor)
+                PlaceholderText(data.exp1Position, "JOB POSITION HERE", textColor, 12.sp, FontWeight.Bold) {
+                    onFieldChange(data.copy(exp1Position = it))
+                }
+                PlaceholderText(data.exp1Company, "Company Name | 2020 - Present", accentColor, 10.sp) {
+                    onFieldChange(data.copy(exp1Company = it))
+                }
+                PlaceholderText(data.exp1Desc, "Lorem ipsum dolor sit amet, sed do eiusmod tempor.", subTextColor, 10.sp, multiline = true) {
+                    onFieldChange(data.copy(exp1Desc = it))
+                }
+                Spacer(Modifier.height(8.dp))
+                PlaceholderText(data.exp2Position, "JOB POSITION HERE", textColor, 12.sp, FontWeight.Bold) {
+                    onFieldChange(data.copy(exp2Position = it))
+                }
+                PlaceholderText(data.exp2Company, "Company Name | 2018 - 2020", accentColor, 10.sp) {
+                    onFieldChange(data.copy(exp2Company = it))
+                }
+            }
+        }
+    }
     }
 }
