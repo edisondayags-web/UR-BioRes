@@ -92,115 +92,543 @@ fun ResumeTemplateFormScreen(
             "resume_template_18" -> ResumeTemplate18Screen(data, { data = it })
             "resume_template_19" -> ResumeTemplate19Screen(data, { data = it })
             "resume_template_20" -> ResumeTemplate20Screen(data, { data = it })
+            "resume_template_21" -> ResumeTemplate21Screen(data, { data = it })
+            "resume_template_22" -> ResumeTemplate22Screen(data, { data = it })
+            "resume_template_23" -> ResumeTemplate23Screen(data, { data = it })
             else -> ResumeTemplate01Screen(data, { data = it })
         }
     }
 }
 
-// ===== INDIVIDUAL TEMPLATES (01 to 12) =====
+// ===== INDIVIDUAL TEMPLATES (01 to 23) - AUTO-WIRED TO PIXELPERFECT =====
 
 @Composable
 fun ResumeTemplate01Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
-    BaseResumeTemplateScreenV2(Color(0xFF0D0D0D), Color(0xFFD4AF37), Color.White, Color(0xFFAAAAAA), "01", true, data, onFieldChange)
+    com.saltech.urdocs.ui.templates.ResumeTemplate01_PixelPerfect(
+        userName = data.fullName,
+        userTitle = data.professionalTitle,
+        contactPhone = data.phone,
+        contactEmail = data.email,
+        contactAddress = data.location,
+        contactWebsite = data.website,
+        contactLinkedin = data.linkedin,
+        aboutMe = listOf(data.aboutMe),
+        education = listOf(
+            "${data.edu1Degree} - ${data.edu1School} (${data.edu1Years})",
+            "${data.edu2Degree} - ${data.edu2School} (${data.edu2Years})"
+        ),
+        skillsLeft = listOf(data.skill1, data.skill2, data.skill3),
+        skillsRight = listOf(data.skill4, data.skill5, data.skill6),
+        experienceLeft = listOf("${data.exp1Position} - ${data.exp1Company} (${data.exp1Dates})", data.exp1Desc),
+        experienceRight = listOf("${data.exp2Position} - ${data.exp2Company} (${data.exp2Dates})"),
+        references = listOf("${data.refName} - ${data.refPositionCompany} (${data.refContact})")
+    )
 }
 
 @Composable
 fun ResumeTemplate02Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
-    BaseResumeTemplateScreenV3(Color.White, Color(0xFF1B3358), Color(0xFF1B1B1B), Color(0xFF777777), "02", false, data, onFieldChange)
+    com.saltech.urdocs.ui.templates.ResumeTemplate02_PixelPerfect(
+        userName = data.fullName,
+        userTitle = data.professionalTitle,
+        contactPhone = data.phone,
+        contactEmail = data.email,
+        contactAddress = data.location,
+        contactWebsite = data.website,
+        contactLinkedin = data.linkedin,
+        aboutMe = listOf(data.aboutMe),
+        education = listOf(
+            "${data.edu1Degree} - ${data.edu1School} (${data.edu1Years})",
+            "${data.edu2Degree} - ${data.edu2School} (${data.edu2Years})"
+        ),
+        skillsLeft = listOf(data.skill1, data.skill2, data.skill3),
+        skillsRight = listOf(data.skill4, data.skill5, data.skill6),
+        experienceLeft = listOf("${data.exp1Position} - ${data.exp1Company} (${data.exp1Dates})", data.exp1Desc),
+        experienceRight = listOf("${data.exp2Position} - ${data.exp2Company} (${data.exp2Dates})"),
+        references = listOf("${data.refName} - ${data.refPositionCompany} (${data.refContact})")
+    )
 }
 
 @Composable
 fun ResumeTemplate03Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
-    BaseResumeTemplateScreenV2(Color(0xFF0D140D), Color(0xFF4CAF50), Color.White, Color(0xFFAAAAAA), "03", false, data, onFieldChange)
+    com.saltech.urdocs.ui.templates.ResumeTemplate03_PixelPerfect(
+        userName = data.fullName,
+        userTitle = data.professionalTitle,
+        contactPhone = data.phone,
+        contactEmail = data.email,
+        contactAddress = data.location,
+        contactWebsite = data.website,
+        contactLinkedin = data.linkedin,
+        aboutMe = listOf(data.aboutMe),
+        education = listOf(
+            "${data.edu1Degree} - ${data.edu1School} (${data.edu1Years})",
+            "${data.edu2Degree} - ${data.edu2School} (${data.edu2Years})"
+        ),
+        skillsLeft = listOf(data.skill1, data.skill2, data.skill3),
+        skillsRight = listOf(data.skill4, data.skill5, data.skill6),
+        experienceLeft = listOf("${data.exp1Position} - ${data.exp1Company} (${data.exp1Dates})", data.exp1Desc),
+        experienceRight = listOf("${data.exp2Position} - ${data.exp2Company} (${data.exp2Dates})"),
+        references = listOf("${data.refName} - ${data.refPositionCompany} (${data.refContact})")
+    )
 }
 
 @Composable
 fun ResumeTemplate04Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
-    BaseResumeTemplateScreenV2(Color(0xFFFBF3E7), Color(0xFFC9A227), Color(0xFF2B2B2B), Color(0xFF6E6E6E), "04", true, data, onFieldChange)
+    com.saltech.urdocs.ui.templates.ResumeTemplate04_PixelPerfect(
+        userName = data.fullName,
+        userTitle = data.professionalTitle,
+        contactPhone = data.phone,
+        contactEmail = data.email,
+        contactAddress = data.location,
+        contactWebsite = data.website,
+        contactLinkedin = data.linkedin,
+        aboutMe = listOf(data.aboutMe),
+        education = listOf(
+            "${data.edu1Degree} - ${data.edu1School} (${data.edu1Years})",
+            "${data.edu2Degree} - ${data.edu2School} (${data.edu2Years})"
+        ),
+        skillsLeft = listOf(data.skill1, data.skill2, data.skill3),
+        skillsRight = listOf(data.skill4, data.skill5, data.skill6),
+        experienceLeft = listOf("${data.exp1Position} - ${data.exp1Company} (${data.exp1Dates})", data.exp1Desc),
+        experienceRight = listOf("${data.exp2Position} - ${data.exp2Company} (${data.exp2Dates})"),
+        references = listOf("${data.refName} - ${data.refPositionCompany} (${data.refContact})")
+    )
 }
 
 @Composable
 fun ResumeTemplate05Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
-    BaseResumeTemplateScreenV2(Color(0xFF0F0A14), Color(0xFF9B6FE0), Color.White, Color(0xFFAAAAAA), "05", false, data, onFieldChange)
+    com.saltech.urdocs.ui.templates.ResumeTemplate05_PixelPerfect(
+        userName = data.fullName,
+        userTitle = data.professionalTitle,
+        contactPhone = data.phone,
+        contactEmail = data.email,
+        contactAddress = data.location,
+        contactWebsite = data.website,
+        contactLinkedin = data.linkedin,
+        aboutMe = listOf(data.aboutMe),
+        education = listOf(
+            "${data.edu1Degree} - ${data.edu1School} (${data.edu1Years})",
+            "${data.edu2Degree} - ${data.edu2School} (${data.edu2Years})"
+        ),
+        skillsLeft = listOf(data.skill1, data.skill2, data.skill3),
+        skillsRight = listOf(data.skill4, data.skill5, data.skill6),
+        experienceLeft = listOf("${data.exp1Position} - ${data.exp1Company} (${data.exp1Dates})", data.exp1Desc),
+        experienceRight = listOf("${data.exp2Position} - ${data.exp2Company} (${data.exp2Dates})"),
+        references = listOf("${data.refName} - ${data.refPositionCompany} (${data.refContact})")
+    )
 }
 
 @Composable
 fun ResumeTemplate06Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
-    BaseResumeTemplateScreenV4(Color.White, Color(0xFF2E7D6B), Color(0xFF1B1B1B), Color(0xFF777777), "06", false, data, onFieldChange)
+    com.saltech.urdocs.ui.templates.ResumeTemplate06_PixelPerfect(
+        userName = data.fullName,
+        userTitle = data.professionalTitle,
+        contactPhone = data.phone,
+        contactEmail = data.email,
+        contactAddress = data.location,
+        contactWebsite = data.website,
+        contactLinkedin = data.linkedin,
+        aboutMe = listOf(data.aboutMe),
+        education = listOf(
+            "${data.edu1Degree} - ${data.edu1School} (${data.edu1Years})",
+            "${data.edu2Degree} - ${data.edu2School} (${data.edu2Years})"
+        ),
+        skillsLeft = listOf(data.skill1, data.skill2, data.skill3),
+        skillsRight = listOf(data.skill4, data.skill5, data.skill6),
+        experienceLeft = listOf("${data.exp1Position} - ${data.exp1Company} (${data.exp1Dates})", data.exp1Desc),
+        experienceRight = listOf("${data.exp2Position} - ${data.exp2Company} (${data.exp2Dates})"),
+        references = listOf("${data.refName} - ${data.refPositionCompany} (${data.refContact})")
+    )
 }
 
 @Composable
 fun ResumeTemplate07Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
-    BaseResumeTemplateScreenV2(Color(0xFF0B1224), Color(0xFFD4AF37), Color.White, Color(0xFFAAAAAA), "07", false, data, onFieldChange)
+    com.saltech.urdocs.ui.templates.ResumeTemplate07_PixelPerfect(
+        userName = data.fullName,
+        userTitle = data.professionalTitle,
+        contactPhone = data.phone,
+        contactEmail = data.email,
+        contactAddress = data.location,
+        contactWebsite = data.website,
+        contactLinkedin = data.linkedin,
+        aboutMe = listOf(data.aboutMe),
+        education = listOf(
+            "${data.edu1Degree} - ${data.edu1School} (${data.edu1Years})",
+            "${data.edu2Degree} - ${data.edu2School} (${data.edu2Years})"
+        ),
+        skillsLeft = listOf(data.skill1, data.skill2, data.skill3),
+        skillsRight = listOf(data.skill4, data.skill5, data.skill6),
+        experienceLeft = listOf("${data.exp1Position} - ${data.exp1Company} (${data.exp1Dates})", data.exp1Desc),
+        experienceRight = listOf("${data.exp2Position} - ${data.exp2Company} (${data.exp2Dates})"),
+        references = listOf("${data.refName} - ${data.refPositionCompany} (${data.refContact})")
+    )
 }
 
 @Composable
 fun ResumeTemplate08Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
-    BaseResumeTemplateScreenV3(Color(0xFFF3F6FA), Color(0xFF2F4B7C), Color(0xFF1B1B1B), Color(0xFF777777), "08", true, data, onFieldChange)
+    com.saltech.urdocs.ui.templates.ResumeTemplate08_PixelPerfect(
+        userName = data.fullName,
+        userTitle = data.professionalTitle,
+        contactPhone = data.phone,
+        contactEmail = data.email,
+        contactAddress = data.location,
+        contactWebsite = data.website,
+        contactLinkedin = data.linkedin,
+        aboutMe = listOf(data.aboutMe),
+        education = listOf(
+            "${data.edu1Degree} - ${data.edu1School} (${data.edu1Years})",
+            "${data.edu2Degree} - ${data.edu2School} (${data.edu2Years})"
+        ),
+        skillsLeft = listOf(data.skill1, data.skill2, data.skill3),
+        skillsRight = listOf(data.skill4, data.skill5, data.skill6),
+        experienceLeft = listOf("${data.exp1Position} - ${data.exp1Company} (${data.exp1Dates})", data.exp1Desc),
+        experienceRight = listOf("${data.exp2Position} - ${data.exp2Company} (${data.exp2Dates})"),
+        references = listOf("${data.refName} - ${data.refPositionCompany} (${data.refContact})")
+    )
 }
 
 @Composable
 fun ResumeTemplate09Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
-    BaseResumeTemplateScreenV2(Color(0xFFFBF3E7), Color(0xFFC9A227), Color(0xFF2B2B2B), Color(0xFF6E6E6E), "09", false, data, onFieldChange)
+    com.saltech.urdocs.ui.templates.ResumeTemplate09_PixelPerfect(
+        userName = data.fullName,
+        userTitle = data.professionalTitle,
+        contactPhone = data.phone,
+        contactEmail = data.email,
+        contactAddress = data.location,
+        contactWebsite = data.website,
+        contactLinkedin = data.linkedin,
+        aboutMe = listOf(data.aboutMe),
+        education = listOf(
+            "${data.edu1Degree} - ${data.edu1School} (${data.edu1Years})",
+            "${data.edu2Degree} - ${data.edu2School} (${data.edu2Years})"
+        ),
+        skillsLeft = listOf(data.skill1, data.skill2, data.skill3),
+        skillsRight = listOf(data.skill4, data.skill5, data.skill6),
+        experienceLeft = listOf("${data.exp1Position} - ${data.exp1Company} (${data.exp1Dates})", data.exp1Desc),
+        experienceRight = listOf("${data.exp2Position} - ${data.exp2Company} (${data.exp2Dates})"),
+        references = listOf("${data.refName} - ${data.refPositionCompany} (${data.refContact})")
+    )
 }
 
 @Composable
 fun ResumeTemplate10Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
-    BaseResumeTemplateScreenV2(Color(0xFF0D0D0D), Color(0xFFCC2B2B), Color.White, Color(0xFFAAAAAA), "10", false, data, onFieldChange)
+    com.saltech.urdocs.ui.templates.ResumeTemplate10_PixelPerfect(
+        userName = data.fullName,
+        userTitle = data.professionalTitle,
+        contactPhone = data.phone,
+        contactEmail = data.email,
+        contactAddress = data.location,
+        contactWebsite = data.website,
+        contactLinkedin = data.linkedin,
+        aboutMe = listOf(data.aboutMe),
+        education = listOf(
+            "${data.edu1Degree} - ${data.edu1School} (${data.edu1Years})",
+            "${data.edu2Degree} - ${data.edu2School} (${data.edu2Years})"
+        ),
+        skillsLeft = listOf(data.skill1, data.skill2, data.skill3),
+        skillsRight = listOf(data.skill4, data.skill5, data.skill6),
+        experienceLeft = listOf("${data.exp1Position} - ${data.exp1Company} (${data.exp1Dates})", data.exp1Desc),
+        experienceRight = listOf("${data.exp2Position} - ${data.exp2Company} (${data.exp2Dates})"),
+        references = listOf("${data.refName} - ${data.refPositionCompany} (${data.refContact})")
+    )
 }
 
 @Composable
 fun ResumeTemplate11Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
-    BaseResumeTemplateScreenV4(Color.White, Color(0xFF2E5E3E), Color(0xFF1B1B1B), Color(0xFF777777), "11", false, data, onFieldChange)
+    com.saltech.urdocs.ui.templates.ResumeTemplate11_PixelPerfect(
+        userName = data.fullName,
+        userTitle = data.professionalTitle,
+        contactPhone = data.phone,
+        contactEmail = data.email,
+        contactAddress = data.location,
+        contactWebsite = data.website,
+        contactLinkedin = data.linkedin,
+        aboutMe = listOf(data.aboutMe),
+        education = listOf(
+            "${data.edu1Degree} - ${data.edu1School} (${data.edu1Years})",
+            "${data.edu2Degree} - ${data.edu2School} (${data.edu2Years})"
+        ),
+        skillsLeft = listOf(data.skill1, data.skill2, data.skill3),
+        skillsRight = listOf(data.skill4, data.skill5, data.skill6),
+        experienceLeft = listOf("${data.exp1Position} - ${data.exp1Company} (${data.exp1Dates})", data.exp1Desc),
+        experienceRight = listOf("${data.exp2Position} - ${data.exp2Company} (${data.exp2Dates})"),
+        references = listOf("${data.refName} - ${data.refPositionCompany} (${data.refContact})")
+    )
 }
 
 @Composable
 fun ResumeTemplate12Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
-    BaseResumeTemplateScreenV2(Color(0xFF14071A), Color(0xFFB744C4), Color.White, Color(0xFFAAAAAA), "12", true, data, onFieldChange)
+    com.saltech.urdocs.ui.templates.ResumeTemplate12_PixelPerfect(
+        userName = data.fullName,
+        userTitle = data.professionalTitle,
+        contactPhone = data.phone,
+        contactEmail = data.email,
+        contactAddress = data.location,
+        contactWebsite = data.website,
+        contactLinkedin = data.linkedin,
+        aboutMe = listOf(data.aboutMe),
+        education = listOf(
+            "${data.edu1Degree} - ${data.edu1School} (${data.edu1Years})",
+            "${data.edu2Degree} - ${data.edu2School} (${data.edu2Years})"
+        ),
+        skillsLeft = listOf(data.skill1, data.skill2, data.skill3),
+        skillsRight = listOf(data.skill4, data.skill5, data.skill6),
+        experienceLeft = listOf("${data.exp1Position} - ${data.exp1Company} (${data.exp1Dates})", data.exp1Desc),
+        experienceRight = listOf("${data.exp2Position} - ${data.exp2Company} (${data.exp2Dates})"),
+        references = listOf("${data.refName} - ${data.refPositionCompany} (${data.refContact})")
+    )
 }
-
-// ===== REUSABLE BASE ENGINE & COMPONENTS =====
-
-// ===== V2 TEMPLATES (13 to 20) - photo circle layout =====
 
 @Composable
 fun ResumeTemplate13Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
-    BaseResumeTemplateScreenV2(Color(0xFFFDF8F0), Color(0xFF6B8E4E), Color(0xFF2B2B2B), Color(0xFF6E6E6E), "13", true, data, onFieldChange)
+    com.saltech.urdocs.ui.templates.ResumeTemplate13_PixelPerfect(
+        userName = data.fullName,
+        userTitle = data.professionalTitle,
+        contactPhone = data.phone,
+        contactEmail = data.email,
+        contactAddress = data.location,
+        contactWebsite = data.website,
+        contactLinkedin = data.linkedin,
+        aboutMe = listOf(data.aboutMe),
+        education = listOf(
+            "${data.edu1Degree} - ${data.edu1School} (${data.edu1Years})",
+            "${data.edu2Degree} - ${data.edu2School} (${data.edu2Years})"
+        ),
+        skillsLeft = listOf(data.skill1, data.skill2, data.skill3),
+        skillsRight = listOf(data.skill4, data.skill5, data.skill6),
+        experienceLeft = listOf("${data.exp1Position} - ${data.exp1Company} (${data.exp1Dates})", data.exp1Desc),
+        experienceRight = listOf("${data.exp2Position} - ${data.exp2Company} (${data.exp2Dates})"),
+        references = listOf("${data.refName} - ${data.refPositionCompany} (${data.refContact})")
+    )
 }
 
 @Composable
 fun ResumeTemplate14Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
-    BaseResumeTemplateScreenV2(Color(0xFF1A0F2E), Color(0xFFB794F6), Color.White, Color(0xFFBBBBBB), "14", true, data, onFieldChange)
+    com.saltech.urdocs.ui.templates.ResumeTemplate14_PixelPerfect(
+        userName = data.fullName,
+        userTitle = data.professionalTitle,
+        contactPhone = data.phone,
+        contactEmail = data.email,
+        contactAddress = data.location,
+        contactWebsite = data.website,
+        contactLinkedin = data.linkedin,
+        aboutMe = listOf(data.aboutMe),
+        education = listOf(
+            "${data.edu1Degree} - ${data.edu1School} (${data.edu1Years})",
+            "${data.edu2Degree} - ${data.edu2School} (${data.edu2Years})"
+        ),
+        skillsLeft = listOf(data.skill1, data.skill2, data.skill3),
+        skillsRight = listOf(data.skill4, data.skill5, data.skill6),
+        experienceLeft = listOf("${data.exp1Position} - ${data.exp1Company} (${data.exp1Dates})", data.exp1Desc),
+        experienceRight = listOf("${data.exp2Position} - ${data.exp2Company} (${data.exp2Dates})"),
+        references = listOf("${data.refName} - ${data.refPositionCompany} (${data.refContact})")
+    )
 }
 
 @Composable
 fun ResumeTemplate15Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
-    BaseResumeTemplateScreenV3(Color.White, Color(0xFF1B3358), Color(0xFF1B1B1B), Color(0xFF777777), "15", false, data, onFieldChange)
+    com.saltech.urdocs.ui.templates.ResumeTemplate15_PixelPerfect(
+        userName = data.fullName,
+        userTitle = data.professionalTitle,
+        contactPhone = data.phone,
+        contactEmail = data.email,
+        contactAddress = data.location,
+        contactWebsite = data.website,
+        contactLinkedin = data.linkedin,
+        aboutMe = listOf(data.aboutMe),
+        education = listOf(
+            "${data.edu1Degree} - ${data.edu1School} (${data.edu1Years})",
+            "${data.edu2Degree} - ${data.edu2School} (${data.edu2Years})"
+        ),
+        skillsLeft = listOf(data.skill1, data.skill2, data.skill3),
+        skillsRight = listOf(data.skill4, data.skill5, data.skill6),
+        experienceLeft = listOf("${data.exp1Position} - ${data.exp1Company} (${data.exp1Dates})", data.exp1Desc),
+        experienceRight = listOf("${data.exp2Position} - ${data.exp2Company} (${data.exp2Dates})"),
+        references = listOf("${data.refName} - ${data.refPositionCompany} (${data.refContact})")
+    )
 }
 
 @Composable
 fun ResumeTemplate16Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
-    BaseResumeTemplateScreenV2(Color(0xFF0D0D0D), Color(0xFFD4AF37), Color.White, Color(0xFFAAAAAA), "16", false, data, onFieldChange)
+    com.saltech.urdocs.ui.templates.ResumeTemplate16_PixelPerfect(
+        userName = data.fullName,
+        userTitle = data.professionalTitle,
+        contactPhone = data.phone,
+        contactEmail = data.email,
+        contactAddress = data.location,
+        contactWebsite = data.website,
+        contactLinkedin = data.linkedin,
+        aboutMe = listOf(data.aboutMe),
+        education = listOf(
+            "${data.edu1Degree} - ${data.edu1School} (${data.edu1Years})",
+            "${data.edu2Degree} - ${data.edu2School} (${data.edu2Years})"
+        ),
+        skillsLeft = listOf(data.skill1, data.skill2, data.skill3),
+        skillsRight = listOf(data.skill4, data.skill5, data.skill6),
+        experienceLeft = listOf("${data.exp1Position} - ${data.exp1Company} (${data.exp1Dates})", data.exp1Desc),
+        experienceRight = listOf("${data.exp2Position} - ${data.exp2Company} (${data.exp2Dates})"),
+        references = listOf("${data.refName} - ${data.refPositionCompany} (${data.refContact})")
+    )
 }
 
 @Composable
 fun ResumeTemplate17Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
-    BaseResumeTemplateScreenV2(Color(0xFF071A1A), Color(0xFF33CCCC), Color.White, Color(0xFFAAAAAA), "17", true, data, onFieldChange)
+    com.saltech.urdocs.ui.templates.ResumeTemplate17_PixelPerfect(
+        userName = data.fullName,
+        userTitle = data.professionalTitle,
+        contactPhone = data.phone,
+        contactEmail = data.email,
+        contactAddress = data.location,
+        contactWebsite = data.website,
+        contactLinkedin = data.linkedin,
+        aboutMe = listOf(data.aboutMe),
+        education = listOf(
+            "${data.edu1Degree} - ${data.edu1School} (${data.edu1Years})",
+            "${data.edu2Degree} - ${data.edu2School} (${data.edu2Years})"
+        ),
+        skillsLeft = listOf(data.skill1, data.skill2, data.skill3),
+        skillsRight = listOf(data.skill4, data.skill5, data.skill6),
+        experienceLeft = listOf("${data.exp1Position} - ${data.exp1Company} (${data.exp1Dates})", data.exp1Desc),
+        experienceRight = listOf("${data.exp2Position} - ${data.exp2Company} (${data.exp2Dates})"),
+        references = listOf("${data.refName} - ${data.refPositionCompany} (${data.refContact})")
+    )
 }
 
 @Composable
 fun ResumeTemplate18Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
-    BaseResumeTemplateScreenV2(Color(0xFFFBF3E7), Color(0xFFB8860B), Color(0xFF2B2B2B), Color(0xFF6E6E6E), "18", true, data, onFieldChange)
+    com.saltech.urdocs.ui.templates.ResumeTemplate18_PixelPerfect(
+        userName = data.fullName,
+        userTitle = data.professionalTitle,
+        contactPhone = data.phone,
+        contactEmail = data.email,
+        contactAddress = data.location,
+        contactWebsite = data.website,
+        contactLinkedin = data.linkedin,
+        aboutMe = listOf(data.aboutMe),
+        education = listOf(
+            "${data.edu1Degree} - ${data.edu1School} (${data.edu1Years})",
+            "${data.edu2Degree} - ${data.edu2School} (${data.edu2Years})"
+        ),
+        skillsLeft = listOf(data.skill1, data.skill2, data.skill3),
+        skillsRight = listOf(data.skill4, data.skill5, data.skill6),
+        experienceLeft = listOf("${data.exp1Position} - ${data.exp1Company} (${data.exp1Dates})", data.exp1Desc),
+        experienceRight = listOf("${data.exp2Position} - ${data.exp2Company} (${data.exp2Dates})"),
+        references = listOf("${data.refName} - ${data.refPositionCompany} (${data.refContact})")
+    )
 }
 
 @Composable
 fun ResumeTemplate19Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
-    BaseResumeTemplateScreenV2(Color(0xFF1A0808), Color(0xFFCC3355), Color.White, Color(0xFFAAAAAA), "19", false, data, onFieldChange)
+    com.saltech.urdocs.ui.templates.ResumeTemplate19_PixelPerfect(
+        userName = data.fullName,
+        userTitle = data.professionalTitle,
+        contactPhone = data.phone,
+        contactEmail = data.email,
+        contactAddress = data.location,
+        contactWebsite = data.website,
+        contactLinkedin = data.linkedin,
+        aboutMe = listOf(data.aboutMe),
+        education = listOf(
+            "${data.edu1Degree} - ${data.edu1School} (${data.edu1Years})",
+            "${data.edu2Degree} - ${data.edu2School} (${data.edu2Years})"
+        ),
+        skillsLeft = listOf(data.skill1, data.skill2, data.skill3),
+        skillsRight = listOf(data.skill4, data.skill5, data.skill6),
+        experienceLeft = listOf("${data.exp1Position} - ${data.exp1Company} (${data.exp1Dates})", data.exp1Desc),
+        experienceRight = listOf("${data.exp2Position} - ${data.exp2Company} (${data.exp2Dates})"),
+        references = listOf("${data.refName} - ${data.refPositionCompany} (${data.refContact})")
+    )
 }
 
 @Composable
 fun ResumeTemplate20Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
-    BaseResumeTemplateScreenV4(Color(0xFFF3FAF9), Color(0xFF2E7D6B), Color(0xFF1B1B1B), Color(0xFF666666), "20", false, data, onFieldChange)
+    com.saltech.urdocs.ui.templates.ResumeTemplate20_PixelPerfect(
+        userName = data.fullName,
+        userTitle = data.professionalTitle,
+        contactPhone = data.phone,
+        contactEmail = data.email,
+        contactAddress = data.location,
+        contactWebsite = data.website,
+        contactLinkedin = data.linkedin,
+        aboutMe = listOf(data.aboutMe),
+        education = listOf(
+            "${data.edu1Degree} - ${data.edu1School} (${data.edu1Years})",
+            "${data.edu2Degree} - ${data.edu2School} (${data.edu2Years})"
+        ),
+        skillsLeft = listOf(data.skill1, data.skill2, data.skill3),
+        skillsRight = listOf(data.skill4, data.skill5, data.skill6),
+        experienceLeft = listOf("${data.exp1Position} - ${data.exp1Company} (${data.exp1Dates})", data.exp1Desc),
+        experienceRight = listOf("${data.exp2Position} - ${data.exp2Company} (${data.exp2Dates})"),
+        references = listOf("${data.refName} - ${data.refPositionCompany} (${data.refContact})")
+    )
+}
+
+@Composable
+fun ResumeTemplate21Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
+    com.saltech.urdocs.ui.templates.ResumeTemplate21_PixelPerfect(
+        userName = data.fullName,
+        userTitle = data.professionalTitle,
+        contactPhone = data.phone,
+        contactEmail = data.email,
+        contactAddress = data.location,
+        contactWebsite = data.website,
+        contactLinkedin = data.linkedin,
+        aboutMe = listOf(data.aboutMe),
+        education = listOf(
+            "${data.edu1Degree} - ${data.edu1School} (${data.edu1Years})",
+            "${data.edu2Degree} - ${data.edu2School} (${data.edu2Years})"
+        ),
+        skillsLeft = listOf(data.skill1, data.skill2, data.skill3),
+        skillsRight = listOf(data.skill4, data.skill5, data.skill6),
+        experienceLeft = listOf("${data.exp1Position} - ${data.exp1Company} (${data.exp1Dates})", data.exp1Desc),
+        experienceRight = listOf("${data.exp2Position} - ${data.exp2Company} (${data.exp2Dates})"),
+        references = listOf("${data.refName} - ${data.refPositionCompany} (${data.refContact})")
+    )
+}
+
+@Composable
+fun ResumeTemplate22Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
+    com.saltech.urdocs.ui.templates.ResumeTemplate22_PixelPerfect(
+        userName = data.fullName,
+        userTitle = data.professionalTitle,
+        contactPhone = data.phone,
+        contactEmail = data.email,
+        contactAddress = data.location,
+        contactWebsite = data.website,
+        contactLinkedin = data.linkedin,
+        aboutMe = listOf(data.aboutMe),
+        education = listOf(
+            "${data.edu1Degree} - ${data.edu1School} (${data.edu1Years})",
+            "${data.edu2Degree} - ${data.edu2School} (${data.edu2Years})"
+        ),
+        skillsLeft = listOf(data.skill1, data.skill2, data.skill3),
+        skillsRight = listOf(data.skill4, data.skill5, data.skill6),
+        experienceLeft = listOf("${data.exp1Position} - ${data.exp1Company} (${data.exp1Dates})", data.exp1Desc),
+        experienceRight = listOf("${data.exp2Position} - ${data.exp2Company} (${data.exp2Dates})"),
+        references = listOf("${data.refName} - ${data.refPositionCompany} (${data.refContact})")
+    )
+}
+
+@Composable
+fun ResumeTemplate23Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
+    com.saltech.urdocs.ui.templates.ResumeTemplate23_PixelPerfect(
+        userName = data.fullName,
+        userTitle = data.professionalTitle,
+        contactPhone = data.phone,
+        contactEmail = data.email,
+        contactAddress = data.location,
+        contactWebsite = data.website,
+        contactLinkedin = data.linkedin,
+        aboutMe = listOf(data.aboutMe),
+        education = listOf(
+            "${data.edu1Degree} - ${data.edu1School} (${data.edu1Years})",
+            "${data.edu2Degree} - ${data.edu2School} (${data.edu2Years})"
+        ),
+        skillsLeft = listOf(data.skill1, data.skill2, data.skill3),
+        skillsRight = listOf(data.skill4, data.skill5, data.skill6),
+        experienceLeft = listOf("${data.exp1Position} - ${data.exp1Company} (${data.exp1Dates})", data.exp1Desc),
+        experienceRight = listOf("${data.exp2Position} - ${data.exp2Company} (${data.exp2Dates})"),
+        references = listOf("${data.refName} - ${data.refPositionCompany} (${data.refContact})")
+    )
 }
 
 @Composable
