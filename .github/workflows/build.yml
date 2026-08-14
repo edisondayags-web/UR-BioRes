@@ -23,8 +23,20 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
+        with:
+          cache-read-only: false
 
-      # ⚡ Automatic check: Gagawan lang ng wrapper kung wala sa repo
+      - name: Cache Android SDK
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.android/sdk
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
       - name: Ensure Gradle Wrapper
         run: |
           if [ ! -f ./gradlew ]; then
@@ -49,11 +61,12 @@ jobs:
 
       - name: Generate debug keystore
         run: |
-          keytool -genkey -v -keystore app/debug.keystore -storepass android \
-            -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 \
-            -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
+          if [ ! -f app/debug.keystore ]; then
+            keytool -genkey -v -keystore app/debug.keystore -storepass android \
+              -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 \
+              -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
+          fi
 
-      # ⚡ Parallel execution at incremental Kotlin compilation para sa bilis
       - name: Build debug APK
         run: ./gradlew assembleDebug --build-cache --parallel -Pkotlin.incremental=true
 
@@ -65,4 +78,3 @@ jobs:
           files: app/build/outputs/apk/debug/app-debug.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
