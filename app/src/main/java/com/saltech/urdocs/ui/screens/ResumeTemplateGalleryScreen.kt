@@ -23,11 +23,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+private enum class LayoutStyle { CLASSIC_TWO_COL, ATS_SINGLE_COL, SIDEBAR_BOLD, MINIMAL_MONO, HEADER_BLOCK }
+
 private data class TemplateInfo(
     val id: String,
     val label: String,
     val accent: Color,
-    val bg: Color
+    val bg: Color,
+    val layout: LayoutStyle = LayoutStyle.CLASSIC_TWO_COL
 )
 
 private val resumeTemplates = listOf(
@@ -54,6 +57,10 @@ private val resumeTemplates = listOf(
     TemplateInfo("resume_template_21", "21", Color(0xFF7EC8E3), Color(0xFF0E1E26)),
     TemplateInfo("resume_template_22", "22", Color(0xFFFF8A65), Color(0xFF2B160E)),
     TemplateInfo("resume_template_23", "23", Color(0xFF80DEEA), Color(0xFF0E1F26)),
+    TemplateInfo("resume_template_24", "24 (ATS Classic)", Color(0xFF2C2C2C), Color(0xFFFFFFFF), LayoutStyle.ATS_SINGLE_COL),
+    TemplateInfo("resume_template_25", "25 (Sidebar Bold)", Color(0xFFFFC107), Color(0xFF10131A), LayoutStyle.SIDEBAR_BOLD),
+    TemplateInfo("resume_template_26", "26 (Minimal Mono)", Color(0xFF000000), Color(0xFFF5F5F5), LayoutStyle.MINIMAL_MONO),
+    TemplateInfo("resume_template_27", "27 (Header Block)", Color(0xFF3F51B5), Color(0xFF14161F), LayoutStyle.HEADER_BLOCK),
 )
 
 @Composable
@@ -91,12 +98,13 @@ fun ResumeTemplateGalleryScreen(
                             .clickable { onTemplateSelected(t.id) }
                     ) {
                         Column(modifier = Modifier.fillMaxSize()) {
-                            MiniResumePreview(
+                            TemplatePreview(
                                 accent = t.accent,
+                                bg = t.bg,
+                                layout = t.layout,
                                 modifier = Modifier
                                     .weight(1f)
                                     .fillMaxWidth()
-                                    .padding(10.dp)
                             )
                             Row(
                                 modifier = Modifier
@@ -106,7 +114,7 @@ fun ResumeTemplateGalleryScreen(
                                     .padding(8.dp),
                                 horizontalArrangement = Arrangement.Center
                             ) {
-                                Text("Template ${t.label}", color = t.accent, fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                                Text("Template ${t.label}", color = t.accent, fontWeight = FontWeight.Bold, fontSize = 13.sp)
                             }
                         }
                     }
@@ -116,27 +124,25 @@ fun ResumeTemplateGalleryScreen(
     }
 }
 
-/**
- * Code-drawn mock resume preview: a circle (photo placeholder) + header bar
- * + two columns of line bars. No image assets needed — purely Compose shapes.
- */
+@Composable
+private fun TemplatePreview(accent: Color, bg: Color, layout: LayoutStyle, modifier: Modifier = Modifier) {
+    when (layout) {
+        LayoutStyle.CLASSIC_TWO_COL -> MiniResumePreview(accent, modifier.padding(10.dp))
+        LayoutStyle.ATS_SINGLE_COL -> AtsSingleColPreview(accent, modifier.padding(10.dp))
+        LayoutStyle.SIDEBAR_BOLD -> SidebarBoldPreview(accent, modifier)
+        LayoutStyle.MINIMAL_MONO -> MinimalMonoPreview(accent, modifier.padding(12.dp))
+        LayoutStyle.HEADER_BLOCK -> HeaderBlockPreview(accent, modifier)
+    }
+}
+
+/** Classic two-column: circle photo + header bar, 3 rows of 2-column bars. */
 @Composable
 private fun MiniResumePreview(accent: Color, modifier: Modifier = Modifier) {
     Column(modifier = modifier) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Box(
-                modifier = Modifier
-                    .size(22.dp)
-                    .clip(CircleShape)
-                    .border(1.5.dp, accent, CircleShape)
-            )
+            Box(modifier = Modifier.size(22.dp).clip(CircleShape).border(1.5.dp, accent, CircleShape))
             Spacer(Modifier.width(8.dp))
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .height(6.dp)
-                    .background(Color.White.copy(alpha = 0.85f))
-            )
+            Box(modifier = Modifier.weight(1f).height(6.dp).background(Color.White.copy(alpha = 0.85f)))
         }
         Spacer(Modifier.height(10.dp))
         repeat(3) {
@@ -150,15 +156,96 @@ private fun MiniResumePreview(accent: Color, modifier: Modifier = Modifier) {
     }
 }
 
+/** ATS-safe single column: no sidebar, big bold name bar, full-width section lines. */
 @Composable
-private fun MiniColumn(accent: Color, modifier: Modifier = Modifier) {
+private fun AtsSingleColPreview(accent: Color, modifier: Modifier = Modifier) {
+    Column(modifier = modifier) {
+        Box(modifier = Modifier.fillMaxWidth(0.6f).height(8.dp).background(accent))
+        Spacer(Modifier.height(4.dp))
+        Box(modifier = Modifier.fillMaxWidth(0.4f).height(4.dp).background(Color.Gray.copy(alpha = 0.6f)))
+        Spacer(Modifier.height(14.dp))
+        repeat(4) {
+            Box(modifier = Modifier.fillMaxWidth(0.3f).height(4.dp).background(accent))
+            Spacer(Modifier.height(4.dp))
+            repeat(2) {
+                Box(modifier = Modifier.fillMaxWidth().height(3.dp).background(Color.Gray.copy(alpha = 0.5f)))
+                Spacer(Modifier.height(3.dp))
+            }
+            Spacer(Modifier.height(8.dp))
+        }
+    }
+}
+
+/** Sidebar bold: dark left sidebar block with circle photo, content on right. */
+@Composable
+private fun SidebarBoldPreview(accent: Color, modifier: Modifier = Modifier) {
+    Row(modifier = modifier) {
+        Column(
+            modifier = Modifier
+                .fillMaxHeight()
+                .width(46.dp)
+                .background(accent.copy(alpha = 0.15f))
+                .padding(6.dp)
+        ) {
+            Box(modifier = Modifier.size(20.dp).clip(CircleShape).border(1.5.dp, accent, CircleShape))
+            Spacer(Modifier.height(10.dp))
+            repeat(4) {
+                Box(modifier = Modifier.fillMaxWidth().height(3.dp).background(accent))
+                Spacer(Modifier.height(6.dp))
+            }
+        }
+        Column(modifier = Modifier.weight(1f).padding(10.dp)) {
+            Box(modifier = Modifier.fillMaxWidth(0.7f).height(6.dp).background(Color.White.copy(alpha = 0.85f)))
+            Spacer(Modifier.height(12.dp))
+            repeat(3) {
+                Box(modifier = Modifier.fillMaxWidth().height(3.dp).background(Color.White.copy(alpha = 0.5f)))
+                Spacer(Modifier.height(3.dp))
+                Box(modifier = Modifier.fillMaxWidth(0.8f).height(3.dp).background(Color.White.copy(alpha = 0.5f)))
+                Spacer(Modifier.height(8.dp))
+            }
+        }
+    }
+}
+
+/** Minimal mono: pure black/white, thin hairlines only, no color blocks. */
+@Composable
+private fun MinimalMonoPreview(accent: Color, modifier: Modifier = Modifier) {
+    Column(modifier = modifier) {
+        Box(modifier = Modifier.fillMaxWidth(0.5f).height(2.dp).background(accent))
+        Spacer(Modifier.height(16.dp))
+        repeat(5) {
+            Box(modifier = Modifier.fillMaxWidth().height(1.dp).background(accent.copy(alpha = 0.7f)))
+            Spacer(Modifier.height(10.dp))
+        }
+    }
+}
+
+/** Header block: full-width solid color band at top, content below. */
+@Composable
+private fun HeaderBlockPreview(accent: Color, modifier: Modifier = Modifier) {
     Column(modifier = modifier) {
         Box(
             modifier = Modifier
-                .fillMaxWidth(0.7f)
-                .height(4.dp)
-                .background(accent)
-        )
+                .fillMaxWidth()
+                .height(40.dp)
+                .background(accent),
+            contentAlignment = Alignment.CenterStart
+        ) {
+            Box(modifier = Modifier.padding(start = 10.dp).fillMaxWidth(0.5f).height(6.dp).background(Color.Black.copy(alpha = 0.7f)))
+        }
+        Column(modifier = Modifier.padding(10.dp)) {
+            repeat(4) {
+                Box(modifier = Modifier.fillMaxWidth().height(3.dp).background(Color.White.copy(alpha = 0.5f)))
+                Spacer(Modifier.height(6.dp))
+            }
+        }
+    }
+}
+
+@Composable
+private fun MiniColumn(accent: Color, modifier: Modifier = Modifier) {
+    Column(modifier = modifier) {
+        Box(modifier = Modifier.fillMaxWidth(0.7f).height(4.dp).background(accent))
         Spacer(Modifier.height(4.dp))
         repeat(3) {
             Box(
@@ -171,4 +258,3 @@ private fun MiniColumn(accent: Color, modifier: Modifier = Modifier) {
         }
     }
 }
-
