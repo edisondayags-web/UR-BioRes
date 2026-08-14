@@ -1,4 +1,3 @@
-
 package com.saltech.urdocs.ui.templates
 
 import androidx.compose.foundation.Canvas
@@ -7,6 +6,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -15,14 +15,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlin.math.cos
 import kotlin.math.sin
 
-// HEXAGON HELPER - 20 LINES
+// HEXAGON HELPER
 @Composable
 fun HexagonOutline_01(modifier: Modifier, color: Color) {
     Canvas(modifier) {
@@ -37,7 +40,7 @@ fun HexagonOutline_01(modifier: Modifier, color: Color) {
     }
 }
 
-// DOTTED MATRIX - 25 LINES
+// DOTTED MATRIX
 @Composable
 fun DottedMatrix_01(modifier: Modifier, color: Color) {
     Canvas(modifier) {
@@ -57,7 +60,31 @@ fun TimelineNode_01(accent: Color) {
     }
 }
 
-// MAIN PIXEL PERFECT TEMPLATE 01 - 400+ LINES DETAILED
+@Composable
+private fun EditableText_01(
+    value: String,
+    placeholder: String,
+    color: Color,
+    fontSize: TextUnit,
+    fontWeight: FontWeight? = null,
+    modifier: Modifier = Modifier,
+    onValueChange: (String) -> Unit
+) {
+    Box(modifier = modifier) {
+        if (value.isEmpty()) {
+            Text(placeholder, color = color.copy(alpha = 0.45f), fontSize = fontSize, fontWeight = fontWeight)
+        }
+        BasicTextField(
+            value = value,
+            onValueChange = onValueChange,
+            textStyle = TextStyle(color = color, fontSize = fontSize, fontWeight = fontWeight),
+            cursorBrush = SolidColor(color),
+            maxLines = 1,
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
+}
+
 @Composable
 fun ResumeTemplate01_PixelPerfect(
     userName: String = "",
@@ -67,354 +94,154 @@ fun ResumeTemplate01_PixelPerfect(
     contactAddress: String = "",
     contactWebsite: String = "",
     contactLinkedin: String = "",
-    aboutMe: List<String> = emptyList(),
-    education: List<String> = emptyList(),
-    skillsLeft: List<String> = emptyList(),
-    skillsRight: List<String> = emptyList(),
-    experienceLeft: List<String> = emptyList(),
-    experienceRight: List<String> = emptyList(),
-    references: List<String> = emptyList()
+    aboutMe: String = "",
+    edu1Degree: String = "", edu1School: String = "", edu1Years: String = "",
+    edu2Degree: String = "", edu2School: String = "", edu2Years: String = "",
+    skills: List<String> = List(6) { "" },
+    exp1Position: String = "", exp1Company: String = "", exp1Dates: String = "", exp1Desc: String = "",
+    exp2Position: String = "", exp2Company: String = "", exp2Dates: String = "", exp2Desc: String = "",
+    exp3Position: String = "", exp3Company: String = "", exp3Dates: String = "", exp3Desc: String = "",
+    refName: String = "", refPositionCompany: String = "", refPhone: String = "", refEmail: String = "",
+    onFieldChange: (String, String) -> Unit = { _, _ -> }
 ) {
-    val accent = Color(0xFFFF2A2A)
+    val accent = Color(0xFFD4AF37)
     Box(Modifier.fillMaxSize().background(Color(0xFF050505)).padding(0.dp)) {
         Box(Modifier.fillMaxSize().padding(10.dp).border(1.dp, accent.copy(alpha=0.35f), RoundedCornerShape(topStart=14.dp, topEnd=0.dp, bottomStart=0.dp, bottomEnd=14.dp))) {
-            // TOP HEXAGON CLUSTER - DETAILED 40 LINES
-            Row(Modifier.align(Alignment.TopEnd).padding(top=4.dp, end=10.dp), horizontalArrangement=Arrangement.spacedBy(2.dp)) {
-                Column(verticalArrangement=Arrangement.spacedBy(2.dp)) {
-                    HexagonOutline_01(Modifier.size(22.dp), accent)
-                    HexagonOutline_01(Modifier.size(18.dp), accent.copy(alpha=0.6f))
-                    HexagonOutline_01(Modifier.size(12.dp), accent.copy(alpha=0.3f))
-                }
-                Column(verticalArrangement=Arrangement.spacedBy(4.dp), modifier=Modifier.padding(top=6.dp)) {
-                    HexagonOutline_01(Modifier.size(28.dp), accent)
-                    HexagonOutline_01(Modifier.size(16.dp), accent.copy(alpha=0.5f))
-                    HexagonOutline_01(Modifier.size(10.dp), accent.copy(alpha=0.2f))
-                }
-                Column(verticalArrangement=Arrangement.spacedBy(3.dp)) {
-                    HexagonOutline_01(Modifier.size(20.dp), accent.copy(alpha=0.7f))
-                    HexagonOutline_01(Modifier.size(14.dp), accent.copy(alpha=0.4f))
-                    HexagonOutline_01(Modifier.size(8.dp), accent.copy(alpha=0.2f))
-                }
-            }
-            // BOTTOM LEFT HEXAGON CLUSTER - 30 LINES
-            Box(Modifier.align(Alignment.BottomStart).padding(bottom=8.dp, start=8.dp)) {
-                Row {
-                    Box {
-                        HexagonOutline_01(Modifier.size(32.dp), accent)
-                        HexagonOutline_01(Modifier.size(26.dp).offset(x=8.dp, y=8.dp), accent.copy(alpha=0.7f))
-                        HexagonOutline_01(Modifier.size(20.dp).offset(x=18.dp, y=-4.dp), accent.copy(alpha=0.5f))
-                        HexagonOutline_01(Modifier.size(14.dp).offset(x=28.dp, y=10.dp), accent.copy(alpha=0.3f))
-                    }
-                    Spacer(Modifier.width(8.dp))
-                    Box {
-                        HexagonOutline_01(Modifier.size(24.dp), accent.copy(alpha=0.6f))
-                        HexagonOutline_01(Modifier.size(18.dp).offset(x=10.dp, y=12.dp), accent.copy(alpha=0.4f))
-                        HexagonOutline_01(Modifier.size(12.dp).offset(x=20.dp, y=2.dp), accent.copy(alpha=0.2f))
-                    }
-                }
-            }
-            // DOTTED MATRIX - TOP LEFT & BOTTOM RIGHT - 15 LINES
+
             DottedMatrix_01(Modifier.align(Alignment.TopStart).padding(top=4.dp, start=4.dp).size(24.dp, 28.dp), accent.copy(alpha=0.5f))
             DottedMatrix_01(Modifier.align(Alignment.BottomEnd).padding(end=8.dp, bottom=8.dp).size(60.dp, 32.dp), accent)
-            // MAIN 2-COLUMN LAYOUT - 250+ LINES
-            Row(Modifier.fillMaxSize().padding(horizontal=16.dp, vertical=18.dp)) {
-                // LEFT COLUMN
-                Column(Modifier.weight(0.78f).fillMaxHeight(), verticalArrangement=Arrangement.spacedBy(10.dp)) {
-                    // PHOTO CIRCLE - 20 LINES
-                    Box(Modifier.size(96.dp).clip(CircleShape).border(1.5.dp, accent, CircleShape).background(Color.Transparent), contentAlignment=Alignment.Center) {
-                        Box(Modifier.size(90.dp).clip(CircleShape).background(accent.copy(alpha=0.05f)))
-                        if(userName.isNotEmpty()) Text(userName.take(1), color=accent, fontSize=28.sp, fontWeight=FontWeight.Bold)
-                    }
-                    Spacer(Modifier.height(4.dp))
-                    // CONTACT HEADER + 5 ROWS - 50 LINES
-                    Column(verticalArrangement=Arrangement.spacedBy(7.dp)) {
-                        Row(verticalAlignment=Alignment.CenterVertically) {
-                            Text("CONTACT", color=accent, fontSize=10.sp, fontWeight=FontWeight.Bold, letterSpacing=0.8.sp)
-                            Spacer(Modifier.width(6.dp)); Box(Modifier.weight(1f).height(1.dp).background(accent.copy(alpha=0.6f))); Box(Modifier.size(5.dp).clip(CircleShape).background(accent))
-                        }
-                        Column(verticalArrangement=Arrangement.spacedBy(9.dp)) {
-                            val contacts = listOf(contactPhone, contactEmail, contactAddress, contactWebsite, contactLinkedin)
-                            repeat(5) { idx ->
-                                Row(verticalAlignment=Alignment.CenterVertically) {
-                                    Box(Modifier.size(18.dp).clip(CircleShape).border(0.8.dp, accent.copy(alpha=0.7f), CircleShape).background(Color.Transparent), contentAlignment=Alignment.Center) {
-                                        Box(Modifier.size(6.dp).clip(CircleShape).background(accent.copy(alpha=0.8f)))
-                                    }
-                                    Spacer(Modifier.width(8.dp))
-                                    if(contacts[idx].isNotEmpty()) Text(contacts[idx], color=Color.White, fontSize=7.sp) else Box(Modifier.weight(1f).height(0.8.dp).background(Color.White.copy(alpha=0.35f)))
-                                }
-                            }
+
+            Column(Modifier.fillMaxSize().padding(horizontal=16.dp, vertical=18.dp)) {
+
+                Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.Top) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text("01", color = Color.White, fontSize = 22.sp, fontWeight = FontWeight.Bold)
+                        Spacer(Modifier.height(14.dp))
+                        EditableText_01(userName, "EX: YOUR NAME", accent, 26.sp, FontWeight.Bold) { onFieldChange("fullName", it) }
+                        Spacer(Modifier.height(6.dp))
+                        EditableText_01(userTitle, "Ex: PROFESSIONAL TITLE", Color.White, 12.sp) { onFieldChange("professionalTitle", it) }
+                        Spacer(Modifier.height(8.dp))
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Box(Modifier.width(90.dp).height(1.5.dp).background(accent))
+                            Box(Modifier.size(5.dp).clip(CircleShape).background(accent))
                         }
                     }
-                    Spacer(Modifier.height(4.dp))
-                    // SKILLS LEFT - 40 LINES
-                    Column(verticalArrangement=Arrangement.spacedBy(7.dp)) {
-                        Row(verticalAlignment=Alignment.CenterVertically) {
-                            Text("SKILLS", color=accent, fontSize=10.sp, fontWeight=FontWeight.Bold, letterSpacing=0.8.sp)
-                            Spacer(Modifier.width(6.dp)); Box(Modifier.weight(1f).height(1.dp).background(accent.copy(alpha=0.6f))); Box(Modifier.size(5.dp).clip(CircleShape).background(accent))
-                        }
-                        Column(verticalArrangement=Arrangement.spacedBy(10.dp)) {
-                            repeat(6) { i ->
-                                Row(verticalAlignment=Alignment.CenterVertically) {
-                                    Box(Modifier.size(5.dp).clip(CircleShape).background(accent)); Spacer(Modifier.width(8.dp))
-                                    if(skillsLeft.size>i) Text(skillsLeft[i], color=Color.White, fontSize=7.sp) else Box(Modifier.weight(1f).height(0.8.dp).background(Color.White.copy(alpha=0.3f)))
-                                }
-                            }
-                        }
-                    }
-                    Spacer(Modifier.height(4.dp))
-                    // EXPERIENCE LEFT WITH TIMELINE - 50 LINES
-                    Column(verticalArrangement=Arrangement.spacedBy(7.dp)) {
-                        Row(verticalAlignment=Alignment.CenterVertically) {
-                            Text("EXPERIENCE", color=accent, fontSize=10.sp, fontWeight=FontWeight.Bold, letterSpacing=0.8.sp)
-                            Spacer(Modifier.width(6.dp)); Box(Modifier.weight(1f).height(1.dp).background(accent.copy(alpha=0.6f))); Box(Modifier.size(5.dp).clip(CircleShape).background(accent))
-                        }
-                        Row {
-                            Column(horizontalAlignment=Alignment.CenterHorizontally, modifier=Modifier.padding(top=2.dp)) {
-                                TimelineNode_01(accent); Box(Modifier.width(1.dp).height(18.dp).background(accent.copy(alpha=0.5f)))
-                                TimelineNode_01(accent); Box(Modifier.width(1.dp).height(18.dp).background(accent.copy(alpha=0.5f)))
-                                TimelineNode_01(accent)
-                            }
-                            Spacer(Modifier.width(8.dp))
-                            Column(verticalArrangement=Arrangement.spacedBy(14.dp), modifier=Modifier.padding(top=1.dp)) {
-                                repeat(3) { i -> if(experienceLeft.size>i) Text(experienceLeft[i], color=Color.White, fontSize=7.sp) else Box(Modifier.fillMaxWidth().height(0.8.dp).background(Color.White.copy(alpha=0.35f))) }
-                            }
-                        }
-                    }
-                    Spacer(Modifier.height(4.dp))
-                    // REFERENCES - 30 LINES
-                    Column(verticalArrangement=Arrangement.spacedBy(7.dp)) {
-                        Row(verticalAlignment=Alignment.CenterVertically) {
-                            Text("REFERENCES", color=accent, fontSize=10.sp, fontWeight=FontWeight.Bold, letterSpacing=0.8.sp)
-                            Spacer(Modifier.width(6.dp)); Box(Modifier.weight(1f).height(1.dp).background(accent.copy(alpha=0.6f))); Box(Modifier.size(5.dp).clip(CircleShape).background(accent))
-                        }
-                        Column(verticalArrangement=Arrangement.spacedBy(12.dp)) {
-                            repeat(3) { i ->
-                                Row(verticalAlignment=Alignment.CenterVertically) {
-                                    Box(Modifier.size(5.dp).clip(CircleShape).background(accent)); Spacer(Modifier.width(8.dp))
-                                    if(references.size>i) Text(references[i], color=Color.White, fontSize=7.sp) else Box(Modifier.weight(1f).height(0.8.dp).background(Color.White.copy(alpha=0.3f)))
-                                }
-                            }
-                        }
+                    Spacer(Modifier.width(12.dp))
+                    Box(Modifier.size(70.dp).clip(CircleShape).border(1.5.dp, accent, CircleShape).background(Color.Transparent), contentAlignment=Alignment.Center) {
+                        if(userName.isNotEmpty()) Text(userName.take(1), color=accent, fontSize=22.sp, fontWeight=FontWeight.Bold)
                     }
                 }
-                // CENTER LINE - 5 LINES
-                Box(Modifier.width(1.dp).fillMaxHeight().padding(horizontal=12.dp).background(accent.copy(alpha=0.3f)))
-                // RIGHT COLUMN - 120 LINES
-                Column(Modifier.weight(1.22f).fillMaxHeight(), verticalArrangement=Arrangement.spacedBy(18.dp)) {
-                    Spacer(Modifier.height(12.dp))
-                    Column(verticalArrangement=Arrangement.spacedBy(8.dp)) {
-                        Row(verticalAlignment=Alignment.CenterVertically) {
-                            Text("ABOUT ME", color=accent, fontSize=10.sp, fontWeight=FontWeight.Bold, letterSpacing=0.8.sp)
-                            Spacer(Modifier.width(6.dp)); Box(Modifier.weight(1f).height(1.dp).background(accent.copy(alpha=0.6f))); Box(Modifier.size(5.dp).clip(CircleShape).background(accent))
+
+                Spacer(Modifier.height(20.dp))
+
+                Row(Modifier.fillMaxSize()) {
+                    Column(Modifier.weight(0.78f).fillMaxHeight(), verticalArrangement=Arrangement.spacedBy(10.dp)) {
+
+                        Column(verticalArrangement=Arrangement.spacedBy(9.dp)) {
+                            SectionLabel_01("EX: CONTACT", accent)
+                            ContactField_01(contactPhone, "Ex: +123 456 7890", accent) { onFieldChange("phone", it) }
+                            ContactField_01(contactEmail, "Ex: youremail@email.com", accent) { onFieldChange("email", it) }
+                            ContactField_01(contactAddress, "Ex: City, State, Country", accent) { onFieldChange("location", it) }
+                            ContactField_01(contactLinkedin, "Ex: linkedin.com/in/yourname", accent) { onFieldChange("linkedin", it) }
+                            ContactField_01(contactWebsite, "Ex: www.yourwebsite.com", accent) { onFieldChange("website", it) }
                         }
-                        Spacer(Modifier.height(6.dp))
-                        if(aboutMe.isNotEmpty()) Column(verticalArrangement=Arrangement.spacedBy(4.dp)) { aboutMe.forEach { Text(it, color=Color.White, fontSize=7.sp) } } else Box(Modifier.fillMaxWidth().height(0.8.dp).background(Color.White.copy(alpha=0.35f)))
-                    }
-                    Spacer(Modifier.height(10.dp))
-                    Column(verticalArrangement=Arrangement.spacedBy(8.dp)) {
-                        Row(verticalAlignment=Alignment.CenterVertically) {
-                            Text("EDUCATION", color=accent, fontSize=10.sp, fontWeight=FontWeight.Bold, letterSpacing=0.8.sp)
-                            Spacer(Modifier.width(6.dp)); Box(Modifier.weight(1f).height(1.dp).background(accent.copy(alpha=0.6f))); Box(Modifier.size(5.dp).clip(CircleShape).background(accent))
-                        }
-                        Column(verticalArrangement=Arrangement.spacedBy(14.dp)) {
-                            repeat(2) { i ->
-                                Row(verticalAlignment=Alignment.CenterVertically) {
-                                    Box(Modifier.size(6.dp).clip(CircleShape).background(accent)); Spacer(Modifier.width(8.dp))
-                                    if(education.size>i) Text(education[i], color=Color.White, fontSize=7.sp) else Box(Modifier.weight(1f).height(0.8.dp).background(Color.White.copy(alpha=0.35f)))
-                                }
+
+                        Spacer(Modifier.height(4.dp))
+                        Column(verticalArrangement=Arrangement.spacedBy(9.dp)) {
+                            SectionLabel_01("EX: SKILLS", accent)
+                            val skillHints = listOf("Ex: Problem Solving","Ex: Communication","Ex: Teamwork","Ex: Leadership","Ex: Time Management","Ex: Creativity")
+                            skills.forEachIndexed { i, s ->
+                                EditableText_01(s, skillHints.getOrElse(i){"Ex: Skill"}, Color.White, 8.sp) { onFieldChange("skill${i+1}", it) }
                             }
                         }
-                    }
-                    Spacer(Modifier.height(6.dp))
-                    Column(verticalArrangement=Arrangement.spacedBy(8.dp)) {
-                        Row(verticalAlignment=Alignment.CenterVertically) {
-                            Text("SKILLS", color=accent, fontSize=10.sp, fontWeight=FontWeight.Bold, letterSpacing=0.8.sp)
-                            Spacer(Modifier.width(6.dp)); Box(Modifier.weight(1f).height(1.dp).background(accent.copy(alpha=0.6f))); Box(Modifier.size(5.dp).clip(CircleShape).background(accent))
-                        }
-                        Column(verticalArrangement=Arrangement.spacedBy(12.dp)) {
-                            repeat(5) { i ->
-                                Row(verticalAlignment=Alignment.CenterVertically) {
-                                    Box(Modifier.size(5.dp).clip(CircleShape).background(accent)); Spacer(Modifier.width(8.dp))
-                                    if(skillsRight.size>i) Text(skillsRight[i], color=Color.White, fontSize=7.sp) else Box(Modifier.weight(1f).height(0.8.dp).background(Color.White.copy(alpha=0.3f)))
-                                }
-                            }
+
+                        Spacer(Modifier.height(4.dp))
+                        Column(verticalArrangement=Arrangement.spacedBy(7.dp)) {
+                            SectionLabel_01("EX: REFERENCES", accent)
+                            EditableText_01(refName, "Ex: Reference Name", Color.White, 9.sp, FontWeight.Bold) { onFieldChange("refName", it) }
+                            EditableText_01(refPositionCompany, "Ex: Job Position / Company", Color.White, 8.sp) { onFieldChange("refPositionCompany", it) }
+                            ContactField_01(refPhone, "Ex: +123 456 7890", accent) { onFieldChange("refPhone", it) }
+                            ContactField_01(refEmail, "Ex: reference@email.com", accent) { onFieldChange("refEmail", it) }
                         }
                     }
-                    Spacer(Modifier.height(6.dp))
-                    Column(verticalArrangement=Arrangement.spacedBy(8.dp)) {
-                        Row(verticalAlignment=Alignment.CenterVertically) {
-                            Text("EXPERIENCE", color=accent, fontSize=10.sp, fontWeight=FontWeight.Bold, letterSpacing=0.8.sp)
-                            Spacer(Modifier.width(6.dp)); Box(Modifier.weight(1f).height(1.dp).background(accent.copy(alpha=0.6f))); Box(Modifier.size(5.dp).clip(CircleShape).background(accent))
+
+                    Box(Modifier.width(1.dp).fillMaxHeight().padding(horizontal=12.dp).background(accent.copy(alpha=0.3f)))
+
+                    Column(Modifier.weight(1.22f).fillMaxHeight(), verticalArrangement=Arrangement.spacedBy(14.dp)) {
+
+                        Column(verticalArrangement=Arrangement.spacedBy(6.dp)) {
+                            SectionLabel_01("EX: ABOUT ME", accent)
+                            EditableText_01(aboutMe, "Ex: Lorem ipsum dolor sit amet, consectetur adipiscing elit.", Color.White, 9.sp) { onFieldChange("aboutMe", it) }
                         }
-                        Row {
-                            Column(horizontalAlignment=Alignment.CenterHorizontally, modifier=Modifier.padding(top=2.dp)) {
-                                TimelineNode_01(accent); Box(Modifier.width(1.dp).height(22.dp).background(accent.copy(alpha=0.5f)))
-                                TimelineNode_01(accent); Box(Modifier.width(1.dp).height(22.dp).background(accent.copy(alpha=0.5f)))
-                                TimelineNode_01(accent)
+
+                        Column(verticalArrangement=Arrangement.spacedBy(8.dp)) {
+                            SectionLabel_01("EX: EDUCATION", accent)
+                            TimelineEntry_01(accent) {
+                                EditableText_01(edu1Degree, "Ex: DEGREE NAME / MAJOR", Color.White, 9.sp, FontWeight.Bold) { onFieldChange("edu1Degree", it) }
+                                EditableText_01(edu1School, "Ex: University Name", Color.White, 8.sp) { onFieldChange("edu1School", it) }
+                                EditableText_01(edu1Years, "Ex: 2016 - 2020", Color.White, 8.sp) { onFieldChange("edu1Years", it) }
                             }
-                            Spacer(Modifier.width(10.dp))
-                            Column(verticalArrangement=Arrangement.spacedBy(18.dp), modifier=Modifier.padding(top=2.dp)) {
-                                repeat(3) { i -> if(experienceRight.size>i) Text(experienceRight[i], color=Color.White, fontSize=7.sp) else Box(Modifier.fillMaxWidth().height(0.8.dp).background(Color.White.copy(alpha=0.35f))) }
+                            TimelineEntry_01(accent) {
+                                EditableText_01(edu2Degree, "Ex: DEGREE NAME / MAJOR", Color.White, 9.sp, FontWeight.Bold) { onFieldChange("edu2Degree", it) }
+                                EditableText_01(edu2School, "Ex: University Name", Color.White, 8.sp) { onFieldChange("edu2School", it) }
+                                EditableText_01(edu2Years, "Ex: 2012 - 2016", Color.White, 8.sp) { onFieldChange("edu2Years", it) }
                             }
                         }
-                    }
-                    Spacer(Modifier.weight(1f))
-                    Row(Modifier.fillMaxWidth(), horizontalArrangement=Arrangement.SpaceBetween) {
-                        Text("01", color=accent.copy(alpha=0.4f), fontSize=8.sp, fontWeight=FontWeight.Bold)
-                        Text("Red Neon Wave", color=Color.White.copy(alpha=0.3f), fontSize=7.sp)
+
+                        Column(verticalArrangement=Arrangement.spacedBy(8.dp)) {
+                            SectionLabel_01("EX: EXPERIENCE", accent)
+                            TimelineEntry_01(accent) {
+                                EditableText_01(exp1Position, "Ex: JOB POSITION HERE", Color.White, 9.sp, FontWeight.Bold) { onFieldChange("exp1Position", it) }
+                                EditableText_01(exp1Company, "Ex: Company Name | 2020 - Present", accent, 8.sp) { onFieldChange("exp1Company", it) }
+                                EditableText_01(exp1Desc, "Ex: Lorem ipsum dolor sit amet, consectetur adipiscing elit.", Color.White.copy(alpha=0.8f), 8.sp) { onFieldChange("exp1Desc", it) }
+                            }
+                            TimelineEntry_01(accent) {
+                                EditableText_01(exp2Position, "Ex: JOB POSITION HERE", Color.White, 9.sp, FontWeight.Bold) { onFieldChange("exp2Position", it) }
+                                EditableText_01(exp2Company, "Ex: Company Name | 2018 - 2020", accent, 8.sp) { onFieldChange("exp2Company", it) }
+                                EditableText_01(exp2Desc, "Ex: Lorem ipsum dolor sit amet, consectetur adipiscing elit.", Color.White.copy(alpha=0.8f), 8.sp) { onFieldChange("exp2Desc", it) }
+                            }
+                            TimelineEntry_01(accent) {
+                                EditableText_01(exp3Position, "Ex: JOB POSITION HERE", Color.White, 9.sp, FontWeight.Bold) { onFieldChange("exp3Position", it) }
+                                EditableText_01(exp3Company, "Ex: Company Name | 2016 - 2018", accent, 8.sp) { onFieldChange("exp3Company", it) }
+                                EditableText_01(exp3Desc, "Ex: Lorem ipsum dolor sit amet, consectetur adipiscing elit.", Color.White.copy(alpha=0.8f), 8.sp) { onFieldChange("exp3Desc", it) }
+                            }
+                        }
                     }
                 }
             }
         }
     }
 }
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
-// padding line to reach 400+ - template 01 - extra detail for pixel perfect hexagon & dotted corner logic
+
+@Composable
+private fun SectionLabel_01(text: String, accent: Color) {
+    Row(verticalAlignment=Alignment.CenterVertically) {
+        Text(text, color=accent, fontSize=10.sp, fontWeight=FontWeight.Bold, letterSpacing=0.8.sp)
+        Spacer(Modifier.width(6.dp))
+        Box(Modifier.weight(1f).height(1.dp).background(accent.copy(alpha=0.6f)))
+        Box(Modifier.size(5.dp).clip(CircleShape).background(accent))
+    }
+}
+
+@Composable
+private fun ContactField_01(value: String, placeholder: String, accent: Color, onValueChange: (String) -> Unit) {
+    Row(verticalAlignment=Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
+        Box(Modifier.size(16.dp).clip(CircleShape).border(0.8.dp, accent.copy(alpha=0.7f), CircleShape), contentAlignment=Alignment.Center) {
+            Box(Modifier.size(5.dp).clip(CircleShape).background(accent.copy(alpha=0.8f)))
+        }
+        Spacer(Modifier.width(8.dp))
+        EditableText_01(value, placeholder, Color.White, 8.sp, modifier = Modifier.weight(1f), onValueChange = onValueChange)
+    }
+}
+
+@Composable
+private fun TimelineEntry_01(accent: Color, content: @Composable ColumnScope.() -> Unit) {
+    Row(Modifier.fillMaxWidth()) {
+        Column(horizontalAlignment=Alignment.CenterHorizontally, modifier=Modifier.padding(top=2.dp)) {
+            TimelineNode_01(accent)
+            Box(Modifier.width(1.dp).weight(1f).defaultMinSize(minHeight = 30.dp).background(accent.copy(alpha=0.5f)))
+        }
+        Spacer(Modifier.width(8.dp))
+        Column(verticalArrangement=Arrangement.spacedBy(2.dp), modifier=Modifier.weight(1f).padding(bottom = 10.dp), content = content)
+    }
+}
