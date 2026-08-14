@@ -68,7 +68,7 @@ jobs:
           fi
 
       - name: Build debug APK
-        run: ./gradlew assembleDebug --build-cache --parallel -Pkotlin.incremental=true
+        run: ./gradlew assembleDebug --no-build-cache -Pkotlin.incremental=false
 
       - name: Create Release with APK
         uses: softprops/action-gh-release@v2
