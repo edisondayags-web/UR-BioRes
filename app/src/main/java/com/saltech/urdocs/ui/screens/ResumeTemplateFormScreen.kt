@@ -19,6 +19,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 
 // ---- Colors (Template 01 - red theme) ----
 private val T01Bg = Color(0xFF0D0D0D)
@@ -317,7 +321,7 @@ fun ResumeTemplateFormScreen(
     Column(modifier = Modifier.fillMaxSize()) {
         androidx.compose.material3.IconButton(onClick = onBack) {
             androidx.compose.material3.Icon(
-                androidx.compose.material.icons.Icons.Filled.ArrowBack,
+                Icons.Filled.ArrowBack,
                 contentDescription = "Back",
                 tint = Color.White
             )
