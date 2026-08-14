@@ -231,11 +231,17 @@ internal fun BaseResumeTemplateScreen(
     data: ResumeTemplateFields,
     onFieldChange: (ResumeTemplateFields) -> Unit
 ) {
-    Row(
+    Box(
         modifier = Modifier
             .fillMaxSize()
+            .background(Color(0xFF1A1A1A)),
+        contentAlignment = Alignment.Center
+    ) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .aspectRatio(0.7071f)
             .background(backgroundColor)
-            .verticalScroll(rememberScrollState())
     ) {
         // ===== LEFT SIDEBAR =====
         Column(
@@ -391,6 +397,7 @@ internal fun BaseResumeTemplateScreen(
                 }
             }
         }
+    }
     }
 }
 
