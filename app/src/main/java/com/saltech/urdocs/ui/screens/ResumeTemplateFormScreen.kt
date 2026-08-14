@@ -78,6 +78,7 @@ fun ResumeTemplateFormScreen(
             "resume_template_04" -> ResumeTemplate04Screen(data, { data = it })
             "resume_template_05" -> ResumeTemplate05Screen(data, { data = it })
             "resume_template_06" -> ResumeTemplate06Screen(data, { data = it })
+            "resume_template_07" -> ResumeTemplate07Screen(data, { data = it })
             "resume_template_08" -> ResumeTemplate08Screen(data, { data = it })
             "resume_template_09" -> ResumeTemplate09Screen(data, { data = it })
             "resume_template_10" -> ResumeTemplate10Screen(data, { data = it })
@@ -100,134 +101,62 @@ fun ResumeTemplateFormScreen(
 
 @Composable
 fun ResumeTemplate01Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
-    BaseResumeTemplateScreen(
-        backgroundColor = Color(0xFF0D0D0D),
-        accentColor = Color(0xFFE8121F), // Red
-        badgeNumber = "01",
-        useDotSkills = false,
-        data = data,
-        onFieldChange = onFieldChange
-    )
+    BaseResumeTemplateScreenV2(Color(0xFF0D0D0D), Color(0xFFD4AF37), Color.White, Color(0xFFAAAAAA), "01", true, data, onFieldChange)
 }
 
 @Composable
 fun ResumeTemplate02Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
-    BaseResumeTemplateScreen(
-        backgroundColor = Color(0xFF0D0D0D),
-        accentColor = Color(0xFF8CFF33), // Neon Green
-        badgeNumber = "02",
-        useDotSkills = false,
-        data = data,
-        onFieldChange = onFieldChange
-    )
+    BaseResumeTemplateScreenV2(Color.White, Color(0xFF1B3358), Color(0xFF1B1B1B), Color(0xFF777777), "02", false, data, onFieldChange)
 }
 
 @Composable
 fun ResumeTemplate03Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
-    BaseResumeTemplateScreen(
-        backgroundColor = Color(0xFF0D0D0D),
-        accentColor = Color(0xFFD4AF37), // Gold
-        badgeNumber = "03",
-        useDotSkills = true,
-        data = data,
-        onFieldChange = onFieldChange
-    )
+    BaseResumeTemplateScreenV2(Color(0xFF0D140D), Color(0xFF4CAF50), Color.White, Color(0xFFAAAAAA), "03", false, data, onFieldChange)
 }
 
 @Composable
 fun ResumeTemplate04Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
-    BaseResumeTemplateScreen(
-        backgroundColor = Color(0xFF080C14),
-        accentColor = Color(0xFF00BFFF), // Cyber Blue
-        badgeNumber = "04",
-        useDotSkills = false,
-        data = data,
-        onFieldChange = onFieldChange
-    )
+    BaseResumeTemplateScreenV2(Color(0xFFFBF3E7), Color(0xFFC9A227), Color(0xFF2B2B2B), Color(0xFF6E6E6E), "04", true, data, onFieldChange)
 }
 
 @Composable
 fun ResumeTemplate05Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
-    BaseResumeTemplateScreen(
-        backgroundColor = Color(0xFF0F0A14),
-        accentColor = Color(0xFF9933FF), // Purple
-        badgeNumber = "05",
-        useDotSkills = true,
-        data = data,
-        onFieldChange = onFieldChange
-    )
+    BaseResumeTemplateScreenV2(Color(0xFF0F0A14), Color(0xFF9B6FE0), Color.White, Color(0xFFAAAAAA), "05", false, data, onFieldChange)
 }
 
 @Composable
 fun ResumeTemplate06Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
-    BaseResumeTemplateScreen(
-        backgroundColor = Color(0xFF0D0D0D),
-        accentColor = Color(0xFFFF8000), // Amber / Orange
-        badgeNumber = "06",
-        useDotSkills = false,
-        data = data,
-        onFieldChange = onFieldChange
-    )
+    BaseResumeTemplateScreenV2(Color.White, Color(0xFF2E7D6B), Color(0xFF1B1B1B), Color(0xFF777777), "06", false, data, onFieldChange)
+}
+
+@Composable
+fun ResumeTemplate07Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
+    BaseResumeTemplateScreenV2(Color(0xFF0B1224), Color(0xFFD4AF37), Color.White, Color(0xFFAAAAAA), "07", false, data, onFieldChange)
 }
 
 @Composable
 fun ResumeTemplate08Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
-    BaseResumeTemplateScreen(
-        backgroundColor = Color(0xFF0D0D0D),
-        accentColor = Color(0xFFFF3399), // Pink
-        badgeNumber = "08",
-        useDotSkills = true,
-        data = data,
-        onFieldChange = onFieldChange
-    )
+    BaseResumeTemplateScreenV2(Color(0xFFF3F6FA), Color(0xFF2F4B7C), Color(0xFF1B1B1B), Color(0xFF777777), "08", true, data, onFieldChange)
 }
 
 @Composable
 fun ResumeTemplate09Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
-    BaseResumeTemplateScreen(
-        backgroundColor = Color(0xFF0D0D0D),
-        accentColor = Color(0xFFFFD700), // Bright Gold
-        badgeNumber = "09",
-        useDotSkills = false,
-        data = data,
-        onFieldChange = onFieldChange
-    )
+    BaseResumeTemplateScreenV2(Color(0xFFFBF3E7), Color(0xFFC9A227), Color(0xFF2B2B2B), Color(0xFF6E6E6E), "09", false, data, onFieldChange)
 }
 
 @Composable
 fun ResumeTemplate10Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
-    BaseResumeTemplateScreen(
-        backgroundColor = Color(0xFF0D0D0D),
-        accentColor = Color(0xFFE0E0E0), // Silver
-        badgeNumber = "10",
-        useDotSkills = true,
-        data = data,
-        onFieldChange = onFieldChange
-    )
+    BaseResumeTemplateScreenV2(Color(0xFF0D0D0D), Color(0xFFCC2B2B), Color.White, Color(0xFFAAAAAA), "10", false, data, onFieldChange)
 }
 
 @Composable
 fun ResumeTemplate11Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
-    BaseResumeTemplateScreen(
-        backgroundColor = Color(0xFF060913),
-        accentColor = Color(0xFF3366FF), // Electric Blue
-        badgeNumber = "11",
-        useDotSkills = false,
-        data = data,
-        onFieldChange = onFieldChange
-    )
+    BaseResumeTemplateScreenV2(Color.White, Color(0xFF2E5E3E), Color(0xFF1B1B1B), Color(0xFF777777), "11", false, data, onFieldChange)
 }
 
 @Composable
 fun ResumeTemplate12Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
-    BaseResumeTemplateScreen(
-        backgroundColor = Color(0xFF0D0D0D),
-        accentColor = Color(0xFFCCFF00), // Lime Green
-        badgeNumber = "12",
-        useDotSkills = true,
-        data = data,
-        onFieldChange = onFieldChange
-    )
+    BaseResumeTemplateScreenV2(Color(0xFF14071A), Color(0xFFB744C4), Color.White, Color(0xFFAAAAAA), "12", true, data, onFieldChange)
 }
 
 // ===== REUSABLE BASE ENGINE & COMPONENTS =====
