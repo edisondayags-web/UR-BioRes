@@ -307,3 +307,38 @@ private fun EditableText(
         modifier = modifier.fillMaxWidth()
     )
 }
+
+@Composable
+fun ResumeTemplateFormScreen(
+    templateName: String,
+    onBack: () -> Unit = {}
+) {
+    var data by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(ResumeTemplateFields()) }
+    Column(modifier = Modifier.fillMaxSize()) {
+        androidx.compose.material3.IconButton(onClick = onBack) {
+            androidx.compose.material3.Icon(
+                androidx.compose.material.icons.Icons.Filled.ArrowBack,
+                contentDescription = "Back",
+                tint = Color.White
+            )
+        }
+        ResumeTemplate01Screen(data = data, onFieldChange = { data = it })
+    }
+}
+
+data class ResumeTemplateFields(
+    val fullName: String = "",
+    val professionalTitle: String = "",
+    val phone: String = "",
+    val email: String = "",
+    val location: String = "",
+    val linkedin: String = "",
+    val website: String = "",
+    val aboutMe: String = "",
+    val edu1Degree: String = "", val edu1School: String = "", val edu1Years: String = "",
+    val edu2Degree: String = "", val edu2School: String = "", val edu2Years: String = "",
+    val skill1: String = "", val skill2: String = "", val skill3: String = "", val skill4: String = "", val skill5: String = "",
+    val exp1Position: String = "", val exp1Company: String = "", val exp1Dates: String = "", val exp1Desc: String = "",
+    val exp2Position: String = "", val exp2Company: String = "", val exp2Dates: String = "",
+    val refName: String = "", val refPositionCompany: String = "", val refContact: String = ""
+)
