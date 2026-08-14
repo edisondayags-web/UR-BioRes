@@ -14,10 +14,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -47,6 +50,65 @@ private val resumeTemplates = listOf(
     TemplateInfo("resume_template_20", "20", Color(0xFF2E7D6B)),
 )
 
+private val sampleData = ResumeTemplateFields(
+    fullName = "Juan Dela Cruz",
+    professionalTitle = "Software Developer",
+    phone = "+63 912 345 6789",
+    email = "juan@email.com",
+    location = "Manila, Philippines",
+    aboutMe = "Passionate developer with experience building mobile apps.",
+    edu1Degree = "BS Computer Science", edu1School = "State University", edu1Years = "2018-2022",
+    skill1 = "Kotlin", skill2 = "Android", skill3 = "Firebase",
+    exp1Position = "Junior Developer", exp1Company = "Tech Co.", exp1Dates = "2022-Present"
+)
+
+@Composable
+private fun MiniTemplatePreview(templateId: String) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .layout { measurable, constraints ->
+                val fullWidth = 800
+                val fullHeight = 1130
+                val placeable = measurable.measure(
+                    androidx.compose.ui.unit.Constraints.fixed(fullWidth, fullHeight)
+                )
+                val scale = constraints.maxWidth.toFloat() / fullWidth.toFloat()
+                layout(constraints.maxWidth, (fullHeight * scale).toInt()) {
+                    placeable.placeWithLayer(0, 0) {
+                        scaleX = scale
+                        scaleY = scale
+                        transformOrigin = androidx.compose.ui.graphics.TransformOrigin(0f, 0f)
+                    }
+                }
+            }
+    ) {
+        val data = remember { mutableStateOf(sampleData) }
+        when (templateId) {
+            "resume_template_01" -> ResumeTemplate01Screen(data.value) {}
+            "resume_template_02" -> ResumeTemplate02Screen(data.value) {}
+            "resume_template_03" -> ResumeTemplate03Screen(data.value) {}
+            "resume_template_04" -> ResumeTemplate04Screen(data.value) {}
+            "resume_template_05" -> ResumeTemplate05Screen(data.value) {}
+            "resume_template_06" -> ResumeTemplate06Screen(data.value) {}
+            "resume_template_07" -> ResumeTemplate07Screen(data.value) {}
+            "resume_template_08" -> ResumeTemplate08Screen(data.value) {}
+            "resume_template_09" -> ResumeTemplate09Screen(data.value) {}
+            "resume_template_10" -> ResumeTemplate10Screen(data.value) {}
+            "resume_template_11" -> ResumeTemplate11Screen(data.value) {}
+            "resume_template_12" -> ResumeTemplate12Screen(data.value) {}
+            "resume_template_13" -> ResumeTemplate13Screen(data.value) {}
+            "resume_template_14" -> ResumeTemplate14Screen(data.value) {}
+            "resume_template_15" -> ResumeTemplate15Screen(data.value) {}
+            "resume_template_16" -> ResumeTemplate16Screen(data.value) {}
+            "resume_template_17" -> ResumeTemplate17Screen(data.value) {}
+            "resume_template_18" -> ResumeTemplate18Screen(data.value) {}
+            "resume_template_19" -> ResumeTemplate19Screen(data.value) {}
+            "resume_template_20" -> ResumeTemplate20Screen(data.value) {}
+        }
+    }
+}
+
 @Composable
 fun ResumeTemplateGalleryScreen(
     onTemplateSelected: (String) -> Unit,
@@ -75,16 +137,27 @@ fun ResumeTemplateGalleryScreen(
                         modifier = Modifier
                             .padding(6.dp)
                             .fillMaxWidth()
-                            .height(140.dp)
+                            .height(220.dp)
                             .clip(RoundedCornerShape(12.dp))
                             .background(Color(0xFF14213D))
                             .border(1.dp, t.color.copy(alpha = 0.6f), RoundedCornerShape(12.dp))
-                            .clickable { onTemplateSelected(t.id) },
-                        contentAlignment = Alignment.Center
+                            .clickable { onTemplateSelected(t.id) }
                     ) {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text(t.label, color = t.color, fontWeight = FontWeight.Bold, fontSize = 28.sp)
-                            Text("Template", color = Color.White.copy(alpha = 0.7f), fontSize = 12.sp)
+                        Column(modifier = Modifier.fillMaxSize()) {
+                            Box(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .fillMaxWidth()
+                                    .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp))
+                            ) {
+                                MiniTemplatePreview(t.id)
+                            }
+                            Row(
+                                modifier = Modifier.fillMaxWidth().padding(8.dp),
+                                horizontalArrangement = Arrangement.Center
+                            ) {
+                                Text("Template ${t.label}", color = t.color, fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                            }
                         }
                     }
                 }
