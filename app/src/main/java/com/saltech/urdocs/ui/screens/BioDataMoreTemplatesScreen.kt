@@ -52,7 +52,7 @@ fun BioDataMoreTemplatesScreen(
                 modifier = Modifier.fillMaxSize().padding(horizontal = 12.dp),
                 contentPadding = PaddingValues(8.dp)
             ) {
-                items(templateNames) { name ->
+                items(templateNames, key = { it }) { name ->
                     val resId = context.resources.getIdentifier(name, "drawable", context.packageName)
                     if (resId != 0) {
                         Image(

@@ -79,7 +79,7 @@ fun ResumeTemplateGalleryScreen(
                 modifier = Modifier.fillMaxSize().padding(horizontal = 12.dp),
                 contentPadding = PaddingValues(8.dp)
             ) {
-                items(resumeTemplates) { t ->
+                items(resumeTemplates, key = { it.id }) { t ->
                     Box(
                         modifier = Modifier
                             .padding(6.dp)
