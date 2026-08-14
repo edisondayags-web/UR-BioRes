@@ -1,6 +1,5 @@
 package com.saltech.urdocs.ui.screens
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -19,21 +18,31 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+
+private data class TemplateInfo(val id: String, val label: String, val color: Color)
+
+private val resumeTemplates = listOf(
+    TemplateInfo("resume_template_01", "01", Color(0xFFE8121F)),
+    TemplateInfo("resume_template_02", "02", Color(0xFF8CFF33)),
+    TemplateInfo("resume_template_03", "03", Color(0xFFD4AF37)),
+    TemplateInfo("resume_template_04", "04", Color(0xFF00BFFF)),
+    TemplateInfo("resume_template_05", "05", Color(0xFF9933FF)),
+    TemplateInfo("resume_template_06", "06", Color(0xFFFF8000)),
+    TemplateInfo("resume_template_08", "08", Color(0xFFFF3399)),
+    TemplateInfo("resume_template_09", "09", Color(0xFFFFD700)),
+    TemplateInfo("resume_template_10", "10", Color(0xFFE0E0E0)),
+    TemplateInfo("resume_template_11", "11", Color(0xFF3366FF)),
+    TemplateInfo("resume_template_12", "12", Color(0xFFCCFF00)),
+)
 
 @Composable
 fun ResumeTemplateGalleryScreen(
     onTemplateSelected: (String) -> Unit,
     onBack: () -> Unit = {}
 ) {
-    val context = LocalContext.current
-    val templateNames = (1..20).map { "resume_template_" + it.toString().padStart(2, '0') }
-
     Box(modifier = Modifier.fillMaxSize().background(Color(0xFF0B1530))) {
         Column(modifier = Modifier.fillMaxSize()) {
             Row(
@@ -52,19 +61,22 @@ fun ResumeTemplateGalleryScreen(
                 modifier = Modifier.fillMaxSize().padding(horizontal = 12.dp),
                 contentPadding = PaddingValues(8.dp)
             ) {
-                items(templateNames) { name ->
-                    val resId = context.resources.getIdentifier(name, "drawable", context.packageName)
-                    if (resId != 0) {
-                        Image(
-                            painter = painterResource(id = resId),
-                            contentDescription = name,
-                            contentScale = ContentScale.Fit,
-                            modifier = Modifier
-                                .padding(6.dp)
-                                .clip(RoundedCornerShape(12.dp))
-                                .border(1.dp, Color.White.copy(alpha = 0.3f), RoundedCornerShape(12.dp))
-                                .clickable { onTemplateSelected(name) }
-                        )
+                items(resumeTemplates) { t ->
+                    Box(
+                        modifier = Modifier
+                            .padding(6.dp)
+                            .fillMaxWidth()
+                            .height(140.dp)
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(Color(0xFF14213D))
+                            .border(1.dp, t.color.copy(alpha = 0.6f), RoundedCornerShape(12.dp))
+                            .clickable { onTemplateSelected(t.id) },
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text(t.label, color = t.color, fontWeight = FontWeight.Bold, fontSize = 28.sp)
+                            Text("Template", color = Color.White.copy(alpha = 0.7f), fontSize = 12.sp)
+                        }
                     }
                 }
             }

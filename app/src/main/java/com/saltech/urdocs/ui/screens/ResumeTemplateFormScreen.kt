@@ -69,7 +69,20 @@ fun ResumeTemplateFormScreen(
         IconButton(onClick = onBack) {
             Icon(Icons.Filled.ArrowBack, contentDescription = "Back", tint = Color.White)
         }
-        ResumeTemplate01Screen(data = data, onFieldChange = { data = it })
+        when (templateName) {
+            "resume_template_01" -> ResumeTemplate01Screen(data, { data = it })
+            "resume_template_02" -> ResumeTemplate02Screen(data, { data = it })
+            "resume_template_03" -> ResumeTemplate03Screen(data, { data = it })
+            "resume_template_04" -> ResumeTemplate04Screen(data, { data = it })
+            "resume_template_05" -> ResumeTemplate05Screen(data, { data = it })
+            "resume_template_06" -> ResumeTemplate06Screen(data, { data = it })
+            "resume_template_08" -> ResumeTemplate08Screen(data, { data = it })
+            "resume_template_09" -> ResumeTemplate09Screen(data, { data = it })
+            "resume_template_10" -> ResumeTemplate10Screen(data, { data = it })
+            "resume_template_11" -> ResumeTemplate11Screen(data, { data = it })
+            "resume_template_12" -> ResumeTemplate12Screen(data, { data = it })
+            else -> ResumeTemplate01Screen(data, { data = it })
+        }
     }
 }
 
