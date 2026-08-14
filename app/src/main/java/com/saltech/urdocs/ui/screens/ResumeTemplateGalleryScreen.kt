@@ -1,6 +1,5 @@
 package com.saltech.urdocs.ui.screens
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -8,6 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -19,37 +19,41 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.saltech.urdocs.R
 
-private data class TemplateInfo(val id: String, val label: String, val color: Color, val thumbRes: Int)
+private data class TemplateInfo(
+    val id: String,
+    val label: String,
+    val accent: Color,
+    val bg: Color
+)
 
 private val resumeTemplates = listOf(
-    TemplateInfo("resume_template_01", "01", Color(0xFFD4AF37), R.drawable.thumb_template_01),
-    TemplateInfo("resume_template_02", "02", Color(0xFF1B3358), R.drawable.thumb_template_02),
-    TemplateInfo("resume_template_03", "03", Color(0xFF4CAF50), R.drawable.thumb_template_03),
-    TemplateInfo("resume_template_04", "04", Color(0xFFC9A227), R.drawable.thumb_template_04),
-    TemplateInfo("resume_template_05", "05", Color(0xFF9B6FE0), R.drawable.thumb_template_05),
-    TemplateInfo("resume_template_06", "06", Color(0xFF2E7D6B), R.drawable.thumb_template_06),
-    TemplateInfo("resume_template_07", "07", Color(0xFFD4AF37), R.drawable.thumb_template_07),
-    TemplateInfo("resume_template_08", "08", Color(0xFF2F4B7C), R.drawable.thumb_template_08),
-    TemplateInfo("resume_template_09", "09", Color(0xFFC9A227), R.drawable.thumb_template_09),
-    TemplateInfo("resume_template_10", "10", Color(0xFFCC2B2B), R.drawable.thumb_template_10),
-    TemplateInfo("resume_template_11", "11", Color(0xFF2E5E3E), R.drawable.thumb_template_11),
-    TemplateInfo("resume_template_12", "12", Color(0xFFB744C4), R.drawable.thumb_template_12),
-    TemplateInfo("resume_template_13", "13", Color(0xFF6B8E4E), R.drawable.thumb_template_13),
-    TemplateInfo("resume_template_14", "14", Color(0xFFB794F6), R.drawable.thumb_template_14),
-    TemplateInfo("resume_template_15", "15", Color(0xFF1B3358), R.drawable.thumb_template_15),
-    TemplateInfo("resume_template_16", "16", Color(0xFFD4AF37), R.drawable.thumb_template_16),
-    TemplateInfo("resume_template_17", "17", Color(0xFF33CCCC), R.drawable.thumb_template_17),
-    TemplateInfo("resume_template_18", "18", Color(0xFFB8860B), R.drawable.thumb_template_18),
-    TemplateInfo("resume_template_19", "19", Color(0xFFCC3355), R.drawable.thumb_template_19),
-    TemplateInfo("resume_template_20", "20", Color(0xFF2E7D6B), R.drawable.thumb_template_20),
-    TemplateInfo("resume_template_21", "21", Color(0xFF7EC8E3), R.drawable.thumb_template_21),
+    TemplateInfo("resume_template_01", "01", Color(0xFFD4AF37), Color(0xFF0E0E0E)),
+    TemplateInfo("resume_template_02", "02", Color(0xFFFFFFFF), Color(0xFF1B3358)),
+    TemplateInfo("resume_template_03", "03", Color(0xFF4CAF50), Color(0xFF0E2B1A)),
+    TemplateInfo("resume_template_04", "04", Color(0xFFC9A227), Color(0xFF0E0E0E)),
+    TemplateInfo("resume_template_05", "05", Color(0xFF9B6FE0), Color(0xFF1A0E2B)),
+    TemplateInfo("resume_template_06", "06", Color(0xFF2E7D6B), Color(0xFF0E2020)),
+    TemplateInfo("resume_template_07", "07", Color(0xFFD4AF37), Color(0xFF0E0E0E)),
+    TemplateInfo("resume_template_08", "08", Color(0xFF2F4B7C), Color(0xFF0E1730)),
+    TemplateInfo("resume_template_09", "09", Color(0xFFC9A227), Color(0xFF0E0E0E)),
+    TemplateInfo("resume_template_10", "10", Color(0xFFCC2B2B), Color(0xFF2B0E0E)),
+    TemplateInfo("resume_template_11", "11", Color(0xFF2E5E3E), Color(0xFF0E1E14)),
+    TemplateInfo("resume_template_12", "12", Color(0xFFB744C4), Color(0xFF20102B)),
+    TemplateInfo("resume_template_13", "13", Color(0xFF6B8E4E), Color(0xFF14200E)),
+    TemplateInfo("resume_template_14", "14", Color(0xFFB794F6), Color(0xFF1A1330)),
+    TemplateInfo("resume_template_15", "15", Color(0xFF1B3358), Color(0xFF0B1530)),
+    TemplateInfo("resume_template_16", "16", Color(0xFFD4AF37), Color(0xFF0E0E0E)),
+    TemplateInfo("resume_template_17", "17", Color(0xFF33CCCC), Color(0xFF0E2626)),
+    TemplateInfo("resume_template_18", "18", Color(0xFFB8860B), Color(0xFF1A1408)),
+    TemplateInfo("resume_template_19", "19", Color(0xFFCC3355), Color(0xFF250E14)),
+    TemplateInfo("resume_template_20", "20", Color(0xFF2E7D6B), Color(0xFF0E2020)),
+    TemplateInfo("resume_template_21", "21", Color(0xFF7EC8E3), Color(0xFF0E1E26)),
+    TemplateInfo("resume_template_22", "22", Color(0xFFFF8A65), Color(0xFF2B160E)),
+    TemplateInfo("resume_template_23", "23", Color(0xFF80DEEA), Color(0xFF0E1F26)),
 )
 
 @Composable
@@ -82,25 +86,27 @@ fun ResumeTemplateGalleryScreen(
                             .fillMaxWidth()
                             .height(220.dp)
                             .clip(RoundedCornerShape(12.dp))
-                            .background(Color(0xFF14213D))
-                            .border(1.dp, t.color.copy(alpha = 0.6f), RoundedCornerShape(12.dp))
+                            .background(t.bg)
+                            .border(1.dp, t.accent.copy(alpha = 0.6f), RoundedCornerShape(12.dp))
                             .clickable { onTemplateSelected(t.id) }
                     ) {
                         Column(modifier = Modifier.fillMaxSize()) {
-                            Image(
-                                painter = painterResource(id = t.thumbRes),
-                                contentDescription = "Template ${t.label} preview",
-                                contentScale = ContentScale.Crop,
+                            MiniResumePreview(
+                                accent = t.accent,
                                 modifier = Modifier
                                     .weight(1f)
                                     .fillMaxWidth()
-                                    .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp))
+                                    .padding(10.dp)
                             )
                             Row(
-                                modifier = Modifier.fillMaxWidth().padding(8.dp),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(t.bg)
+                                    .border(width = 1.dp, color = t.accent.copy(alpha = 0.4f))
+                                    .padding(8.dp),
                                 horizontalArrangement = Arrangement.Center
                             ) {
-                                Text("Template ${t.label}", color = t.color, fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                                Text("Template ${t.label}", color = t.accent, fontWeight = FontWeight.Bold, fontSize = 14.sp)
                             }
                         }
                     }
@@ -109,3 +115,60 @@ fun ResumeTemplateGalleryScreen(
         }
     }
 }
+
+/**
+ * Code-drawn mock resume preview: a circle (photo placeholder) + header bar
+ * + two columns of line bars. No image assets needed — purely Compose shapes.
+ */
+@Composable
+private fun MiniResumePreview(accent: Color, modifier: Modifier = Modifier) {
+    Column(modifier = modifier) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Box(
+                modifier = Modifier
+                    .size(22.dp)
+                    .clip(CircleShape)
+                    .border(1.5.dp, accent, CircleShape)
+            )
+            Spacer(Modifier.width(8.dp))
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .height(6.dp)
+                    .background(Color.White.copy(alpha = 0.85f))
+            )
+        }
+        Spacer(Modifier.height(10.dp))
+        repeat(3) {
+            Row(modifier = Modifier.fillMaxWidth()) {
+                MiniColumn(accent = accent, modifier = Modifier.weight(1f))
+                Spacer(Modifier.width(6.dp))
+                MiniColumn(accent = accent, modifier = Modifier.weight(1f))
+            }
+            Spacer(Modifier.height(8.dp))
+        }
+    }
+}
+
+@Composable
+private fun MiniColumn(accent: Color, modifier: Modifier = Modifier) {
+    Column(modifier = modifier) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(0.7f)
+                .height(4.dp)
+                .background(accent)
+        )
+        Spacer(Modifier.height(4.dp))
+        repeat(3) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(if (it == 2) 0.5f else 1f)
+                    .height(3.dp)
+                    .background(Color.White.copy(alpha = 0.5f))
+            )
+            Spacer(Modifier.height(3.dp))
+        }
+    }
+}
+
