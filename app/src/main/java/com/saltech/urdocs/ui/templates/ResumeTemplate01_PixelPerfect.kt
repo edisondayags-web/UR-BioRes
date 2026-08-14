@@ -2,8 +2,11 @@ package com.saltech.urdocs.ui.templates
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -105,13 +108,13 @@ fun ResumeTemplate01_PixelPerfect(
     onFieldChange: (String, String) -> Unit = { _, _ -> }
 ) {
     val accent = Color(0xFFD4AF37)
-    Box(Modifier.fillMaxSize().background(Color(0xFF050505)).padding(0.dp)) {
-        Box(Modifier.fillMaxSize().padding(10.dp).border(1.dp, accent.copy(alpha=0.35f), RoundedCornerShape(topStart=14.dp, topEnd=0.dp, bottomStart=0.dp, bottomEnd=14.dp))) {
+    Box(Modifier.fillMaxSize().background(Color(0xFF050505)).padding(0.dp).verticalScroll(rememberScrollState())) {
+        Box(Modifier.fillMaxWidth().defaultMinSize(minHeight = 700.dp).padding(10.dp).border(1.dp, accent.copy(alpha=0.35f), RoundedCornerShape(topStart=14.dp, topEnd=0.dp, bottomStart=0.dp, bottomEnd=14.dp))) {
 
             DottedMatrix_01(Modifier.align(Alignment.TopStart).padding(top=4.dp, start=4.dp).size(24.dp, 28.dp), accent.copy(alpha=0.5f))
             DottedMatrix_01(Modifier.align(Alignment.BottomEnd).padding(end=8.dp, bottom=8.dp).size(60.dp, 32.dp), accent)
 
-            Column(Modifier.fillMaxSize().padding(horizontal=16.dp, vertical=18.dp)) {
+            Column(Modifier.fillMaxWidth().padding(horizontal=16.dp, vertical=18.dp)) {
 
                 Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.Top) {
                     Column(modifier = Modifier.weight(1f)) {
@@ -134,7 +137,7 @@ fun ResumeTemplate01_PixelPerfect(
 
                 Spacer(Modifier.height(20.dp))
 
-                Row(Modifier.fillMaxSize()) {
+                Row(Modifier.fillMaxWidth().height(IntrinsicSize.Min)) {
                     Column(Modifier.weight(0.78f).fillMaxHeight(), verticalArrangement=Arrangement.spacedBy(10.dp)) {
 
                         Column(verticalArrangement=Arrangement.spacedBy(9.dp)) {

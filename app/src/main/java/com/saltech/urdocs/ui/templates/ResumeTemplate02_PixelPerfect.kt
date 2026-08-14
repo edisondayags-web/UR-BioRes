@@ -3,8 +3,11 @@ package com.saltech.urdocs.ui.templates
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -115,8 +118,8 @@ fun ResumeTemplate02_PixelPerfect(
     onFieldChange: (String, String) -> Unit = { _, _ -> }
 ) {
     val accent = Color(0xFF9EFF00)
-    Box(Modifier.fillMaxSize().background(Color(0xFF050505)).padding(0.dp)) {
-        Box(Modifier.fillMaxSize().padding(10.dp).border(1.dp, accent.copy(alpha=0.35f), RoundedCornerShape(topStart=14.dp, topEnd=0.dp, bottomStart=0.dp, bottomEnd=14.dp))) {
+    Box(Modifier.fillMaxSize().background(Color(0xFF050505)).padding(0.dp).verticalScroll(rememberScrollState())) {
+        Box(Modifier.fillMaxWidth().defaultMinSize(minHeight = 700.dp).padding(10.dp).border(1.dp, accent.copy(alpha=0.35f), RoundedCornerShape(topStart=14.dp, topEnd=0.dp, bottomStart=0.dp, bottomEnd=14.dp))) {
 
             Row(Modifier.align(Alignment.TopEnd).padding(top=4.dp, end=10.dp), horizontalArrangement=Arrangement.spacedBy(2.dp)) {
                 Column(verticalArrangement=Arrangement.spacedBy(2.dp)) {
@@ -154,7 +157,7 @@ fun ResumeTemplate02_PixelPerfect(
             DottedMatrix_02(Modifier.align(Alignment.TopStart).padding(top=4.dp, start=4.dp).size(24.dp, 28.dp), accent.copy(alpha=0.5f))
             DottedMatrix_02(Modifier.align(Alignment.BottomEnd).padding(end=8.dp, bottom=8.dp).size(60.dp, 32.dp), accent)
 
-            Column(Modifier.fillMaxSize().padding(horizontal=16.dp, vertical=18.dp)) {
+            Column(Modifier.fillMaxWidth().padding(horizontal=16.dp, vertical=18.dp)) {
 
                 // ===== HEADER: badge "02", Name + Title + underline, photo circle =====
                 Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.Top) {
@@ -178,7 +181,7 @@ fun ResumeTemplate02_PixelPerfect(
 
                 Spacer(Modifier.height(18.dp))
 
-                Row(Modifier.fillMaxSize()) {
+                Row(Modifier.fillMaxWidth().height(IntrinsicSize.Min)) {
                     // ===== LEFT COLUMN: Contact / Skills / References =====
                     Column(Modifier.weight(0.78f).fillMaxHeight(), verticalArrangement=Arrangement.spacedBy(9.dp)) {
 
