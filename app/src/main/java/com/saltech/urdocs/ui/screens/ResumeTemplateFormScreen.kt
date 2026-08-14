@@ -204,185 +204,6 @@ fun ResumeTemplate20Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTem
 }
 
 @Composable
-internal fun BaseResumeTemplateScreen(
-    backgroundColor: Color,
-    accentColor: Color,
-    badgeNumber: String,
-    useDotSkills: Boolean,
-    data: ResumeTemplateFields,
-    onFieldChange: (ResumeTemplateFields) -> Unit
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFF1A1A1A)),
-        contentAlignment = Alignment.Center
-    ) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .aspectRatio(0.7071f)
-            .background(backgroundColor)
-    ) {
-        // ===== LEFT SIDEBAR =====
-        Column(
-            modifier = Modifier
-                .weight(0.34f)
-                .padding(start = 20.dp, end = 16.dp, bottom = 32.dp)
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(64.dp)
-                    .padding(top = 12.dp)
-            ) {
-                Canvas(modifier = Modifier.matchParentSize()) {
-                    val path = Path().apply {
-                        moveTo(0f, 0f)
-                        lineTo(size.width, 0f)
-                        lineTo(0f, size.height)
-                        close()
-                    }
-                    drawPath(path, color = accentColor)
-                }
-                Text(
-                    text = badgeNumber,
-                    color = T01White,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(start = 6.dp, top = 4.dp)
-                )
-            }
-
-            Spacer(Modifier.height(20.dp))
-
-            Text("UR", color = accentColor, fontSize = 40.sp, fontWeight = FontWeight.Bold)
-            Text("Resume", color = T01White, fontSize = 16.sp)
-
-            Spacer(Modifier.height(16.dp))
-            HorizontalLine(accentColor)
-            Spacer(Modifier.height(20.dp))
-
-            SidebarHeader("CONTACT", accentColor)
-            ContactRow(Icons.Filled.Phone, data.phone, "+63 XXX XXX XXXX", accentColor) { onFieldChange(data.copy(phone = it)) }
-            ContactRow(Icons.Filled.Email, data.email, "youremail@email.com", accentColor) { onFieldChange(data.copy(email = it)) }
-            ContactRow(Icons.Filled.Place, data.location, "City, State, Country", accentColor) { onFieldChange(data.copy(location = it)) }
-            LinkedInRow(data.linkedin, accentColor) { onFieldChange(data.copy(linkedin = it)) }
-            ContactRow(Icons.Filled.Language, data.website, "yourwebsite.com", accentColor) { onFieldChange(data.copy(website = it)) }
-
-            Spacer(Modifier.height(16.dp))
-            HorizontalLine(accentColor)
-            Spacer(Modifier.height(16.dp))
-
-            SidebarHeader("SKILLS", accentColor)
-            val skills = listOf(
-                Pair(data.skill1, "Problem Solving"),
-                Pair(data.skill2, "Communication"),
-                Pair(data.skill3, "Teamwork"),
-                Pair(data.skill4, "Leadership"),
-                Pair(data.skill5, "Time Management"),
-                Pair(data.skill6, "Creativity")
-            )
-            skills.forEachIndexed { index, pair ->
-                if (useDotSkills) {
-                    SkillDotRow(pair.first, pair.second, accentColor) { newVal ->
-                        onFieldChange(
-                            when (index) {
-                                0 -> data.copy(skill1 = newVal)
-                                1 -> data.copy(skill2 = newVal)
-                                2 -> data.copy(skill3 = newVal)
-                                3 -> data.copy(skill4 = newVal)
-                                4 -> data.copy(skill5 = newVal)
-                                else -> data.copy(skill6 = newVal)
-                            }
-                        )
-                    }
-                } else {
-                    SkillBarRow(pair.first, pair.second, accentColor) { newVal ->
-                        onFieldChange(
-                            when (index) {
-                                0 -> data.copy(skill1 = newVal)
-                                1 -> data.copy(skill2 = newVal)
-                                2 -> data.copy(skill3 = newVal)
-                                3 -> data.copy(skill4 = newVal)
-                                4 -> data.copy(skill5 = newVal)
-                                else -> data.copy(skill6 = newVal)
-                            }
-                        )
-                    }
-                }
-            }
-
-            Spacer(Modifier.height(16.dp))
-            HorizontalLine(accentColor)
-            Spacer(Modifier.height(16.dp))
-
-            SidebarHeader("REFERENCES", accentColor)
-            PlaceholderText(data.refName, "Available upon request", T01Gray, 12.sp) {
-                onFieldChange(data.copy(refName = it))
-            }
-        }
-
-        // ===== RIGHT CONTENT =====
-        Column(
-            modifier = Modifier
-                .weight(0.66f)
-                .padding(start = 16.dp, end = 24.dp, top = 32.dp, bottom = 32.dp)
-        ) {
-            PlaceholderText(data.fullName, "YOUR NAME", T01White, 28.sp, FontWeight.Bold) {
-                onFieldChange(data.copy(fullName = it))
-            }
-            PlaceholderText(data.professionalTitle, "PROFESSIONAL TITLE", accentColor, 13.sp) {
-                onFieldChange(data.copy(professionalTitle = it))
-            }
-
-            Spacer(Modifier.height(20.dp))
-            SectionHeader("ABOUT ME", accentColor)
-            PlaceholderText(data.aboutMe, "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", T01Gray, 13.sp, multiline = true) {
-                onFieldChange(data.copy(aboutMe = it))
-            }
-
-            Spacer(Modifier.height(24.dp))
-            SectionHeader("EDUCATION", accentColor)
-            TimelineEntry(accentColor) {
-                PlaceholderText(data.edu1Degree, "DEGREE NAME / MAJOR", T01White, 13.sp, FontWeight.Bold) {
-                    onFieldChange(data.copy(edu1Degree = it))
-                }
-                PlaceholderText(data.edu1School, "University Name", T01Gray, 12.sp) {
-                    onFieldChange(data.copy(edu1School = it))
-                }
-                PlaceholderText(data.edu1Years, "2016 - 2020", T01Gray, 12.sp) {
-                    onFieldChange(data.copy(edu1Years = it))
-                }
-            }
-
-            Spacer(Modifier.height(24.dp))
-            SectionHeader("EXPERIENCE", accentColor)
-            TimelineEntry(accentColor) {
-                PlaceholderText(data.exp1Position, "JOB POSITION HERE", T01White, 13.sp, FontWeight.Bold) {
-                    onFieldChange(data.copy(exp1Position = it))
-                }
-                PlaceholderText(data.exp1Company, "Company Name | 2020 - Present", accentColor, 11.sp) {
-                    onFieldChange(data.copy(exp1Company = it))
-                }
-                PlaceholderText(data.exp1Desc, "Lorem ipsum dolor sit amet, sed do eiusmod tempor.", T01Gray, 12.sp, multiline = true) {
-                    onFieldChange(data.copy(exp1Desc = it))
-                }
-            }
-            Spacer(Modifier.height(16.dp))
-            TimelineEntry(accentColor) {
-                PlaceholderText(data.exp2Position, "JOB POSITION HERE", T01White, 13.sp, FontWeight.Bold) {
-                    onFieldChange(data.copy(exp2Position = it))
-                }
-                PlaceholderText(data.exp2Company, "Company Name | 2018 - 2020", accentColor, 11.sp) {
-                    onFieldChange(data.copy(exp2Company = it))
-                }
-            }
-        }
-    }
-    }
-}
-
-@Composable
 private fun SidebarHeader(text: String, accentColor: Color) {
     Text(text, color = accentColor, fontSize = 14.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(bottom = 10.dp))
 }
@@ -405,16 +226,16 @@ private fun HorizontalLine(accentColor: Color) {
 }
 
 @Composable
-private fun ContactRow(icon: ImageVector, value: String, placeholder: String, accentColor: Color, onValueChange: (String) -> Unit) {
+private fun ContactRow(icon: ImageVector, value: String, placeholder: String, accentColor: Color, textColor: Color = T01White, onValueChange: (String) -> Unit) {
     Row(modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp), verticalAlignment = Alignment.CenterVertically) {
         Icon(icon, contentDescription = null, tint = accentColor, modifier = Modifier.size(16.dp))
         Spacer(Modifier.width(10.dp))
-        PlaceholderText(value, placeholder, T01White, 12.sp, modifier = Modifier.weight(1f), onValueChange = onValueChange)
+        PlaceholderText(value, placeholder, textColor, 12.sp, modifier = Modifier.weight(1f), onValueChange = onValueChange)
     }
 }
 
 @Composable
-private fun LinkedInRow(value: String, accentColor: Color, onValueChange: (String) -> Unit) {
+private fun LinkedInRow(value: String, accentColor: Color, textColor: Color = T01White, onValueChange: (String) -> Unit) {
     Row(modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp), verticalAlignment = Alignment.CenterVertically) {
         Box(
             modifier = Modifier
@@ -423,17 +244,17 @@ private fun LinkedInRow(value: String, accentColor: Color, onValueChange: (Strin
                 .background(accentColor),
             contentAlignment = Alignment.Center
         ) {
-            Text("in", color = T01White, fontSize = 9.sp, fontWeight = FontWeight.Bold)
+            Text("in", color = Color.White, fontSize = 9.sp, fontWeight = FontWeight.Bold)
         }
         Spacer(Modifier.width(10.dp))
-        PlaceholderText(value, "linkedin.com/in/yourname", T01White, 12.sp, modifier = Modifier.weight(1f), onValueChange = onValueChange)
+        PlaceholderText(value, "linkedin.com/in/yourname", textColor, 12.sp, modifier = Modifier.weight(1f), onValueChange = onValueChange)
     }
 }
 
 @Composable
-private fun SkillBarRow(value: String, defaultLabel: String, accentColor: Color, onValueChange: (String) -> Unit) {
+private fun SkillBarRow(value: String, defaultLabel: String, accentColor: Color, textColor: Color = T01White, onValueChange: (String) -> Unit) {
     Column(modifier = Modifier.fillMaxWidth().padding(bottom = 10.dp)) {
-        PlaceholderText(value, defaultLabel, T01White, 12.sp, onValueChange = onValueChange)
+        PlaceholderText(value, defaultLabel, textColor, 12.sp, onValueChange = onValueChange)
         Spacer(Modifier.height(4.dp))
         Box(
             modifier = Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(4.dp)).background(T01BarTrack)
@@ -444,9 +265,9 @@ private fun SkillBarRow(value: String, defaultLabel: String, accentColor: Color,
 }
 
 @Composable
-private fun SkillDotRow(value: String, defaultLabel: String, accentColor: Color, onValueChange: (String) -> Unit) {
+private fun SkillDotRow(value: String, defaultLabel: String, accentColor: Color, textColor: Color = T01White, onValueChange: (String) -> Unit) {
     Column(modifier = Modifier.fillMaxWidth().padding(bottom = 10.dp)) {
-        PlaceholderText(value, defaultLabel, T01White, 12.sp, onValueChange = onValueChange)
+        PlaceholderText(value, defaultLabel, textColor, 12.sp, onValueChange = onValueChange)
         Spacer(Modifier.height(4.dp))
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -562,10 +383,10 @@ internal fun BaseResumeTemplateScreenV2(
         Row(modifier = Modifier.fillMaxWidth()) {
             Column(modifier = Modifier.weight(0.4f).padding(end = 12.dp)) {
                 SidebarHeader("CONTACT", accentColor)
-                ContactRow(Icons.Filled.Phone, data.phone, "+63 XXX XXX XXXX", accentColor) { onFieldChange(data.copy(phone = it)) }
-                ContactRow(Icons.Filled.Email, data.email, "youremail@email.com", accentColor) { onFieldChange(data.copy(email = it)) }
-                ContactRow(Icons.Filled.Place, data.location, "City, State, Country", accentColor) { onFieldChange(data.copy(location = it)) }
-                LinkedInRow(data.linkedin, accentColor) { onFieldChange(data.copy(linkedin = it)) }
+                ContactRow(Icons.Filled.Phone, data.phone, "+63 XXX XXX XXXX", accentColor, textColor) { onFieldChange(data.copy(phone = it)) }
+                ContactRow(Icons.Filled.Email, data.email, "youremail@email.com", accentColor, textColor) { onFieldChange(data.copy(email = it)) }
+                ContactRow(Icons.Filled.Place, data.location, "City, State, Country", accentColor, textColor) { onFieldChange(data.copy(location = it)) }
+                LinkedInRow(data.linkedin, accentColor, textColor) { onFieldChange(data.copy(linkedin = it)) }
 
                 Spacer(Modifier.height(14.dp))
                 SidebarHeader("SKILLS", accentColor)
@@ -579,7 +400,7 @@ internal fun BaseResumeTemplateScreenV2(
                 )
                 skills.forEachIndexed { index, pair ->
                     if (useDotSkills) {
-                        SkillDotRow(pair.first, pair.second, accentColor) { newVal ->
+                        SkillDotRow(pair.first, pair.second, accentColor, textColor) { newVal ->
                             onFieldChange(
                                 when (index) {
                                     0 -> data.copy(skill1 = newVal)
@@ -592,7 +413,7 @@ internal fun BaseResumeTemplateScreenV2(
                             )
                         }
                     } else {
-                        SkillBarRow(pair.first, pair.second, accentColor) { newVal ->
+                        SkillBarRow(pair.first, pair.second, accentColor, textColor) { newVal ->
                             onFieldChange(
                                 when (index) {
                                     0 -> data.copy(skill1 = newVal)
