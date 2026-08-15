@@ -90,14 +90,23 @@ fun SharedAvatarPicker(
             isProcessing = true
             scope.launch(Dispatchers.Default) {
                 try {
-                    val raw = if (Build.VERSION.SDK_INT >= 28) {
+                    val downsized = if (Build.VERSION.SDK_INT >= 28) {
                         val src = ImageDecoder.createSource(context.contentResolver, uri)
-                        ImageDecoder.decodeBitmap(src)
+                        ImageDecoder.decodeBitmap(src) { decoder, info, _ ->
+                            val w = info.size.width
+                            val h = info.size.height
+                            val largest = maxOf(w, h)
+                            if (largest > 1024) {
+                                val scale = 1024f / largest
+                                decoder.setTargetSize((w * scale).toInt(), (h * scale).toInt())
+                            }
+                            decoder.isMutableRequired = true
+                        }
                     } else {
                         @Suppress("DEPRECATION")
-                        MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
+                        val raw = MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
+                        com.saltech.urdocs.util.ImageUtils.downscaleIfLarge(raw, 1024)
                     }
-                    val downsized = com.saltech.urdocs.util.ImageUtils.downscaleIfLarge(raw, 1024)
                     val finalBitmap = try {
                         val cropped = com.saltech.urdocs.ml.FaceCropHelper.cropTo2x2WithFaceBox(downsized).first
                         com.saltech.urdocs.ml.BackgroundHelper.replaceWithWhiteBackground(cropped)
