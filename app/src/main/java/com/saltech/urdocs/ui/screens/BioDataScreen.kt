@@ -147,6 +147,7 @@ fun BioDataScreen(
 
     var rawSource by remember { mutableStateOf<Bitmap?>(null) }
     var displaySelfie by remember { mutableStateOf<Bitmap?>(null) }
+    var lastCropError by remember { mutableStateOf<String?>(null) }
     var isProcessingPhoto by remember { mutableStateOf(false) }
 
     var poloChoicePending by remember { mutableStateOf<Pair<Bitmap, Rect>?>(null) }
@@ -194,6 +195,8 @@ fun BioDataScreen(
                 try {
                     com.saltech.urdocs.ml.FaceCropHelper.cropTo2x2WithFaceBox(raw)
                 } catch (e: Exception) {
+                    android.util.Log.e("FaceCrop", "crop failed", e)
+                    lastCropError = e.message ?: e.toString()
                     null
                 }
             }
@@ -202,6 +205,7 @@ fun BioDataScreen(
                 finishProcessing(result.first, result.second, addPolo = false)
             } else {
                 displaySelfie = raw
+                lastCropError?.let { android.widget.Toast.makeText(context, "Crop failed: " + it, android.widget.Toast.LENGTH_LONG).show() }
             }
         }
     }
