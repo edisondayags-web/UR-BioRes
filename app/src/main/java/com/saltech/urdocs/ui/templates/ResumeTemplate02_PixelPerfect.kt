@@ -64,6 +64,7 @@ import kotlin.math.cos
 import kotlin.math.sin
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.layer.drawLayer
 
 @Composable
 private fun HexagonOutline_02(modifier: Modifier, color: Color) {
