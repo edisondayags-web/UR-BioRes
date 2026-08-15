@@ -61,8 +61,8 @@ data class ResumeTemplateFields(
     val exp3Position: String = "", val exp3Company: String = "", val exp3Dates: String = "", val exp3Desc: String = "",
     val exp4Position: String = "", val exp4Company: String = "", val exp4Dates: String = "", val exp4Desc: String = "",
     val exp5Position: String = "", val exp5Company: String = "", val exp5Dates: String = "", val exp5Desc: String = "",
-    val refName: String = "", val refPositionCompany: String = "", val refContact: String = "", val refEmail: String = "",
-    val ref2Name: String = "", val ref2PositionCompany: String = "", val ref2Contact: String = "", val ref2Email: String = ""
+    val refName: String = "", val refPositionCompany: String = "", val refContact: String = "", val refEmail: String = "", val refAvatarUri: String = "",
+    val ref2Name: String = "", val ref2PositionCompany: String = "", val ref2Contact: String = "", val ref2Email: String = "", val ref2AvatarUri: String = ""
 )
 
 // ===== FORM SCREEN WRAPPER =====
@@ -187,8 +187,8 @@ fun ResumeTemplate02Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTem
         exp3Position = data.exp3Position, exp3Company = data.exp3Company, exp3Dates = data.exp3Dates, exp3Desc = data.exp3Desc,
         exp4Position = data.exp4Position, exp4Company = data.exp4Company, exp4Dates = data.exp4Dates, exp4Desc = data.exp4Desc,
         exp5Position = data.exp5Position, exp5Company = data.exp5Company, exp5Dates = data.exp5Dates, exp5Desc = data.exp5Desc,
-        refName = data.refName, refPositionCompany = data.refPositionCompany, refPhone = data.refContact, refEmail = data.refEmail,
-        ref2Name = data.ref2Name, ref2PositionCompany = data.ref2PositionCompany, ref2Phone = data.ref2Contact, ref2Email = data.ref2Email,
+        refName = data.refName, refPositionCompany = data.refPositionCompany, refPhone = data.refContact, refEmail = data.refEmail, refAvatarUri = data.refAvatarUri,
+        ref2Name = data.ref2Name, ref2PositionCompany = data.ref2PositionCompany, ref2Phone = data.ref2Contact, ref2Email = data.ref2Email, ref2AvatarUri = data.ref2AvatarUri,
         onFieldChange = { field, value ->
             onFieldChange(
                 when (field) {
@@ -241,6 +241,8 @@ fun ResumeTemplate02Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTem
                     "ref2PositionCompany" -> data.copy(ref2PositionCompany = value)
                     "ref2Phone" -> data.copy(ref2Contact = value)
                     "ref2Email" -> data.copy(ref2Email = value)
+                    "refAvatarUri" -> data.copy(refAvatarUri = value)
+                    "ref2AvatarUri" -> data.copy(ref2AvatarUri = value)
                     else -> data
                 }
             )
