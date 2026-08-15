@@ -64,7 +64,7 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 @Composable
-fun HexagonOutline_02(modifier: Modifier, color: Color) {
+private fun HexagonOutline_02(modifier: Modifier, color: Color) {
     Canvas(modifier) {
         val r = size.minDimension/2; val cx = size.width/2; val cy = size.height/2
         val path = Path()
@@ -78,7 +78,7 @@ fun HexagonOutline_02(modifier: Modifier, color: Color) {
 }
 
 @Composable
-fun DottedMatrix_02(modifier: Modifier, color: Color) {
+private fun DottedMatrix_02(modifier: Modifier, color: Color) {
     Canvas(modifier) {
         for(r in 0..7) {
             for(c in 0..13) {
