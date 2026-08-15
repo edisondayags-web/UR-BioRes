@@ -72,8 +72,11 @@ fun ResumeTemplateFormScreen(
     onBack: () -> Unit = {}
 ) {
     var data by remember { mutableStateOf(ResumeTemplateFields()) }
-    Column(modifier = Modifier.fillMaxSize().background(Color(0xFF0D0D0D))) {
-        IconButton(onClick = onBack) {
+    Box(modifier = Modifier.fillMaxSize().background(Color(0xFF0D0D0D))) {
+        IconButton(
+            onClick = onBack,
+            modifier = Modifier.align(Alignment.TopStart).padding(top = 4.dp, start = 8.dp)
+        ) {
             Icon(Icons.Filled.ArrowBack, contentDescription = "Back", tint = Color.White)
         }
         when (templateName) {
