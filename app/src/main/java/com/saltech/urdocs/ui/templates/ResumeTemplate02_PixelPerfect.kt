@@ -63,31 +63,6 @@ import java.io.FileOutputStream
 import kotlin.math.cos
 import kotlin.math.sin
 
-private fun uriToBitmap02(context: android.content.Context, uriString: String): Bitmap? {
-    if (uriString.isEmpty()) return null
-    return try {
-        if (uriString.startsWith("file://")) {
-            BitmapFactory.decodeFile(Uri.parse(uriString).path)
-        } else {
-            val uri = Uri.parse(uriString)
-            if (Build.VERSION.SDK_INT >= 28) {
-                val src = ImageDecoder.createSource(context.contentResolver, uri)
-                ImageDecoder.decodeBitmap(src)
-            } else {
-                @Suppress("DEPRECATION")
-                MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
-            }
-        }
-    } catch (e: Exception) { null }
-}
-
-private fun saveAvatarBitmap02(context: android.content.Context, bitmap: Bitmap): String {
-    val dir = File(context.filesDir, "avatars").apply { mkdirs() }
-    val file = File(dir, "avatar_${System.currentTimeMillis()}.png")
-    FileOutputStream(file).use { out -> bitmap.compress(Bitmap.CompressFormat.PNG, 95, out) }
-    return "file://" + file.absolutePath
-}
-
 @Composable
 fun HexagonOutline_02(modifier: Modifier, color: Color) {
     Canvas(modifier) {
@@ -140,71 +115,6 @@ private fun EditableText_02(
 }
 
 @Composable
-private fun AvatarPicker_02(
-    uriValue: String,
-    size: Dp,
-    accent: Color,
-    initial: String,
-    onUriChange: (String) -> Unit
-) {
-    val context = LocalContext.current
-    val scope = rememberCoroutineScope()
-    var bitmap by remember { mutableStateOf<Bitmap?>(null) }
-    var isProcessing by remember { mutableStateOf(false) }
-    LaunchedEffect(uriValue) { bitmap = uriToBitmap02(context, uriValue) }
-
-    val pickMedia = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-        if (uri != null) {
-            isProcessing = true
-            scope.launch(Dispatchers.Default) {
-                try {
-                    val raw = if (Build.VERSION.SDK_INT >= 28) {
-                        val src = ImageDecoder.createSource(context.contentResolver, uri)
-                        ImageDecoder.decodeBitmap(src)
-                    } else {
-                        @Suppress("DEPRECATION")
-                        MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
-                    }
-                    val cropped = try {
-                        com.saltech.urdocs.ml.FaceCropHelper.cropTo2x2WithFaceBox(raw).first
-                    } catch (e: Exception) { raw }
-                    val savedPath = saveAvatarBitmap02(context, cropped)
-                    withContext(Dispatchers.Main) {
-                        isProcessing = false
-                        onUriChange(savedPath)
-                    }
-                } catch (e: Exception) {
-                    withContext(Dispatchers.Main) { isProcessing = false }
-                }
-            }
-        }
-    }
-
-    Box(Modifier.size(size)) {
-        Box(
-            Modifier.size(size).clip(CircleShape).border(2.dp, accent, CircleShape)
-                .background(Color.Transparent)
-                .clickable { pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) },
-            contentAlignment = Alignment.Center
-        ) {
-            when {
-                isProcessing -> CircularProgressIndicator(color = accent, modifier = Modifier.size(size * 0.35f), strokeWidth = 2.dp)
-                bitmap != null -> Image(bitmap!!.asImageBitmap(), contentDescription = "Avatar", modifier = Modifier.fillMaxSize().clip(CircleShape))
-                initial.isNotEmpty() -> Text(initial.take(1), color = accent, fontSize = (size.value * 0.33f).sp, fontWeight = FontWeight.Bold)
-            }
-        }
-        Box(
-            Modifier.size(size * 0.27f).align(Alignment.BottomEnd).clip(CircleShape).background(accent)
-                .border(2.dp, Color(0xFF050505), CircleShape)
-                .clickable { pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) },
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(Icons.Filled.Add, contentDescription = "Add photo", tint = Color.Black, modifier = Modifier.size(size * 0.15f))
-        }
-    }
-}
-
-@Composable
 fun ResumeTemplate02_PixelPerfect(
     userName: String = "",
     userTitle: String = "",
@@ -228,12 +138,7 @@ fun ResumeTemplate02_PixelPerfect(
     onFieldChange: (String, String) -> Unit = { _, _ -> }
 ) {
     val accent = Color(0xFF9EFF00)
-    val nameFontSize = when {
-        userName.length > 26 -> 12.sp
-        userName.length > 20 -> 14.sp
-        userName.length > 15 -> 16.5.sp
-        else -> 19.sp
-    }
+    val nameFontSize = autoShrinkNameFontSize(userName)
 
     Box(Modifier.fillMaxSize().background(Color(0xFF050505)).padding(0.dp).verticalScroll(rememberScrollState())) {
         Box(Modifier.fillMaxWidth().defaultMinSize(minHeight = 700.dp).padding(10.dp).border(1.dp, accent.copy(alpha=0.35f), RoundedCornerShape(topStart=14.dp, topEnd=0.dp, bottomStart=0.dp, bottomEnd=14.dp))) {
@@ -252,7 +157,7 @@ fun ResumeTemplate02_PixelPerfect(
             Column(Modifier.fillMaxWidth().padding(horizontal=16.dp, vertical=16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
 
                 Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                    AvatarPicker_02(avatarUri, 90.dp, accent, userName) { onFieldChange("avatarUri", it) }
+                    SharedAvatarPicker(avatarUri, 90.dp, accent, userName) { onFieldChange("avatarUri", it) }
                     Spacer(Modifier.width(14.dp))
                     Column(Modifier.weight(1f)) {
                         EditableText_02(userName, "Ex: Your Name", accent, nameFontSize, FontWeight.Bold) { onFieldChange("fullName", it) }
@@ -412,7 +317,7 @@ private fun ReferenceBlock_02(
     onName: (String) -> Unit, onPosition: (String) -> Unit, onPhone: (String) -> Unit, onEmail: (String) -> Unit, onAvatarUri: (String) -> Unit
 ) {
     Row(modifier, verticalAlignment = Alignment.CenterVertically) {
-        AvatarPicker_02(avatarUri, 36.dp, accent, name, onAvatarUri)
+        SharedAvatarPicker(avatarUri, 36.dp, accent, name, onAvatarUri)
         Spacer(Modifier.width(10.dp))
         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
             EditableText_02(name, "Ex: Reference Name", Color.White, 8.sp, FontWeight.Bold) { onName(it) }
