@@ -65,7 +65,8 @@ fun generateBarcodeBitmap(text: String, width: Int = 600, height: Int = 200): Bi
 fun TemplateExportMenu(
     graphicsLayer: GraphicsLayer,
     resumeName: String,
-    onHome: () -> Unit
+    onHome: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
     var expanded by remember { mutableStateOf(false) }
@@ -78,7 +79,7 @@ fun TemplateExportMenu(
         return imageBitmap.asAndroidBitmap()
     }
 
-    Box {
+    Box(modifier) {
         IconButton(onClick = { expanded = true }) {
             Icon(Icons.Default.MoreVert, contentDescription = "Menu", tint = Color.White)
         }

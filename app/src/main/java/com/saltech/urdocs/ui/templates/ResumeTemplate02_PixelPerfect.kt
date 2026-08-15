@@ -276,8 +276,13 @@ fun ResumeTemplate02_PixelPerfect(
             }
         }
     }
+        TemplateExportMenu(
+            graphicsLayer,
+            "resume_$userName",
+            onHome = {},
+            modifier = Modifier.align(Alignment.TopEnd).padding(top = 24.dp, end = 12.dp)
+        )
     }
-    TemplateExportMenu(graphicsLayer, "resume_$userName", onHome = {})
 }
 
 @Composable
