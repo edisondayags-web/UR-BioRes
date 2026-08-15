@@ -111,6 +111,8 @@ fun LeaveLetterScreen(onBack: () -> Unit = {}) {
 
     // Plain mode - toggles between blue floral design and plain white/black letter
     var isPlainMode by remember { mutableStateOf(false) }
+    var selectedBorderIndex by remember { mutableStateOf(0) }
+    var showTemplateSelector by remember { mutableStateOf(false) }
 
     val textColor = if (isPlainMode) Color.Black else LLBlue
     val bodyFontFamily = if (isPlainMode) FontFamily.Default else FontFamily.Serif
@@ -166,8 +168,15 @@ fun LeaveLetterScreen(onBack: () -> Unit = {}) {
             ) {
                 // Bond paper background (blue floral border) - only shown in design mode
                 if (!isPlainMode) {
+                    val ctx = LocalContext.current
+                    val borderResId = if (selectedBorderIndex == 0) {
+                        R.drawable.bond_paper_blank
+                    } else {
+                        val name = "letter_border_" + selectedBorderIndex.toString().padStart(2, '0')
+                        ctx.resources.getIdentifier(name, "drawable", ctx.packageName).let { if (it != 0) it else R.drawable.bond_paper_blank }
+                    }
                     Image(
-                        painter = painterResource(R.drawable.bond_paper_blank),
+                        painter = painterResource(borderResId),
                         contentDescription = null,
                         modifier = Modifier.fillMaxSize(),
                         contentScale = ContentScale.FillBounds
@@ -358,6 +367,11 @@ fun LeaveLetterScreen(onBack: () -> Unit = {}) {
             }
 
                 Button(
+                    onClick = { showTemplateSelector = true }
+                ) {
+                    Text("More Templates", color = Color.White, fontWeight = FontWeight.Bold)
+                }
+                Button(
                     onClick = { isPlainMode = !isPlainMode },
                     colors = androidx.compose.material3.ButtonDefaults.buttonColors(
                         containerColor = if (isPlainMode) Color.DarkGray else LLBlue
@@ -368,6 +382,15 @@ fun LeaveLetterScreen(onBack: () -> Unit = {}) {
             }
         }
     }
+        if (showTemplateSelector) {
+            LetterTemplateSelectorScreen(
+                onTemplateSelected = { idx ->
+                    selectedBorderIndex = idx
+                    showTemplateSelector = false
+                },
+                onBack = { showTemplateSelector = false }
+            )
+        }
     }
 }
 
