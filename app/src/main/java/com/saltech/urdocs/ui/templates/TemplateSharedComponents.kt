@@ -97,16 +97,17 @@ fun SharedAvatarPicker(
                         @Suppress("DEPRECATION")
                         MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
                     }
+                    val downsized = com.saltech.urdocs.util.ImageUtils.downscaleIfLarge(raw, 1024)
                     val finalBitmap = try {
-                        val cropped = com.saltech.urdocs.ml.FaceCropHelper.cropTo2x2WithFaceBox(raw).first
+                        val cropped = com.saltech.urdocs.ml.FaceCropHelper.cropTo2x2WithFaceBox(downsized).first
                         com.saltech.urdocs.ml.BackgroundHelper.replaceWithWhiteBackground(cropped)
-                    } catch (e: Exception) { raw }
+                    } catch (e: Throwable) { downsized }
                     val savedPath = saveAvatarBitmapShared(context, finalBitmap)
                     withContext(Dispatchers.Main) {
                         isProcessing = false
                         onUriChange(savedPath)
                     }
-                } catch (e: Exception) {
+                } catch (e: Throwable) {
                     withContext(Dispatchers.Main) { isProcessing = false }
                 }
             }

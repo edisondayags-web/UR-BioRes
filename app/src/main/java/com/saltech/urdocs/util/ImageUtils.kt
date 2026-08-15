@@ -13,6 +13,17 @@ import androidx.exifinterface.media.ExifInterface
  * photos (EXIF rotation) para hindi paikot ang lumalabas.
  */
 object ImageUtils {
+    fun downscaleIfLarge(bitmap: android.graphics.Bitmap, maxDimension: Int): android.graphics.Bitmap {
+        val w = bitmap.width
+        val h = bitmap.height
+        val largest = maxOf(w, h)
+        if (largest <= maxDimension) return bitmap
+        val scale = maxDimension.toFloat() / largest
+        val newW = (w * scale).toInt()
+        val newH = (h * scale).toInt()
+        return android.graphics.Bitmap.createScaledBitmap(bitmap, newW, newH, true)
+    }
+
     fun loadBitmapFromUri(context: Context, uri: Uri): Bitmap? {
         val resolver = context.contentResolver
         val bitmap = resolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it) } ?: return null
