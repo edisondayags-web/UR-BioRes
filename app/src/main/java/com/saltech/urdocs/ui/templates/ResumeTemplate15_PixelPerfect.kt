@@ -61,6 +61,8 @@ fun TimelineNode_15(accent: Color) {
 @Composable
 fun ResumeTemplate15_PixelPerfect(
     userName: String = "",
+    avatarUri: String = "",
+    onFieldChange: (String, String) -> Unit = { _, _ -> },
     userTitle: String = "",
     contactPhone: String = "",
     contactEmail: String = "",
@@ -121,10 +123,7 @@ fun ResumeTemplate15_PixelPerfect(
                 // LEFT COLUMN
                 Column(Modifier.weight(0.78f).fillMaxHeight(), verticalArrangement=Arrangement.spacedBy(10.dp)) {
                     // PHOTO CIRCLE - 20 LINES
-                    Box(Modifier.size(96.dp).clip(CircleShape).border(1.5.dp, accent, CircleShape).background(Color.Transparent), contentAlignment=Alignment.Center) {
-                        Box(Modifier.size(90.dp).clip(CircleShape).background(accent.copy(alpha=0.05f)))
-                        if(userName.isNotEmpty()) Text(userName.take(1), color=accent, fontSize=28.sp, fontWeight=FontWeight.Bold)
-                    }
+                    SharedAvatarPicker(avatarUri, 96.dp, accent, userName) { onFieldChange("avatarUri", it) }
                     Spacer(Modifier.height(4.dp))
                     // CONTACT HEADER + 5 ROWS - 50 LINES
                     Column(verticalArrangement=Arrangement.spacedBy(7.dp)) {

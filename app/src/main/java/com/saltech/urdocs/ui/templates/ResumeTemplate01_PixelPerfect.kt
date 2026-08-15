@@ -91,6 +91,8 @@ private fun EditableText_01(
 @Composable
 fun ResumeTemplate01_PixelPerfect(
     userName: String = "",
+    avatarUri: String = "",
+    onFieldChange: (String, String) -> Unit = { _, _ -> },
     userTitle: String = "",
     contactPhone: String = "",
     contactEmail: String = "",
@@ -130,9 +132,7 @@ fun ResumeTemplate01_PixelPerfect(
                         }
                     }
                     Spacer(Modifier.width(12.dp))
-                    Box(Modifier.size(70.dp).clip(CircleShape).border(1.5.dp, accent, CircleShape).background(Color.Transparent), contentAlignment=Alignment.Center) {
-                        if(userName.isNotEmpty()) Text(userName.take(1), color=accent, fontSize=22.sp, fontWeight=FontWeight.Bold)
-                    }
+                    SharedAvatarPicker(avatarUri, 70.dp, accent, userName) { onFieldChange("avatarUri", it) }
                 }
 
                 Spacer(Modifier.height(20.dp))
