@@ -202,7 +202,6 @@ fun ResumeTemplate01Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTem
 fun ResumeTemplate02Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit, onHome: () -> Unit = {}) {
     com.saltech.urdocs.ui.templates.ResumeTemplate02_PixelPerfect(
         userName = data.fullName,
-        onHomeOverride = onHome,
         userTitle = data.professionalTitle,
         avatarUri = data.avatarUri,
         contactPhone = data.phone,
