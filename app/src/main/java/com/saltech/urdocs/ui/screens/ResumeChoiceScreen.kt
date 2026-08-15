@@ -80,7 +80,7 @@ fun ResumeChoiceScreen(onChoose: (String) -> Unit, onBack: () -> Unit = {}) {
                 Text("gusto", color = Color.White, fontSize = 14.sp)
                 Text(" mong ", color = RGray, fontSize = 14.sp)
                 Text("format", color = Color.White, fontSize = 14.sp)
-                Text(" Luv🩵.", color = RGray, fontSize = 14.sp)
+                Text(" Luv.", color = RGray, fontSize = 14.sp)
             }
 
             Spacer(Modifier.height(16.dp))
