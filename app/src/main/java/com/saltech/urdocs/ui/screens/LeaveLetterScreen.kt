@@ -3,6 +3,9 @@ package com.saltech.urdocs.ui.screens
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material3.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Download
 
 import android.content.ContentValues
 import android.graphics.Bitmap
@@ -372,7 +375,7 @@ fun LeaveLetterScreen(onBack: () -> Unit = {}) {
                 contentPadding = PaddingValues(horizontal = 4.dp, vertical = 8.dp),
                 colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = LLBlue)
             ) {
-                Icon(androidx.compose.material.icons.Icons.Filled.Download, contentDescription = "Download", tint = Color.White)
+                Icon(Icons.Filled.Download, contentDescription = "Download", tint = Color.White)
             }
 
                 Button(
