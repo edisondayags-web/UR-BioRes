@@ -32,7 +32,7 @@ fun BioDataMoreTemplatesScreen(
     onBack: () -> Unit = {}
 ) {
     val context = LocalContext.current
-    val templateNames = (1..20).map { "biodata_template_" + it.toString().padStart(2, '0') }
+    val templateNames = (1..16).map { it }
 
     Box(modifier = Modifier.fillMaxSize().background(Color(0xFF0B1530))) {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -52,20 +52,18 @@ fun BioDataMoreTemplatesScreen(
                 modifier = Modifier.fillMaxSize().padding(horizontal = 12.dp),
                 contentPadding = PaddingValues(8.dp)
             ) {
-                items(templateNames, key = { it }) { name ->
-                    val resId = context.resources.getIdentifier(name, "drawable", context.packageName)
-                    if (resId != 0) {
-                        Image(
-                            painter = painterResource(id = resId),
-                            contentDescription = name,
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier
-                                .padding(6.dp)
-                                .aspectRatio(0.75f)
-                                .clip(RoundedCornerShape(12.dp))
-                                .border(1.dp, Color.White.copy(alpha = 0.3f), RoundedCornerShape(12.dp))
-                                .clickable { onTemplateSelected(name) }
-                        )
+                items(templateNames, key = { it }) { num ->
+                    Box(
+                        modifier = Modifier
+                            .padding(6.dp)
+                            .aspectRatio(0.75f)
+                            .clip(RoundedCornerShape(12.dp))
+                            .border(1.dp, Color.White.copy(alpha = 0.3f), RoundedCornerShape(12.dp))
+                            .background(Color(0xFF13224A))
+                            .clickable { onTemplateSelected("biodata_template_" + num.toString().padStart(2, '0')) },
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text("Template " + num.toString().padStart(2, '0'), color = Color.White, fontWeight = FontWeight.Bold, fontSize = 14.sp)
                     }
                 }
             }
