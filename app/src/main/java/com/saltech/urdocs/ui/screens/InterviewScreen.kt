@@ -66,10 +66,10 @@ fun InterviewScreen(
             }
             Spacer(Modifier.height(10.dp))
             Row {
-                Text("Piliin ang ", color = IGray, fontSize = 14.sp)
-                Text("gusto", color = Color.White, fontSize = 14.sp)
-                Text(" mong ", color = IGray, fontSize = 14.sp)
-                Text("practice", color = Color.White, fontSize = 14.sp)
+                Text("Pili ", color = IGray, fontSize = 14.sp)
+                Text("kalang", color = Color.White, fontSize = 14.sp)
+                Text(" ng gusto ", color = IGray, fontSize = 14.sp)
+                Text("mo dyan", color = Color.White, fontSize = 14.sp)
                 Text(".", color = IGray, fontSize = 14.sp)
             }
 
