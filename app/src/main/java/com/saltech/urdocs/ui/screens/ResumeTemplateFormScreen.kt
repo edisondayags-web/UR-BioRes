@@ -45,6 +45,7 @@ private val T01BarTrack = Color(0xFF2A2A2A)
 data class ResumeTemplateFields(
     val fullName: String = "",
     val professionalTitle: String = "",
+    val avatarUri: String = "",
     val phone: String = "",
     val email: String = "",
     val location: String = "",
@@ -56,8 +57,12 @@ data class ResumeTemplateFields(
     val skill1: String = "", val skill2: String = "", val skill3: String = "", 
     val skill4: String = "", val skill5: String = "", val skill6: String = "",
     val exp1Position: String = "", val exp1Company: String = "", val exp1Dates: String = "", val exp1Desc: String = "",
-    val exp2Position: String = "", val exp2Company: String = "", val exp2Dates: String = "",
-    val refName: String = "", val refPositionCompany: String = "", val refContact: String = ""
+    val exp2Position: String = "", val exp2Company: String = "", val exp2Dates: String = "", val exp2Desc: String = "",
+    val exp3Position: String = "", val exp3Company: String = "", val exp3Dates: String = "", val exp3Desc: String = "",
+    val exp4Position: String = "", val exp4Company: String = "", val exp4Dates: String = "", val exp4Desc: String = "",
+    val exp5Position: String = "", val exp5Company: String = "", val exp5Dates: String = "", val exp5Desc: String = "",
+    val refName: String = "", val refPositionCompany: String = "", val refContact: String = "", val refEmail: String = "",
+    val ref2Name: String = "", val ref2PositionCompany: String = "", val ref2Contact: String = "", val ref2Email: String = ""
 )
 
 // ===== FORM SCREEN WRAPPER =====
@@ -167,6 +172,7 @@ fun ResumeTemplate02Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTem
     com.saltech.urdocs.ui.templates.ResumeTemplate02_PixelPerfect(
         userName = data.fullName,
         userTitle = data.professionalTitle,
+        avatarUri = data.avatarUri,
         contactPhone = data.phone,
         contactEmail = data.email,
         contactAddress = data.location,
@@ -177,14 +183,18 @@ fun ResumeTemplate02Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTem
         edu2Degree = data.edu2Degree, edu2School = data.edu2School, edu2Years = data.edu2Years,
         skills = listOf(data.skill1, data.skill2, data.skill3, data.skill4, data.skill5, data.skill6),
         exp1Position = data.exp1Position, exp1Company = data.exp1Company, exp1Dates = data.exp1Dates, exp1Desc = data.exp1Desc,
-        exp2Position = data.exp2Position, exp2Company = data.exp2Company, exp2Dates = data.exp2Dates, exp2Desc = "",
-        exp3Position = "", exp3Company = "", exp3Dates = "", exp3Desc = "",
-        refName = data.refName, refPositionCompany = data.refPositionCompany, refPhone = data.refContact, refEmail = "",
+        exp2Position = data.exp2Position, exp2Company = data.exp2Company, exp2Dates = data.exp2Dates, exp2Desc = data.exp2Desc,
+        exp3Position = data.exp3Position, exp3Company = data.exp3Company, exp3Dates = data.exp3Dates, exp3Desc = data.exp3Desc,
+        exp4Position = data.exp4Position, exp4Company = data.exp4Company, exp4Dates = data.exp4Dates, exp4Desc = data.exp4Desc,
+        exp5Position = data.exp5Position, exp5Company = data.exp5Company, exp5Dates = data.exp5Dates, exp5Desc = data.exp5Desc,
+        refName = data.refName, refPositionCompany = data.refPositionCompany, refPhone = data.refContact, refEmail = data.refEmail,
+        ref2Name = data.ref2Name, ref2PositionCompany = data.ref2PositionCompany, ref2Phone = data.ref2Contact, ref2Email = data.ref2Email,
         onFieldChange = { field, value ->
             onFieldChange(
                 when (field) {
                     "fullName" -> data.copy(fullName = value)
                     "professionalTitle" -> data.copy(professionalTitle = value)
+                    "avatarUri" -> data.copy(avatarUri = value)
                     "phone" -> data.copy(phone = value)
                     "email" -> data.copy(email = value)
                     "location" -> data.copy(location = value)
@@ -205,12 +215,32 @@ fun ResumeTemplate02Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTem
                     "skill6" -> data.copy(skill6 = value)
                     "exp1Position" -> data.copy(exp1Position = value)
                     "exp1Company" -> data.copy(exp1Company = value)
+                    "exp1Dates" -> data.copy(exp1Dates = value)
                     "exp1Desc" -> data.copy(exp1Desc = value)
                     "exp2Position" -> data.copy(exp2Position = value)
                     "exp2Company" -> data.copy(exp2Company = value)
+                    "exp2Dates" -> data.copy(exp2Dates = value)
+                    "exp2Desc" -> data.copy(exp2Desc = value)
+                    "exp3Position" -> data.copy(exp3Position = value)
+                    "exp3Company" -> data.copy(exp3Company = value)
+                    "exp3Dates" -> data.copy(exp3Dates = value)
+                    "exp3Desc" -> data.copy(exp3Desc = value)
+                    "exp4Position" -> data.copy(exp4Position = value)
+                    "exp4Company" -> data.copy(exp4Company = value)
+                    "exp4Dates" -> data.copy(exp4Dates = value)
+                    "exp4Desc" -> data.copy(exp4Desc = value)
+                    "exp5Position" -> data.copy(exp5Position = value)
+                    "exp5Company" -> data.copy(exp5Company = value)
+                    "exp5Dates" -> data.copy(exp5Dates = value)
+                    "exp5Desc" -> data.copy(exp5Desc = value)
                     "refName" -> data.copy(refName = value)
                     "refPositionCompany" -> data.copy(refPositionCompany = value)
                     "refPhone" -> data.copy(refContact = value)
+                    "refEmail" -> data.copy(refEmail = value)
+                    "ref2Name" -> data.copy(ref2Name = value)
+                    "ref2PositionCompany" -> data.copy(ref2PositionCompany = value)
+                    "ref2Phone" -> data.copy(ref2Contact = value)
+                    "ref2Email" -> data.copy(ref2Email = value)
                     else -> data
                 }
             )
