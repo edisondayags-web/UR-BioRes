@@ -6,15 +6,20 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material.icons.filled.ContentCopy
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -27,30 +32,46 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
-import kotlin.math.max
-import kotlin.math.min
+import java.util.UUID
 
-private data class DrawerCategory(val label: String, val icon: String)
+// ===================== DATA MODELS =====================
+
+private enum class ElementType { TEXT, RECTANGLE, CIRCLE, LINE, STAR, IMAGE }
+
+private data class DroppedElement(
+    val id: String = UUID.randomUUID().toString(),
+    val type: ElementType,
+    var x: Float,
+    var y: Float,
+    var width: Float = 100f,
+    var height: Float = 60f,
+    var text: String = "Text",
+    var colorArgb: Long = 0xFF2A5CE0
+)
+
+private data class DrawerCategory(val label: String, val icon: String, val type: ElementType)
 
 private val drawerCategories = listOf(
-    DrawerCategory("Elements", "🧩"),
-    DrawerCategory("Icons", "⭐"),
-    DrawerCategory("Fonts", "🅰️"),
-    DrawerCategory("Signs", "➡️"),
-    DrawerCategory("Badges", "🏷️"),
-    DrawerCategory("Shapes", "⬜"),
-    DrawerCategory("Images", "🖼️"),
-    DrawerCategory("Backgrounds", "🎨"),
+    DrawerCategory("Text", "🅰️", ElementType.TEXT),
+    DrawerCategory("Rectangle", "⬜", ElementType.RECTANGLE),
+    DrawerCategory("Circle", "⚪", ElementType.CIRCLE),
+    DrawerCategory("Line", "➖", ElementType.LINE),
+    DrawerCategory("Star", "⭐", ElementType.STAR),
+    DrawerCategory("Image", "🖼️", ElementType.IMAGE),
 )
+
+// ===================== MAIN SCREEN =====================
 
 @Composable
 fun DragDropScreen(onBack: () -> Unit = {}) {
     var scale by remember { mutableStateOf(1f) }
-    var offset by remember { mutableStateOf(Offset.Zero) }
+    var canvasOffset by remember { mutableStateOf(Offset.Zero) }
 
     var drawerOpen by remember { mutableStateOf(false) }
-    var selectedCategory by remember { mutableStateOf(drawerCategories.first()) }
     var lastInteraction by remember { mutableStateOf(System.currentTimeMillis()) }
+
+    val elements = remember { mutableStateListOf<DroppedElement>() }
+    var selectedId by remember { mutableStateOf<String?>(null) }
 
     // Auto-hide drawer after 4 seconds of no interaction
     LaunchedEffect(drawerOpen, lastInteraction) {
@@ -60,6 +81,32 @@ fun DragDropScreen(onBack: () -> Unit = {}) {
                 drawerOpen = false
             }
         }
+    }
+
+    fun addElement(type: ElementType) {
+        val newEl = DroppedElement(
+            type = type,
+            x = 100f,
+            y = 150f,
+            text = when (type) {
+                ElementType.TEXT -> "Double tap to edit"
+                else -> ""
+            }
+        )
+        elements.add(newEl)
+        selectedId = newEl.id
+    }
+
+    fun deleteSelected() {
+        elements.removeAll { it.id == selectedId }
+        selectedId = null
+    }
+
+    fun duplicateSelected() {
+        val original = elements.find { it.id == selectedId } ?: return
+        val copy = original.copy(id = UUID.randomUUID().toString(), x = original.x + 20f, y = original.y + 20f)
+        elements.add(copy)
+        selectedId = copy.id
     }
 
     Box(
@@ -74,7 +121,7 @@ fun DragDropScreen(onBack: () -> Unit = {}) {
                 .pointerInput(Unit) {
                     detectTransformGestures { _, pan, zoom, _ ->
                         scale = (scale * zoom).coerceIn(0.5f, 5f)
-                        offset += pan
+                        canvasOffset += pan
                         lastInteraction = System.currentTimeMillis()
                     }
                 },
@@ -82,17 +129,39 @@ fun DragDropScreen(onBack: () -> Unit = {}) {
         ) {
             Box(
                 modifier = Modifier
-                    .size(width = 350.dp, height = 495.dp) // A4-ish ratio bondpaper
+                    .size(width = 350.dp, height = 495.dp)
                     .graphicsLayer(
                         scaleX = scale,
                         scaleY = scale,
-                        translationX = offset.x,
-                        translationY = offset.y
+                        translationX = canvasOffset.x,
+                        translationY = canvasOffset.y
                     )
                     .background(Color.White)
                     .border(1.dp, Color.Gray.copy(alpha = 0.4f))
+                    .pointerInput(Unit) {
+                        detectTapGestures { selectedId = null }
+                    }
             ) {
-                // Empty bondpaper — dropped elements will render here later
+                // ===== RENDER DROPPED ELEMENTS =====
+                elements.forEach { el ->
+                    key(el.id) {
+                        DraggableElement(
+                            element = el,
+                            isSelected = el.id == selectedId,
+                            onSelect = { selectedId = el.id; lastInteraction = System.currentTimeMillis() },
+                            onMove = { dx, dy ->
+                                el.x += dx / scale
+                                el.y += dy / scale
+                                lastInteraction = System.currentTimeMillis()
+                            },
+                            onResize = { dw, dh ->
+                                el.width = (el.width + dw / scale).coerceAtLeast(24f)
+                                el.height = (el.height + dh / scale).coerceAtLeast(24f)
+                                lastInteraction = System.currentTimeMillis()
+                            }
+                        )
+                    }
+                }
             }
         }
 
@@ -107,6 +176,25 @@ fun DragDropScreen(onBack: () -> Unit = {}) {
             Icon(Icons.Filled.ArrowBack, contentDescription = "Back", tint = Color.White)
         }
 
+        // ===== SELECTED ELEMENT TOOLBAR (Delete / Duplicate) =====
+        if (selectedId != null) {
+            Row(
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(top = 12.dp, end = 12.dp)
+                    .background(Color.Black.copy(alpha = 0.6f), RoundedCornerShape(10.dp))
+                    .padding(4.dp),
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                IconButton(onClick = { duplicateSelected() }) {
+                    Icon(Icons.Filled.ContentCopy, contentDescription = "Duplicate", tint = Color.White)
+                }
+                IconButton(onClick = { deleteSelected() }) {
+                    Icon(Icons.Filled.Delete, contentDescription = "Delete", tint = Color(0xFFFF4D4D))
+                }
+            }
+        }
+
         // ===== ">" DRAWER TAB =====
         if (!drawerOpen) {
             Box(
@@ -114,9 +202,11 @@ fun DragDropScreen(onBack: () -> Unit = {}) {
                     .align(Alignment.CenterStart)
                     .padding(top = 220.dp)
                     .background(Color(0xFF2A2A2A), RoundedCornerShape(topEnd = 12.dp, bottomEnd = 12.dp))
-                    .clickableTab {
-                        drawerOpen = true
-                        lastInteraction = System.currentTimeMillis()
+                    .pointerInput(Unit) {
+                        detectTapGestures {
+                            drawerOpen = true
+                            lastInteraction = System.currentTimeMillis()
+                        }
                     }
                     .padding(vertical = 16.dp, horizontal = 6.dp)
             ) {
@@ -144,37 +234,27 @@ fun DragDropScreen(onBack: () -> Unit = {}) {
                         .padding(12.dp)
                 ) {
                     Text(
-                        "Elements",
+                        "Elements — tap to add",
                         color = Color.White,
                         fontWeight = FontWeight.Bold,
-                        fontSize = 16.sp,
+                        fontSize = 14.sp,
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
 
-                    // Category chips row
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(Color(0xFF151515), RoundedCornerShape(10.dp))
-                            .padding(4.dp)
-                    ) {
-                        // Simple scrollable-less first few categories; can be made scrollable later
-                    }
-
                     LazyVerticalGrid(
                         columns = GridCells.Fixed(4),
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(top = 8.dp)
+                        modifier = Modifier.weight(1f)
                     ) {
                         items(drawerCategories) { cat ->
                             Column(
                                 horizontalAlignment = Alignment.CenterHorizontally,
                                 modifier = Modifier
                                     .padding(6.dp)
-                                    .clickableTab {
-                                        selectedCategory = cat
-                                        lastInteraction = System.currentTimeMillis()
+                                    .pointerInput(cat.type) {
+                                        detectTapGestures {
+                                            addElement(cat.type)
+                                            lastInteraction = System.currentTimeMillis()
+                                        }
                                     }
                             ) {
                                 Box(
@@ -192,13 +272,12 @@ fun DragDropScreen(onBack: () -> Unit = {}) {
                     }
                 }
 
-                // Close tab attached to drawer edge
                 Box(
                     modifier = Modifier
                         .align(Alignment.CenterVertically)
                         .background(Color(0xFF2A2A2A), RoundedCornerShape(topEnd = 12.dp, bottomEnd = 12.dp))
-                        .clickableTab {
-                            drawerOpen = false
+                        .pointerInput(Unit) {
+                            detectTapGestures { drawerOpen = false }
                         }
                         .padding(vertical = 16.dp, horizontal = 6.dp)
                 ) {
@@ -221,12 +300,90 @@ fun DragDropScreen(onBack: () -> Unit = {}) {
     }
 }
 
-private fun Modifier.clickableTab(onClick: () -> Unit): Modifier = this.then(
-    Modifier.pointerInput(Unit) {
-        detectTapGesturesSimple(onClick)
-    }
-)
+// ===================== DRAGGABLE ELEMENT RENDERER =====================
 
-private suspend fun androidx.compose.ui.input.pointer.PointerInputScope.detectTapGesturesSimple(onClick: () -> Unit) {
-    androidx.compose.foundation.gestures.detectTapGestures(onTap = { onClick() })
+@Composable
+private fun DraggableElement(
+    element: DroppedElement,
+    isSelected: Boolean,
+    onSelect: () -> Unit,
+    onMove: (Float, Float) -> Unit,
+    onResize: (Float, Float) -> Unit
+) {
+    val widthDp = with(androidx.compose.ui.platform.LocalDensity.current) { element.width.toDp() }
+    val heightDp = with(androidx.compose.ui.platform.LocalDensity.current) { element.height.toDp() }
+    val xDp = with(androidx.compose.ui.platform.LocalDensity.current) { element.x.toDp() }
+    val yDp = with(androidx.compose.ui.platform.LocalDensity.current) { element.y.toDp() }
+
+    Box(
+        modifier = Modifier
+            .offset(x = xDp, y = yDp)
+            .size(width = widthDp, height = heightDp)
+            .then(
+                if (isSelected) Modifier.border(2.dp, Color(0xFF2A5CE0)) else Modifier
+            )
+            .pointerInput(element.id) {
+                detectTapGestures { onSelect() }
+            }
+            .pointerInput(element.id) {
+                detectDragGestures(
+                    onDragStart = { onSelect() },
+                    onDrag = { change, dragAmount ->
+                        change.consume()
+                        onMove(dragAmount.x, dragAmount.y)
+                    }
+                )
+            }
+    ) {
+        when (element.type) {
+            ElementType.TEXT -> Text(
+                element.text,
+                color = Color.Black,
+                fontSize = 14.sp,
+                modifier = Modifier.padding(4.dp)
+            )
+            ElementType.RECTANGLE -> Box(
+                Modifier
+                    .fillMaxSize()
+                    .background(Color(element.colorArgb).copy(alpha = 0.85f))
+            )
+            ElementType.CIRCLE -> Box(
+                Modifier
+                    .fillMaxSize()
+                    .background(Color(element.colorArgb).copy(alpha = 0.85f), CircleShape)
+            )
+            ElementType.LINE -> Box(
+                Modifier
+                    .fillMaxWidth()
+                    .height(3.dp)
+                    .align(Alignment.CenterStart)
+                    .background(Color(element.colorArgb))
+            )
+            ElementType.STAR -> Text("⭐", fontSize = 32.sp, modifier = Modifier.align(Alignment.Center))
+            ElementType.IMAGE -> Box(
+                Modifier
+                    .fillMaxSize()
+                    .background(Color.LightGray),
+                contentAlignment = Alignment.Center
+            ) {
+                Text("🖼️", fontSize = 24.sp)
+            }
+        }
+
+        // ===== RESIZE HANDLE (bottom-right corner) =====
+        if (isSelected) {
+            Box(
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .size(18.dp)
+                    .background(Color(0xFF2A5CE0), CircleShape)
+                    .pointerInput(element.id) {
+                        detectDragGestures { change, dragAmount ->
+                            change.consume()
+                            onResize(dragAmount.x, dragAmount.y)
+                        }
+                    }
+            )
+        }
+    }
 }
