@@ -52,6 +52,7 @@ import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.ui.viewinterop.AndroidView
 
@@ -895,14 +896,17 @@ fun GenericLetterScreen(letterType: LetterType, onBack: () -> Unit = {}) {
             Row(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .padding(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    .fillMaxWidth()
+                    .padding(vertical = 12.dp, horizontal = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(6.dp)
             ) {
                 Button(
                     onClick = { isEditMode = !isEditMode },
+                    modifier = Modifier.weight(1f),
+                    contentPadding = PaddingValues(horizontal = 4.dp, vertical = 8.dp),
                     colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = GLBlue)
                 ) {
-                    Text(if (isEditMode) "Done" else "Edit", color = Color.White, fontWeight = FontWeight.Bold)
+                    Text(if (isEditMode) "Done" else "Edit", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 12.sp)
                 }
 
                 Button(
@@ -937,24 +941,30 @@ fun GenericLetterScreen(letterType: LetterType, onBack: () -> Unit = {}) {
                             proceedDownload()
                         }
                     },
+                    modifier = Modifier.weight(1f),
+                    contentPadding = PaddingValues(horizontal = 4.dp, vertical = 8.dp),
                     colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = GLBlue)
                 ) {
-                    Text("Download", color = Color.White, fontWeight = FontWeight.Bold)
+                    Icon(Icons.Filled.Download, contentDescription = "Download", tint = Color.White)
                 }
 
                 Button(
                     onClick = { showTemplateSelector = true },
+                    modifier = Modifier.weight(1f),
+                    contentPadding = PaddingValues(horizontal = 4.dp, vertical = 8.dp),
                     colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = GLBlue)
                 ) {
-                    Text("More Templates", color = Color.White, fontWeight = FontWeight.Bold)
+                    Text("More Templates", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 11.sp)
                 }
                 Button(
                     onClick = { isPlainMode = !isPlainMode },
+                    modifier = Modifier.weight(1f),
+                    contentPadding = PaddingValues(horizontal = 4.dp, vertical = 8.dp),
                     colors = androidx.compose.material3.ButtonDefaults.buttonColors(
                         containerColor = if (isPlainMode) Color.DarkGray else GLBlue
                     )
                 ) {
-                    Text(if (isPlainMode) "Design" else "Plain", color = Color.White, fontWeight = FontWeight.Bold)
+                    Text(if (isPlainMode) "Design" else "Plain", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 12.sp)
                 }
             }
             if (showTemplateSelector) {

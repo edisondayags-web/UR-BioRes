@@ -54,6 +54,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Download
 import androidx.compose.ui.viewinterop.AndroidView
 
 private val RLBlue = Color(0xFF1D3FB5)
@@ -329,71 +330,79 @@ fun ResignationLetterScreen(onBack: () -> Unit = {}) {
                     Spacer(Modifier.weight(1f))
                 }
             }
-
             // Edit + Download + Plain buttons in a row
             Row(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .padding(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    .fillMaxWidth()
+                    .padding(vertical = 12.dp, horizontal = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(6.dp)
             ) {
                 Button(
                     onClick = { isEditMode = !isEditMode },
+                    modifier = Modifier.weight(1f),
+                    contentPadding = PaddingValues(horizontal = 4.dp, vertical = 8.dp),
                     colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = RLBlue)
                 ) {
-                    Text(if (isEditMode) "Done" else "Edit", color = Color.White, fontWeight = FontWeight.Bold)
+                    Text(if (isEditMode) "Done" else "Edit", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 12.sp)
                 }
 
                 Button(
-                onClick = {
-                    isEditMode = false // exit edit mode so no highlight box shows + Picture recording turns back on
-                    scale = fitScale
-                    offset = Offset.Zero
-                    val activity = context as? android.app.Activity
-                    fun proceedDownload() {
-                        coroutineScope.launch {
-                            delay(100)
-                            val bitmap = Bitmap.createBitmap(
-                                picture.width.coerceAtLeast(1),
-                                picture.height.coerceAtLeast(1),
-                                Bitmap.Config.ARGB_8888
-                            )
-                            val canvas = android.graphics.Canvas(bitmap)
-                            canvas.drawColor(android.graphics.Color.WHITE)
-                            canvas.drawPicture(picture)
-                            saveResignationToGallery(context, bitmap)
-                        }
-                    }
-                    if (activity != null && interstitialAd != null) {
-                        interstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
-                            override fun onAdDismissedFullScreenContent() {
-                                interstitialAd = null
-                                proceedDownload()
+                    onClick = {
+                        isEditMode = false
+                        scale = fitScale
+                        offset = Offset.Zero
+                        val activity = context as? android.app.Activity
+                        fun proceedDownload() {
+                            coroutineScope.launch {
+                                delay(100)
+                                val bitmap = Bitmap.createBitmap(
+                                    picture.width.coerceAtLeast(1),
+                                    picture.height.coerceAtLeast(1),
+                                    Bitmap.Config.ARGB_8888
+                                )
+                                val canvas = android.graphics.Canvas(bitmap)
+                                canvas.drawColor(android.graphics.Color.WHITE)
+                                canvas.drawPicture(picture)
+                                saveResignationToGallery(context, bitmap)
                             }
                         }
-                        interstitialAd?.show(activity)
-                    } else {
-                        proceedDownload()
-                    }
-                },
+                        if (activity != null && interstitialAd != null) {
+                            interstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
+                                override fun onAdDismissedFullScreenContent() {
+                                    interstitialAd = null
+                                    proceedDownload()
+                                }
+                            }
+                            interstitialAd?.show(activity)
+                        } else {
+                            proceedDownload()
+                        }
+                    },
+                    modifier = Modifier.weight(1f),
+                    contentPadding = PaddingValues(horizontal = 4.dp, vertical = 8.dp),
                     colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = RLBlue)
                 ) {
-                    Text("Download", color = Color.White, fontWeight = FontWeight.Bold)
+                    Icon(Icons.Filled.Download, contentDescription = "Download", tint = Color.White)
                 }
 
                 Button(
                     onClick = { showTemplateSelector = true },
+                    modifier = Modifier.weight(1f),
+                    contentPadding = PaddingValues(horizontal = 4.dp, vertical = 8.dp),
                     colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = RLBlue)
                 ) {
-                    Text("More Templates", color = Color.White, fontWeight = FontWeight.Bold)
+                    Text("More Templates", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 11.sp)
                 }
                 Button(
                     onClick = { isPlainMode = !isPlainMode },
+                    modifier = Modifier.weight(1f),
+                    contentPadding = PaddingValues(horizontal = 4.dp, vertical = 8.dp),
                     colors = androidx.compose.material3.ButtonDefaults.buttonColors(
                         containerColor = if (isPlainMode) Color.DarkGray else RLBlue
                     )
                 ) {
-                    Text(if (isPlainMode) "Design" else "Plain", color = Color.White, fontWeight = FontWeight.Bold)
+                    Text(if (isPlainMode) "Design" else "Plain", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 12.sp)
                 }
             }
         }
