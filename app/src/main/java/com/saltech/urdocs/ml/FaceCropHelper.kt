@@ -16,12 +16,23 @@ object FaceCropHelper {
     private val detector by lazy {
         val options = FaceDetectorOptions.Builder()
             .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_ACCURATE)
+            .setMinFaceSize(0.1f)
             .build()
         FaceDetection.getClient(options)
     }
 
+    /** Ensures bitmap is in a config ML Kit can always process (some gallery
+     * photos decode as HARDWARE/RGB_565 which face detection silently fails on). */
+    private fun toDetectableBitmap(bitmap: Bitmap): Bitmap {
+        return if (bitmap.config != Bitmap.Config.ARGB_8888) {
+            bitmap.copy(Bitmap.Config.ARGB_8888, false)
+        } else {
+            bitmap
+        }
+    }
+
     suspend fun cropTo2x2(bitmap: Bitmap): Bitmap = suspendCancellableCoroutine { cont ->
-        val image = InputImage.fromBitmap(bitmap, 0)
+        val image = InputImage.fromBitmap(toDetectableBitmap(bitmap), 0)
         detector.process(image)
             .addOnSuccessListener { faces ->
                 val face = faces.firstOrNull()
@@ -36,7 +47,7 @@ object FaceCropHelper {
 
     suspend fun cropTo2x2WithFaceBox(bitmap: Bitmap): Pair<Bitmap, Rect> =
         suspendCancellableCoroutine { cont ->
-            val image = InputImage.fromBitmap(bitmap, 0)
+            val image = InputImage.fromBitmap(toDetectableBitmap(bitmap), 0)
             detector.process(image)
                 .addOnSuccessListener { faces ->
                     val face = faces.firstOrNull()
