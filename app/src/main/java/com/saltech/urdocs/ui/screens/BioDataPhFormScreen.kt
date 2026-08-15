@@ -115,7 +115,17 @@ fun BioDataPhFormScreen(
     ) { uri ->
         if (uri != null) {
             val loaded = com.saltech.urdocs.util.ImageUtils.loadBitmapFromUri(context, uri)
-            if (loaded != null) uploadedPhoto = loaded
+            if (loaded != null) {
+                coroutineScope.launch {
+                    val cropped = try {
+                        com.saltech.urdocs.ml.FaceCropHelper.cropTo2x2WithFaceBox(loaded).first
+                    } catch (e: Exception) {
+                        android.widget.Toast.makeText(context, "Crop failed: " + (e.message ?: e.toString()), android.widget.Toast.LENGTH_LONG).show()
+                        loaded
+                    }
+                    uploadedPhoto = cropped
+                }
+            }
         }
     }
 
