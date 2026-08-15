@@ -92,11 +92,7 @@ fun HomeScreen(
                     HomeMenuCard(
                         item = item,
                         onClick = {
-                            if (item.route == "job_researcher") {
-                                showComingSoon = true
-                            } else {
-                                onNavigate(item.route)
-                            }
+                            onNavigate(item.route)
                         }
                     )
                 }
