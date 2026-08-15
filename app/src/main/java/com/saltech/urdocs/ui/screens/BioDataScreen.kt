@@ -341,6 +341,7 @@ fun BioDataScreen(
                                     androidx.compose.foundation.Image(
                                         bitmap = displaySelfie!!.asImageBitmap(),
                                         contentDescription = "2x2 Photo",
+                                        contentScale = ContentScale.Crop,
                                         modifier = Modifier.fillMaxSize()
                                     )
                                 }
