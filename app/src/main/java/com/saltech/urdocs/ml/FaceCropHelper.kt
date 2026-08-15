@@ -128,8 +128,8 @@ object FaceCropHelper {
     private fun centerCropSquare(bitmap: Bitmap): Bitmap {
         val side = min(bitmap.width, bitmap.height)
         val x = (bitmap.width - side) / 2
-        val y = (bitmap.height - side) / 2
-        return Bitmap.createBitmap(bitmap, x, y, side, side)
+        val y = 0
+        return Bitmap.createBitmap(bitmap, x, y.coerceIn(0, bitmap.height - side), side, side)
     }
 
     fun addPoloOverlay(croppedBitmap: Bitmap, faceBoxInCropped: Rect): Bitmap {

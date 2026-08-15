@@ -136,7 +136,14 @@ fun SelfieCaptureScreen(
                 object : ImageCapture.OnImageCapturedCallback() {
                     override fun onCaptureSuccess(image: ImageProxy) {
                         showFlashPop = false
-                        val bitmap = image.toBitmap()
+                        val rawBitmap = image.toBitmap()
+                        val rotationDegrees = image.imageInfo.rotationDegrees
+                        val bitmap = if (rotationDegrees != 0) {
+                            val matrix = android.graphics.Matrix().apply { postRotate(rotationDegrees.toFloat()) }
+                            Bitmap.createBitmap(rawBitmap, 0, 0, rawBitmap.width, rawBitmap.height, matrix, true)
+                        } else {
+                            rawBitmap
+                        }
                         image.close()
                         cameraProvider?.unbindAll()
                         isProcessing = false
