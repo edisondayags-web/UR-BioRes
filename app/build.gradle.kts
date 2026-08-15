@@ -122,6 +122,7 @@ dependencies {
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.8.1")
     implementation("androidx.exifinterface:exifinterface:1.3.7")
+    implementation("com.google.zxing:core:3.5.3")
 
     implementation("com.google.guava:guava:31.1-android")
 
