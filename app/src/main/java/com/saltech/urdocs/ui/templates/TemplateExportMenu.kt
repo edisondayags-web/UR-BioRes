@@ -88,8 +88,7 @@ fun TemplateExportMenu(
                 expanded = false
                 scope.launch {
                     val bmp = captureBitmap()
-                    val uri = saveBitmapToCache(context, bmp, resumeName)
-                    Toast.makeText(context, "Saved to cache: $uri", Toast.LENGTH_SHORT).show()
+                    saveBitmapToGallery(context, bmp, resumeName)
                 }
             })
             DropdownMenuItem(text = { Text("Send To") }, onClick = {
