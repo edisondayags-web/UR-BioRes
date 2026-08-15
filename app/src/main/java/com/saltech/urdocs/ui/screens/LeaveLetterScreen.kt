@@ -1,6 +1,7 @@
 package com.saltech.urdocs.ui.screens
 
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.rememberScrollState
 
 import android.content.ContentValues
@@ -322,16 +323,17 @@ fun LeaveLetterScreen(onBack: () -> Unit = {}) {
             Row(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .padding(vertical = 16.dp)
-                    .horizontalScroll(rememberScrollState())
-                    .padding(horizontal = 12.dp),
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    .fillMaxWidth()
+                    .padding(vertical = 12.dp, horizontal = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(6.dp)
             ) {
                 Button(
                     onClick = { isEditMode = !isEditMode },
+                    modifier = Modifier.weight(1f),
+                    contentPadding = PaddingValues(horizontal = 4.dp, vertical = 8.dp),
                     colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = LLBlue)
                 ) {
-                    Text(if (isEditMode) "Done" else "Edit", color = Color.White, fontWeight = FontWeight.Bold)
+                    Text(if (isEditMode) "Done" else "Edit", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 12.sp)
                 }
 
             Button(
@@ -366,24 +368,30 @@ fun LeaveLetterScreen(onBack: () -> Unit = {}) {
                         proceedDownload()
                     }
                 },
+                modifier = Modifier.weight(1f),
+                contentPadding = PaddingValues(horizontal = 4.dp, vertical = 8.dp),
                 colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = LLBlue)
             ) {
-                Text("Download", color = Color.White, fontWeight = FontWeight.Bold)
+                Icon(androidx.compose.material.icons.Icons.Filled.Download, contentDescription = "Download", tint = Color.White)
             }
 
                 Button(
                     onClick = { showTemplateSelector = true },
+                    modifier = Modifier.weight(1f),
+                    contentPadding = PaddingValues(horizontal = 4.dp, vertical = 8.dp),
                     colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = LLBlue)
                 ) {
-                    Text("More Templates", color = Color.White, fontWeight = FontWeight.Bold)
+                    Text("More Templates", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 11.sp)
                 }
                 Button(
                     onClick = { isPlainMode = !isPlainMode },
+                    modifier = Modifier.weight(1f),
+                    contentPadding = PaddingValues(horizontal = 4.dp, vertical = 8.dp),
                     colors = androidx.compose.material3.ButtonDefaults.buttonColors(
                         containerColor = if (isPlainMode) Color.DarkGray else LLBlue
                     )
                 ) {
-                    Text(if (isPlainMode) "Design" else "Plain", color = Color.White, fontWeight = FontWeight.Bold)
+                    Text(if (isPlainMode) "Design" else "Plain", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 12.sp)
                 }
             }
         }
