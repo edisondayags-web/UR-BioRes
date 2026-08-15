@@ -93,11 +93,7 @@ fun HomeScreen(
                     HomeMenuCard(
                         item = item,
                         onClick = {
-                            if (item.route == "drag_drop") {
-                                showComingSoon = true
-                            } else {
-                                onNavigate(item.route)
-                            }
+                            onNavigate(item.route)
                         }
                     )
                 }
