@@ -280,7 +280,7 @@ fun ResumeTemplate02_PixelPerfect(
             graphicsLayer,
             "resume_$userName",
             onHome = {},
-            modifier = Modifier.align(Alignment.TopEnd).padding(top = 24.dp, end = 12.dp)
+            modifier = Modifier.align(Alignment.TopEnd).padding(top = 4.dp, end = 12.dp)
         )
     }
 }
