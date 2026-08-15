@@ -7,6 +7,8 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.graphics.layer.drawLayer
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -167,15 +169,21 @@ fun BiodataTemplate05_PixelPerfect(
     work3Company: String = "", work3Position: String = "", work3Dates: String = "",
     skill1: String = "", skill2: String = "", skill3: String = "", skill4: String = "", skill5: String = "", skill6: String = "",
     ref1: String = "", ref2: String = "", ref3: String = "",
-    onFieldChange: (String, String) -> Unit = { _, _ -> }
+    onFieldChange: (String, String) -> Unit = { _, _ -> },
+    onHomeOverride: () -> Unit = {}
 ) {
     val accent1 = Color(0xFFFF8C00)
     val accent2 = Color(0xFF00BFFF)
     val isDark = true
     val bgColor = if(isDark) Color(0xFF0A0A0A) else Color.White
+    val graphicsLayer = androidx.compose.ui.graphics.rememberGraphicsLayer()
     
     // Main container 400+ lines detailed
-    Box(Modifier.fillMaxSize().background(bgColor).padding(0.dp)) {
+    Box(Modifier.fillMaxSize()) {
+    Box(Modifier.fillMaxSize().background(bgColor).padding(0.dp).drawWithContent {
+        graphicsLayer.record { this@drawWithContent.drawContent() }
+        drawLayer(graphicsLayer)
+    }) {
         // Background layer with decorations - 60 lines
         if(isDark) {
             // Dark background with dotted halftone
@@ -416,6 +424,13 @@ fun BiodataTemplate05_PixelPerfect(
                 Text("UR-DOCS BIODATA", color=(if(isDark) Color.White else Color.Black).copy(alpha=0.3f), fontSize=6.sp)
             }
         }
+    }
+        com.saltech.urdocs.ui.templates.TemplateExportMenu(
+            graphicsLayer,
+            "biodata_$fullName",
+            onHome = onHomeOverride,
+            modifier = Modifier.align(Alignment.TopEnd).padding(top = 4.dp, end = 12.dp)
+        )
     }
 }
 
