@@ -138,7 +138,8 @@ fun ResumeTemplate02_PixelPerfect(
     exp5Position: String = "", exp5Company: String = "", exp5Dates: String = "", exp5Desc: String = "",
     refName: String = "", refPositionCompany: String = "", refPhone: String = "", refEmail: String = "", refAvatarUri: String = "",
     ref2Name: String = "", ref2PositionCompany: String = "", ref2Phone: String = "", ref2Email: String = "", ref2AvatarUri: String = "",
-    onFieldChange: (String, String) -> Unit = { _, _ -> }
+    onFieldChange: (String, String) -> Unit = { _, _ -> },
+    onHomeOverride: () -> Unit = {}
 ) {
     val accent = Color(0xFF9EFF00)
     val nameFontSize = autoShrinkNameFontSize(userName)
@@ -279,7 +280,7 @@ fun ResumeTemplate02_PixelPerfect(
         TemplateExportMenu(
             graphicsLayer,
             "resume_$userName",
-            onHome = {},
+            onHome = onHomeOverride,
             modifier = Modifier.align(Alignment.TopEnd).padding(top = 4.dp, end = 12.dp)
         )
     }

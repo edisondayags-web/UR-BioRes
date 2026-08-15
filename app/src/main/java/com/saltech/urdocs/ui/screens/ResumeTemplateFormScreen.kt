@@ -78,7 +78,7 @@ fun ResumeTemplateFormScreen(
         }
         when (templateName) {
             "resume_template_01" -> ResumeTemplate01Screen(data, { data = it })
-            "resume_template_02" -> ResumeTemplate02Screen(data, { data = it })
+            "resume_template_02" -> ResumeTemplate02Screen(data, { data = it }, onBack)
             "resume_template_03" -> ResumeTemplate03Screen(data, { data = it })
             "resume_template_04" -> ResumeTemplate04Screen(data, { data = it })
             "resume_template_05" -> ResumeTemplate05Screen(data, { data = it })
@@ -195,9 +195,10 @@ fun ResumeTemplate01Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTem
 }
 
 @Composable
-fun ResumeTemplate02Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
+fun ResumeTemplate02Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit, onHome: () -> Unit = {}) {
     com.saltech.urdocs.ui.templates.ResumeTemplate02_PixelPerfect(
         userName = data.fullName,
+        onHomeOverride = onHome,
         userTitle = data.professionalTitle,
         avatarUri = data.avatarUri,
         contactPhone = data.phone,
