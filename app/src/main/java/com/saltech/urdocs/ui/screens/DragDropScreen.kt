@@ -42,7 +42,7 @@ import java.util.UUID
 
 // ===================== DATA MODEL (state-backed so drags actually redraw) =====================
 
-private enum class ElementType { TEXT, RECTANGLE, CIRCLE, LINE, STAR, IMAGE }
+private enum class ElementType { TEXT, RECTANGLE, CIRCLE, LINE, ICON, BADGE, IMAGE }
 
 private class DroppedElement(
     val id: String = UUID.randomUUID().toString(),
@@ -52,6 +52,7 @@ private class DroppedElement(
     width: Float = 100f,
     height: Float = 60f,
     text: String = "Text",
+    glyph: String = "",
     colorArgb: Long = 0xFF2A5CE0
 ) {
     var x by mutableStateOf(x)
@@ -59,22 +60,66 @@ private class DroppedElement(
     var width by mutableStateOf(width)
     var height by mutableStateOf(height)
     var text by mutableStateOf(text)
+    var glyph by mutableStateOf(glyph)
     var colorArgb by mutableStateOf(colorArgb)
 
     fun copyAt(newX: Float, newY: Float) = DroppedElement(
-        type = type, x = newX, y = newY, width = width, height = height, text = text, colorArgb = colorArgb
+        type = type, x = newX, y = newY, width = width, height = height,
+        text = text, glyph = glyph, colorArgb = colorArgb
     )
 }
 
-private data class DrawerCategory(val label: String, val icon: String, val type: ElementType)
+// ===================== DRAWER TABS + ITEMS =====================
 
-private val drawerCategories = listOf(
-    DrawerCategory("Text", "🅰️", ElementType.TEXT),
-    DrawerCategory("Rectangle", "⬜", ElementType.RECTANGLE),
-    DrawerCategory("Circle", "⚪", ElementType.CIRCLE),
-    DrawerCategory("Line", "➖", ElementType.LINE),
-    DrawerCategory("Star", "⭐", ElementType.STAR),
-    DrawerCategory("Image", "🖼️", ElementType.IMAGE),
+private enum class DrawerTab(val label: String) { SHAPES("Shapes"), ICONS("Icons"), BADGES("Badges"), SIGNS("Signs") }
+
+private data class DrawerItem(
+    val label: String,
+    val preview: String,
+    val type: ElementType,
+    val glyph: String = "",
+    val badgeText: String = "",
+    val badgeColor: Long = 0xFF2A5CE0
+)
+
+private val shapeItems = listOf(
+    DrawerItem("Text", "🅰️", ElementType.TEXT),
+    DrawerItem("Rectangle", "⬜", ElementType.RECTANGLE),
+    DrawerItem("Circle", "⚪", ElementType.CIRCLE),
+    DrawerItem("Line", "➖", ElementType.LINE),
+    DrawerItem("Image", "🖼️", ElementType.IMAGE),
+)
+
+private val iconItems = listOf(
+    DrawerItem("Star", "⭐", ElementType.ICON, glyph = "⭐"),
+    DrawerItem("Heart", "❤️", ElementType.ICON, glyph = "❤️"),
+    DrawerItem("Check", "✅", ElementType.ICON, glyph = "✅"),
+    DrawerItem("Home", "🏠", ElementType.ICON, glyph = "🏠"),
+    DrawerItem("Phone", "📞", ElementType.ICON, glyph = "📞"),
+    DrawerItem("Mail", "✉️", ElementType.ICON, glyph = "✉️"),
+    DrawerItem("Camera", "📷", ElementType.ICON, glyph = "📷"),
+    DrawerItem("Location", "📍", ElementType.ICON, glyph = "📍"),
+    DrawerItem("Lock", "🔒", ElementType.ICON, glyph = "🔒"),
+    DrawerItem("Gift", "🎁", ElementType.ICON, glyph = "🎁"),
+    DrawerItem("Bell", "🔔", ElementType.ICON, glyph = "🔔"),
+    DrawerItem("Flag", "🚩", ElementType.ICON, glyph = "🚩"),
+)
+
+private val badgeItems = listOf(
+    DrawerItem("NEW", "🏷️", ElementType.BADGE, badgeText = "NEW", badgeColor = 0xFF00C853),
+    DrawerItem("SALE", "🏷️", ElementType.BADGE, badgeText = "SALE", badgeColor = 0xFFE0245E),
+    DrawerItem("HOT", "🏷️", ElementType.BADGE, badgeText = "HOT", badgeColor = 0xFFFF6D00),
+    DrawerItem("FREE", "🏷️", ElementType.BADGE, badgeText = "FREE", badgeColor = 0xFF2A5CE0),
+    DrawerItem("50% OFF", "🏷️", ElementType.BADGE, badgeText = "50% OFF", badgeColor = 0xFF8E24AA),
+)
+
+private val signItems = listOf(
+    DrawerItem("Arrow Up", "⬆️", ElementType.ICON, glyph = "⬆️"),
+    DrawerItem("Arrow Down", "⬇️", ElementType.ICON, glyph = "⬇️"),
+    DrawerItem("Arrow Left", "⬅️", ElementType.ICON, glyph = "⬅️"),
+    DrawerItem("Arrow Right", "➡️", ElementType.ICON, glyph = "➡️"),
+    DrawerItem("Stop", "🛑", ElementType.ICON, glyph = "🛑"),
+    DrawerItem("Warning", "⚠️", ElementType.ICON, glyph = "⚠️"),
 )
 
 private val swatchColors = listOf(
@@ -89,6 +134,7 @@ fun DragDropScreen(onBack: () -> Unit = {}) {
     var canvasOffset by remember { mutableStateOf(Offset.Zero) }
 
     var drawerOpen by remember { mutableStateOf(false) }
+    var activeTab by remember { mutableStateOf(DrawerTab.SHAPES) }
     var lastInteraction by remember { mutableStateOf(System.currentTimeMillis()) }
 
     val elements = remember { mutableStateListOf<DroppedElement>() }
@@ -104,12 +150,17 @@ fun DragDropScreen(onBack: () -> Unit = {}) {
         }
     }
 
-    fun addElement(type: ElementType) {
+    fun addItem(item: DrawerItem) {
         val newEl = DroppedElement(
-            type = type,
+            type = item.type,
             x = 100f,
             y = 150f,
-            text = if (type == ElementType.TEXT) "Double tap to edit" else ""
+            text = if (item.type == ElementType.TEXT) "Double tap to edit"
+                   else if (item.type == ElementType.BADGE) item.badgeText else "",
+            glyph = item.glyph,
+            colorArgb = if (item.type == ElementType.BADGE) item.badgeColor else 0xFF2A5CE0,
+            width = if (item.type == ElementType.BADGE) 90f else if (item.type == ElementType.ICON) 48f else 100f,
+            height = if (item.type == ElementType.BADGE) 32f else if (item.type == ElementType.ICON) 48f else 60f
         )
         elements.add(newEl)
         selectedId = newEl.id
@@ -165,7 +216,6 @@ fun DragDropScreen(onBack: () -> Unit = {}) {
                         DraggableElement(
                             element = el,
                             isSelected = el.id == selectedId,
-                            scale = scale,
                             onSelect = { selectedId = el.id; lastInteraction = System.currentTimeMillis() },
                             onMove = { dx, dy ->
                                 el.x += dx / scale
@@ -259,20 +309,42 @@ fun DragDropScreen(onBack: () -> Unit = {}) {
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
 
+                    // Tab row
+                    LazyRow(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.padding(bottom = 8.dp)) {
+                        items(DrawerTab.values().toList()) { tab ->
+                            Box(
+                                modifier = Modifier
+                                    .background(
+                                        if (activeTab == tab) Color(0xFF2A5CE0) else Color(0xFF2A2A2A),
+                                        RoundedCornerShape(8.dp)
+                                    )
+                                    .clickable { activeTab = tab }
+                                    .padding(horizontal = 10.dp, vertical = 6.dp)
+                            ) {
+                                Text(tab.label, color = Color.White, fontSize = 10.sp)
+                            }
+                        }
+                    }
+
+                    val currentItems = when (activeTab) {
+                        DrawerTab.SHAPES -> shapeItems
+                        DrawerTab.ICONS -> iconItems
+                        DrawerTab.BADGES -> badgeItems
+                        DrawerTab.SIGNS -> signItems
+                    }
+
                     LazyVerticalGrid(
                         columns = GridCells.Fixed(4),
                         modifier = Modifier.weight(1f)
                     ) {
-                        items(drawerCategories) { cat ->
+                        items(currentItems) { item ->
                             Column(
                                 horizontalAlignment = Alignment.CenterHorizontally,
                                 modifier = Modifier
                                     .padding(6.dp)
-                                    .pointerInput(cat.type) {
-                                        detectTapGestures {
-                                            addElement(cat.type)
-                                            lastInteraction = System.currentTimeMillis()
-                                        }
+                                    .clickable {
+                                        addItem(item)
+                                        lastInteraction = System.currentTimeMillis()
                                     }
                             ) {
                                 Box(
@@ -281,10 +353,10 @@ fun DragDropScreen(onBack: () -> Unit = {}) {
                                         .background(Color(0xFF2A2A2A), RoundedCornerShape(10.dp)),
                                     contentAlignment = Alignment.Center
                                 ) {
-                                    Text(cat.icon, fontSize = 20.sp)
+                                    Text(item.preview, fontSize = 20.sp)
                                 }
                                 Spacer(Modifier.height(4.dp))
-                                Text(cat.label, color = Color.White.copy(alpha = 0.8f), fontSize = 9.sp)
+                                Text(item.label, color = Color.White.copy(alpha = 0.8f), fontSize = 8.sp)
                             }
                         }
                     }
@@ -330,7 +402,7 @@ fun DragDropScreen(onBack: () -> Unit = {}) {
                         .background(Color(0xFF202020), RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
                         .padding(12.dp)
                 ) {
-                    if (el.type == ElementType.TEXT) {
+                    if (el.type == ElementType.TEXT || el.type == ElementType.BADGE) {
                         OutlinedTextField(
                             value = el.text,
                             onValueChange = { el.text = it },
@@ -345,7 +417,9 @@ fun DragDropScreen(onBack: () -> Unit = {}) {
                         )
                         Spacer(Modifier.height(8.dp))
                     }
-                    if (el.type != ElementType.TEXT) {
+                    if (el.type == ElementType.RECTANGLE || el.type == ElementType.CIRCLE ||
+                        el.type == ElementType.LINE || el.type == ElementType.BADGE
+                    ) {
                         Text("Color", color = Color.White.copy(alpha = 0.7f), fontSize = 11.sp)
                         Spacer(Modifier.height(6.dp))
                         LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -375,7 +449,6 @@ fun DragDropScreen(onBack: () -> Unit = {}) {
 private fun DraggableElement(
     element: DroppedElement,
     isSelected: Boolean,
-    scale: Float,
     onSelect: () -> Unit,
     onMove: (Float, Float) -> Unit,
     onResize: (Float, Float) -> Unit
@@ -430,7 +503,19 @@ private fun DraggableElement(
                     .align(Alignment.CenterStart)
                     .background(Color(element.colorArgb))
             )
-            ElementType.STAR -> Text("⭐", fontSize = 32.sp, modifier = Modifier.align(Alignment.Center))
+            ElementType.ICON -> Text(
+                element.glyph,
+                fontSize = 28.sp,
+                modifier = Modifier.align(Alignment.Center)
+            )
+            ElementType.BADGE -> Box(
+                Modifier
+                    .fillMaxSize()
+                    .background(Color(element.colorArgb), RoundedCornerShape(6.dp)),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(element.text, color = Color.White, fontSize = 11.sp, fontWeight = FontWeight.Bold)
+            }
             ElementType.IMAGE -> Box(
                 Modifier
                     .fillMaxSize()
