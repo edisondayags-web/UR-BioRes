@@ -52,6 +52,7 @@ fun HomeScreen(
         HomeMenuItem("✉️", "LETTERS", "Leave, Excuse, Resign, etc.", "letters"),
         HomeMenuItem("💬", "INTERVIEW", "Practice Office Interview (Q&A / Tips)", "interview"),
         HomeMenuItem("🔎", "JOB RESEARCHER", "Hahanapan ka ng work near you", "job_researcher"),
+        HomeMenuItem("🖱️", "DRAG AND DROP", "Design freely, drag elements anywhere", "drag_drop"),
     )
 
     Box(
@@ -92,7 +93,11 @@ fun HomeScreen(
                     HomeMenuCard(
                         item = item,
                         onClick = {
-                            onNavigate(item.route)
+                            if (item.route == "drag_drop") {
+                                showComingSoon = true
+                            } else {
+                                onNavigate(item.route)
+                            }
                         }
                     )
                 }
