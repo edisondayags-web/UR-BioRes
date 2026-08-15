@@ -120,6 +120,7 @@ fun TemplateExportMenu(
         AlertDialog(
             onDismissRequest = { showQr = false },
             confirmButton = { TextButton(onClick = { showQr = false }) { Text("Close") } },
+            dismissButton = { TextButton(onClick = { saveBitmapToGallery(context, qrBmp, resumeName + "_qr") }) { Text("Download") } },
             text = {
                 androidx.compose.foundation.Image(
                     qrBmp.asImageBitmap(), contentDescription = "QR Code",
@@ -134,6 +135,7 @@ fun TemplateExportMenu(
         AlertDialog(
             onDismissRequest = { showBarcode = false },
             confirmButton = { TextButton(onClick = { showBarcode = false }) { Text("Close") } },
+            dismissButton = { TextButton(onClick = { saveBitmapToGallery(context, bcBmp, resumeName + "_barcode") }) { Text("Download") } },
             text = {
                 androidx.compose.foundation.Image(
                     bcBmp.asImageBitmap(), contentDescription = "Barcode",
@@ -141,5 +143,20 @@ fun TemplateExportMenu(
                 )
             }
         )
+    }
+}
+
+fun saveBitmapToGallery(context: Context, bitmap: Bitmap, name: String) {
+    val values = android.content.ContentValues().apply {
+        put(android.provider.MediaStore.Images.Media.DISPLAY_NAME, "$name.png")
+        put(android.provider.MediaStore.Images.Media.MIME_TYPE, "image/png")
+        put(android.provider.MediaStore.Images.Media.RELATIVE_PATH, "Pictures/UR-BioRes")
+    }
+    val uri = context.contentResolver.insert(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+    uri?.let {
+        context.contentResolver.openOutputStream(it)?.use { out ->
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
+        }
+        Toast.makeText(context, "Saved to Gallery", Toast.LENGTH_SHORT).show()
     }
 }
