@@ -7,6 +7,7 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.offset
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.layer.drawLayer
 import androidx.compose.foundation.shape.CircleShape
@@ -429,7 +430,7 @@ fun BiodataTemplate16_PixelPerfect(
             graphicsLayer,
             "biodata_$fullName",
             onHome = onHomeOverride,
-            modifier = Modifier.align(Alignment.TopEnd).padding(top = 4.dp, end = 12.dp)
+            modifier = Modifier.align(Alignment.TopEnd).padding(top = 4.dp, end = 12.dp).offset(y = (-52).dp)
         )
     }
 }
