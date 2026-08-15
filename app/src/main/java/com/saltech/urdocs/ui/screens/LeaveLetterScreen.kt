@@ -1,5 +1,8 @@
 package com.saltech.urdocs.ui.screens
 
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.rememberScrollState
+
 import android.content.ContentValues
 import android.graphics.Bitmap
 import android.graphics.Picture
@@ -319,8 +322,10 @@ fun LeaveLetterScreen(onBack: () -> Unit = {}) {
             Row(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .padding(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    .padding(vertical = 16.dp)
+                    .horizontalScroll(rememberScrollState())
+                    .padding(horizontal = 12.dp),
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 Button(
                     onClick = { isEditMode = !isEditMode },
@@ -367,7 +372,8 @@ fun LeaveLetterScreen(onBack: () -> Unit = {}) {
             }
 
                 Button(
-                    onClick = { showTemplateSelector = true }
+                    onClick = { showTemplateSelector = true },
+                    colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = LLBlue)
                 ) {
                     Text("More Templates", color = Color.White, fontWeight = FontWeight.Bold)
                 }

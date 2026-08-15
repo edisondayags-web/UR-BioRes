@@ -707,6 +707,8 @@ fun GenericLetterScreen(letterType: LetterType, onBack: () -> Unit = {}) {
     var bodyText by remember(letterType) { mutableStateOf(content.defaultBody) }
 
     var isPlainMode by remember { mutableStateOf(false) }
+    var selectedBorderIndex by remember { mutableStateOf(0) }
+    var showTemplateSelector by remember { mutableStateOf(false) }
 
     val textColor = if (isPlainMode) Color.Black else GLBlue
     val bodyFontFamily = if (isPlainMode) FontFamily.Default else FontFamily.Serif
@@ -761,8 +763,15 @@ fun GenericLetterScreen(letterType: LetterType, onBack: () -> Unit = {}) {
                     .background(Color.White)
             ) {
                 if (!isPlainMode) {
+                    val ctx = LocalContext.current
+                    val borderResId = if (selectedBorderIndex == 0) {
+                        R.drawable.bond_paper_blank
+                    } else {
+                        val name = "letter_border_" + selectedBorderIndex.toString().padStart(2, '0')
+                        ctx.resources.getIdentifier(name, "drawable", ctx.packageName).let { if (it != 0) it else R.drawable.bond_paper_blank }
+                    }
                     Image(
-                        painter = painterResource(R.drawable.bond_paper_blank),
+                        painter = painterResource(borderResId),
                         contentDescription = null,
                         modifier = Modifier.fillMaxSize(),
                         contentScale = ContentScale.FillBounds
@@ -934,6 +943,12 @@ fun GenericLetterScreen(letterType: LetterType, onBack: () -> Unit = {}) {
                 }
 
                 Button(
+                    onClick = { showTemplateSelector = true },
+                    colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = GLBlue)
+                ) {
+                    Text("More Templates", color = Color.White, fontWeight = FontWeight.Bold)
+                }
+                Button(
                     onClick = { isPlainMode = !isPlainMode },
                     colors = androidx.compose.material3.ButtonDefaults.buttonColors(
                         containerColor = if (isPlainMode) Color.DarkGray else GLBlue
@@ -941,6 +956,15 @@ fun GenericLetterScreen(letterType: LetterType, onBack: () -> Unit = {}) {
                 ) {
                     Text(if (isPlainMode) "Design" else "Plain", color = Color.White, fontWeight = FontWeight.Bold)
                 }
+            }
+            if (showTemplateSelector) {
+                LetterTemplateSelectorScreen(
+                    onTemplateSelected = { idx ->
+                        selectedBorderIndex = idx
+                        showTemplateSelector = false
+                    },
+                    onBack = { showTemplateSelector = false }
+                )
             }
         }
     }
