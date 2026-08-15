@@ -141,7 +141,7 @@ fun ResumeChoiceScreen(onChoose: (String) -> Unit, onBack: () -> Unit = {}) {
             ResumeChoiceCard(
                 icon = { Icon(Icons.Filled.GridView, contentDescription = null, tint = Color.White, modifier = it) },
                 title = "More Templates",
-                subtitle = "(browse full gallery, 19 designs)",
+                subtitle = "(tap mo lang luv🩵)",
                 onClick = { onChoose("gallery") }
             )
         }
