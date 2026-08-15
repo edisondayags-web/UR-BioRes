@@ -1,6 +1,8 @@
 
 package com.saltech.urdocs.ui.templates.biodata
 
+import com.saltech.urdocs.ui.templates.biodata.EditableText_Bio
+
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -155,7 +157,17 @@ fun BiodataTemplate06_PixelPerfect(
     educationList: List<Triple<String,String,String>> = emptyList(),
     workExpList: List<Triple<String,String,String>> = emptyList(),
     skills: List<String> = emptyList(),
-    references: List<String> = emptyList()
+    references: List<String> = emptyList(),
+    avatarUri: String = "",
+    edu1Level: String = "", edu1School: String = "", edu1Year: String = "",
+    edu2Level: String = "", edu2School: String = "", edu2Year: String = "",
+    edu3Level: String = "", edu3School: String = "", edu3Year: String = "",
+    work1Company: String = "", work1Position: String = "", work1Dates: String = "",
+    work2Company: String = "", work2Position: String = "", work2Dates: String = "",
+    work3Company: String = "", work3Position: String = "", work3Dates: String = "",
+    skill1: String = "", skill2: String = "", skill3: String = "", skill4: String = "", skill5: String = "", skill6: String = "",
+    ref1: String = "", ref2: String = "", ref3: String = "",
+    onFieldChange: (String, String) -> Unit = { _, _ -> }
 ) {
     val accent1 = Color(0xFF4CAF50)
     val accent2 = Color(0xFFE91E63)
@@ -238,6 +250,7 @@ fun BiodataTemplate06_PixelPerfect(
                     "🏠" to "Current Address"
                 )
                 val personalValues = listOf(fullName, dateOfBirth, placeOfBirth, civilStatus, religion, citizenship, height, weight, email, contactNo, currentAddress)
+    val personalKeys = listOf("fullName","dateOfBirth","placeOfBirth","civilStatus","religion","citizenship","height","weight","email","contactNo","currentAddress")
                 Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
                     personalFields.forEachIndexed { index, (icon, label) ->
                         if(isDark) {
@@ -249,11 +262,7 @@ fun BiodataTemplate06_PixelPerfect(
                                 Text("$label :", color=Color.White, fontSize=7.5.sp, modifier=Modifier.width(85.dp))
                                 Text(":", color=Color.White.copy(alpha=0.6f), fontSize=7.sp)
                                 Spacer(Modifier.width(6.dp))
-                                if(personalValues[index].isNotEmpty()) {
-                                    Text(personalValues[index], color=Color.White, fontSize=7.5.sp, modifier=Modifier.weight(1f))
-                                } else {
-                                    Box(Modifier.weight(1f).height(0.7.dp).background(Color.White.copy(alpha=0.3f)))
-                                }
+                                EditableText_Bio(personalValues[index], Color.White, 7.5.sp, Modifier.weight(1f)) { onFieldChange(personalKeys[index], it) }
                             }
                         } else {
                             Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
@@ -264,11 +273,7 @@ fun BiodataTemplate06_PixelPerfect(
                                 Text("$label :", color=Color.Black, fontSize=7.5.sp, modifier=Modifier.width(85.dp))
                                 Text(":", color=Color.Black.copy(alpha=0.6f), fontSize=7.sp)
                                 Spacer(Modifier.width(6.dp))
-                                if(personalValues[index].isNotEmpty()) {
-                                    Text(personalValues[index], color=Color.Black, fontSize=7.5.sp, modifier=Modifier.weight(1f))
-                                } else {
-                                    Box(Modifier.weight(1f).height(0.6.dp).background(Color.Black.copy(alpha=0.2f)))
-                                }
+                                EditableText_Bio(personalValues[index], Color.Black, 7.5.sp, Modifier.weight(1f)) { onFieldChange(personalKeys[index], it) }
                             }
                         }
                     }
@@ -294,20 +299,20 @@ fun BiodataTemplate06_PixelPerfect(
                 }
                 Spacer(Modifier.height(6.dp))
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    val eduLevels = listOf(edu1Level, edu2Level, edu3Level)
+                    val eduSchools = listOf(edu1School, edu2School, edu3School)
+                    val eduYears = listOf(edu1Year, edu2Year, edu3Year)
+                    val eduLevelKeys = listOf("edu1Level","edu2Level","edu3Level")
+                    val eduSchoolKeys = listOf("edu1School","edu2School","edu3School")
+                    val eduYearKeys = listOf("edu1Year","edu2Year","edu3Year")
                     repeat(3) { idx ->
                         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                            if(educationList.size > idx) {
-                                val edu = educationList[idx]
-                                Text(edu.first, color=if(isDark) Color.White else Color.Black, fontSize=7.sp, modifier=Modifier.weight(1f))
-                                Text(edu.second, color=if(isDark) Color.White else Color.Black, fontSize=7.sp, modifier=Modifier.weight(1.5f))
-                                Text(edu.third, color=if(isDark) Color.White else Color.Black, fontSize=7.sp, modifier=Modifier.weight(1f))
-                            } else {
-                                Box(Modifier.weight(1f).height(0.7.dp).background((if(isDark) Color.White else Color.Black).copy(alpha=0.25f)))
-                                Spacer(Modifier.width(8.dp))
-                                Box(Modifier.weight(1.5f).height(0.7.dp).background((if(isDark) Color.White else Color.Black).copy(alpha=0.25f)))
-                                Spacer(Modifier.width(8.dp))
-                                Box(Modifier.weight(1f).height(0.7.dp).background((if(isDark) Color.White else Color.Black).copy(alpha=0.25f)))
-                            }
+                            val tc = if(isDark) Color.White else Color.Black
+                            EditableText_Bio(eduLevels[idx], tc, 7.sp, Modifier.weight(1f)) { onFieldChange(eduLevelKeys[idx], it) }
+                            Spacer(Modifier.width(8.dp))
+                            EditableText_Bio(eduSchools[idx], tc, 7.sp, Modifier.weight(1.5f)) { onFieldChange(eduSchoolKeys[idx], it) }
+                            Spacer(Modifier.width(8.dp))
+                            EditableText_Bio(eduYears[idx], tc, 7.sp, Modifier.weight(1f)) { onFieldChange(eduYearKeys[idx], it) }
                         }
                     }
                 }
@@ -332,20 +337,20 @@ fun BiodataTemplate06_PixelPerfect(
                 }
                 Spacer(Modifier.height(6.dp))
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    val workCompanies = listOf(work1Company, work2Company, work3Company)
+                    val workPositions = listOf(work1Position, work2Position, work3Position)
+                    val workDates = listOf(work1Dates, work2Dates, work3Dates)
+                    val workCompanyKeys = listOf("work1Company","work2Company","work3Company")
+                    val workPositionKeys = listOf("work1Position","work2Position","work3Position")
+                    val workDatesKeys = listOf("work1Dates","work2Dates","work3Dates")
                     repeat(3) { idx ->
                         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                            if(workExpList.size > idx) {
-                                val work = workExpList[idx]
-                                Text(work.first, color=if(isDark) Color.White else Color.Black, fontSize=7.sp, modifier=Modifier.weight(1.2f))
-                                Text(work.second, color=if(isDark) Color.White else Color.Black, fontSize=7.sp, modifier=Modifier.weight(1f))
-                                Text(work.third, color=if(isDark) Color.White else Color.Black, fontSize=7.sp, modifier=Modifier.weight(1f))
-                            } else {
-                                Box(Modifier.weight(1.2f).height(0.7.dp).background((if(isDark) Color.White else Color.Black).copy(alpha=0.25f)))
-                                Spacer(Modifier.width(8.dp))
-                                Box(Modifier.weight(1f).height(0.7.dp).background((if(isDark) Color.White else Color.Black).copy(alpha=0.25f)))
-                                Spacer(Modifier.width(8.dp))
-                                Box(Modifier.weight(1f).height(0.7.dp).background((if(isDark) Color.White else Color.Black).copy(alpha=0.25f)))
-                            }
+                            val tc2 = if(isDark) Color.White else Color.Black
+                            EditableText_Bio(workCompanies[idx], tc2, 7.sp, Modifier.weight(1.2f)) { onFieldChange(workCompanyKeys[idx], it) }
+                            Spacer(Modifier.width(8.dp))
+                            EditableText_Bio(workPositions[idx], tc2, 7.sp, Modifier.weight(1f)) { onFieldChange(workPositionKeys[idx], it) }
+                            Spacer(Modifier.width(8.dp))
+                            EditableText_Bio(workDates[idx], tc2, 7.sp, Modifier.weight(1f)) { onFieldChange(workDatesKeys[idx], it) }
                         }
                     }
                 }
@@ -371,11 +376,9 @@ fun BiodataTemplate06_PixelPerfect(
                                 Row(Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically) {
                                     Box(Modifier.size(5.dp).clip(CircleShape).background(if(isDark) Color.White else Color.Black))
                                     Spacer(Modifier.width(8.dp))
-                                    if(skills.size > skillIdx) {
-                                        Text(skills[skillIdx], color=if(isDark) Color.White else Color.Black, fontSize=7.sp)
-                                    } else {
-                                        Box(Modifier.weight(1f).height(0.7.dp).background((if(isDark) Color.White else Color.Black).copy(alpha=0.25f)))
-                                    }
+                                    val skillVals = listOf(skill1, skill2, skill3, skill4, skill5, skill6)
+                                    val skillKeys = listOf("skill1","skill2","skill3","skill4","skill5","skill6")
+                                    EditableText_Bio(skillVals[skillIdx], if(isDark) Color.White else Color.Black, 7.sp, Modifier.weight(1f)) { onFieldChange(skillKeys[skillIdx], it) }
                                 }
                                 if(colIdx==0) Spacer(Modifier.width(16.dp))
                             }
@@ -397,8 +400,10 @@ fun BiodataTemplate06_PixelPerfect(
                 }
                 Spacer(Modifier.height(8.dp))
                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    val refVals = listOf(ref1, ref2, ref3)
+                    val refKeys = listOf("ref1","ref2","ref3")
                     repeat(3) { idx ->
-                        Box(Modifier.fillMaxWidth().height(1.dp).background((if(isDark) Color.White else Color.Black).copy(alpha=0.3f)))
+                        EditableText_Bio(refVals[idx], if(isDark) Color.White else Color.Black, 7.sp, Modifier.fillMaxWidth()) { onFieldChange(refKeys[idx], it) }
                     }
                 }
             }

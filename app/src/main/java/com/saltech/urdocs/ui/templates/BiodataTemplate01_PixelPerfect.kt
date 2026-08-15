@@ -1,6 +1,8 @@
 
 package com.saltech.urdocs.ui.templates.biodata
 
+import com.saltech.urdocs.ui.templates.biodata.EditableText_Bio
+
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -521,20 +523,3 @@ fun BiodataTemplate01_PixelPerfect(
 // extra padding line to reach 600 - template 01 - Black Green Pink Wave - pixel perfect
 // extra padding line to reach 600 - template 01 - Black Green Pink Wave - pixel perfect
 // extra padding line to reach 600 - template 01 - Black Green Pink Wave - pixel perfect
-@Composable
-fun EditableText_Bio(
-    value: String,
-    color: androidx.compose.ui.graphics.Color,
-    fontSize: androidx.compose.ui.unit.TextUnit,
-    modifier: Modifier = Modifier,
-    onValueChange: (String) -> Unit
-) {
-    androidx.compose.foundation.text.BasicTextField(
-        value = value,
-        onValueChange = onValueChange,
-        textStyle = androidx.compose.ui.text.TextStyle(color = color, fontSize = fontSize),
-        cursorBrush = androidx.compose.ui.graphics.SolidColor(color),
-        maxLines = 1,
-        modifier = modifier
-    )
-}
