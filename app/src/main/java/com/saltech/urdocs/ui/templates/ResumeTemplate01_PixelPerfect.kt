@@ -107,7 +107,6 @@ fun ResumeTemplate01_PixelPerfect(
     exp2Position: String = "", exp2Company: String = "", exp2Dates: String = "", exp2Desc: String = "",
     exp3Position: String = "", exp3Company: String = "", exp3Dates: String = "", exp3Desc: String = "",
     refName: String = "", refPositionCompany: String = "", refPhone: String = "", refEmail: String = "",
-    onFieldChange: (String, String) -> Unit = { _, _ -> }
 ) {
     val accent = Color(0xFFD4AF37)
     Box(Modifier.fillMaxSize().background(Color(0xFF050505)).padding(0.dp).verticalScroll(rememberScrollState())) {
