@@ -384,6 +384,7 @@ private fun LettersHubContent(
                     IconButton(onClick = onBack) {
                         Icon(Icons.Filled.ArrowBack, contentDescription = "Back", tint = Color.White)
                     }
+                    Spacer(Modifier.width(12.dp))
                     Box(
                         modifier = Modifier
                             .size(52.dp)
