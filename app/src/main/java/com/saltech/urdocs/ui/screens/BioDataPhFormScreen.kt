@@ -116,14 +116,20 @@ fun BioDataPhFormScreen(
         if (uri != null) {
             val loaded = com.saltech.urdocs.util.ImageUtils.loadBitmapFromUri(context, uri)
             if (loaded != null) {
-                coroutineScope.launch {
-                    val cropped = try {
-                        com.saltech.urdocs.ml.FaceCropHelper.cropTo2x2WithFaceBox(loaded).first
-                    } catch (e: Exception) {
-                        android.widget.Toast.makeText(context, "Crop failed: " + (e.message ?: e.toString()), android.widget.Toast.LENGTH_LONG).show()
+                coroutineScope.launch(kotlinx.coroutines.Dispatchers.Default) {
+                    val finalBitmap = try {
+                        val downsized = com.saltech.urdocs.util.ImageUtils.downscaleIfLarge(loaded, 1024)
+                        val cropped = com.saltech.urdocs.ml.FaceCropHelper.cropTo2x2WithFaceBox(downsized).first
+                        com.saltech.urdocs.ml.BackgroundHelper.replaceWithWhiteBackground(cropped)
+                    } catch (e: Throwable) {
+                        kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main) {
+                            android.widget.Toast.makeText(context, "Photo processing failed: " + (e.message ?: e.toString()), android.widget.Toast.LENGTH_LONG).show()
+                        }
                         loaded
                     }
-                    uploadedPhoto = cropped
+                    kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main) {
+                        uploadedPhoto = finalBitmap
+                    }
                 }
             }
         }
