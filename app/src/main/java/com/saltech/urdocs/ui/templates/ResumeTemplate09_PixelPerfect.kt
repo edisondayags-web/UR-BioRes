@@ -1,5 +1,8 @@
 package com.saltech.urdocs.ui.templates
 
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.graphics.layer.drawLayer
+
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
@@ -135,13 +138,19 @@ fun ResumeTemplate09_PixelPerfect(
     exp5Position: String = "", exp5Company: String = "", exp5Dates: String = "", exp5Desc: String = "",
     refName: String = "", refPositionCompany: String = "", refPhone: String = "", refEmail: String = "", refAvatarUri: String = "",
     ref2Name: String = "", ref2PositionCompany: String = "", ref2Phone: String = "", ref2Email: String = "", ref2AvatarUri: String = "",
-    onFieldChange: (String, String) -> Unit = { _, _ -> }
+    onFieldChange: (String, String) -> Unit = { _, _ -> },
+    onHomeOverride: () -> Unit = {}
 ) {
     val accent = Color(0xFF4D8DFF)
+    val graphicsLayer = androidx.compose.ui.graphics.rememberGraphicsLayer()
     val nameFontSize = autoShrinkNameFontSize(userName)
 
+    Box(Modifier.fillMaxSize()) {
     Box(Modifier.fillMaxSize().background(Color(0xFF050505)).padding(0.dp).verticalScroll(rememberScrollState())) {
-        Box(Modifier.fillMaxWidth().defaultMinSize(minHeight = 700.dp).padding(10.dp).border(1.dp, accent.copy(alpha=0.35f), RoundedCornerShape(topStart=14.dp, topEnd=0.dp, bottomStart=0.dp, bottomEnd=14.dp))) {
+        Box(Modifier.fillMaxWidth().defaultMinSize(minHeight = 700.dp).padding(10.dp).border(1.dp, accent.copy(alpha=0.35f), RoundedCornerShape(topStart=14.dp, topEnd=0.dp, bottomStart=0.dp, bottomEnd=14.dp))).drawWithContent {
+                graphicsLayer.record { this@drawWithContent.drawContent() }
+                drawLayer(graphicsLayer)
+            }) {
 
             DottedMatrix_02(Modifier.align(Alignment.TopStart).padding(top=4.dp, start=4.dp).size(24.dp, 28.dp), accent.copy(alpha=0.5f))
             Row(Modifier.align(Alignment.TopEnd).padding(top=4.dp, end=10.dp), horizontalArrangement=Arrangement.spacedBy(2.dp)) {
@@ -263,7 +272,15 @@ fun ResumeTemplate09_PixelPerfect(
             }
         }
     }
+        com.saltech.urdocs.ui.templates.TemplateExportMenu(
+            graphicsLayer,
+            "resume_$userName",
+            onHome = onHomeOverride,
+            modifier = Modifier.align(Alignment.TopEnd).padding(top = 4.dp, end = 12.dp)
+        )
+    }
 }
+
 
 @Composable
 private fun SectionLabel_02(text: String, accent: Color) {

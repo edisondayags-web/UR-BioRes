@@ -80,29 +80,29 @@ fun ResumeTemplateFormScreen(
             Icon(Icons.Filled.ArrowBack, contentDescription = "Back", tint = Color.White)
         }
         when (templateName) {
-            "resume_template_01" -> ResumeTemplate01Screen(data, { data = it })
+            "resume_template_01" -> ResumeTemplate01Screen(data, { data = it }, onBack)
             "resume_template_02" -> ResumeTemplate02Screen(data, { data = it }, onBack)
-            "resume_template_03" -> ResumeTemplate03Screen(data, { data = it })
-            "resume_template_04" -> ResumeTemplate04Screen(data, { data = it })
-            "resume_template_05" -> ResumeTemplate05Screen(data, { data = it })
-            "resume_template_06" -> ResumeTemplate06Screen(data, { data = it })
-            "resume_template_07" -> ResumeTemplate07Screen(data, { data = it })
-            "resume_template_08" -> ResumeTemplate08Screen(data, { data = it })
-            "resume_template_09" -> ResumeTemplate09Screen(data, { data = it })
-            "resume_template_10" -> ResumeTemplate10Screen(data, { data = it })
-            "resume_template_11" -> ResumeTemplate11Screen(data, { data = it })
-            "resume_template_12" -> ResumeTemplate12Screen(data, { data = it })
-            "resume_template_13" -> ResumeTemplate13Screen(data, { data = it })
-            "resume_template_14" -> ResumeTemplate14Screen(data, { data = it })
-            "resume_template_15" -> ResumeTemplate15Screen(data, { data = it })
-            "resume_template_16" -> ResumeTemplate16Screen(data, { data = it })
-            "resume_template_17" -> ResumeTemplate17Screen(data, { data = it })
-            "resume_template_18" -> ResumeTemplate18Screen(data, { data = it })
-            "resume_template_19" -> ResumeTemplate19Screen(data, { data = it })
-            "resume_template_20" -> ResumeTemplate20Screen(data, { data = it })
-            "resume_template_21" -> ResumeTemplate21Screen(data, { data = it })
-            "resume_template_22" -> ResumeTemplate22Screen(data, { data = it })
-            "resume_template_23" -> ResumeTemplate23Screen(data, { data = it })
+            "resume_template_03" -> ResumeTemplate03Screen(data, { data = it }, onBack)
+            "resume_template_04" -> ResumeTemplate04Screen(data, { data = it }, onBack)
+            "resume_template_05" -> ResumeTemplate05Screen(data, { data = it }, onBack)
+            "resume_template_06" -> ResumeTemplate06Screen(data, { data = it }, onBack)
+            "resume_template_07" -> ResumeTemplate07Screen(data, { data = it }, onBack)
+            "resume_template_08" -> ResumeTemplate08Screen(data, { data = it }, onBack)
+            "resume_template_09" -> ResumeTemplate09Screen(data, { data = it }, onBack)
+            "resume_template_10" -> ResumeTemplate10Screen(data, { data = it }, onBack)
+            "resume_template_11" -> ResumeTemplate11Screen(data, { data = it }, onBack)
+            "resume_template_12" -> ResumeTemplate12Screen(data, { data = it }, onBack)
+            "resume_template_13" -> ResumeTemplate13Screen(data, { data = it }, onBack)
+            "resume_template_14" -> ResumeTemplate14Screen(data, { data = it }, onBack)
+            "resume_template_15" -> ResumeTemplate15Screen(data, { data = it }, onBack)
+            "resume_template_16" -> ResumeTemplate16Screen(data, { data = it }, onBack)
+            "resume_template_17" -> ResumeTemplate17Screen(data, { data = it }, onBack)
+            "resume_template_18" -> ResumeTemplate18Screen(data, { data = it }, onBack)
+            "resume_template_19" -> ResumeTemplate19Screen(data, { data = it }, onBack)
+            "resume_template_20" -> ResumeTemplate20Screen(data, { data = it }, onBack)
+            "resume_template_21" -> ResumeTemplate21Screen(data, { data = it }, onBack)
+            "resume_template_22" -> ResumeTemplate22Screen(data, { data = it }, onBack)
+            "resume_template_23" -> ResumeTemplate23Screen(data, { data = it }, onBack)
             "resume_template_24" -> BaseResumeTemplateScreenV2(Color.White, Color(0xFF2C2C2C), Color.Black, Color(0xFF666666), "24", false, data, { data = it })
             "resume_template_25" -> BaseResumeTemplateScreenV2(Color(0xFF10131A), Color(0xFFFFC107), Color.White, Color(0xFFAAAAAA), "25", true, data, { data = it })
             "resume_template_26" -> BaseResumeTemplateScreenV2(Color(0xFFF5F5F5), Color.Black, Color.Black, Color(0xFF666666), "26", false, data, { data = it })
@@ -115,7 +115,7 @@ fun ResumeTemplateFormScreen(
 // ===== INDIVIDUAL TEMPLATES (01 to 23) - AUTO-WIRED TO PIXELPERFECT =====
 
 @Composable
-fun ResumeTemplate01Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
+fun ResumeTemplate01Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit, onHome: () -> Unit = {}) {
     com.saltech.urdocs.ui.templates.ResumeTemplate01_PixelPerfect(
         userName = data.fullName,
         userTitle = data.professionalTitle,
@@ -193,7 +193,8 @@ fun ResumeTemplate01Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTem
                     else -> data
                 }
             )
-        }
+        },
+        onHomeOverride = onHome
     )
 }
 
@@ -277,12 +278,13 @@ fun ResumeTemplate02Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTem
                     else -> data
                 }
             )
-        }
+        },
+        onHomeOverride = onHome
     )
 }
 
 @Composable
-fun ResumeTemplate03Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
+fun ResumeTemplate03Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit, onHome: () -> Unit = {}) {
     com.saltech.urdocs.ui.templates.ResumeTemplate03_PixelPerfect(
         userName = data.fullName,
         userTitle = data.professionalTitle,
@@ -360,12 +362,13 @@ fun ResumeTemplate03Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTem
                     else -> data
                 }
             )
-        }
+        },
+        onHomeOverride = onHome
     )
 }
 
 @Composable
-fun ResumeTemplate04Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
+fun ResumeTemplate04Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit, onHome: () -> Unit = {}) {
     com.saltech.urdocs.ui.templates.ResumeTemplate04_PixelPerfect(
         userName = data.fullName,
         userTitle = data.professionalTitle,
@@ -443,12 +446,13 @@ fun ResumeTemplate04Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTem
                     else -> data
                 }
             )
-        }
+        },
+        onHomeOverride = onHome
     )
 }
 
 @Composable
-fun ResumeTemplate05Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
+fun ResumeTemplate05Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit, onHome: () -> Unit = {}) {
     com.saltech.urdocs.ui.templates.ResumeTemplate05_PixelPerfect(
         userName = data.fullName,
         userTitle = data.professionalTitle,
@@ -526,12 +530,13 @@ fun ResumeTemplate05Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTem
                     else -> data
                 }
             )
-        }
+        },
+        onHomeOverride = onHome
     )
 }
 
 @Composable
-fun ResumeTemplate06Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
+fun ResumeTemplate06Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit, onHome: () -> Unit = {}) {
     com.saltech.urdocs.ui.templates.ResumeTemplate06_PixelPerfect(
         userName = data.fullName,
         userTitle = data.professionalTitle,
@@ -609,12 +614,13 @@ fun ResumeTemplate06Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTem
                     else -> data
                 }
             )
-        }
+        },
+        onHomeOverride = onHome
     )
 }
 
 @Composable
-fun ResumeTemplate07Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
+fun ResumeTemplate07Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit, onHome: () -> Unit = {}) {
     com.saltech.urdocs.ui.templates.ResumeTemplate07_PixelPerfect(
         userName = data.fullName,
         userTitle = data.professionalTitle,
@@ -692,12 +698,13 @@ fun ResumeTemplate07Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTem
                     else -> data
                 }
             )
-        }
+        },
+        onHomeOverride = onHome
     )
 }
 
 @Composable
-fun ResumeTemplate08Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
+fun ResumeTemplate08Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit, onHome: () -> Unit = {}) {
     com.saltech.urdocs.ui.templates.ResumeTemplate08_PixelPerfect(
         userName = data.fullName,
         userTitle = data.professionalTitle,
@@ -775,12 +782,13 @@ fun ResumeTemplate08Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTem
                     else -> data
                 }
             )
-        }
+        },
+        onHomeOverride = onHome
     )
 }
 
 @Composable
-fun ResumeTemplate09Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
+fun ResumeTemplate09Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit, onHome: () -> Unit = {}) {
     com.saltech.urdocs.ui.templates.ResumeTemplate09_PixelPerfect(
         userName = data.fullName,
         userTitle = data.professionalTitle,
@@ -858,12 +866,13 @@ fun ResumeTemplate09Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTem
                     else -> data
                 }
             )
-        }
+        },
+        onHomeOverride = onHome
     )
 }
 
 @Composable
-fun ResumeTemplate10Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
+fun ResumeTemplate10Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit, onHome: () -> Unit = {}) {
     com.saltech.urdocs.ui.templates.ResumeTemplate10_PixelPerfect(
         userName = data.fullName,
         userTitle = data.professionalTitle,
@@ -941,12 +950,13 @@ fun ResumeTemplate10Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTem
                     else -> data
                 }
             )
-        }
+        },
+        onHomeOverride = onHome
     )
 }
 
 @Composable
-fun ResumeTemplate11Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
+fun ResumeTemplate11Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit, onHome: () -> Unit = {}) {
     com.saltech.urdocs.ui.templates.ResumeTemplate11_PixelPerfect(
         userName = data.fullName,
         userTitle = data.professionalTitle,
@@ -1024,12 +1034,13 @@ fun ResumeTemplate11Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTem
                     else -> data
                 }
             )
-        }
+        },
+        onHomeOverride = onHome
     )
 }
 
 @Composable
-fun ResumeTemplate12Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
+fun ResumeTemplate12Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit, onHome: () -> Unit = {}) {
     com.saltech.urdocs.ui.templates.ResumeTemplate12_PixelPerfect(
         userName = data.fullName,
         userTitle = data.professionalTitle,
@@ -1107,12 +1118,13 @@ fun ResumeTemplate12Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTem
                     else -> data
                 }
             )
-        }
+        },
+        onHomeOverride = onHome
     )
 }
 
 @Composable
-fun ResumeTemplate13Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
+fun ResumeTemplate13Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit, onHome: () -> Unit = {}) {
     com.saltech.urdocs.ui.templates.ResumeTemplate13_PixelPerfect(
         userName = data.fullName,
         userTitle = data.professionalTitle,
@@ -1190,12 +1202,13 @@ fun ResumeTemplate13Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTem
                     else -> data
                 }
             )
-        }
+        },
+        onHomeOverride = onHome
     )
 }
 
 @Composable
-fun ResumeTemplate14Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
+fun ResumeTemplate14Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit, onHome: () -> Unit = {}) {
     com.saltech.urdocs.ui.templates.ResumeTemplate14_PixelPerfect(
         userName = data.fullName,
         userTitle = data.professionalTitle,
@@ -1273,12 +1286,13 @@ fun ResumeTemplate14Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTem
                     else -> data
                 }
             )
-        }
+        },
+        onHomeOverride = onHome
     )
 }
 
 @Composable
-fun ResumeTemplate15Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
+fun ResumeTemplate15Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit, onHome: () -> Unit = {}) {
     com.saltech.urdocs.ui.templates.ResumeTemplate15_PixelPerfect(
         userName = data.fullName,
         userTitle = data.professionalTitle,
@@ -1356,12 +1370,13 @@ fun ResumeTemplate15Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTem
                     else -> data
                 }
             )
-        }
+        },
+        onHomeOverride = onHome
     )
 }
 
 @Composable
-fun ResumeTemplate16Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
+fun ResumeTemplate16Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit, onHome: () -> Unit = {}) {
     com.saltech.urdocs.ui.templates.ResumeTemplate16_PixelPerfect(
         userName = data.fullName,
         userTitle = data.professionalTitle,
@@ -1439,12 +1454,13 @@ fun ResumeTemplate16Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTem
                     else -> data
                 }
             )
-        }
+        },
+        onHomeOverride = onHome
     )
 }
 
 @Composable
-fun ResumeTemplate17Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
+fun ResumeTemplate17Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit, onHome: () -> Unit = {}) {
     com.saltech.urdocs.ui.templates.ResumeTemplate17_PixelPerfect(
         userName = data.fullName,
         userTitle = data.professionalTitle,
@@ -1522,12 +1538,13 @@ fun ResumeTemplate17Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTem
                     else -> data
                 }
             )
-        }
+        },
+        onHomeOverride = onHome
     )
 }
 
 @Composable
-fun ResumeTemplate18Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
+fun ResumeTemplate18Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit, onHome: () -> Unit = {}) {
     com.saltech.urdocs.ui.templates.ResumeTemplate18_PixelPerfect(
         userName = data.fullName,
         userTitle = data.professionalTitle,
@@ -1605,12 +1622,13 @@ fun ResumeTemplate18Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTem
                     else -> data
                 }
             )
-        }
+        },
+        onHomeOverride = onHome
     )
 }
 
 @Composable
-fun ResumeTemplate19Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
+fun ResumeTemplate19Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit, onHome: () -> Unit = {}) {
     com.saltech.urdocs.ui.templates.ResumeTemplate19_PixelPerfect(
         userName = data.fullName,
         userTitle = data.professionalTitle,
@@ -1688,12 +1706,13 @@ fun ResumeTemplate19Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTem
                     else -> data
                 }
             )
-        }
+        },
+        onHomeOverride = onHome
     )
 }
 
 @Composable
-fun ResumeTemplate20Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
+fun ResumeTemplate20Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit, onHome: () -> Unit = {}) {
     com.saltech.urdocs.ui.templates.ResumeTemplate20_PixelPerfect(
         userName = data.fullName,
         userTitle = data.professionalTitle,
@@ -1771,12 +1790,13 @@ fun ResumeTemplate20Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTem
                     else -> data
                 }
             )
-        }
+        },
+        onHomeOverride = onHome
     )
 }
 
 @Composable
-fun ResumeTemplate21Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
+fun ResumeTemplate21Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit, onHome: () -> Unit = {}) {
     com.saltech.urdocs.ui.templates.ResumeTemplate21_PixelPerfect(
         userName = data.fullName,
         userTitle = data.professionalTitle,
@@ -1854,12 +1874,13 @@ fun ResumeTemplate21Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTem
                     else -> data
                 }
             )
-        }
+        },
+        onHomeOverride = onHome
     )
 }
 
 @Composable
-fun ResumeTemplate22Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
+fun ResumeTemplate22Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit, onHome: () -> Unit = {}) {
     com.saltech.urdocs.ui.templates.ResumeTemplate22_PixelPerfect(
         userName = data.fullName,
         userTitle = data.professionalTitle,
@@ -1937,12 +1958,13 @@ fun ResumeTemplate22Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTem
                     else -> data
                 }
             )
-        }
+        },
+        onHomeOverride = onHome
     )
 }
 
 @Composable
-fun ResumeTemplate23Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit) {
+fun ResumeTemplate23Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit, onHome: () -> Unit = {}) {
     com.saltech.urdocs.ui.templates.ResumeTemplate23_PixelPerfect(
         userName = data.fullName,
         userTitle = data.professionalTitle,
@@ -2020,7 +2042,8 @@ fun ResumeTemplate23Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTem
                     else -> data
                 }
             )
-        }
+        },
+        onHomeOverride = onHome
     )
 }
 
