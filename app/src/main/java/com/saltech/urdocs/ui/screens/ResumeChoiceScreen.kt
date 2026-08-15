@@ -45,6 +45,7 @@ private val RGradient = Brush.horizontalGradient(listOf(RPink, RGreen))
 @Composable
 fun ResumeChoiceScreen(onChoose: (String) -> Unit, onBack: () -> Unit = {}) {
     Box(modifier = Modifier.fillMaxSize().background(Color.Transparent)) {
+        PremiumWaveBackground()
         IconButton(
             onClick = onBack,
             modifier = Modifier
@@ -53,7 +54,6 @@ fun ResumeChoiceScreen(onChoose: (String) -> Unit, onBack: () -> Unit = {}) {
         ) {
             Icon(Icons.Filled.ArrowBack, contentDescription = "Back", tint = Color.White)
         }
-        PremiumWaveBackground()
         
         Box(
             modifier = Modifier
