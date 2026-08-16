@@ -221,12 +221,12 @@ class GeminiRepository {
         }
     }
 
-    private fun callOpenRouter(messages: JSONArray): String {
+    private fun callOpenRouterSingle(model: String, messages: JSONArray): Pair<Int, String> {
         val apiKey = BuildConfig.OPENROUTER_API_KEY
         val url = URL("https://openrouter.ai/api/v1/chat/completions")
 
         val body = JSONObject().apply {
-            put("models", org.json.JSONArray(modelFallbacks))
+            put("model", model)
             put("messages", messages)
         }
 
@@ -246,20 +246,35 @@ class GeminiRepository {
         val responseCode = connection.responseCode
         val stream = if (responseCode in 200..299) connection.inputStream else connection.errorStream
         val responseText = stream.bufferedReader().use { it.readText() }
+        return Pair(responseCode, responseText)
+    }
 
-        if (responseCode !in 200..299) {
-            return "Error sa OpenRouter API ($responseCode): $responseText"
+    private fun callOpenRouter(messages: JSONArray): String {
+        var lastError = "Walang na-generate na sagot. Subukan ulit."
+
+        for (model in modelFallbacks) {
+            try {
+                val (responseCode, responseText) = callOpenRouterSingle(model, messages)
+
+                if (responseCode in 200..299) {
+                    return try {
+                        val json = JSONObject(responseText)
+                        json.getJSONArray("choices")
+                            .getJSONObject(0)
+                            .getJSONObject("message")
+                            .getString("content")
+                    } catch (e: Exception) {
+                        continue
+                    }
+                } else {
+                    lastError = "Error sa OpenRouter API ($responseCode): $responseText"
+                }
+            } catch (e: Exception) {
+                lastError = "Error: ${e.message}"
+            }
         }
 
-        return try {
-            val json = JSONObject(responseText)
-            json.getJSONArray("choices")
-                .getJSONObject(0)
-                .getJSONObject("message")
-                .getString("content")
-        } catch (e: Exception) {
-            "Walang na-generate na sagot. Subukan ulit."
-        }
+        return lastError
     }
 
     suspend fun generateLetter(request: LetterRequest): String = withContext(Dispatchers.IO) {
