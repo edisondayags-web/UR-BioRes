@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.sp
 import com.saltech.urdocs.data.GeminiRepository
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 import java.util.*
 
