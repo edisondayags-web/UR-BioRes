@@ -330,6 +330,59 @@ class GeminiRepository {
         callOpenRouter(messages)
     }
 
+    suspend fun searchJobs(keywords: String, location: String): String = withContext(Dispatchers.IO) {
+        try {
+            val apiKey = BuildConfig.JOOBLE_API_KEY
+            val url = URL("https://jooble.org/api/$apiKey")
+
+            val body = JSONObject().apply {
+                put("keywords", keywords)
+                put("location", location)
+            }
+
+            val connection = (url.openConnection() as HttpURLConnection).apply {
+                requestMethod = "POST"
+                setRequestProperty("Content-Type", "application/json")
+                doOutput = true
+                connectTimeout = 20000
+                readTimeout = 20000
+            }
+
+            connection.outputStream.use { it.write(body.toString().toByteArray()) }
+
+            val responseCode = connection.responseCode
+            val stream = if (responseCode in 200..299) connection.inputStream else connection.errorStream
+            val responseText = stream.bufferedReader().use { it.readText() }
+
+            if (responseCode !in 200..299) {
+                return@withContext ""
+            }
+
+            val json = JSONObject(responseText)
+            val jobs = json.optJSONArray("jobs") ?: return@withContext ""
+
+            if (jobs.length() == 0) return@withContext ""
+
+            val sb = StringBuilder()
+            val maxResults = minOf(jobs.length(), 5)
+            for (i in 0 until maxResults) {
+                val job = jobs.getJSONObject(i)
+                val title = job.optString("title", "")
+                val company = job.optString("company", "")
+                val loc = job.optString("location", "")
+                val link = job.optString("link", "")
+                sb.append("- $title")
+                if (company.isNotBlank()) sb.append(" sa $company")
+                if (loc.isNotBlank()) sb.append(" ($loc)")
+                if (link.isNotBlank()) sb.append("\n  $link")
+                sb.append("\n")
+            }
+            sb.toString().trim()
+        } catch (e: Exception) {
+            ""
+        }
+    }
+
     suspend fun chatOpen(history: List<Pair<String, String>>): String = withContext(Dispatchers.IO) {
         val messages = JSONArray().apply {
             put(JSONObject().apply {

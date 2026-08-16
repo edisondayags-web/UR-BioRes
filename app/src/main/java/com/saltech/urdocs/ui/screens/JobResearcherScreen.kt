@@ -167,9 +167,19 @@ private fun JobResearcherScreenOriginal(
         inputText = ""
         isTyping = true
         scope.launch {
-            val reply = repository.chatOpen(updatedHistory)
-            addMessage(reply, isUser = false)
-            history = history + ("model" to reply)
+            val aiReply = repository.chatOpen(updatedHistory)
+            val jobResults = if (updatedHistory.size >= 2) {
+                repository.searchJobs(keywords = "", location = text)
+            } else ""
+
+            val finalReply = if (jobResults.isNotBlank()) {
+                "$aiReply\n\nMga totoong bakante ngayon (Jooble):\n$jobResults"
+            } else {
+                aiReply
+            }
+
+            addMessage(finalReply, isUser = false)
+            history = history + ("model" to finalReply)
             isTyping = false
         }
     }

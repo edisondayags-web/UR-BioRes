@@ -29,6 +29,7 @@ android {
         }
         buildConfigField("String", "GEMINI_API_KEY", "\"${localProps.getProperty("GEMINI_API_KEY", "")}\"")
         buildConfigField("String", "OPENROUTER_API_KEY", "\"${localProps.getProperty("OPENROUTER_API_KEY", "")}\"")
+        buildConfigField("String", "JOOBLE_API_KEY", "\"${localProps.getProperty("JOOBLE_API_KEY", "")}\"")
     }
 
     signingConfigs {
