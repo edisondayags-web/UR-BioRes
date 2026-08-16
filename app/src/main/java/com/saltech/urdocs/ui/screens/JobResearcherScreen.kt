@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.saltech.urdocs.data.GeminiRepository
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.async
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -167,10 +168,13 @@ private fun JobResearcherScreenOriginal(
         inputText = ""
         isTyping = true
         scope.launch {
-            val aiReply = repository.chatOpen(updatedHistory)
-            val jobResults = if (updatedHistory.size >= 2) {
-                repository.searchJobs(keywords = "", location = text)
-            } else ""
+            val aiReplyDeferred = async { repository.chatOpen(updatedHistory) }
+            val jobResultsDeferred = if (updatedHistory.size >= 2) {
+                async { repository.searchJobs(keywords = "", location = text) }
+            } else null
+
+            val aiReply = aiReplyDeferred.await()
+            val jobResults = jobResultsDeferred?.await() ?: ""
 
             val finalReply = if (jobResults.isNotBlank()) {
                 "$aiReply\n\nMga totoong bakante ngayon (Jooble):\n$jobResults"
