@@ -403,9 +403,9 @@ class GeminiRepository {
 
     private fun stripMarkdown(text: String): String {
         return text
-            .replace(Regex("\*\*(.*?)\*\*"), "$1")
-            .replace(Regex("\*(.*?)\*"), "$1")
-            .replace(Regex("#{1,6}\s*"), "")
+            .replace(Regex("""\*\*(.*?)\*\*"""), "$1")
+            .replace(Regex("""\*(.*?)\*"""), "$1")
+            .replace(Regex("""#{1,6}\s*"""), "")
             .replace(Regex("`{1,3}"), "")
             .replace(Regex("^-{3,}$", RegexOption.MULTILINE), "")
             .trim()
