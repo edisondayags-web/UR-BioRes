@@ -16,6 +16,10 @@ import androidx.compose.ui.graphics.layer.GraphicsLayer
 import androidx.compose.ui.graphics.rememberGraphicsLayer
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.platform.LocalContext
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.FullScreenContentCallback
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import androidx.core.content.FileProvider
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
@@ -73,6 +77,20 @@ fun TemplateExportMenu(
     val scope = rememberCoroutineScope()
     var showQr by remember { mutableStateOf(false) }
     var showBarcode by remember { mutableStateOf(false) }
+    var interstitialAd by remember { mutableStateOf<InterstitialAd?>(null) }
+
+    LaunchedEffect(Unit) {
+        InterstitialAd.load(
+            context,
+            "ca-app-pub-3134240485602899/5274307709",
+            AdRequest.Builder().build(),
+            object : InterstitialAdLoadCallback() {
+                override fun onAdLoaded(ad: InterstitialAd) {
+                    interstitialAd = ad
+                }
+            }
+        )
+    }
 
     suspend fun captureBitmap(): Bitmap {
         val imageBitmap = graphicsLayer.toImageBitmap()
@@ -86,9 +104,23 @@ fun TemplateExportMenu(
         DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
             DropdownMenuItem(text = { Text("Download") }, onClick = {
                 expanded = false
-                scope.launch {
-                    val bmp = captureBitmap()
-                    saveBitmapToGallery(context, bmp, resumeName)
+                val activity = context as? android.app.Activity
+                fun proceedDownload() {
+                    scope.launch {
+                        val bmp = captureBitmap()
+                        saveBitmapToGallery(context, bmp, resumeName)
+                    }
+                }
+                if (activity != null && interstitialAd != null) {
+                    interstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
+                        override fun onAdDismissedFullScreenContent() {
+                            interstitialAd = null
+                            proceedDownload()
+                        }
+                    }
+                    interstitialAd?.show(activity)
+                } else {
+                    proceedDownload()
                 }
             })
             DropdownMenuItem(text = { Text("Send To") }, onClick = {

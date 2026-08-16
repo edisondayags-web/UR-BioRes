@@ -45,6 +45,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.FullScreenContentCallback
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import androidx.compose.ui.draw.clip
@@ -104,6 +107,19 @@ fun BioDataPhFormScreen(
     val paperHeightDp = 1500.dp
 
     val context = LocalContext.current
+    var interstitialAd by remember { mutableStateOf<InterstitialAd?>(null) }
+    LaunchedEffect(Unit) {
+        InterstitialAd.load(
+            context,
+            "ca-app-pub-3134240485602899/5274307709",
+            AdRequest.Builder().build(),
+            object : InterstitialAdLoadCallback() {
+                override fun onAdLoaded(ad: InterstitialAd) {
+                    interstitialAd = ad
+                }
+            }
+        )
+    }
     var data by remember { mutableStateOf(BioDataPhFormFields()) }
     var offset by remember { mutableStateOf(Offset.Zero) }
     val picture = remember { Picture() }
@@ -366,17 +382,31 @@ fun BioDataPhFormScreen(
                         onClick = {
                             scale = fitScale
                             offset = Offset.Zero
-                            coroutineScope.launch {
-                                delay(100)
-                                val bitmap = Bitmap.createBitmap(
-                                    picture.width.coerceAtLeast(1),
-                                    picture.height.coerceAtLeast(1),
-                                    Bitmap.Config.ARGB_8888
-                                )
-                                val canvas = android.graphics.Canvas(bitmap)
-                                canvas.drawColor(android.graphics.Color.WHITE)
-                                canvas.drawPicture(picture)
-                                savePhFormBitmapToGallery(context, bitmap)
+                            val activity = context as? android.app.Activity
+                            fun proceedDownload() {
+                                coroutineScope.launch {
+                                    delay(100)
+                                    val bitmap = Bitmap.createBitmap(
+                                        picture.width.coerceAtLeast(1),
+                                        picture.height.coerceAtLeast(1),
+                                        Bitmap.Config.ARGB_8888
+                                    )
+                                    val canvas = android.graphics.Canvas(bitmap)
+                                    canvas.drawColor(android.graphics.Color.WHITE)
+                                    canvas.drawPicture(picture)
+                                    savePhFormBitmapToGallery(context, bitmap)
+                                }
+                            }
+                            if (activity != null && interstitialAd != null) {
+                                interstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
+                                    override fun onAdDismissedFullScreenContent() {
+                                        interstitialAd = null
+                                        proceedDownload()
+                                    }
+                                }
+                                interstitialAd?.show(activity)
+                            } else {
+                                proceedDownload()
                             }
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),

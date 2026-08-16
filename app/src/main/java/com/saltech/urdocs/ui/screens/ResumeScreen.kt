@@ -22,6 +22,9 @@ import androidx.compose.ui.viewinterop.AndroidView
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.FullScreenContentCallback
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 
 /** Maliit na underline-style field -- itsura ng "Label: ____" sa papel. */
 @Composable
@@ -54,6 +57,19 @@ fun ResumeScreen(
 ) {
     SecureScreen()
     val context = LocalContext.current
+    var interstitialAd by remember { mutableStateOf<InterstitialAd?>(null) }
+    LaunchedEffect(Unit) {
+        InterstitialAd.load(
+            context,
+            "ca-app-pub-3134240485602899/5274307709",
+            AdRequest.Builder().build(),
+            object : InterstitialAdLoadCallback() {
+                override fun onAdLoaded(ad: InterstitialAd) {
+                    interstitialAd = ad
+                }
+            }
+        )
+    }
 
     var fullName by remember { mutableStateOf("") }
     var address by remember { mutableStateOf("") }
@@ -82,8 +98,22 @@ fun ResumeScreen(
             Spacer(modifier = Modifier.height(16.dp))
             Button(
                 onClick = {
-                    val saved = GallerySaver.saveBitmap(context, previewBitmap!!, "Resume_${System.currentTimeMillis()}")
-                    Toast.makeText(context, if (saved) "Na-save sa Gallery (Pictures/UR Docs)!" else "Hindi na-save, subukan ulit.", Toast.LENGTH_LONG).show()
+                    val activity = context as? android.app.Activity
+                    fun proceedDownload() {
+                        val saved = GallerySaver.saveBitmap(context, previewBitmap!!, "Resume_${System.currentTimeMillis()}")
+                        Toast.makeText(context, if (saved) "Na-save sa Gallery (Pictures/UR Docs)!" else "Hindi na-save, subukan ulit.", Toast.LENGTH_LONG).show()
+                    }
+                    if (activity != null && interstitialAd != null) {
+                        interstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
+                            override fun onAdDismissedFullScreenContent() {
+                                interstitialAd = null
+                                proceedDownload()
+                            }
+                        }
+                        interstitialAd?.show(activity)
+                    } else {
+                        proceedDownload()
+                    }
                 },
                 modifier = Modifier.fillMaxWidth()
             ) { Text("⬇️ I-download / I-save sa Gallery") }
