@@ -93,7 +93,11 @@ fun HomeScreen(
                     HomeMenuCard(
                         item = item,
                         onClick = {
-                            onNavigate(item.route)
+                            if (item.route == "drag_drop") {
+                                showComingSoon = true
+                            } else {
+                                onNavigate(item.route)
+                            }
                         }
                     )
                 }
@@ -111,7 +115,7 @@ fun HomeScreen(
             AlertDialog(
                 onDismissRequest = { showComingSoon = false },
                 title = { Text("Coming Soon pato Luv❤️🩵") },
-                text = { Text("baka next day or weeek ok nato🩵") },
+                text = { Text("under maintenance pa luv sorry") },
                 confirmButton = {
                     TextButton(onClick = { showComingSoon = false }) {
                         Text("OK")

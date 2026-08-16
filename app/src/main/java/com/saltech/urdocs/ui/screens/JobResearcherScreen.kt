@@ -168,22 +168,10 @@ private fun JobResearcherScreenOriginal(
         inputText = ""
         isTyping = true
         scope.launch {
-            val aiReplyDeferred = async { repository.chatOpen(updatedHistory) }
-            val jobResultsDeferred = if (updatedHistory.size >= 2) {
-                async { repository.searchJobs(keywords = "", location = text) }
-            } else null
-
-            val aiReply = aiReplyDeferred.await()
-            val jobResults = jobResultsDeferred?.await() ?: ""
-
-            val finalReply = if (jobResults.isNotBlank()) {
-                "$aiReply\n\nMga totoong bakante ngayon (Jooble):\n$jobResults"
-            } else {
-                aiReply
-            }
-
-            addMessage(finalReply, isUser = false)
-            history = history + ("model" to finalReply)
+            delay(600)
+            val maintenanceReply = "sorry luv under maintenance pa Ako\uD83E\uDE75"
+            addMessage(maintenanceReply, isUser = false)
+            history = history + ("model" to maintenanceReply)
             isTyping = false
         }
     }
