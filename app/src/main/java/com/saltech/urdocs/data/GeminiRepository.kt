@@ -16,6 +16,8 @@ class GeminiRepository {
         "openai/gpt-oss-20b:free",
         "openai/gpt-oss-120b:free",
         "meta-llama/llama-3.3-70b-instruct:free",
+        "deepseek/deepseek-chat-v3.1:free",
+        "qwen/qwen3-235b-a22b:free",
     )
 
     private data class LetterConfig(val focus: String, val requiredInfo: String)
@@ -321,6 +323,6 @@ class GeminiRepository {
             }
         }
 
-        callKimi(messages)
+        callOpenRouter(messages)
     }
 }
