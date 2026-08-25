@@ -107,7 +107,8 @@ fun ResumeTemplateFormScreen(
             "resume_template_25" -> BaseResumeTemplateScreenV2(Color(0xFF10131A), Color(0xFFFFC107), Color.White, Color(0xFFAAAAAA), "25", true, data, { data = it })
             "resume_template_26" -> BaseResumeTemplateScreenV2(Color(0xFFF5F5F5), Color.Black, Color.Black, Color(0xFF666666), "26", false, data, { data = it })
             "resume_template_27" -> BaseResumeTemplateScreenV2(Color(0xFF14161F), Color(0xFF3F51B5), Color.White, Color(0xFFAAAAAA), "27", true, data, { data = it })
-            else -> ResumeTemplate01Screen(data, { data = it })
+            "resume_template_28" -> ResumeTemplate28Screen(data, { data = it }, onBack)
+             else -> ResumeTemplate01Screen(data, { data = it })
         }
     }
 }
