@@ -339,10 +339,16 @@ fun ResumeTemplateP1_01_PixelPerfect(
             }
         }
 
-        com.saltech.urdocs.ui.templates.TemplateExportMenu(
-            graphicsLayer, "resume_$userName", onHome = onHomeOverride,
+        Box(
             modifier = Modifier.align(Alignment.TopEnd).padding(top = 4.dp, end = 12.dp)
-        )
+                .size(36.dp)
+                .clip(CircleShape)
+                .background(Color(0xFF12203D))
+        ) {
+            com.saltech.urdocs.ui.templates.TemplateExportMenu(
+                graphicsLayer, "resume_$userName", onHome = onHomeOverride
+            )
+        }
     }
 }
 
