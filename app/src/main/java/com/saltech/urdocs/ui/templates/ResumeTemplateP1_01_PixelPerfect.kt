@@ -233,7 +233,7 @@ fun ResumeTemplateP1_01_PixelPerfect(
             Modifier.fillMaxSize().background(Color.White).verticalScroll(rememberScrollState())
                 .drawWithContent { graphicsLayer.record { this@drawWithContent.drawContent() }; drawLayer(graphicsLayer) }
         ) {
-            Row(Modifier.defaultMinSize(minHeight = 900.dp)) {
+            Row(Modifier.defaultMinSize(minHeight = 900.dp).height(IntrinsicSize.Max)) {
 
                 // ===== LEFT SIDEBAR =====
                 Column(
