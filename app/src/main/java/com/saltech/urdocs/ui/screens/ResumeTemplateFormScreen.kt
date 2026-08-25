@@ -62,7 +62,14 @@ data class ResumeTemplateFields(
     val exp4Position: String = "", val exp4Company: String = "", val exp4Dates: String = "", val exp4Desc: String = "",
     val exp5Position: String = "", val exp5Company: String = "", val exp5Dates: String = "", val exp5Desc: String = "",
     val refName: String = "", val refPositionCompany: String = "", val refContact: String = "", val refEmail: String = "", val refAvatarUri: String = "",
-    val ref2Name: String = "", val ref2PositionCompany: String = "", val ref2Contact: String = "", val ref2Email: String = "", val ref2AvatarUri: String = ""
+    val ref2Name: String = "", val ref2PositionCompany: String = "", val ref2Contact: String = "", val ref2Email: String = "", val ref2AvatarUri: String = "",
+    val exp1Desc2: String = "", val exp1Desc3: String = "",
+    val exp2Desc2: String = "", val exp2Desc3: String = "",
+    val exp3Desc2: String = "", val exp3Desc3: String = "",
+    val workSetup: String = "", val workSchedule: String = "", val preferredRole: String = "",
+    val prefLocations: String = "", val availability: String = "", val languages: String = "",
+    val certifications: String = "", val hobbies: String = "", val careerGoal: String = "",
+    val strengths: String = "", val otherInfo: String = ""
 )
 
 // ===== FORM SCREEN WRAPPER =====
@@ -2433,13 +2440,14 @@ fun ResumeTemplateP1_01Screen(data: ResumeTemplateFields, onFieldChange: (Resume
         edu1Degree = data.edu1Degree, edu1School = data.edu1School, edu1Years = data.edu1Years,
         edu2Degree = data.edu2Degree, edu2School = data.edu2School, edu2Years = data.edu2Years,
         skills = listOf(data.skill1, data.skill2, data.skill3, data.skill4, data.skill5, data.skill6),
-        exp1Position = data.exp1Position, exp1Company = data.exp1Company, exp1Dates = data.exp1Dates, exp1Desc = data.exp1Desc,
-        exp2Position = data.exp2Position, exp2Company = data.exp2Company, exp2Dates = data.exp2Dates, exp2Desc = data.exp2Desc,
-        exp3Position = data.exp3Position, exp3Company = data.exp3Company, exp3Dates = data.exp3Dates, exp3Desc = data.exp3Desc,
-        exp4Position = data.exp4Position, exp4Company = data.exp4Company, exp4Dates = data.exp4Dates, exp4Desc = data.exp4Desc,
-        exp5Position = data.exp5Position, exp5Company = data.exp5Company, exp5Dates = data.exp5Dates, exp5Desc = data.exp5Desc,
+        exp1Position = data.exp1Position, exp1Company = data.exp1Company, exp1Dates = data.exp1Dates, exp1Desc = data.exp1Desc, exp1Desc2 = data.exp1Desc2, exp1Desc3 = data.exp1Desc3,
+        exp2Position = data.exp2Position, exp2Company = data.exp2Company, exp2Dates = data.exp2Dates, exp2Desc = data.exp2Desc, exp2Desc2 = data.exp2Desc2, exp2Desc3 = data.exp2Desc3,
+        exp3Position = data.exp3Position, exp3Company = data.exp3Company, exp3Dates = data.exp3Dates, exp3Desc = data.exp3Desc, exp3Desc2 = data.exp3Desc2, exp3Desc3 = data.exp3Desc3,
         refName = data.refName, refPositionCompany = data.refPositionCompany, refPhone = data.refContact, refEmail = data.refEmail, refAvatarUri = data.refAvatarUri,
         ref2Name = data.ref2Name, ref2PositionCompany = data.ref2PositionCompany, ref2Phone = data.ref2Contact, ref2Email = data.ref2Email, ref2AvatarUri = data.ref2AvatarUri,
+        workSetup = data.workSetup, workSchedule = data.workSchedule, preferredRole = data.preferredRole,
+        prefLocations = data.prefLocations, availability = data.availability, languages = data.languages,
+        certifications = data.certifications, hobbies = data.hobbies, careerGoal = data.careerGoal, strengths = data.strengths, otherInfo = data.otherInfo,
         onFieldChange = { field, value ->
             onFieldChange(
                 when (field) {
@@ -2468,22 +2476,20 @@ fun ResumeTemplateP1_01Screen(data: ResumeTemplateFields, onFieldChange: (Resume
                     "exp1Company" -> data.copy(exp1Company = value)
                     "exp1Dates" -> data.copy(exp1Dates = value)
                     "exp1Desc" -> data.copy(exp1Desc = value)
+                    "exp1Desc2" -> data.copy(exp1Desc2 = value)
+                    "exp1Desc3" -> data.copy(exp1Desc3 = value)
                     "exp2Position" -> data.copy(exp2Position = value)
                     "exp2Company" -> data.copy(exp2Company = value)
                     "exp2Dates" -> data.copy(exp2Dates = value)
                     "exp2Desc" -> data.copy(exp2Desc = value)
+                    "exp2Desc2" -> data.copy(exp2Desc2 = value)
+                    "exp2Desc3" -> data.copy(exp2Desc3 = value)
                     "exp3Position" -> data.copy(exp3Position = value)
                     "exp3Company" -> data.copy(exp3Company = value)
                     "exp3Dates" -> data.copy(exp3Dates = value)
                     "exp3Desc" -> data.copy(exp3Desc = value)
-                    "exp4Position" -> data.copy(exp4Position = value)
-                    "exp4Company" -> data.copy(exp4Company = value)
-                    "exp4Dates" -> data.copy(exp4Dates = value)
-                    "exp4Desc" -> data.copy(exp4Desc = value)
-                    "exp5Position" -> data.copy(exp5Position = value)
-                    "exp5Company" -> data.copy(exp5Company = value)
-                    "exp5Dates" -> data.copy(exp5Dates = value)
-                    "exp5Desc" -> data.copy(exp5Desc = value)
+                    "exp3Desc2" -> data.copy(exp3Desc2 = value)
+                    "exp3Desc3" -> data.copy(exp3Desc3 = value)
                     "refName" -> data.copy(refName = value)
                     "refPositionCompany" -> data.copy(refPositionCompany = value)
                     "refPhone" -> data.copy(refContact = value)
@@ -2494,6 +2500,17 @@ fun ResumeTemplateP1_01Screen(data: ResumeTemplateFields, onFieldChange: (Resume
                     "ref2Email" -> data.copy(ref2Email = value)
                     "refAvatarUri" -> data.copy(refAvatarUri = value)
                     "ref2AvatarUri" -> data.copy(ref2AvatarUri = value)
+                    "workSetup" -> data.copy(workSetup = value)
+                    "workSchedule" -> data.copy(workSchedule = value)
+                    "preferredRole" -> data.copy(preferredRole = value)
+                    "prefLocations" -> data.copy(prefLocations = value)
+                    "availability" -> data.copy(availability = value)
+                    "languages" -> data.copy(languages = value)
+                    "certifications" -> data.copy(certifications = value)
+                    "hobbies" -> data.copy(hobbies = value)
+                    "careerGoal" -> data.copy(careerGoal = value)
+                    "strengths" -> data.copy(strengths = value)
+                    "otherInfo" -> data.copy(otherInfo = value)
                     else -> data
                 }
             )
