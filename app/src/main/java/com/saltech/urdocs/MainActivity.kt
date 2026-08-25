@@ -33,6 +33,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             UrDocsTheme {
                 val navController = rememberNavController()
+                var pendingSelfieTarget by remember { mutableStateOf<String?>(null) }
                 var resumeSelfie by remember { mutableStateOf<Bitmap?>(null) }
                 var biodataSelfie by remember { mutableStateOf<Bitmap?>(null) }
                 var hybridSelfie by remember { mutableStateOf<Bitmap?>(null) }
@@ -59,6 +60,10 @@ class MainActivity : ComponentActivity() {
                     composable(Screen.ResumeTraditional.route) {
                         TraditionalResumeScreen(
                             processedSelfie = resumeSelfie,
+                            onTakeSelfie = {
+                                pendingSelfieTarget = "resume"
+                                navController.navigate(Screen.SelfieCapture.createRoute("resume"))
+                            },
                             onBack = { navController.popBackStack() }
                         )
                     }
@@ -68,6 +73,10 @@ class MainActivity : ComponentActivity() {
                     composable(Screen.ResumeHybrid.route) {
                         HybridResumeScreen(
                             processedSelfie = hybridSelfie,
+                            onTakeSelfie = {
+                                pendingSelfieTarget = "resume_hybrid"
+                                navController.navigate(Screen.SelfieCapture.createRoute("resume_hybrid"))
+                            },
                             onBack = { navController.popBackStack() }
                         )
                     }
@@ -104,23 +113,39 @@ class MainActivity : ComponentActivity() {
                     composable(Screen.BioDataStandard.route) {
                         BioDataPhFormScreen(
                             processedSelfie = biodataSelfie,
+                            onTakeSelfie = {
+                                pendingSelfieTarget = "biodata"
+                                navController.navigate(Screen.SelfieCapture.createRoute("biodata"))
+                            }
                         )
                     }
                     composable(Screen.BioDataPhForm.route) {
                         BioDataPhFormScreen(
                             processedSelfie = biodataSelfie,
+                            onTakeSelfie = {
+                                pendingSelfieTarget = "biodata"
+                                navController.navigate(Screen.SelfieCapture.createRoute("biodata"))
+                            }
                         )
                     }
                     composable(Screen.BioDataBlack.route) {
                         BioDataV2Screen(
                             isBlack = true,
                             processedSelfie = biodataSelfie,
+                            onTakeSelfie = {
+                                pendingSelfieTarget = "biodata"
+                                navController.navigate(Screen.SelfieCapture.createRoute("biodata"))
+                            }
                         )
                     }
                     composable(Screen.BioDataBlue.route) {
                         BioDataV2Screen(
                             isBlack = false,
                             processedSelfie = biodataSelfie,
+                            onTakeSelfie = {
+                                pendingSelfieTarget = "biodata"
+                                navController.navigate(Screen.SelfieCapture.createRoute("biodata"))
+                            }
                         )
                     }
                     composable(Screen.BioDataMoreTemplates.route) {
@@ -183,6 +208,11 @@ class MainActivity : ComponentActivity() {
                             onBack = { navController.popBackStack() }
                         )
                     }
+                    composable(Screen.DragDrop.route) {
+                        DragDropScreen(
+                            onBack = { navController.popBackStack() }
+                        )
+                    }
                     composable(Screen.Settings.route) {
                         SettingsScreen(
                             onBack = { navController.popBackStack() },
@@ -204,6 +234,20 @@ class MainActivity : ComponentActivity() {
                     composable(Screen.AboutDeveloper.route) {
                         AboutDeveloperScreen(onBack = { navController.popBackStack() })
                     }
+                    composable(
+                        route = Screen.SelfieCapture.route,
+                        arguments = listOf(navArgument("returnTo") { type = NavType.StringType })
+                    ) { backStackEntry ->
+                        val returnTo = backStackEntry.arguments?.getString("returnTo") ?: "resume"
+                        SelfieCaptureScreen(
+                            onProcessed = { bitmap ->
+                                if (returnTo == "resume") resumeSelfie = bitmap
+                                else if (returnTo == "resume_hybrid") hybridSelfie = bitmap
+                                else biodataSelfie = bitmap
+                                navController.popBackStack()
+                            },
+                            onCancel = { navController.popBackStack() }
+                        )
                     }
                 }
             } else {
