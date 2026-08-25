@@ -24,16 +24,13 @@ import kotlinx.coroutines.launch
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         val authManager = AuthManager()
         lifecycleScope.launch {
             runCatching { authManager.ensureSignedIn() }
         }
-
         setContent {
             UrDocsTheme {
                 val navController = rememberNavController()
-                var pendingSelfieTarget by remember { mutableStateOf<String?>(null) }
                 var resumeSelfie by remember { mutableStateOf<Bitmap?>(null) }
                 var biodataSelfie by remember { mutableStateOf<Bitmap?>(null) }
                 var hybridSelfie by remember { mutableStateOf<Bitmap?>(null) }
@@ -60,9 +57,6 @@ class MainActivity : ComponentActivity() {
                     composable(Screen.ResumeTraditional.route) {
                         TraditionalResumeScreen(
                             processedSelfie = resumeSelfie,
-                                pendingSelfieTarget = "resume"
-                                navController.navigate(Screen.SelfieCapture.createRoute("resume"))
-                            },
                             onBack = { navController.popBackStack() }
                         )
                     }
@@ -72,10 +66,6 @@ class MainActivity : ComponentActivity() {
                     composable(Screen.ResumeHybrid.route) {
                         HybridResumeScreen(
                             processedSelfie = hybridSelfie,
-                            onTakeSelfie = {
-                                pendingSelfieTarget = "resume_hybrid"
-                                navController.navigate(Screen.SelfieCapture.createRoute("resume_hybrid"))
-                            },
                             onBack = { navController.popBackStack() }
                         )
                     }
@@ -88,16 +78,16 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                     composable(
-    Screen.ResumeTemplateForm.route,
-    arguments = listOf(navArgument("templateName") { type = NavType.StringType })
-) { backStackEntry ->
-    val templateName = backStackEntry.arguments?.getString("templateName") ?: ""
-    ResumeTemplateFormScreen(
-        templateName = templateName,
-        onBack = { navController.popBackStack() }
-    )
-                    }                    
-                  composable(Screen.BioData.route) {
+                        Screen.ResumeTemplateForm.route,
+                        arguments = listOf(navArgument("templateName") { type = NavType.StringType })
+                    ) { backStackEntry ->
+                        val templateName = backStackEntry.arguments?.getString("templateName") ?: ""
+                        ResumeTemplateFormScreen(
+                            templateName = templateName,
+                            onBack = { navController.popBackStack() }
+                        )
+                    }
+                    composable(Screen.BioData.route) {
                         BiodataChoiceScreen(
                             onChoose = { choice ->
                                 when (choice) {
@@ -111,40 +101,24 @@ class MainActivity : ComponentActivity() {
                     }
                     composable(Screen.BioDataStandard.route) {
                         BioDataPhFormScreen(
-                            processedSelfie = biodataSelfie,
-                            onTakeSelfie = {
-                                pendingSelfieTarget = "biodata"
-                                navController.navigate(Screen.SelfieCapture.createRoute("biodata"))
-                            }
+                            processedSelfie = biodataSelfie
                         )
                     }
                     composable(Screen.BioDataPhForm.route) {
                         BioDataPhFormScreen(
-                            processedSelfie = biodataSelfie,
-                            onTakeSelfie = {
-                                pendingSelfieTarget = "biodata"
-                                navController.navigate(Screen.SelfieCapture.createRoute("biodata"))
-                            }
+                            processedSelfie = biodataSelfie
                         )
                     }
                     composable(Screen.BioDataBlack.route) {
                         BioDataV2Screen(
                             isBlack = true,
-                            processedSelfie = biodataSelfie,
-                            onTakeSelfie = {
-                                pendingSelfieTarget = "biodata"
-                                navController.navigate(Screen.SelfieCapture.createRoute("biodata"))
-                            }
+                            processedSelfie = biodataSelfie
                         )
                     }
                     composable(Screen.BioDataBlue.route) {
                         BioDataV2Screen(
                             isBlack = false,
-                            processedSelfie = biodataSelfie,
-                            onTakeSelfie = {
-                                pendingSelfieTarget = "biodata"
-                                navController.navigate(Screen.SelfieCapture.createRoute("biodata"))
-                            }
+                            processedSelfie = biodataSelfie
                         )
                     }
                     composable(Screen.BioDataMoreTemplates.route) {
@@ -175,16 +149,16 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                     composable(
-    route = Screen.LetterAssistant.route,
-    arguments = listOf(navArgument("letterType") { type = NavType.StringType })
-) { backStackEntry ->
-    val typeArg = backStackEntry.arguments?.getString("letterType") ?: "CUSTOM"
-    val letterType = com.saltech.urdocs.model.LetterType.entries.firstOrNull { it.name == typeArg }
-        ?: com.saltech.urdocs.model.LetterType.CUSTOM
-    LetterAssistantScreen(
-        letterType = letterType,
-        onBack = { navController.popBackStack() }
-    )
+                        route = Screen.LetterAssistant.route,
+                        arguments = listOf(navArgument("letterType") { type = NavType.StringType })
+                    ) { backStackEntry ->
+                        val typeArg = backStackEntry.arguments?.getString("letterType") ?: "CUSTOM"
+                        val letterType = com.saltech.urdocs.model.LetterType.entries.firstOrNull { it.name == typeArg }
+                            ?: com.saltech.urdocs.model.LetterType.CUSTOM
+                        LetterAssistantScreen(
+                            letterType = letterType,
+                            onBack = { navController.popBackStack() }
+                        )
                     }
                     composable(Screen.Interview.route) {
                         InterviewScreen(
@@ -227,20 +201,6 @@ class MainActivity : ComponentActivity() {
                     }
                     composable(Screen.AboutDeveloper.route) {
                         AboutDeveloperScreen(onBack = { navController.popBackStack() })
-                    }
-                    composable(
-                        route = Screen.SelfieCapture.route,
-                        arguments = listOf(navArgument("returnTo") { type = NavType.StringType })
-                    ) { backStackEntry ->
-                        val returnTo = backStackEntry.arguments?.getString("returnTo") ?: "resume"
-                            onProcessed = { bitmap ->
-                                if (returnTo == "resume") resumeSelfie = bitmap
-                                else if (returnTo == "resume_hybrid") hybridSelfie = bitmap
-                                else biodataSelfie = bitmap
-                                navController.popBackStack()
-                            },
-                            onCancel = { navController.popBackStack() }
-                        )
                     }
                 }
             } else {
