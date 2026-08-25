@@ -96,8 +96,7 @@ data class BioDataFields(
 
 @Composable
 fun BioDataScreen(
-    processedSelfie: android.graphics.Bitmap? = null,
-    onTakeSelfie: () -> Unit = {}
+    processedSelfie: android.graphics.Bitmap? = null
 ) {
     //SecureScreen()
     val paperWidthDp = 850.dp
@@ -330,7 +329,6 @@ fun BioDataScreen(
                             modifier = Modifier
                                 .size(180.dp, 180.dp)
                                 .border(1.dp, Color.Black)
-                                .clickable(enabled = displaySelfie == null) { onTakeSelfie() }
                         ) {
                             when {
                                 isProcessingPhoto -> {
@@ -478,10 +476,6 @@ fun BioDataScreen(
                     Text("📤", fontSize = 16.sp)
                     Spacer(Modifier.width(6.dp))
                     Text("Upload", fontSize = 14.sp, fontWeight = FontWeight.Bold, color = Color.White)
-                    if (displaySelfie != null) {
-                        Spacer(Modifier.width(12.dp))
-                        Text("🔄 Retake", fontSize = 13.sp, color = Color(0xFF3B6FE0), modifier = Modifier.clickable { onTakeSelfie() })
-                    }
                 }
 
                 Button(

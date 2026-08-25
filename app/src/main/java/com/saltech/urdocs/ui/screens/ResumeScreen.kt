@@ -52,8 +52,7 @@ private class Row4(val a: MutableState<String>, val b: MutableState<String>, val
 
 @Composable
 fun ResumeScreen(
-    processedSelfie: Bitmap? = null,
-    onTakeSelfie: () -> Unit
+    processedSelfie: Bitmap? = null
 ) {
     SecureScreen()
     val context = LocalContext.current
@@ -157,10 +156,6 @@ fun ResumeScreen(
             }
         }
         Spacer(modifier = Modifier.height(8.dp))
-        OutlinedButton(onClick = onTakeSelfie, modifier = Modifier.fillMaxWidth()) {
-            Text(if (processedSelfie == null) "📸 Kumuha ng 2x2 Selfie" else "📸 Palitan ang Selfie")
-        }
-        Spacer(modifier = Modifier.height(16.dp))
 
         PaperField("FULL NAME", fullName) { fullName = it }
         PaperField("ADDRESS", address) { address = it }

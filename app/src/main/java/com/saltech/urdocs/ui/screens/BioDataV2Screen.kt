@@ -89,7 +89,6 @@ data class BioDataV2Fields(
 fun BioDataV2Screen(
     isBlack: Boolean,
     processedSelfie: Bitmap? = null,
-    onTakeSelfie: () -> Unit = {}
 ) {
     val accent = if (isBlack) Color.Black else Color(0xFF1D6FE0)
     val paperWidthDp = 850.dp
@@ -170,7 +169,6 @@ fun BioDataV2Screen(
                                 .size(90.dp, 100.dp)
                                 .clip(RoundedCornerShape(topEnd = 18.dp))
                                 .border(1.dp, accent, RoundedCornerShape(topEnd = 18.dp))
-                                .clickable(enabled = processedSelfie == null) { onTakeSelfie() }
                         ) {
                             if (processedSelfie != null) {
                                 Image(

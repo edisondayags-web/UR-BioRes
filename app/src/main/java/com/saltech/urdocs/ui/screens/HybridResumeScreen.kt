@@ -97,7 +97,6 @@ data class HybridResumeFields(
 @Composable
 fun HybridResumeScreen(
     processedSelfie: Bitmap? = null,
-    onTakeSelfie: () -> Unit = {},
     onBack: () -> Unit = {}
 ) {
     //SecureScreen()
@@ -251,7 +250,6 @@ fun HybridResumeScreen(
                         modifier = Modifier
                             .size(80.dp, 96.dp)
                             .border(1.dp, Color.Black)
-                            .clickable(enabled = displaySelfie == null) { onTakeSelfie() }
                     ) {
                         when {
                             isProcessingPhoto -> {
@@ -414,10 +412,6 @@ fun HybridResumeScreen(
                 Text("📤", fontSize = 16.sp)
                 Spacer(Modifier.width(6.dp))
                 Text("Upload", fontSize = 14.sp, fontWeight = FontWeight.Bold, color = Color.White)
-                if (displaySelfie != null) {
-                    Spacer(Modifier.width(12.dp))
-                    Text("🔄 Retake", fontSize = 13.sp, color = Color(0xFF3B6FE0), modifier = Modifier.clickable { onTakeSelfie() })
-                }
             }
 
             Button(

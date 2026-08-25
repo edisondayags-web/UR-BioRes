@@ -101,7 +101,6 @@ data class BioDataPhFormFields(
 @Composable
 fun BioDataPhFormScreen(
     processedSelfie: Bitmap? = null,
-    onTakeSelfie: () -> Unit = {}
 ) {
     val paperWidthDp = 850.dp
     val paperHeightDp = 1500.dp
@@ -220,7 +219,6 @@ fun BioDataPhFormScreen(
                             modifier = Modifier
                                 .size(110.dp, 110.dp)
                                 .border(1.dp, Color.Black)
-                                .clickable(enabled = displaySelfie == null) { onTakeSelfie() }
                         ) {
                             if (displaySelfie != null) {
                                 androidx.compose.foundation.Image(
