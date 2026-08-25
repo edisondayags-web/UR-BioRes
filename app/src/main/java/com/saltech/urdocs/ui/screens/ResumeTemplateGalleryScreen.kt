@@ -61,6 +61,7 @@ private val resumeTemplates = listOf(
     TemplateInfo("resume_template_25", "25 (Sidebar Bold)", Color(0xFFFFC107), Color(0xFF10131A), LayoutStyle.SIDEBAR_BOLD),
     TemplateInfo("resume_template_26", "26 (Minimal Mono)", Color(0xFF000000), Color(0xFFF5F5F5), LayoutStyle.MINIMAL_MONO),
     TemplateInfo("resume_template_27", "27 (Header Block)", Color(0xFF3F51B5), Color(0xFF14161F), LayoutStyle.HEADER_BLOCK),
+    TemplateInfo("resume_template_28", "28 (Package 1)", Color(0xFFD4AF37), Color(0xFFFFFFFF), LayoutStyle.CLASSIC_TWO_COL),
 )
 
 @Composable
