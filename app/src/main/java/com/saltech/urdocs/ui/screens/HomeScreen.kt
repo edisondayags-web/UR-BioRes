@@ -45,14 +45,12 @@ data class HomeMenuItem(
 fun HomeScreen(
     onNavigate: (String) -> Unit
 ) {
-    var showComingSoon by remember { mutableStateOf(false) }
     val items = listOf(
         HomeMenuItem("📄", "RESUME", "Pang BPO/Office etc • Professional CV", "resume"),
         HomeMenuItem("📝", "BIO-DATA", "Pang Company/Store etc. • PH Job Application", "biodata"),
         HomeMenuItem("✉️", "LETTERS", "Leave, Excuse, Resign, etc.", "letters"),
         HomeMenuItem("💬", "INTERVIEW", "Practice Office Interview (Q&A / Tips)", "interview"),
         HomeMenuItem("🔎", "JOB RESEARCHER", "Hahanapan ka ng work near you", "job_researcher"),
-        HomeMenuItem("🖱️", "DRAG AND DROP", "Design freely, drag elements anywhere", "drag_drop"),
     )
 
     Box(
@@ -92,11 +90,7 @@ fun HomeScreen(
                 items.forEach { item ->
                     HomeMenuCard(
                         item = item,
-                        onClick = {
-                            if (item.route == "drag_drop") {
-                                showComingSoon = true
-                            } else {
-                                onNavigate(item.route)
+                            onNavigate(item.route)
                             }
                         }
                     )
@@ -111,17 +105,6 @@ fun HomeScreen(
                 fontSize = 10.sp
             )
         }
-        if (showComingSoon) {
-            AlertDialog(
-                onDismissRequest = { showComingSoon = false },
-                title = { Text("Coming Soon pato Luv❤️🩵") },
-                text = { Text("under maintenance pa luv sorry") },
-                confirmButton = {
-                    TextButton(onClick = { showComingSoon = false }) {
-                        Text("OK")
-                    }
-                }
-            )
         }
     }
 }
