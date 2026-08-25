@@ -60,7 +60,6 @@ class MainActivity : ComponentActivity() {
                     composable(Screen.ResumeTraditional.route) {
                         TraditionalResumeScreen(
                             processedSelfie = resumeSelfie,
-                            onTakeSelfie = {
                                 pendingSelfieTarget = "resume"
                                 navController.navigate(Screen.SelfieCapture.createRoute("resume"))
                             },
@@ -208,11 +207,6 @@ class MainActivity : ComponentActivity() {
                             onBack = { navController.popBackStack() }
                         )
                     }
-                    composable(Screen.DragDrop.route) {
-                        DragDropScreen(
-                            onBack = { navController.popBackStack() }
-                        )
-                    }
                     composable(Screen.Settings.route) {
                         SettingsScreen(
                             onBack = { navController.popBackStack() },
@@ -239,7 +233,6 @@ class MainActivity : ComponentActivity() {
                         arguments = listOf(navArgument("returnTo") { type = NavType.StringType })
                     ) { backStackEntry ->
                         val returnTo = backStackEntry.arguments?.getString("returnTo") ?: "resume"
-                        SelfieCaptureScreen(
                             onProcessed = { bitmap ->
                                 if (returnTo == "resume") resumeSelfie = bitmap
                                 else if (returnTo == "resume_hybrid") hybridSelfie = bitmap
