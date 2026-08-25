@@ -22,6 +22,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 
 private enum class LayoutStyle { CLASSIC_TWO_COL, ATS_SINGLE_COL, SIDEBAR_BOLD, MINIMAL_MONO, HEADER_BLOCK }
 
@@ -58,12 +62,15 @@ private val resumeTemplates = listOf(
     TemplateInfo("resume_template_22", "22", Color(0xFFFF8A65), Color(0xFF2B160E)),
     TemplateInfo("resume_template_23", "23", Color(0xFF80DEEA), Color(0xFF0E1F26)),
 )
+private val package1Templates = emptyList<TemplateInfo>()
+
 
 @Composable
 fun ResumeTemplateGalleryScreen(
     onTemplateSelected: (String) -> Unit,
     onBack: () -> Unit = {}
 ) {
+    var selectedPackage by remember { mutableStateOf(2) }
     Box(modifier = Modifier.fillMaxSize().background(Color(0xFF0B1530))) {
         Column(modifier = Modifier.fillMaxSize()) {
             Row(
@@ -77,46 +84,75 @@ fun ResumeTemplateGalleryScreen(
                 Text("Choose a Template", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 20.sp)
             }
 
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(3),
-                modifier = Modifier.fillMaxSize().padding(horizontal = 12.dp),
-                contentPadding = PaddingValues(8.dp)
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                items(resumeTemplates, key = { it.id }) { t ->
-                    Box(
-                        modifier = Modifier
-                            .padding(6.dp)
-                            .fillMaxWidth()
-                            .height(220.dp)
-                            .clip(RoundedCornerShape(12.dp))
-                            .background(t.bg)
-                            .border(1.dp, t.accent.copy(alpha = 0.6f), RoundedCornerShape(12.dp))
-                            .clickable { onTemplateSelected(t.id) }
-                    ) {
-                        Column(modifier = Modifier.fillMaxSize()) {
-                            TemplatePreview(
-                                accent = t.accent,
-                                bg = t.bg,
-                                layout = t.layout,
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .fillMaxWidth()
-                            )
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .background(t.bg)
-                                    .border(width = 1.dp, color = t.accent.copy(alpha = 0.4f))
-                                    .padding(8.dp),
-                                horizontalArrangement = Arrangement.Center
-                            ) {
-                                Text("Template ${t.label}", color = t.accent, fontWeight = FontWeight.Bold, fontSize = 13.sp)
+                PackagePill("Package 1", selectedPackage == 1, Color(0xFF4FC3F7), Modifier.weight(1f)) { selectedPackage = 1 }
+                PackagePill("Package 2", selectedPackage == 2, Color(0xFFEC407A), Modifier.weight(1f)) { selectedPackage = 2 }
+            }
+
+            val currentList = if (selectedPackage == 1) package1Templates else resumeTemplates
+
+            if (currentList.isEmpty()) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text("Coming Soon", color = Color.White.copy(alpha = 0.6f), fontSize = 16.sp)
+                }
+            } else {
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(3),
+                    modifier = Modifier.fillMaxSize().padding(horizontal = 12.dp),
+                    contentPadding = PaddingValues(8.dp)
+                ) {
+                    items(currentList, key = { it.id }) { t ->
+                        Box(
+                            modifier = Modifier
+                                .padding(6.dp)
+                                .fillMaxWidth()
+                                .height(220.dp)
+                                .clip(RoundedCornerShape(12.dp))
+                                .background(t.bg)
+                                .border(1.dp, t.accent.copy(alpha = 0.6f), RoundedCornerShape(12.dp))
+                                .clickable { onTemplateSelected(t.id) }
+                        ) {
+                            Column(modifier = Modifier.fillMaxSize()) {
+                                TemplatePreview(
+                                    accent = t.accent,
+                                    bg = t.bg,
+                                    layout = t.layout,
+                                    modifier = Modifier.weight(1f).fillMaxWidth()
+                                )
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .background(t.bg)
+                                        .border(width = 1.dp, color = t.accent.copy(alpha = 0.4f))
+                                        .padding(8.dp),
+                                    horizontalArrangement = Arrangement.Center
+                                ) {
+                                    Text("Template ${t.label}", color = t.accent, fontWeight = FontWeight.Bold, fontSize = 13.sp)
+                                }
                             }
                         }
                     }
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun PackagePill(label: String, selected: Boolean, accent: Color, modifier: Modifier = Modifier, onClick: () -> Unit) {
+    Row(
+        modifier = modifier
+            .clip(RoundedCornerShape(50))
+            .background(if (selected) accent.copy(alpha = 0.15f) else Color.Transparent)
+            .border(1.dp, accent, RoundedCornerShape(50))
+            .clickable { onClick() }
+            .padding(vertical = 10.dp),
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Text(label, color = accent, fontWeight = FontWeight.Bold, fontSize = 14.sp)
     }
 }
 
