@@ -1,4 +1,4 @@
-package com.saltech.urdocs.navigation
+nano app/src/main/java/com/saltech/urdocs/ui/screens/HomeScreen.ktpackage com.saltech.urdocs.navigation
 
 sealed class Screen(val route: String) {
     object Home : Screen("home")
@@ -26,7 +26,6 @@ sealed class Screen(val route: String) {
       fun createRoute(mode: String) = "interview_session/$mode"
     }
     object JobResearcher : Screen("job_researcher")
-    object DragDrop : Screen("drag_drop")
     object Settings : Screen("settings")
     object MyProfile : Screen("my_profile")
     object PrivacyPolicy : Screen("privacy_policy")
