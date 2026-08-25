@@ -82,7 +82,7 @@ fun ResumeTemplateGalleryScreen(
             }
 
             LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
+                columns = GridCells.Fixed(3),
                 modifier = Modifier.fillMaxSize().padding(horizontal = 12.dp),
                 contentPadding = PaddingValues(8.dp)
             ) {
