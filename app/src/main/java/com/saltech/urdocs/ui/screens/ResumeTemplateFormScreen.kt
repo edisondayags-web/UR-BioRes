@@ -35,7 +35,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.saltech.urdocs.ui.templates.ResumeTemplate28Screen
 
 private val T01White = Color(0xFFF5F5F5)
 private val T01Gray = Color(0xFF6E6E6E)
@@ -104,12 +103,6 @@ fun ResumeTemplateFormScreen(
             "resume_template_21" -> ResumeTemplate21Screen(data, { data = it }, onBack)
             "resume_template_22" -> ResumeTemplate22Screen(data, { data = it }, onBack)
             "resume_template_23" -> ResumeTemplate23Screen(data, { data = it }, onBack)
-            "resume_template_24" -> BaseResumeTemplateScreenV2(Color.White, Color(0xFF2C2C2C), Color.Black, Color(0xFF666666), "24", false, data, { data = it })
-            "resume_template_25" -> BaseResumeTemplateScreenV2(Color(0xFF10131A), Color(0xFFFFC107), Color.White, Color(0xFFAAAAAA), "25", true, data, { data = it })
-            "resume_template_26" -> BaseResumeTemplateScreenV2(Color(0xFFF5F5F5), Color.Black, Color.Black, Color(0xFF666666), "26", false, data, { data = it })
-            "resume_template_27" -> BaseResumeTemplateScreenV2(Color(0xFF14161F), Color(0xFF3F51B5), Color.White, Color(0xFFAAAAAA), "27", true, data, { data = it })
-            "resume_template_28" -> ResumeTemplate28Screen(data, { data = it }, onBack)
-             else -> ResumeTemplate01Screen(data, { data = it })
         }
     }
 }
