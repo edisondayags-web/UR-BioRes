@@ -35,6 +35,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.saltech.urdocs.ui.templates.ResumeTemplate28Screen
 
 private val T01White = Color(0xFFF5F5F5)
 private val T01Gray = Color(0xFF6E6E6E)
