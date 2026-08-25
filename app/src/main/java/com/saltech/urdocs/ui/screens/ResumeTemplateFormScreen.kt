@@ -103,6 +103,7 @@ fun ResumeTemplateFormScreen(
             "resume_template_21" -> ResumeTemplate21Screen(data, { data = it }, onBack)
             "resume_template_22" -> ResumeTemplate22Screen(data, { data = it }, onBack)
             "resume_template_23" -> ResumeTemplate23Screen(data, { data = it }, onBack)
+            "package1_template_01" -> ResumeTemplateP1_01Screen(data, { data = it }, onBack)
         }
     }
 }
@@ -2421,4 +2422,82 @@ internal fun BaseResumeTemplateScreenV4(
         }
     }
     }
+}
+
+@Composable
+fun ResumeTemplateP1_01Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit, onHome: () -> Unit = {}) {
+    com.saltech.urdocs.ui.templates.ResumeTemplateP1_01_PixelPerfect(
+        userName = data.fullName, userTitle = data.professionalTitle, avatarUri = data.avatarUri,
+        contactPhone = data.phone, contactEmail = data.email, contactAddress = data.location,
+        contactWebsite = data.website, contactLinkedin = data.linkedin, aboutMe = data.aboutMe,
+        edu1Degree = data.edu1Degree, edu1School = data.edu1School, edu1Years = data.edu1Years,
+        edu2Degree = data.edu2Degree, edu2School = data.edu2School, edu2Years = data.edu2Years,
+        skills = listOf(data.skill1, data.skill2, data.skill3, data.skill4, data.skill5, data.skill6),
+        exp1Position = data.exp1Position, exp1Company = data.exp1Company, exp1Dates = data.exp1Dates, exp1Desc = data.exp1Desc,
+        exp2Position = data.exp2Position, exp2Company = data.exp2Company, exp2Dates = data.exp2Dates, exp2Desc = data.exp2Desc,
+        exp3Position = data.exp3Position, exp3Company = data.exp3Company, exp3Dates = data.exp3Dates, exp3Desc = data.exp3Desc,
+        exp4Position = data.exp4Position, exp4Company = data.exp4Company, exp4Dates = data.exp4Dates, exp4Desc = data.exp4Desc,
+        exp5Position = data.exp5Position, exp5Company = data.exp5Company, exp5Dates = data.exp5Dates, exp5Desc = data.exp5Desc,
+        refName = data.refName, refPositionCompany = data.refPositionCompany, refPhone = data.refContact, refEmail = data.refEmail, refAvatarUri = data.refAvatarUri,
+        ref2Name = data.ref2Name, ref2PositionCompany = data.ref2PositionCompany, ref2Phone = data.ref2Contact, ref2Email = data.ref2Email, ref2AvatarUri = data.ref2AvatarUri,
+        onFieldChange = { field, value ->
+            onFieldChange(
+                when (field) {
+                    "fullName" -> data.copy(fullName = value)
+                    "professionalTitle" -> data.copy(professionalTitle = value)
+                    "avatarUri" -> data.copy(avatarUri = value)
+                    "phone" -> data.copy(phone = value)
+                    "email" -> data.copy(email = value)
+                    "location" -> data.copy(location = value)
+                    "website" -> data.copy(website = value)
+                    "linkedin" -> data.copy(linkedin = value)
+                    "aboutMe" -> data.copy(aboutMe = value)
+                    "edu1Degree" -> data.copy(edu1Degree = value)
+                    "edu1School" -> data.copy(edu1School = value)
+                    "edu1Years" -> data.copy(edu1Years = value)
+                    "edu2Degree" -> data.copy(edu2Degree = value)
+                    "edu2School" -> data.copy(edu2School = value)
+                    "edu2Years" -> data.copy(edu2Years = value)
+                    "skill1" -> data.copy(skill1 = value)
+                    "skill2" -> data.copy(skill2 = value)
+                    "skill3" -> data.copy(skill3 = value)
+                    "skill4" -> data.copy(skill4 = value)
+                    "skill5" -> data.copy(skill5 = value)
+                    "skill6" -> data.copy(skill6 = value)
+                    "exp1Position" -> data.copy(exp1Position = value)
+                    "exp1Company" -> data.copy(exp1Company = value)
+                    "exp1Dates" -> data.copy(exp1Dates = value)
+                    "exp1Desc" -> data.copy(exp1Desc = value)
+                    "exp2Position" -> data.copy(exp2Position = value)
+                    "exp2Company" -> data.copy(exp2Company = value)
+                    "exp2Dates" -> data.copy(exp2Dates = value)
+                    "exp2Desc" -> data.copy(exp2Desc = value)
+                    "exp3Position" -> data.copy(exp3Position = value)
+                    "exp3Company" -> data.copy(exp3Company = value)
+                    "exp3Dates" -> data.copy(exp3Dates = value)
+                    "exp3Desc" -> data.copy(exp3Desc = value)
+                    "exp4Position" -> data.copy(exp4Position = value)
+                    "exp4Company" -> data.copy(exp4Company = value)
+                    "exp4Dates" -> data.copy(exp4Dates = value)
+                    "exp4Desc" -> data.copy(exp4Desc = value)
+                    "exp5Position" -> data.copy(exp5Position = value)
+                    "exp5Company" -> data.copy(exp5Company = value)
+                    "exp5Dates" -> data.copy(exp5Dates = value)
+                    "exp5Desc" -> data.copy(exp5Desc = value)
+                    "refName" -> data.copy(refName = value)
+                    "refPositionCompany" -> data.copy(refPositionCompany = value)
+                    "refPhone" -> data.copy(refContact = value)
+                    "refEmail" -> data.copy(refEmail = value)
+                    "ref2Name" -> data.copy(ref2Name = value)
+                    "ref2PositionCompany" -> data.copy(ref2PositionCompany = value)
+                    "ref2Phone" -> data.copy(ref2Contact = value)
+                    "ref2Email" -> data.copy(ref2Email = value)
+                    "refAvatarUri" -> data.copy(refAvatarUri = value)
+                    "ref2AvatarUri" -> data.copy(ref2AvatarUri = value)
+                    else -> data
+                }
+            )
+        },
+        onHomeOverride = onHome
+    )
 }

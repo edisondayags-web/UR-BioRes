@@ -62,7 +62,9 @@ private val resumeTemplates = listOf(
     TemplateInfo("resume_template_22", "22", Color(0xFFFF8A65), Color(0xFF2B160E)),
     TemplateInfo("resume_template_23", "23", Color(0xFF80DEEA), Color(0xFF0E1F26)),
 )
-private val package1Templates = emptyList<TemplateInfo>()
+private val package1Templates = listOf(
+    TemplateInfo("package1_template_01", "01", Color(0xFF4FC3F7), Color(0xFF12203D), LayoutStyle.SIDEBAR_BOLD)
+)
 
 
 @Composable
