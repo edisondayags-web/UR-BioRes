@@ -78,10 +78,7 @@ private fun FieldWithHint_P1(
     fontWeight: FontWeight? = null, italic: Boolean = false,
     modifier: Modifier = Modifier, onValueChange: (String) -> Unit
 ) {
-    Column(modifier = modifier) {
-        EditableText_P1(value, "", color, fontSize, fontWeight, italic, Modifier.fillMaxWidth(), onValueChange)
-        Text("($hint)", color = color.copy(alpha = 0.45f), fontSize = (fontSize.value - 1.5f).sp, fontStyle = FontStyle.Italic)
-    }
+    EditableText_P1(value, "Ex: $hint", color, fontSize, fontWeight, italic, modifier, onValueChange)
 }
 
 @Composable
@@ -115,17 +112,12 @@ private fun SidebarCheckField_P1(value: String, hint: String, accent: Color, onV
 
 @Composable
 private fun DiamondDivider_P1(value: String, hint: String, accent: Color, onValueChange: (String) -> Unit) {
-    Column(Modifier.fillMaxWidth()) {
-        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
-            Box(Modifier.weight(1f).height(1.dp).background(accent.copy(alpha = 0.6f)))
-            Text("  ◆  ", color = accent, fontSize = 9.sp)
-            EditableText_P1(value, "Professional Title", Color(0xFF222222), 10.sp, FontWeight.Medium, modifier = Modifier.widthIn(max = 220.dp), onValueChange = onValueChange)
-            Text("  ◆  ", color = accent, fontSize = 9.sp)
-            Box(Modifier.weight(1f).height(1.dp).background(accent.copy(alpha = 0.6f)))
-        }
-        Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-            Text("($hint)", color = Color(0xFF888888), fontSize = 8.sp, fontStyle = FontStyle.Italic)
-        }
+    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
+        Box(Modifier.weight(1f).height(1.dp).background(accent.copy(alpha = 0.6f)))
+        Text("  ◆  ", color = accent, fontSize = 9.sp)
+        EditableText_P1(value, "Ex: $hint", Color(0xFF222222), 10.sp, FontWeight.Medium, modifier = Modifier.widthIn(max = 220.dp), onValueChange = onValueChange)
+        Text("  ◆  ", color = accent, fontSize = 9.sp)
+        Box(Modifier.weight(1f).height(1.dp).background(accent.copy(alpha = 0.6f)))
     }
 }
 
