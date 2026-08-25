@@ -38,6 +38,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.saltech.urdocs.ui.screens.ResumeTemplateFields
 
 private val PKG1_ACCENT = Color(0xFFD4AF37)
 private val PKG1_BG = Color.White
