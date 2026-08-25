@@ -175,7 +175,7 @@ fun BiodataTemplate09_PixelPerfect(
 ) {
     val accent1 = Color(0xFFD4AF37)
     val accent2 = Color(0xFF1A237E)
-    val isDark = false
+    val isDark = true
     val bgColor = if(isDark) Color(0xFF0A0A0A) else Color.White
     val graphicsLayer = androidx.compose.ui.graphics.rememberGraphicsLayer()
     
