@@ -183,6 +183,10 @@ class MainActivity : ComponentActivity() {
                             onBack = { navController.popBackStack() }
                         )
                     }
+                    composable(Screen.DragDrop.route) {
+                        DragDropScreen(
+                            onBack = { navController.popBackStack() }
+                        )
                     }
                     composable(Screen.Settings.route) {
                         SettingsScreen(
