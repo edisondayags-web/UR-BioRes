@@ -89,7 +89,7 @@ fun ChooseTemplateScreen(
                 title = {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(
-                            imageVector = androidx.compose.material.icons.Icons.Default.ArrowBack,
+                            imageVector = androidx.compose.material.icons.Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back",
                             tint = White,
                             modifier = Modifier
@@ -284,7 +284,7 @@ fun TemplateEditorScreen(info: TemplateInfo, onBack: () -> Unit) {
                 title = { Text(info.name, color = White) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(androidx.compose.material.icons.Icons.Default.ArrowBack, contentDescription = "Back", tint = White)
+                        Icon(androidx.compose.material.icons.Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = White)
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = BgDark)
