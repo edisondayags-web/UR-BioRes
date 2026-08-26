@@ -166,14 +166,13 @@ fun ResumeTemplateFormScreen(
             Icon(Icons.Filled.ArrowBack, contentDescription = "Back", tint = Color.White)
         }
         val paperWidthDp = 850.dp
-        val paperHeightDp = 1300.dp
         androidx.compose.foundation.layout.BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
-            val fitScale = minOf(maxWidth / paperWidthDp, maxHeight / paperHeightDp)
+            val fitScale = maxWidth / paperWidthDp
             var resumeScale by remember(templateName) { mutableStateOf(fitScale) }
             var resumeOffset by remember(templateName) { mutableStateOf(androidx.compose.ui.geometry.Offset.Zero) }
             Box(
                 modifier = Modifier
-                    .align(Alignment.Center)
+                    .align(Alignment.TopCenter)
                     .pointerInput(Unit) {
                         detectTransformGestures { _, pan, zoom, _ ->
                             resumeScale = (resumeScale * zoom).coerceIn(fitScale, 4f)
@@ -187,7 +186,7 @@ fun ResumeTemplateFormScreen(
                         translationY = resumeOffset.y
                     )
                     .requiredWidth(paperWidthDp)
-                    .requiredHeight(paperHeightDp)
+                    .wrapContentHeight()
             ) {
         when (templateName) {
             "resume_template_01" -> ResumeTemplate01Screen(data, { data = it }, onBack)
