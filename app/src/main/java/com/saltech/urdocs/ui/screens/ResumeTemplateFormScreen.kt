@@ -168,22 +168,12 @@ fun ResumeTemplateFormScreen(
         val paperWidthDp = 850.dp
         androidx.compose.foundation.layout.BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
             val fitScale = maxWidth / paperWidthDp
-            var resumeScale by remember(templateName) { mutableStateOf(fitScale) }
-            var resumeOffset by remember(templateName) { mutableStateOf(androidx.compose.ui.geometry.Offset.Zero) }
             Box(
                 modifier = Modifier
                     .align(Alignment.TopCenter)
-                    .pointerInput(Unit) {
-                        detectTransformGestures { _, pan, zoom, _ ->
-                            resumeScale = (resumeScale * zoom).coerceIn(fitScale, 4f)
-                            resumeOffset = if (resumeScale <= fitScale) androidx.compose.ui.geometry.Offset.Zero else resumeOffset + pan
-                        }
-                    }
                     .graphicsLayer(
-                        scaleX = resumeScale,
-                        scaleY = resumeScale,
-                        translationX = resumeOffset.x,
-                        translationY = resumeOffset.y
+                        scaleX = fitScale,
+                        scaleY = fitScale
                     )
                     .requiredWidth(paperWidthDp)
                     .wrapContentHeight()
