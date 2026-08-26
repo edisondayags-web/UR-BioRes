@@ -98,8 +98,13 @@ fun TemplateExportMenu(
     }
 
     Box(modifier) {
-        IconButton(onClick = { expanded = true }) {
-            Icon(Icons.Default.MoreVert, contentDescription = "Menu", tint = Color.White)
+        Box(
+            modifier = Modifier.size(36.dp).clip(androidx.compose.foundation.shape.CircleShape).background(Color.Black.copy(alpha = 0.55f)),
+            contentAlignment = androidx.compose.ui.Alignment.Center
+        ) {
+            IconButton(onClick = { expanded = true }) {
+                Icon(Icons.Default.MoreVert, contentDescription = "Menu", tint = Color.White)
+            }
         }
         DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
             DropdownMenuItem(text = { Text("Download") }, onClick = {
