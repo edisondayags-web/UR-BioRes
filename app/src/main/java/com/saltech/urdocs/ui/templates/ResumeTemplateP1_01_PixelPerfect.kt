@@ -198,7 +198,9 @@ private fun ReferenceBlock_P1(
 @Composable
 private fun AdditionalInfoRow_P1(icon: ImageVector, label: String, value: String, hint: String, accent: Color, onValueChange: (String) -> Unit) {
     Row(Modifier.fillMaxWidth().padding(vertical = 4.dp), verticalAlignment = Alignment.Top) {
-        Icon(icon, contentDescription = null, tint = accent, modifier = Modifier.size(15.dp).padding(top = 1.dp))
+        Box(Modifier.size(20.dp).clip(CircleShape).background(accent.copy(alpha = 0.15f)), contentAlignment = Alignment.Center) {
+            Icon(icon, contentDescription = null, tint = accent, modifier = Modifier.size(12.dp))
+        }
         Spacer(Modifier.width(8.dp))
         Column(Modifier.weight(1f)) {
             Text(label, color = Color(0xFF12203D), fontWeight = FontWeight.Bold, fontSize = 9.sp)
