@@ -169,8 +169,8 @@ fun ResumeTemplateFormScreen(
         val paperHeightDp = 1300.dp
         androidx.compose.foundation.layout.BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
             val fitScale = minOf(maxWidth / paperWidthDp, maxHeight / paperHeightDp)
-            var resumeScale by remember { mutableStateOf(fitScale) }
-            var resumeOffset by remember { mutableStateOf(androidx.compose.ui.geometry.Offset.Zero) }
+            var resumeScale by remember(templateName) { mutableStateOf(fitScale) }
+            var resumeOffset by remember(templateName) { mutableStateOf(androidx.compose.ui.geometry.Offset.Zero) }
             Box(
                 modifier = Modifier
                     .align(Alignment.Center)
