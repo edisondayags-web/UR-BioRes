@@ -89,15 +89,12 @@ private fun SidebarHeader_P1(text: String) {
 }
 @Composable
 private fun SidebarLabeledField_P1(icon: ImageVector, label: String, value: String, hint: String, accent: Color, onValueChange: (String) -> Unit) {
-    Column(Modifier.fillMaxWidth()) {
-        Text(label, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 7.5.sp)
-        Row(verticalAlignment = Alignment.Top, modifier = Modifier.fillMaxWidth()) {
-            Box(Modifier.size(16.dp).clip(CircleShape).background(accent), contentAlignment = Alignment.Center) {
-                Icon(icon, contentDescription = null, tint = Color(0xFF12203D), modifier = Modifier.size(9.dp))
-            }
-            Spacer(Modifier.width(7.dp))
-            FieldWithHint_P1(value, hint, Color.White, 7.5.sp, modifier = Modifier.weight(1f), onValueChange = onValueChange)
+    Row(verticalAlignment = Alignment.Top, modifier = Modifier.fillMaxWidth()) {
+        Box(Modifier.size(16.dp).clip(CircleShape).background(accent), contentAlignment = Alignment.Center) {
+            Icon(icon, contentDescription = null, tint = Color(0xFF12203D), modifier = Modifier.size(9.dp))
         }
+        Spacer(Modifier.width(7.dp))
+        FieldWithHint_P1(value, hint, Color.White, 7.5.sp, modifier = Modifier.weight(1f), onValueChange = onValueChange)
     }
 }
 
