@@ -20,16 +20,6 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
         with:
           cache-read-only: false
-      - name: Cache Android SDK
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.android/sdk
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
       - name: Ensure Gradle Wrapper
         run: |
           if [ ! -f ./gradlew ]; then
