@@ -1,5 +1,8 @@
 package com.saltech.urdocs.ui.screens
 import com.saltech.urdocs.ui.templates.*
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.foundation.gestures.detectTransformGestures
+import androidx.compose.ui.graphics.graphicsLayer
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -162,6 +165,30 @@ fun ResumeTemplateFormScreen(
         ) {
             Icon(Icons.Filled.ArrowBack, contentDescription = "Back", tint = Color.White)
         }
+        val paperWidthDp = 850.dp
+        val paperHeightDp = 1300.dp
+        androidx.compose.foundation.layout.BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+            val fitScale = minOf(maxWidth / paperWidthDp, maxHeight / paperHeightDp)
+            var resumeScale by remember { mutableStateOf(fitScale) }
+            var resumeOffset by remember { mutableStateOf(androidx.compose.ui.geometry.Offset.Zero) }
+            Box(
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .pointerInput(Unit) {
+                        detectTransformGestures { _, pan, zoom, _ ->
+                            resumeScale = (resumeScale * zoom).coerceIn(fitScale, 4f)
+                            resumeOffset = if (resumeScale <= fitScale) androidx.compose.ui.geometry.Offset.Zero else resumeOffset + pan
+                        }
+                    }
+                    .graphicsLayer(
+                        scaleX = resumeScale,
+                        scaleY = resumeScale,
+                        translationX = resumeOffset.x,
+                        translationY = resumeOffset.y
+                    )
+                    .requiredWidth(paperWidthDp)
+                    .requiredHeight(paperHeightDp)
+            ) {
         when (templateName) {
             "resume_template_01" -> ResumeTemplate01Screen(data, { data = it }, onBack)
             "resume_template_02" -> ResumeTemplate02Screen(data, { data = it }, onBack)
@@ -1869,6 +1896,8 @@ fun ResumeTemplateFormScreen(
                 otherInfo = data.otherInfo,
                 onFieldChange = { k, v -> data = applyFieldChange(data, k, v) }
             )
+        }
+            }
         }
     }
 }
