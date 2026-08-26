@@ -124,7 +124,7 @@ private fun DiamondDivider_P1(value: String, hint: String, accent: Color, onValu
 @Composable
 private fun SectionHeader_P1(text: String) {
     Column(Modifier.fillMaxWidth()) {
-        Text(text, color = Color(0xFF12203D), fontWeight = FontWeight.Black, fontSize = 13.sp, letterSpacing = 0.4.sp)
+        Text(text, color = Color(0xFF12203D), fontWeight = FontWeight.Black, fontSize = 11.sp, letterSpacing = 0.2.sp)
         Spacer(Modifier.height(2.dp))
         Box(Modifier.fillMaxWidth().height(1.2.dp).background(Color(0xFF12203D).copy(alpha = 0.25f)))
     }
