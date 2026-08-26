@@ -63,7 +63,26 @@ private val resumeTemplates = listOf(
     TemplateInfo("resume_template_23", "23", Color(0xFF80DEEA), Color(0xFF0E1F26)),
 )
 private val package1Templates = listOf(
-    TemplateInfo("package1_template_01", "01", Color(0xFF4FC3F7), Color(0xFF12203D), LayoutStyle.SIDEBAR_BOLD)
+    TemplateInfo("template_0", "01", Color(0xFFEDEEF2), Color(0xFF111827)),
+    TemplateInfo("template_1", "02", Color(0xFF2D3748), Color(0xFFEEF1F6)),
+    TemplateInfo("template_2", "03", Color(0xFF2D5A4A), Color(0xFFE6F4F1)),
+    TemplateInfo("template_3", "04", Color(0xFF0A2A8A), Color(0xFF1A1A1A)),
+    TemplateInfo("template_4", "05", Color(0xFF121827), Color.White),
+    TemplateInfo("template_5", "06", Color(0xFF0B3245), Color.White),
+    TemplateInfo("template_6", "07", Color(0xFF123A57), Color.White),
+    TemplateInfo("template_7", "08", Color(0xFF4FC3F7), Color(0xFF12203D)),
+    TemplateInfo("template_8", "09", Color(0xFF4FC3F7), Color(0xFF12203D)),
+    TemplateInfo("template_9", "10", Color(0xFF4FC3F7), Color(0xFF12203D)),
+    TemplateInfo("template_10", "11", Color(0xFF4FC3F7), Color(0xFF12203D)),
+    TemplateInfo("template_11", "12", Color(0xFF4FC3F7), Color(0xFF12203D)),
+    TemplateInfo("template_12", "13", Color(0xFF4FC3F7), Color(0xFF12203D)),
+    TemplateInfo("template_13", "14", Color(0xFF4FC3F7), Color(0xFF12203D)),
+    TemplateInfo("template_14", "15", Color(0xFF4FC3F7), Color(0xFF12203D)),
+    TemplateInfo("template_15", "16", Color(0xFF4FC3F7), Color(0xFF12203D)),
+    TemplateInfo("template_16", "17", Color(0xFF4FC3F7), Color(0xFF12203D)),
+    TemplateInfo("template_17", "18", Color(0xFF4FC3F7), Color(0xFF12203D)),
+    TemplateInfo("template_18", "19", Color(0xFF4FC3F7), Color(0xFF12203D)),
+    TemplateInfo("package1_template_01", "20", Color(0xFF4FC3F7), Color(0xFF12203D), LayoutStyle.SIDEBAR_BOLD),
 )
 
 
@@ -72,7 +91,7 @@ fun ResumeTemplateGalleryScreen(
     onTemplateSelected: (String) -> Unit,
     onBack: () -> Unit = {}
 ) {
-    var selectedPackage by remember { mutableStateOf(2) }
+    var selectedPackage by remember { mutableStateOf(1) }
     Box(modifier = Modifier.fillMaxSize().background(Color(0xFF0B1530))) {
         Column(modifier = Modifier.fillMaxSize()) {
             Row(

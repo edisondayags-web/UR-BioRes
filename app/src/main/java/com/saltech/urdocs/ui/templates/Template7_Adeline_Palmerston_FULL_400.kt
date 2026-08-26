@@ -64,7 +64,7 @@ private val TextStyleBodyBold = TextStyle(fontSize = 11.sp, fontWeight = FontWei
 @Composable
 fun Template7_Adeline_Palmerston_Full400() {
     // ================= STATE - ALL EDITABLE WITH C++ BUFFER =================
-    var fullName by remember { mutableStateOf("ADELINE PALMERSTON") }
+    var fullName by remember { mutableStateOf("EDISON SUCLATAN DAYAGUIT") }
     var jobRole by remember { mutableStateOf("GRAPHIC DESIGNER") }
     var phoneNumber by remember { mutableStateOf("+123-456-7890") }
     var emailAddress by remember { mutableStateOf("hello@reallygreatsite.com") }
