@@ -87,7 +87,6 @@ private fun SidebarHeader_P1(text: String) {
         Text(text, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 9.5.sp, letterSpacing = 0.5.sp)
     }
 }
-
 @Composable
 @Composable
 private fun SidebarLabeledField_P1(icon: ImageVector, label: String, value: String, hint: String, accent: Color, onValueChange: (String) -> Unit) {
@@ -97,6 +96,7 @@ private fun SidebarLabeledField_P1(icon: ImageVector, label: String, value: Stri
     }
 }
 
+@Composable
 private fun SidebarIconField_P1(icon: ImageVector, value: String, hint: String, accent: Color, onValueChange: (String) -> Unit) {
     Row(verticalAlignment = Alignment.Top, modifier = Modifier.fillMaxWidth()) {
         Box(Modifier.size(16.dp).clip(CircleShape).background(Color.White), contentAlignment = Alignment.Center) {
