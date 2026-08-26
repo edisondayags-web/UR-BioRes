@@ -245,7 +245,7 @@ fun ResumeTemplateP1_01_PixelPerfect(
             Modifier.fillMaxSize().background(Color.White).verticalScroll(rememberScrollState())
                 .drawWithContent { graphicsLayer.record { this@drawWithContent.drawContent() }; drawLayer(graphicsLayer) }
         ) {
-            Row(Modifier.defaultMinSize(minHeight = 900.dp).height(IntrinsicSize.Min)) {
+            Row(Modifier.defaultMinSize(minHeight = 900.dp)) {
 
                 // ===== LEFT SIDEBAR =====
                 Column(
@@ -304,7 +304,7 @@ fun ResumeTemplateP1_01_PixelPerfect(
                     Column {
                         EditableText_P1(userName, "Your Name", Color(0xFF12203D), nameFontSize, FontWeight.Black) { onFieldChange("fullName", it) }
                         Spacer(Modifier.height(5.dp))
-                        DiamondDivider_P1(userTitle, "Ex: Software Developer", accent) { onFieldChange("professionalTitle", it) }
+                        DiamondDivider_P1(userTitle, "Software Developer", accent) { onFieldChange("professionalTitle", it) }
                     }
 
                     Column(verticalArrangement = Arrangement.spacedBy(3.dp)) {
