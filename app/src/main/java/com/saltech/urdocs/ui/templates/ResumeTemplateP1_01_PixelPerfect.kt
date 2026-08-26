@@ -89,6 +89,14 @@ private fun SidebarHeader_P1(text: String) {
 }
 
 @Composable
+@Composable
+private fun SidebarLabeledField_P1(icon: ImageVector, label: String, value: String, hint: String, accent: Color, onValueChange: (String) -> Unit) {
+    Column(Modifier.fillMaxWidth()) {
+        Text(label, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 7.5.sp)
+        SidebarIconField_P1(icon, value, hint, accent, onValueChange)
+    }
+}
+
 private fun SidebarIconField_P1(icon: ImageVector, value: String, hint: String, accent: Color, onValueChange: (String) -> Unit) {
     Row(verticalAlignment = Alignment.Top, modifier = Modifier.fillMaxWidth()) {
         Box(Modifier.size(16.dp).clip(CircleShape).background(Color.White), contentAlignment = Alignment.Center) {
@@ -157,7 +165,7 @@ private fun ExperienceEntry_P1(
             Box(Modifier.width(1.dp).weight(1f).background(accent.copy(alpha = 0.3f)))
         }
         Spacer(Modifier.width(7.dp))
-        Column(Modifier.weight(1f).padding(bottom = 10.dp), verticalArrangement = Arrangement.spacedBy(1.dp)) {
+        Column(Modifier.weight(1f).padding(bottom = 6.dp), verticalArrangement = Arrangement.spacedBy(1.dp)) {
             FieldWithHint_P1(position, "Job Position", Color(0xFF12203D), 9.5.sp, FontWeight.Bold, onValueChange = onPosition)
             FieldWithHint_P1(company, "Company Name", Color(0xFF444444), 8.sp, italic = true, onValueChange = onCompany)
             Spacer(Modifier.height(3.dp))
@@ -278,17 +286,17 @@ fun ResumeTemplateP1_01_PixelPerfect(
 
                     Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
                         SidebarHeader_P1("PREFERENCES")
-                        SidebarIconField_P1(Icons.Filled.Work, workSetup, "Flexible / Remote / On-site", accent) { onFieldChange("workSetup", it) }
-                        SidebarIconField_P1(Icons.Filled.DateRange, workSchedule, "Full-time / Part-time / Freelance", accent) { onFieldChange("workSchedule", it) }
-                        SidebarIconField_P1(Icons.Filled.Person, preferredRole, "Software Developer / Designer / VA", accent) { onFieldChange("preferredRole", it) }
-                        SidebarIconField_P1(Icons.Filled.Place, prefLocations, "Bukidnon or Remote / Philippines", accent) { onFieldChange("prefLocations", it) }
-                        SidebarIconField_P1(Icons.Filled.AccessTime, availability, "Immediately / Within 2 Weeks", accent) { onFieldChange("availability", it) }
-                        SidebarIconField_P1(Icons.Filled.Public, languages, "English (Fluent) / Filipino (Native)", accent) { onFieldChange("languages", it) }
+                        SidebarLabeledField_P1(Icons.Filled.Work, "Work Setup", workSetup, "Flexible / Remote / On-site", accent) { onFieldChange("workSetup", it) }
+                        SidebarLabeledField_P1(Icons.Filled.DateRange, "Work Schedule", workSchedule, "Full-time / Part-time / Freelance", accent) { onFieldChange("workSchedule", it) }
+                        SidebarLabeledField_P1(Icons.Filled.Person, "Preferred Role", preferredRole, "Software Developer / Designer / VA", accent) { onFieldChange("preferredRole", it) }
+                        SidebarLabeledField_P1(Icons.Filled.Place, "Locations", prefLocations, "Bukidnon or Remote / Philippines", accent) { onFieldChange("prefLocations", it) }
+                        SidebarLabeledField_P1(Icons.Filled.AccessTime, "Availability", availability, "Immediately / Within 2 Weeks", accent) { onFieldChange("availability", it) }
+                        SidebarLabeledField_P1(Icons.Filled.Public, "Languages", languages, "English (Fluent) / Filipino (Native)", accent) { onFieldChange("languages", it) }
                     }
                 }
 
                 // ===== RIGHT CONTENT =====
-                Column(Modifier.weight(1f).padding(horizontal = 16.dp, vertical = 18.dp), verticalArrangement = Arrangement.spacedBy(13.dp)) {
+                Column(Modifier.weight(1f).padding(horizontal = 14.dp, vertical = 12.dp), verticalArrangement = Arrangement.spacedBy(9.dp)) {
                     Column {
                         EditableText_P1(userName, "Your Name", Color(0xFF12203D), nameFontSize, FontWeight.Black) { onFieldChange("fullName", it) }
                         Spacer(Modifier.height(5.dp))
