@@ -278,6 +278,7 @@ fun TemplateCard(info: TemplateInfo, onClick: () -> Unit) {
 }
 
 // ================= EDITOR SCREEN - AFTER SELECTING =================
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TemplateEditorScreen(info: TemplateInfo, onBack: () -> Unit) {
     Scaffold(
