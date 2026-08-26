@@ -1,4 +1,5 @@
 package com.saltech.urdocs.ui.screens
+import com.saltech.urdocs.ui.templates.*
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
