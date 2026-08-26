@@ -7,6 +7,7 @@
 // ============================================================
 
 package com.saltech.urdocs.ui.templates
+import com.saltech.urdocs.util.NativeBuffer
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
