@@ -88,7 +88,6 @@ private fun SidebarHeader_P1(text: String) {
     }
 }
 @Composable
-@Composable
 private fun SidebarLabeledField_P1(icon: ImageVector, label: String, value: String, hint: String, accent: Color, onValueChange: (String) -> Unit) {
     Column(Modifier.fillMaxWidth()) {
         Text(label, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 7.5.sp)
