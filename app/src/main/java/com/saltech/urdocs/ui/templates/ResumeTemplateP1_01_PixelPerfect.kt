@@ -2,6 +2,12 @@ package com.saltech.urdocs.ui.templates
 
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.layer.drawLayer
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -236,6 +242,8 @@ fun ResumeTemplateP1_01_PixelPerfect(
     onHomeOverride: () -> Unit = {}
 ) {
     val accent = Color(0xFF4FC3F7)
+    var rightContentHeightPx by remember { mutableStateOf(0) }
+    val density = LocalDensity.current
     val sidebarBg = Color(0xFF12203D)
     val graphicsLayer = androidx.compose.ui.graphics.rememberGraphicsLayer()
     val nameFontSize = autoShrinkNameFontSize(userName)
@@ -249,7 +257,7 @@ fun ResumeTemplateP1_01_PixelPerfect(
 
                 // ===== LEFT SIDEBAR =====
                 Column(
-                    Modifier.width(150.dp).fillMaxHeight().background(sidebarBg).padding(12.dp),
+                    Modifier.width(150.dp).heightIn(min = with(density) { rightContentHeightPx.toDp() }).background(sidebarBg).padding(12.dp),
                     verticalArrangement = Arrangement.spacedBy(11.dp)
                 ) {
                     Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
@@ -300,7 +308,7 @@ fun ResumeTemplateP1_01_PixelPerfect(
                 }
 
                 // ===== RIGHT CONTENT =====
-                Column(Modifier.weight(1f).padding(horizontal = 14.dp, vertical = 12.dp), verticalArrangement = Arrangement.spacedBy(9.dp)) {
+                Column(Modifier.weight(1f).onGloballyPositioned { rightContentHeightPx = it.size.height }.padding(horizontal = 14.dp, vertical = 12.dp), verticalArrangement = Arrangement.spacedBy(9.dp)) {
                     Column {
                         EditableText_P1(userName, "Your Name", Color(0xFF12203D), nameFontSize, FontWeight.Black) { onFieldChange("fullName", it) }
                         Spacer(Modifier.height(5.dp))
