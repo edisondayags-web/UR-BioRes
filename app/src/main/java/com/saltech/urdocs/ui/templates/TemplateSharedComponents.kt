@@ -149,10 +149,11 @@ fun SharedAvatarPicker(
 
 /** Auto-shrinks name font size so long full names don't get clipped. */
 fun autoShrinkNameFontSize(name: String, base: Int = 19): androidx.compose.ui.unit.TextUnit {
+    val weighted = name.sumOf { c -> if (c.isUpperCase()) 1.4 else 1.0 }
     return when {
-        name.length > 26 -> (base - 7).sp
-        name.length > 20 -> (base - 5).sp
-        name.length > 15 -> (base - 2.5f).sp
+        weighted > 26 -> (base - 7).sp
+        weighted > 20 -> (base - 5).sp
+        weighted > 15 -> (base - 2.5f).sp
         else -> base.sp
     }
 }
