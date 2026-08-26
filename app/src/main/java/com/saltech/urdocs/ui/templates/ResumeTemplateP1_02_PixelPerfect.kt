@@ -248,9 +248,9 @@ fun ResumeTemplateP1_02_PixelPerfect(
     val graphicsLayer = androidx.compose.ui.graphics.rememberGraphicsLayer()
     val nameFontSize = autoShrinkNameFontSize(userName)
 
-    Box(Modifier.fillMaxWidth().defaultMinSize(minHeight = 700.dp)) {
+    Box(Modifier.fillMaxWidth()) {
         Box(
-            Modifier.fillMaxSize().verticalScroll(rememberScrollState())
+            Modifier.fillMaxWidth().verticalScroll(rememberScrollState())
                 .drawWithContent { graphicsLayer.record { this@drawWithContent.drawContent() }; drawLayer(graphicsLayer) }
         ) {
             Row(Modifier.background(Color.White)) {

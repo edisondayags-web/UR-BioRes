@@ -250,7 +250,7 @@ fun ResumeTemplateP1_15_PixelPerfect(
 
     Box(Modifier.fillMaxWidth().height(1300.dp)) {
         Box(
-            Modifier.fillMaxSize().verticalScroll(rememberScrollState())
+            Modifier.fillMaxWidth().verticalScroll(rememberScrollState())
                 .drawWithContent { graphicsLayer.record { this@drawWithContent.drawContent() }; drawLayer(graphicsLayer) }
         ) {
             Row(Modifier.background(Color.White)) {
