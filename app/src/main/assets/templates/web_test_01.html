@@ -4,8 +4,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: Arial, Helvetica, sans-serif; background: white; }
-  .container { display: flex; width: 100%; min-height: 100vh; }
+  html, body {
+    width: 100%; height: 100%; overflow: hidden; background: #0D0D0D;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  .page-wrapper {
+    width: 100vw; height: 100vh; display: flex; align-items: flex-start; justify-content: center;
+  }
+  .page {
+    width: 850px; height: 1250px; transform-origin: top center; background: white;
+    flex-shrink: 0;
+  }
+  .container { display: flex; width: 850px; height: 1250px; }
 
   /* ===== SIDEBAR ===== */
   .sidebar { width: 32%; background: #12203D; color: white; padding: 20px 16px; }
@@ -39,7 +49,8 @@
   /* ===== CONTENT ===== */
   .content { width: 68%; padding: 24px 20px; background: white; color: #1a1a1a; }
   .name {
-    font-size: 30px; font-weight: 900; color: #12203D; outline: none; line-height: 1.1;
+    font-size: 30px; font-weight: 900; color: #12203D; outline: none; line-height: 1.15;
+    white-space: nowrap; overflow: hidden;
   }
   .title-divider { display: flex; align-items: center; gap: 10px; margin: 10px 0 4px 0; }
   .title-line { flex: 1; height: 1px; background: #cfd8e3; }
@@ -82,7 +93,7 @@
 </style>
 </head>
 <body>
-<div class="container">
+<div class="page-wrapper"><div class="page"><div class="container">
 
   <!-- ================= SIDEBAR ================= -->
   <div class="sidebar">
@@ -253,20 +264,39 @@
     </div>
   </div>
 
-</div>
+</div></div></div>
 
 <script>
   function autoShrink() {
     var nameEl = document.querySelector('.name');
-    var maxSize = 30, minSize = 14;
-    nameEl.style.fontSize = maxSize + 'px';
-    while (nameEl.scrollHeight > 90 && maxSize > minSize) {
-      maxSize -= 1;
-      nameEl.style.fontSize = maxSize + 'px';
+    var containerWidth = nameEl.parentElement.clientWidth;
+    var size = 30;
+    var minSize = 12;
+    nameEl.style.fontSize = size + 'px';
+    while (nameEl.scrollWidth > containerWidth && size > minSize) {
+      size -= 1;
+      nameEl.style.fontSize = size + 'px';
     }
   }
-  document.querySelector('.name').addEventListener('input', autoShrink);
-  window.addEventListener('load', autoShrink);
+  function fitPageToScreen() {
+    var page = document.querySelector('.page');
+    page.style.transform = 'scale(1)';
+    var pageHeight = page.scrollHeight;
+    var pageWidth = 850;
+    var scaleW = window.innerWidth / pageWidth;
+    var scaleH = window.innerHeight / pageHeight;
+    var scale = Math.min(scaleW, scaleH);
+    page.style.transform = 'scale(' + scale + ')';
+  }
+  document.querySelector('.name').addEventListener('input', function() {
+    autoShrink();
+    fitPageToScreen();
+  });
+  window.addEventListener('load', function() {
+    autoShrink();
+    fitPageToScreen();
+  });
+  window.addEventListener('resize', fitPageToScreen);
 </script>
 
 </body>
