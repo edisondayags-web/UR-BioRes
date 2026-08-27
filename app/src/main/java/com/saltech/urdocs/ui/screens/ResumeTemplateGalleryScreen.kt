@@ -38,7 +38,6 @@ private data class TemplateInfo(
 )
 
 private val resumeTemplates = listOf(
-    TemplateInfo("web_test_01", "WEB", Color(0xFF00FF00), Color(0xFF000000)),
     TemplateInfo("resume_template_01", "01", Color(0xFFD4AF37), Color(0xFF0E0E0E)),
     TemplateInfo("resume_template_02", "02", Color(0xFFFFFFFF), Color(0xFF1B3358)),
     TemplateInfo("resume_template_03", "03", Color(0xFF4CAF50), Color(0xFF0E2B1A)),
@@ -63,38 +62,6 @@ private val resumeTemplates = listOf(
     TemplateInfo("resume_template_22", "22", Color(0xFFFF8A65), Color(0xFF2B160E)),
     TemplateInfo("resume_template_23", "23", Color(0xFF80DEEA), Color(0xFF0E1F26)),
 )
-private val package1Templates = listOf(
-    TemplateInfo("package1_template_01", "20", Color(0xFF4FC3F7), Color(0xFF12203D), LayoutStyle.SIDEBAR_BOLD),
-    TemplateInfo("package1_template_02", "21", Color(0xFFEC407A), Color(0xFF3D1220), LayoutStyle.SIDEBAR_BOLD),
-    TemplateInfo("package1_template_03", "22", Color(0xFF66BB6A), Color(0xFF123D1F), LayoutStyle.SIDEBAR_BOLD),
-    TemplateInfo("package1_template_04", "23", Color(0xFFFFA726), Color(0xFF3D2C12), LayoutStyle.SIDEBAR_BOLD),
-    TemplateInfo("package1_template_05", "24", Color(0xFFAB47BC), Color(0xFF2C123D), LayoutStyle.SIDEBAR_BOLD),
-    TemplateInfo("package1_template_06", "25", Color(0xFF29B6F6), Color(0xFF123336), LayoutStyle.SIDEBAR_BOLD),
-    TemplateInfo("package1_template_07", "26", Color(0xFFD4AF37), Color(0xFF1F1A0E), LayoutStyle.SIDEBAR_BOLD),
-    TemplateInfo("package1_template_08", "27", Color(0xFFEF5350), Color(0xFF3D1414), LayoutStyle.SIDEBAR_BOLD),
-    TemplateInfo("package1_template_09", "28", Color(0xFF26A69A), Color(0xFF0E2624), LayoutStyle.SIDEBAR_BOLD),
-    TemplateInfo("package1_template_10", "29", Color(0xFF8D6E63), Color(0xFF2A211D), LayoutStyle.SIDEBAR_BOLD),
-    TemplateInfo("package1_template_11", "30", Color(0xFF5C6BC0), Color(0xFF181E3D), LayoutStyle.SIDEBAR_BOLD),
-    TemplateInfo("package1_template_12", "12", Color(0xFFFF7043), Color(0xFF3D1F12), LayoutStyle.SIDEBAR_BOLD),
-    TemplateInfo("package1_template_13", "13", Color(0xFF42A5F5), Color(0xFF12253D), LayoutStyle.SIDEBAR_BOLD),
-    TemplateInfo("package1_template_14", "14", Color(0xFF9CCC65), Color(0xFF1F3D12), LayoutStyle.SIDEBAR_BOLD),
-    TemplateInfo("package1_template_15", "15", Color(0xFFFFCA28), Color(0xFF3D3212), LayoutStyle.SIDEBAR_BOLD),
-    TemplateInfo("package1_template_16", "16", Color(0xFF7E57C2), Color(0xFF251F3D), LayoutStyle.SIDEBAR_BOLD),
-    TemplateInfo("package1_template_17", "17", Color(0xFF26C6DA), Color(0xFF123339), LayoutStyle.SIDEBAR_BOLD),
-    TemplateInfo("package1_template_18", "18", Color(0xFFEF9A9A), Color(0xFF3D2020), LayoutStyle.SIDEBAR_BOLD),
-    TemplateInfo("package1_template_19", "19", Color(0xFF81C784), Color(0xFF1A331F), LayoutStyle.SIDEBAR_BOLD),
-    TemplateInfo("package1_template_20", "20b", Color(0xFFBA68C8), Color(0xFF331F39), LayoutStyle.SIDEBAR_BOLD),
-    TemplateInfo("package1_template_21", "21b", Color(0xFF4DD0E1), Color(0xFF12303D), LayoutStyle.SIDEBAR_BOLD),
-    TemplateInfo("package1_template_22", "22b", Color(0xFFFFB74D), Color(0xFF3D2A12), LayoutStyle.SIDEBAR_BOLD),
-    TemplateInfo("package1_template_23", "23b", Color(0xFF64B5F6), Color(0xFF122C3D), LayoutStyle.SIDEBAR_BOLD),
-    TemplateInfo("package1_template_24", "24b", Color(0xFFA1887F), Color(0xFF2D251F), LayoutStyle.SIDEBAR_BOLD),
-    TemplateInfo("package1_template_25", "25b", Color(0xFF4DB6AC), Color(0xFF123D37), LayoutStyle.SIDEBAR_BOLD),
-    TemplateInfo("package1_template_26", "26b", Color(0xFFE57373), Color(0xFF3D1717), LayoutStyle.SIDEBAR_BOLD),
-    TemplateInfo("package1_template_27", "27b", Color(0xFF90A4AE), Color(0xFF1F2529), LayoutStyle.SIDEBAR_BOLD),
-    TemplateInfo("package1_template_28", "28b", Color(0xFFF06292), Color(0xFF3D1229), LayoutStyle.SIDEBAR_BOLD),
-    TemplateInfo("package1_template_29", "29b", Color(0xFFAED581), Color(0xFF283D12), LayoutStyle.SIDEBAR_BOLD),
-    TemplateInfo("package1_template_30", "30", Color(0xFF7986CB), Color(0xFF1C1F3D), LayoutStyle.SIDEBAR_BOLD),
-)
 
 
 @Composable
@@ -102,7 +69,6 @@ fun ResumeTemplateGalleryScreen(
     onTemplateSelected: (String) -> Unit,
     onBack: () -> Unit = {}
 ) {
-    var selectedPackage by remember { mutableStateOf(1) }
     Box(modifier = Modifier.fillMaxSize().background(Color(0xFF0B1530))) {
         Column(modifier = Modifier.fillMaxSize()) {
             Row(
@@ -116,15 +82,7 @@ fun ResumeTemplateGalleryScreen(
                 Text("Choose a Template", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 20.sp)
             }
 
-            Row(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                PackagePill("Package 1", selectedPackage == 1, Color(0xFF4FC3F7), Modifier.weight(1f)) { selectedPackage = 1 }
-                PackagePill("Package 2", selectedPackage == 2, Color(0xFFEC407A), Modifier.weight(1f)) { selectedPackage = 2 }
-            }
-
-            val currentList = if (selectedPackage == 1) package1Templates else resumeTemplates
+            val currentList = resumeTemplates
 
             if (currentList.isEmpty()) {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {

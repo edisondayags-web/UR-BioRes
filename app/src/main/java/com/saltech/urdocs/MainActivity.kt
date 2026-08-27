@@ -79,13 +79,14 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                     composable(Screen.ResumeMoreTemplates.route) {
+                        val ctx = androidx.compose.ui.platform.LocalContext.current
                         ResumeTemplateGalleryScreen(
-                            onTemplateSelected = { templateName ->
-                                if (templateName == "web_test_01") {
-                                    navController.navigate(Screen.WebTemplate.createRoute("web_test_01.html"))
-                                } else {
-                                    navController.navigate(Screen.ResumeTemplateForm.createRoute(templateName))
-                                }
+                            onTemplateSelected = {
+                                android.widget.Toast.makeText(
+                                    ctx,
+                                    "Under maintenance pa luv, sorry\uD83E\uDD0D",
+                                    android.widget.Toast.LENGTH_SHORT
+                                ).show()
                             },
                             onBack = { navController.popBackStack() }
                         )
@@ -97,16 +98,6 @@ class MainActivity : ComponentActivity() {
                         val templateName = backStackEntry.arguments?.getString("templateName") ?: ""
                         ResumeTemplateFormScreen(
                             templateName = templateName,
-                            onBack = { navController.popBackStack() }
-                        )
-                    }
-                    composable(
-                        Screen.WebTemplate.route,
-                        arguments = listOf(navArgument("htmlFile") { type = NavType.StringType })
-                    ) { backStackEntry ->
-                        val htmlFile = backStackEntry.arguments?.getString("htmlFile") ?: ""
-                        com.saltech.urdocs.ui.screens.WebTemplateScreen(
-                            htmlFileName = htmlFile,
                             onBack = { navController.popBackStack() }
                         )
                     }
