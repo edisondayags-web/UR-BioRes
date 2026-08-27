@@ -24,6 +24,13 @@ import kotlinx.coroutines.launch
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Thread.setDefaultUncaughtExceptionHandler { _, throwable ->
+            try {
+                val logFile = java.io.File(getExternalFilesDir(null), "crash_log.txt")
+                logFile.writeText(android.util.Log.getStackTraceString(throwable))
+            } catch (e: Exception) {}
+            android.os.Process.killProcess(android.os.Process.myPid())
+        }
         val authManager = AuthManager()
         lifecycleScope.launch {
             runCatching { authManager.ensureSignedIn() }
