@@ -25,10 +25,12 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Thread.setDefaultUncaughtExceptionHandler { _, throwable ->
-            try {
-                val logFile = java.io.File(android.os.Environment.getExternalStoragePublicDirectory(android.os.Environment.DIRECTORY_DOWNLOADS), "urdocs_crash_log.txt")
-                logFile.writeText(android.util.Log.getStackTraceString(throwable))
-            } catch (e: Exception) {}
+            val trace = android.util.Log.getStackTraceString(throwable)
+            val intent = android.content.Intent(this, CrashActivity::class.java).apply {
+                putExtra("error", trace)
+                flags = android.content.Intent.FLAG_ACTIVITY_NEW_TASK
+            }
+            startActivity(intent)
             android.os.Process.killProcess(android.os.Process.myPid())
         }
         val authManager = AuthManager()
