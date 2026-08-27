@@ -9,13 +9,13 @@
     font-family: Arial, Helvetica, sans-serif;
   }
   .page-wrapper {
-    width: 100vw; height: 100vh; display: flex; align-items: flex-start; justify-content: center;
+    width: 100vw; height: 100vh; position: relative; overflow: hidden;
   }
   .page {
-    width: 850px; height: 1250px; transform-origin: top center; background: white;
-    flex-shrink: 0;
+    width: 850px; position: absolute; top: 0; left: 0; transform-origin: top left;
+    background: white;
   }
-  .container { display: flex; width: 850px; height: 1250px; }
+  .container { display: flex; width: 850px; }
 
   /* ===== SIDEBAR ===== */
   .sidebar { width: 32%; background: #12203D; color: white; padding: 20px 16px; }
@@ -280,12 +280,14 @@
   }
   function fitPageToScreen() {
     var page = document.querySelector('.page');
-    page.style.transform = 'scale(1)';
-    var pageHeight = page.scrollHeight;
+    page.style.transform = 'none';
     var pageWidth = 850;
+    var pageHeight = page.offsetHeight;
     var scaleW = window.innerWidth / pageWidth;
     var scaleH = window.innerHeight / pageHeight;
     var scale = Math.min(scaleW, scaleH);
+    var leftOffset = (window.innerWidth - (pageWidth * scale)) / 2;
+    page.style.left = leftOffset + 'px';
     page.style.transform = 'scale(' + scale + ')';
   }
   document.querySelector('.name').addEventListener('input', function() {
