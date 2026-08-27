@@ -4,45 +4,270 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: Arial, sans-serif; }
+  body { font-family: Arial, Helvetica, sans-serif; background: white; }
   .container { display: flex; width: 100%; min-height: 100vh; }
-  .sidebar {
-    width: 30%; background: #3D1220; color: white; padding: 16px;
+
+  /* ===== SIDEBAR ===== */
+  .sidebar { width: 32%; background: #12203D; color: white; padding: 20px 16px; }
+  .avatar-wrap { position: relative; width: 110px; height: 110px; margin: 0 auto 20px auto; }
+  .avatar-circle {
+    width: 110px; height: 110px; border-radius: 50%; border: 3px solid #4FC3F7;
+    background: #1a2f52; display: flex; align-items: center; justify-content: center;
   }
-  .sidebar h3 {
-    background: rgba(255,255,255,0.1); padding: 6px; font-size: 12px;
-    margin-bottom: 8px; margin-top: 16px;
+  .avatar-plus {
+    position: absolute; bottom: 0; right: 0; width: 28px; height: 28px; border-radius: 50%;
+    background: #4FC3F7; color: white; display: flex; align-items: center; justify-content: center;
+    font-size: 16px; font-weight: bold; border: 2px solid #12203D;
   }
-  .sidebar p { font-size: 11px; margin-bottom: 4px; outline: none; }
-  .content { width: 70%; padding: 16px; background: white; }
-  .content h1 {
-    font-size: 24px; color: #12203D; outline: none;
+  .side-header {
+    background: rgba(255,255,255,0.12); padding: 6px 8px; font-size: 12px; font-weight: bold;
+    letter-spacing: 0.5px; margin-top: 18px; margin-bottom: 10px;
   }
-  .content h2 {
-    font-size: 14px; color: #333; border-bottom: 1px solid #ccc;
-    padding-bottom: 4px; margin-top: 16px; margin-bottom: 8px;
+  .side-row { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 8px; font-size: 10.5px; }
+  .side-icon { flex-shrink: 0; width: 14px; height: 14px; margin-top: 1px; color: #4FC3F7; }
+  .side-field { outline: none; color: white; line-height: 1.3; }
+  .edu-block { margin-bottom: 8px; }
+  .edu-bold { font-size: 10.5px; font-weight: bold; outline: none; }
+  .edu-sub { font-size: 9.5px; color: rgba(255,255,255,0.85); outline: none; margin-top: 2px; }
+  .edu-accent { font-size: 9.5px; color: #4FC3F7; outline: none; margin-top: 2px; }
+  .edu-divider { border: none; border-top: 1px solid rgba(255,255,255,0.25); margin: 8px 0; }
+  .pref-row { display: flex; gap: 8px; margin-bottom: 10px; }
+  .pref-icon { flex-shrink: 0; width: 14px; height: 14px; margin-top: 1px; color: #4FC3F7; }
+  .pref-title { font-size: 10px; font-weight: bold; }
+  .pref-sub { font-size: 9.5px; color: rgba(255,255,255,0.85); outline: none; }
+
+  /* ===== CONTENT ===== */
+  .content { width: 68%; padding: 24px 20px; background: white; color: #1a1a1a; }
+  .name {
+    font-size: 30px; font-weight: 900; color: #12203D; outline: none; line-height: 1.1;
   }
-  .content p { font-size: 12px; color: #333; outline: none; }
-  [contenteditable="true"]:focus { background: #fff3cd; }
+  .title-divider { display: flex; align-items: center; gap: 10px; margin: 10px 0 4px 0; }
+  .title-line { flex: 1; height: 1px; background: #cfd8e3; }
+  .title-diamond { color: #4FC3F7; font-size: 10px; }
+  .title-label { font-size: 13px; font-weight: bold; color: #12203D; white-space: nowrap; }
+  .title-sub { text-align: center; font-size: 11.5px; color: #555; outline: none; margin-bottom: 14px; }
+
+  .section-header {
+    font-size: 13px; font-weight: bold; color: #12203D; letter-spacing: 0.5px;
+    border-bottom: 1.5px solid #cfd8e3; padding-bottom: 4px; margin-top: 16px; margin-bottom: 8px;
+  }
+  .about-text { font-size: 11px; color: #333; outline: none; line-height: 1.5; }
+
+  .exp-entry { display: flex; gap: 10px; margin-bottom: 10px; }
+  .exp-date { width: 60px; flex-shrink: 0; font-size: 9.5px; color: #666; outline: none; padding-top: 2px; }
+  .exp-dot-col { width: 12px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; }
+  .exp-dot { width: 8px; height: 8px; border-radius: 50%; background: #4FC3F7; margin-top: 4px; }
+  .exp-line { flex: 1; width: 1px; background: #cfd8e3; margin-top: 4px; }
+  .exp-body { flex: 1; }
+  .exp-position { font-size: 11.5px; font-weight: bold; color: #12203D; outline: none; }
+  .exp-company { font-size: 10.5px; font-style: italic; color: #555; outline: none; margin-bottom: 3px; }
+  .exp-bullet { font-size: 10px; color: #333; outline: none; margin-left: 12px; margin-bottom: 2px; position: relative; }
+  .exp-bullet:before { content: "•"; position: absolute; left: -12px; }
+
+  .ref-grid { display: flex; gap: 20px; }
+  .ref-card { flex: 1; display: flex; gap: 10px; }
+  .ref-avatar {
+    flex-shrink: 0; width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid #4FC3F7;
+    display: flex; align-items: center; justify-content: center; color: #4FC3F7; font-size: 16px;
+  }
+  .ref-name { font-size: 11px; font-weight: bold; color: #12203D; outline: none; }
+  .ref-detail { font-size: 9.5px; color: #555; outline: none; margin-top: 1px; }
+
+  .add-row { display: flex; gap: 10px; padding: 7px 0; border-bottom: 1px solid #eee; }
+  .add-icon { flex-shrink: 0; width: 16px; height: 16px; color: #4FC3F7; margin-top: 1px; }
+  .add-title { font-size: 11px; font-weight: bold; color: #12203D; }
+  .add-desc { font-size: 10px; color: #555; outline: none; }
+
+  [contenteditable="true"]:focus { background: #fff3cd; outline: 1px dashed #999; }
 </style>
 </head>
 <body>
 <div class="container">
+
+  <!-- ================= SIDEBAR ================= -->
   <div class="sidebar">
-    <h3>CONTACT</h3>
-    <p contenteditable="true">Ex: 09123456789</p>
-    <p contenteditable="true">Ex: yourname@gmail.com</p>
-    <p contenteditable="true">Ex: City, Country</p>
-    <h3>EDUCATION</h3>
-    <p contenteditable="true">Ex: Bachelor of Science in IT</p>
-    <p contenteditable="true">Ex: University Name</p>
+    <div class="avatar-wrap">
+      <div class="avatar-circle"></div>
+      <div class="avatar-plus">+</div>
+    </div>
+
+    <div class="side-header">CONTACT</div>
+    <div class="side-row"><span class="side-icon">&#128222;</span><span class="side-field" contenteditable="true">Ex: 09123456789</span></div>
+    <div class="side-row"><span class="side-icon">&#9993;</span><span class="side-field" contenteditable="true">Ex: yourname@email.com</span></div>
+    <div class="side-row"><span class="side-icon">&#128205;</span><span class="side-field" contenteditable="true">Ex: City, Country</span></div>
+
+    <div class="side-header">EDUCATION</div>
+    <div class="edu-block">
+      <div class="edu-bold" contenteditable="true">Ex: Bachelor's Degree</div>
+      <div class="edu-sub" contenteditable="true">Ex: Bachelor of Science in Information Technology</div>
+      <div class="edu-sub" contenteditable="true">Ex: University / School Name</div>
+      <div class="edu-accent" contenteditable="true">Ex: 20XX - 20XX</div>
+    </div>
+    <hr class="edu-divider">
+    <div class="edu-block">
+      <div class="edu-bold" contenteditable="true">Ex: Senior High School</div>
+      <div class="edu-sub" contenteditable="true">Ex: Strand / Track / Section</div>
+      <div class="edu-sub" contenteditable="true">Ex: School Name</div>
+      <div class="edu-accent" contenteditable="true">Ex: 20XX - 20XX</div>
+    </div>
+    <hr class="edu-divider">
+    <div class="edu-block">
+      <div class="edu-bold" contenteditable="true">Ex: Year Graduated</div>
+      <div class="edu-accent" contenteditable="true">Ex: 20XX</div>
+    </div>
+
+    <div class="side-header">SKILLS</div>
+    <div class="side-row"><span class="side-icon">&#10003;</span><span class="side-field" contenteditable="true">Ex: Skill name</span></div>
+    <div class="side-row"><span class="side-icon">&#10003;</span><span class="side-field" contenteditable="true">Ex: Skill name</span></div>
+    <div class="side-row"><span class="side-icon">&#10003;</span><span class="side-field" contenteditable="true">Ex: Skill name</span></div>
+    <div class="side-row"><span class="side-icon">&#10003;</span><span class="side-field" contenteditable="true">Ex: Skill name</span></div>
+    <div class="side-row"><span class="side-icon">&#10003;</span><span class="side-field" contenteditable="true">Ex: Skill name</span></div>
+    <div class="side-row"><span class="side-icon">&#10003;</span><span class="side-field" contenteditable="true">Ex: Skill name</span></div>
+
+    <div class="side-header">WEBSITE / LINKS</div>
+    <div class="side-row"><span class="side-icon">&#128279;</span><span class="side-field" contenteditable="true">Ex: https://yourwebsite.com</span></div>
+    <div class="side-row"><span class="side-icon">&#128279;</span><span class="side-field" contenteditable="true">Ex: https://linkedin.com/in/yourname</span></div>
+
+    <div class="side-header">PREFERENCES</div>
+    <div class="pref-row">
+      <span class="pref-icon">&#128188;</span>
+      <div><div class="pref-title">Work Setup</div><div class="pref-sub" contenteditable="true">Ex: Flexible / Remote / On-site</div></div>
+    </div>
+    <div class="pref-row">
+      <span class="pref-icon">&#128197;</span>
+      <div><div class="pref-title">Work Schedule</div><div class="pref-sub" contenteditable="true">Ex: Full-time / Part-time / Freelance</div></div>
+    </div>
+    <div class="pref-row">
+      <span class="pref-icon">&#128100;</span>
+      <div><div class="pref-title">Preferred Role</div><div class="pref-sub" contenteditable="true">Ex: Software Developer / Designer / VA</div></div>
+    </div>
+    <div class="pref-row">
+      <span class="pref-icon">&#128205;</span>
+      <div><div class="pref-title">Locations</div><div class="pref-sub" contenteditable="true">Ex: City, Country or Remote</div></div>
+    </div>
+    <div class="pref-row">
+      <span class="pref-icon">&#8986;</span>
+      <div><div class="pref-title">Availability</div><div class="pref-sub" contenteditable="true">Ex: Immediately / Within 2 Weeks</div></div>
+    </div>
+    <div class="pref-row">
+      <span class="pref-icon">&#127760;</span>
+      <div><div class="pref-title">Languages</div><div class="pref-sub" contenteditable="true">Ex: English (Fluent) / Filipino (Native)</div></div>
+    </div>
   </div>
+
+  <!-- ================= CONTENT ================= -->
   <div class="content">
-    <h1 contenteditable="true">Your Name</h1>
-    <p contenteditable="true">Ex: Software Developer</p>
-    <h2>ABOUT ME</h2>
-    <p contenteditable="true">Ex: Tell something about yourself...</p>
+    <div class="name" contenteditable="true">Ex: Your Name</div>
+    <div class="title-divider">
+      <span class="title-line"></span>
+      <span class="title-diamond">&#9670;</span>
+      <span class="title-label">Professional Title</span>
+      <span class="title-diamond">&#9670;</span>
+      <span class="title-line"></span>
+    </div>
+    <div class="title-sub" contenteditable="true">Ex: Software Developer</div>
+
+    <div class="section-header">ABOUT ME</div>
+    <div class="about-text" contenteditable="true">Ex: Write a short introduction about yourself, your background, your goals, and what makes you a great fit for the position.</div>
+
+    <div class="section-header">PROFESSIONAL EXPERIENCE</div>
+
+    <div class="exp-entry">
+      <div class="exp-date" contenteditable="true">20XX - Present</div>
+      <div class="exp-dot-col"><div class="exp-dot"></div><div class="exp-line"></div></div>
+      <div class="exp-body">
+        <div class="exp-position" contenteditable="true">Ex: Job Position</div>
+        <div class="exp-company" contenteditable="true">Ex: Company Name</div>
+        <div class="exp-bullet" contenteditable="true">Ex: Describe your responsibilities and achievements.</div>
+        <div class="exp-bullet" contenteditable="true">Ex: Describe your responsibilities and achievements.</div>
+        <div class="exp-bullet" contenteditable="true">Ex: Describe your responsibilities and achievements.</div>
+      </div>
+    </div>
+
+    <div class="exp-entry">
+      <div class="exp-date" contenteditable="true">20XX - 20XX</div>
+      <div class="exp-dot-col"><div class="exp-dot"></div><div class="exp-line"></div></div>
+      <div class="exp-body">
+        <div class="exp-position" contenteditable="true">Ex: Job Position</div>
+        <div class="exp-company" contenteditable="true">Ex: Company Name</div>
+        <div class="exp-bullet" contenteditable="true">Ex: Describe your responsibilities and achievements.</div>
+        <div class="exp-bullet" contenteditable="true">Ex: Describe your responsibilities and achievements.</div>
+        <div class="exp-bullet" contenteditable="true">Ex: Describe your responsibilities and achievements.</div>
+      </div>
+    </div>
+
+    <div class="exp-entry">
+      <div class="exp-date" contenteditable="true">20XX - 20XX</div>
+      <div class="exp-dot-col"><div class="exp-dot"></div></div>
+      <div class="exp-body">
+        <div class="exp-position" contenteditable="true">Ex: Job Position</div>
+        <div class="exp-company" contenteditable="true">Ex: Company Name</div>
+        <div class="exp-bullet" contenteditable="true">Ex: Describe your responsibilities and achievements.</div>
+        <div class="exp-bullet" contenteditable="true">Ex: Describe your responsibilities and achievements.</div>
+        <div class="exp-bullet" contenteditable="true">Ex: Describe your responsibilities and achievements.</div>
+      </div>
+    </div>
+
+    <div class="section-header">REFERENCES</div>
+    <div class="ref-grid">
+      <div class="ref-card">
+        <div class="ref-avatar">&#128100;</div>
+        <div>
+          <div class="ref-name" contenteditable="true">Ex: Full Name</div>
+          <div class="ref-detail" contenteditable="true">Ex: Position / Relation</div>
+          <div class="ref-detail" contenteditable="true">Ex: 09123456789</div>
+          <div class="ref-detail" contenteditable="true">Ex: email@example.com</div>
+        </div>
+      </div>
+      <div class="ref-card">
+        <div class="ref-avatar">&#128100;</div>
+        <div>
+          <div class="ref-name" contenteditable="true">Ex: Full Name</div>
+          <div class="ref-detail" contenteditable="true">Ex: Position / Relation</div>
+          <div class="ref-detail" contenteditable="true">Ex: 09123456789</div>
+          <div class="ref-detail" contenteditable="true">Ex: email@example.com</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-header">ADDITIONAL INFORMATION</div>
+    <div class="add-row">
+      <span class="add-icon">&#127942;</span>
+      <div><div class="add-title">Certifications</div><div class="add-desc" contenteditable="true">Ex: List your certifications or trainings here.</div></div>
+    </div>
+    <div class="add-row">
+      <span class="add-icon">&#127918;</span>
+      <div><div class="add-title">Hobbies</div><div class="add-desc" contenteditable="true">Ex: What are your hobbies or interests?</div></div>
+    </div>
+    <div class="add-row">
+      <span class="add-icon">&#127919;</span>
+      <div><div class="add-title">Career Goal</div><div class="add-desc" contenteditable="true">Ex: Your short-term or long-term career goal.</div></div>
+    </div>
+    <div class="add-row">
+      <span class="add-icon">&#128100;</span>
+      <div><div class="add-title">Strengths</div><div class="add-desc" contenteditable="true">Ex: Your key strengths and qualities.</div></div>
+    </div>
+    <div class="add-row">
+      <span class="add-icon">&#8505;</span>
+      <div><div class="add-title">Other Information</div><div class="add-desc" contenteditable="true">Ex: Any other information that may help your application.</div></div>
+    </div>
   </div>
+
 </div>
+
+<script>
+  function autoShrink() {
+    var nameEl = document.querySelector('.name');
+    var maxSize = 30, minSize = 14;
+    nameEl.style.fontSize = maxSize + 'px';
+    while (nameEl.scrollHeight > 90 && maxSize > minSize) {
+      maxSize -= 1;
+      nameEl.style.fontSize = maxSize + 'px';
+    }
+  }
+  document.querySelector('.name').addEventListener('input', autoShrink);
+  window.addEventListener('load', autoShrink);
+</script>
+
 </body>
 </html>
