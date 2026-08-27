@@ -42,6 +42,8 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Dp
 
 private val T01White = Color(0xFFF5F5F5)
 private val T01Gray = Color(0xFF6E6E6E)
@@ -156,12 +158,20 @@ fun applyFieldChange(data: ResumeTemplateFields, key: String, value: String): Re
 
 @Composable
 fun ScaledToFitContent(
-    scale: Float,
+    availableWidth: Dp,
+    availableHeight: Dp,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit
 ) {
+    val density = LocalDensity.current
     Layout(content = content, modifier = modifier) { measurables, _ ->
         val placeable = measurables.first().measure(Constraints())
+        val availableWidthPx = with(density) { availableWidth.toPx() }
+        val availableHeightPx = with(density) { availableHeight.toPx() }
+        val scale = minOf(
+            availableWidthPx / placeable.width.toFloat(),
+            availableHeightPx / placeable.height.toFloat()
+        )
         val scaledWidth = (placeable.width * scale).toInt()
         val scaledHeight = (placeable.height * scale).toInt()
         layout(scaledWidth, scaledHeight) {
@@ -189,11 +199,13 @@ fun ResumeTemplateFormScreen(
             Icon(Icons.Filled.ArrowBack, contentDescription = "Back", tint = Color.White)
         }
         val paperWidthDp = 850.dp
-        androidx.compose.foundation.layout.BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
-            val fitScale = maxWidth / paperWidthDp
+        androidx.compose.foundation.layout.BoxWithConstraints(
+            modifier = Modifier.fillMaxSize().padding(top = 56.dp)
+        ) {
             ScaledToFitContent(
-                scale = fitScale,
-                modifier = Modifier.align(Alignment.TopCenter)
+                availableWidth = maxWidth,
+                availableHeight = maxHeight,
+                modifier = Modifier.align(Alignment.Center)
             ) {
                 Box(modifier = Modifier.requiredWidth(paperWidthDp)) {
         when (templateName) {
