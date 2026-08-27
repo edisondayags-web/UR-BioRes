@@ -79,14 +79,9 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                     composable(Screen.ResumeMoreTemplates.route) {
-                        val ctx = androidx.compose.ui.platform.LocalContext.current
                         ResumeTemplateGalleryScreen(
-                            onTemplateSelected = {
-                                android.widget.Toast.makeText(
-                                    ctx,
-                                    "Under maintenance pa luv, sorry\uD83E\uDD0D",
-                                    android.widget.Toast.LENGTH_SHORT
-                                ).show()
+                            onTemplateSelected = { templateName ->
+                                navController.navigate(Screen.ResumeTemplateForm.createRoute(templateName))
                             },
                             onBack = { navController.popBackStack() }
                         )
