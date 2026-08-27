@@ -26,7 +26,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         Thread.setDefaultUncaughtExceptionHandler { _, throwable ->
             try {
-                val logFile = java.io.File(getExternalFilesDir(null), "crash_log.txt")
+                val logFile = java.io.File(android.os.Environment.getExternalStoragePublicDirectory(android.os.Environment.DIRECTORY_DOWNLOADS), "urdocs_crash_log.txt")
                 logFile.writeText(android.util.Log.getStackTraceString(throwable))
             } catch (e: Exception) {}
             android.os.Process.killProcess(android.os.Process.myPid())
