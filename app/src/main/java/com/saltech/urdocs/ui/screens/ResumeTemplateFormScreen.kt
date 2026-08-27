@@ -191,7 +191,7 @@ fun ResumeTemplateFormScreen(
     onBack: () -> Unit = {}
 ) {
     var data by remember { mutableStateOf(ResumeTemplateFields()) }
-    Box(modifier = Modifier.fillMaxSize().background(Color.Red)) {
+    Box(modifier = Modifier.fillMaxSize().background(Color(0xFF0D0D0D))) {
         IconButton(
             onClick = onBack,
             modifier = Modifier.align(Alignment.TopStart).padding(top = 4.dp, start = 8.dp)
@@ -202,6 +202,11 @@ fun ResumeTemplateFormScreen(
         androidx.compose.foundation.layout.BoxWithConstraints(
             modifier = Modifier.fillMaxSize().padding(top = 56.dp)
         ) {
+            androidx.compose.material3.Text(
+                text = "avail=" + maxWidth.toString() + " x " + maxHeight.toString(),
+                color = Color.Yellow,
+                modifier = Modifier.align(Alignment.TopStart).background(Color.Black)
+            )
             ScaledToFitContent(
                 availableWidth = maxWidth,
                 availableHeight = maxHeight,
