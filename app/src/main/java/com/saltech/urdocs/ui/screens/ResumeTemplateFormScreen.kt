@@ -39,6 +39,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.unit.Constraints
 
 private val T01White = Color(0xFFF5F5F5)
 private val T01Gray = Color(0xFF6E6E6E)
@@ -151,6 +154,26 @@ fun applyFieldChange(data: ResumeTemplateFields, key: String, value: String): Re
     else -> data
 }
 
+@Composable
+fun ScaledToFitContent(
+    scale: Float,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
+) {
+    Layout(content = content, modifier = modifier) { measurables, _ ->
+        val placeable = measurables.first().measure(Constraints())
+        val scaledWidth = (placeable.width * scale).toInt()
+        val scaledHeight = (placeable.height * scale).toInt()
+        layout(scaledWidth, scaledHeight) {
+            placeable.placeWithLayer(0, 0) {
+                scaleX = scale
+                scaleY = scale
+                transformOrigin = TransformOrigin(0f, 0f)
+            }
+        }
+    }
+}
+
 // ===== FORM SCREEN WRAPPER =====
 @Composable
 fun ResumeTemplateFormScreen(
@@ -168,16 +191,11 @@ fun ResumeTemplateFormScreen(
         val paperWidthDp = 850.dp
         androidx.compose.foundation.layout.BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
             val fitScale = maxWidth / paperWidthDp
-            Box(
-                modifier = Modifier
-                    .align(Alignment.TopCenter)
-                    .graphicsLayer(
-                        scaleX = fitScale,
-                        scaleY = fitScale
-                    )
-                    .requiredWidth(paperWidthDp)
-                    .wrapContentHeight()
+            ScaledToFitContent(
+                scale = fitScale,
+                modifier = Modifier.align(Alignment.TopCenter)
             ) {
+                Box(modifier = Modifier.requiredWidth(paperWidthDp)) {
         when (templateName) {
             "resume_template_01" -> ResumeTemplate01Screen(data, { data = it }, onBack)
             "resume_template_02" -> ResumeTemplate02Screen(data, { data = it }, onBack)
@@ -1887,6 +1905,7 @@ fun ResumeTemplateFormScreen(
             )
         }
             }
+        }
         }
     }
 }
