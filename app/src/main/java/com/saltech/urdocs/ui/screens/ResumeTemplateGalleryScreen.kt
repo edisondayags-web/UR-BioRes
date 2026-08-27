@@ -38,6 +38,7 @@ private data class TemplateInfo(
 )
 
 private val resumeTemplates = listOf(
+    TemplateInfo("web_test_01", "WEB", Color(0xFF00FF00), Color(0xFF000000)),
     TemplateInfo("resume_template_01", "01", Color(0xFFD4AF37), Color(0xFF0E0E0E)),
     TemplateInfo("resume_template_02", "02", Color(0xFFFFFFFF), Color(0xFF1B3358)),
     TemplateInfo("resume_template_03", "03", Color(0xFF4CAF50), Color(0xFF0E2B1A)),

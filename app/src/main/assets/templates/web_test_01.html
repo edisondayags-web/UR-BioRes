@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, sans-serif; }
+  .container { display: flex; width: 100%; min-height: 100vh; }
+  .sidebar {
+    width: 30%; background: #3D1220; color: white; padding: 16px;
+  }
+  .sidebar h3 {
+    background: rgba(255,255,255,0.1); padding: 6px; font-size: 12px;
+    margin-bottom: 8px; margin-top: 16px;
+  }
+  .sidebar p { font-size: 11px; margin-bottom: 4px; outline: none; }
+  .content { width: 70%; padding: 16px; background: white; }
+  .content h1 {
+    font-size: 24px; color: #12203D; outline: none;
+  }
+  .content h2 {
+    font-size: 14px; color: #333; border-bottom: 1px solid #ccc;
+    padding-bottom: 4px; margin-top: 16px; margin-bottom: 8px;
+  }
+  .content p { font-size: 12px; color: #333; outline: none; }
+  [contenteditable="true"]:focus { background: #fff3cd; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="sidebar">
+    <h3>CONTACT</h3>
+    <p contenteditable="true">Ex: 09123456789</p>
+    <p contenteditable="true">Ex: yourname@gmail.com</p>
+    <p contenteditable="true">Ex: City, Country</p>
+    <h3>EDUCATION</h3>
+    <p contenteditable="true">Ex: Bachelor of Science in IT</p>
+    <p contenteditable="true">Ex: University Name</p>
+  </div>
+  <div class="content">
+    <h1 contenteditable="true">Your Name</h1>
+    <p contenteditable="true">Ex: Software Developer</p>
+    <h2>ABOUT ME</h2>
+    <p contenteditable="true">Ex: Tell something about yourself...</p>
+  </div>
+</div>
+</body>
+</html>
