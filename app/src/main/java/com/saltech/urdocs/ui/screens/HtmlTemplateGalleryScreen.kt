@@ -59,6 +59,7 @@ fun HtmlTemplateGalleryScreen(
     onBack: () -> Unit = {}
 ) {
     Box(modifier = Modifier.fillMaxSize().background(Color(0xFF0B1530))) {
+        PremiumWaveBackground()
         Column(modifier = Modifier.fillMaxSize()) {
             Row(
                 modifier = Modifier.fillMaxWidth().padding(16.dp),
