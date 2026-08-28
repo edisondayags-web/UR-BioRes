@@ -39,7 +39,17 @@ private val htmlColorTemplates = listOf(
     HtmlColorInfo("ai_template_08_pink.html", "Pink", Color(0xFFF34FC0)),
     HtmlColorInfo("ai_template_09_gray.html", "Gray", Color(0xFFB0B0B0)),
     HtmlColorInfo("ai_template_10_gold.html", "Gold", Color(0xFFF3D14F)),
-    HtmlColorInfo("ai_template_11_indigo.html", "Indigo", Color(0xFF6B4FF3))
+    HtmlColorInfo("ai_template_11_indigo.html", "Indigo", Color(0xFF6B4FF3)),
+    HtmlColorInfo("ai_template_02_light.html", "Blue Light", Color(0xFF4FC3F7)),
+    HtmlColorInfo("ai_template_03_green_light.html", "Green Light", Color(0xFF4FF3A0)),
+    HtmlColorInfo("ai_template_04_purple_light.html", "Purple Light", Color(0xFFB14FF3)),
+    HtmlColorInfo("ai_template_05_maroon_light.html", "Maroon Light", Color(0xFFF34F6C)),
+    HtmlColorInfo("ai_template_06_orange_light.html", "Orange Light", Color(0xFFF3A94F)),
+    HtmlColorInfo("ai_template_07_teal_light.html", "Teal Light", Color(0xFF4FE0F3)),
+    HtmlColorInfo("ai_template_08_pink_light.html", "Pink Light", Color(0xFFF34FC0)),
+    HtmlColorInfo("ai_template_09_gray_light.html", "Gray Light", Color(0xFFB0B0B0)),
+    HtmlColorInfo("ai_template_10_gold_light.html", "Gold Light", Color(0xFFF3D14F)),
+    HtmlColorInfo("ai_template_11_indigo_light.html", "Indigo Light", Color(0xFF6B4FF3))
 )
 
 @Composable
@@ -75,13 +85,13 @@ fun HtmlTemplateGalleryScreen(
                 ) {
                     Box(
                         modifier = Modifier
-                            .size(48.dp)
+                            .size(44.dp)
                             .clip(CircleShape)
                             .background(info.accent)
                             .border(1.5.dp, Color.White.copy(alpha = 0.4f), CircleShape)
                     )
-                    Spacer(Modifier.height(6.dp))
-                    Text(info.label, color = Color.White, fontSize = 11.sp)
+                    Spacer(Modifier.height(4.dp))
+                    Text(info.label, color = Color.White, fontSize = 8.sp)
                 }
             }
         }
