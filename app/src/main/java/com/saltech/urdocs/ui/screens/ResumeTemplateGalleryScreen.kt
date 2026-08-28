@@ -40,6 +40,7 @@ private data class TemplateInfo(
 private val resumeTemplates = listOf(
     TemplateInfo("ai_template_01.html", "AI-1", Color(0xFF2B6CB0), Color(0xFFFFFFFF)),
     TemplateInfo("ai_template_02.html", "AI-2", Color(0xFF4FC3F7), Color(0xFF12203D)),
+    TemplateInfo("ai_template_03.html", "AI-3", Color(0xFF6FBE44), Color(0xFF1E2A3A)),
     TemplateInfo("resume_template_01", "01", Color(0xFFD4AF37), Color(0xFF0E0E0E)),
     TemplateInfo("resume_template_02", "02", Color(0xFFFFFFFF), Color(0xFF1B3358)),
     TemplateInfo("resume_template_03", "03", Color(0xFF4CAF50), Color(0xFF0E2B1A)),
