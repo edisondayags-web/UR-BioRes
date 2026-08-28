@@ -111,16 +111,12 @@ fun ResumeChoiceScreen(onChoose: (String) -> Unit, onBack: () -> Unit = {}) {
 
             Spacer(Modifier.height(20.dp))
 
-                icon = { Icon(Icons.Filled.Layers, contentDescription = null, tint = Color.White, modifier = it) },
-    title = "Hybrid Resume",
-    subtitle = "(work history + project highlights)",
-    onClick = { onChoose("hybrid") }
-ResumeChoiceCard(
-    icon = { Icon(Icons.Filled.Description, contentDescription = null, tint = Color.White, modifier = it) },
-    title = "HTML",
-    subtitle = "(AI-generated HTML template)",
-    onClick = { onChoose("ai_html") }
-)
+            ResumeChoiceCard(
+                icon = { Icon(Icons.Filled.Description, contentDescription = null, tint = Color.White, modifier = it) },
+                title = "HTML",
+                subtitle = "(AI-generated HTML template)",
+                onClick = { onChoose("ai_html") }
+            )
 
             Spacer(Modifier.height(16.dp))
 
