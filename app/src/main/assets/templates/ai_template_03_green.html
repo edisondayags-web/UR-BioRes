@@ -61,10 +61,48 @@
 
   [contenteditable="true"]:empty:before { content: attr(data-placeholder); color: #999; }
   [contenteditable="true"]:focus { background: #fff3cd; outline: 1px dashed #999; }
+
+  .page { position: relative; }
+  .deco { position: absolute; pointer-events: none; z-index: 5; }
+  .dot-grid { display: grid; grid-template-columns: repeat(3, 4px); grid-gap: 4px; }
+  .dot-grid span { display: block; width: 3px; height: 3px; border-radius: 50%; background: rgba(255,255,255,0.45); }
+  .deco-line { height: 1px; background: #4FF3A0; }
+  .deco-dot { width: 5px; height: 5px; border-radius: 50%; background: #4FF3A0; }
+  .deco-circle { border: 1.2px solid #4FF3A0; border-radius: 50%; background: transparent; }
+  .deco-diamond { border: 1.2px solid #4FF3A0; transform: rotate(45deg); background: transparent; }
+  .deco-diamond.filled { background: #4FF3A0; border: none; }
+
+  .deco-tl-dots { top: 8px; left: 8px; }
+  .deco-bl-dots { bottom: 55px; left: 8px; }
+  .deco-topline { top: 14px; left: 36%; width: 40%; }
+  .deco-topdot { top: 11px; left: 74%; }
+  .deco-bottomline { bottom: 14px; left: 10%; width: 50%; }
+  .deco-bottomdot { bottom: 11px; left: 58%; }
+  .deco-tr-diamond { top: 18px; right: 14px; width: 10px; height: 10px; }
+  .deco-br-diamond { bottom: 30px; right: 12px; width: 16px; height: 16px; }
+  .deco-mid-diamond1 { top: 32%; left: 35.3%; width: 8px; height: 8px; }
+  .deco-mid-diamond2 { top: 62%; left: 35.3%; width: 8px; height: 8px; }
+  .deco-circle-1 { top: 24%; right: 8px; width: 9px; height: 9px; }
+  .deco-circle-2 { top: 45%; right: 4px; width: 6px; height: 6px; }
+  .deco-circle-3 { top: 78%; right: 12px; width: 8px; height: 8px; }
 </style>
 </head>
 <body>
 <div class="page"><div class="container">
+  <div class="deco dot-grid deco-tl-dots"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+  <div class="deco dot-grid deco-bl-dots"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+  <div class="deco deco-line deco-topline"></div>
+  <div class="deco deco-dot deco-topdot"></div>
+  <div class="deco deco-line deco-bottomline"></div>
+  <div class="deco deco-dot deco-bottomdot"></div>
+  <div class="deco deco-diamond deco-tr-diamond"></div>
+  <div class="deco deco-diamond filled deco-br-diamond"></div>
+  <div class="deco deco-diamond filled deco-mid-diamond1"></div>
+  <div class="deco deco-diamond filled deco-mid-diamond2"></div>
+  <div class="deco deco-circle deco-circle-1"></div>
+  <div class="deco deco-circle deco-circle-2"></div>
+  <div class="deco deco-circle deco-circle-3"></div>
+
 
   <div class="sidebar">
     <div class="avatar-circle"></div>
