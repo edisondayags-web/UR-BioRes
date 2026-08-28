@@ -214,7 +214,7 @@ fun ResumeTemplateFormScreen(
             ScaledToFitContent(
                 availableWidth = maxWidth,
                 availableHeight = maxHeight,
-                modifier = Modifier.align(Alignment.Center)
+                modifier = Modifier.align(Alignment.TopCenter)
             ) {
                 Box(modifier = Modifier.requiredWidth(paperWidthDp)) {
         when (templateName) {
