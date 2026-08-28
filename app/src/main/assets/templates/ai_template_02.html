@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 100%; height: 100%; overflow: hidden; background: #0D1B2A;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  .page-wrapper { width: 100%; height: 100vh; overflow: hidden; }
+  .page {
+    width: 380px; margin: 0 auto; background: white; transform-origin: top center;
+  }
+  .container { display: flex; width: 380px; }
+
+  /* ===== SIDEBAR ===== */
+  .sidebar { width: 34%; background: #12203D; color: white; padding: 16px 10px; }
+  .avatar-circle {
+    width: 74px; height: 74px; border-radius: 50%; margin: 0 auto 10px auto;
+    background: #1a2f52; border: 2px solid #4FC3F7; overflow: hidden;
+  }
+  .side-header {
+    font-size: 8px; font-weight: bold; letter-spacing: 0.5px; color: #4FC3F7;
+    border-bottom: 1px solid rgba(255,255,255,0.25); padding-bottom: 3px; margin-top: 10px; margin-bottom: 6px;
+  }
+  .side-row { display: flex; align-items: flex-start; gap: 5px; margin-bottom: 5px; font-size: 7px; line-height: 1.3; }
+  .side-icon { flex-shrink: 0; width: 9px; color: #4FC3F7; }
+  .side-field { outline: none; word-break: break-word; }
+  .edu-block { margin-bottom: 6px; }
+  .edu-bold { font-size: 7.5px; font-weight: bold; outline: none; }
+  .edu-sub { font-size: 6.5px; color: rgba(255,255,255,0.8); outline: none; margin-top: 1px; }
+
+  /* ===== CONTENT ===== */
+  .content { width: 66%; padding: 16px 12px; background: white; color: #1a1a1a; }
+  .name { font-size: 16px; font-weight: 900; color: #12203D; outline: none; line-height: 1.1; }
+  .job-title { font-size: 8.5px; color: #4FC3F7; font-weight: 700; outline: none; margin-top: 1px; margin-bottom: 8px; }
+
+  .section-header {
+    font-size: 8.5px; font-weight: bold; color: #12203D; letter-spacing: 0.5px;
+    border-bottom: 1.2px solid #12203D; padding-bottom: 2px; margin-top: 9px; margin-bottom: 5px;
+  }
+  .about-text { font-size: 7px; color: #333; outline: none; line-height: 1.35; }
+
+  .exp-entry { margin-bottom: 6px; }
+  .exp-position { font-size: 7.5px; font-weight: bold; color: #12203D; outline: none; }
+  .exp-company { font-size: 6.5px; color: #555; outline: none; }
+  .exp-dates { font-size: 6px; color: #4FC3F7; font-weight: 600; outline: none; margin-bottom: 2px; }
+  .exp-bullet { font-size: 6.5px; color: #333; outline: none; margin-left: 8px; margin-bottom: 1px; position: relative; }
+  .exp-bullet:before { content: "•"; position: absolute; left: -8px; }
+
+  [contenteditable="true"]:empty:before { content: attr(data-placeholder); color: #999; }
+  [contenteditable="true"]:focus { background: #fff3cd; outline: 1px dashed #999; }
+</style>
+</head>
+<body>
+<div class="page-wrapper"><div class="page"><div class="container">
+
+  <div class="sidebar">
+    <div class="avatar-circle"></div>
+
+    <div class="side-header">CONTACT</div>
+    <div class="side-row"><span class="side-icon">&#128222;</span><span class="side-field" contenteditable="true" data-placeholder="Phone">+63 912 345 6789</span></div>
+    <div class="side-row"><span class="side-icon">&#9993;</span><span class="side-field" contenteditable="true" data-placeholder="Email">youremail@email.com</span></div>
+    <div class="side-row"><span class="side-icon">&#128205;</span><span class="side-field" contenteditable="true" data-placeholder="Location">City, Philippines</span></div>
+    <div class="side-row"><span class="side-icon">&#128279;</span><span class="side-field" contenteditable="true" data-placeholder="LinkedIn">linkedin.com/in/you</span></div>
+
+    <div class="side-header">SKILLS</div>
+    <div class="side-row"><span class="side-field" contenteditable="true" data-placeholder="Skill">Digital Marketing</span></div>
+    <div class="side-row"><span class="side-field" contenteditable="true" data-placeholder="Skill">Social Media Management</span></div>
+    <div class="side-row"><span class="side-field" contenteditable="true" data-placeholder="Skill">Content Creation</span></div>
+    <div class="side-row"><span class="side-field" contenteditable="true" data-placeholder="Skill">Customer Service</span></div>
+    <div class="side-row"><span class="side-field" contenteditable="true" data-placeholder="Skill">MS Office</span></div>
+
+    <div class="side-header">EDUCATION</div>
+    <div class="edu-block">
+      <div class="edu-bold" contenteditable="true" data-placeholder="Degree">Bachelor of Science in Business Administration</div>
+      <div class="edu-sub" contenteditable="true" data-placeholder="School">University Name</div>
+      <div class="edu-sub" contenteditable="true" data-placeholder="Years">2016 - 2020</div>
+    </div>
+
+    <div class="side-header">TRAININGS</div>
+    <div class="side-row"><span class="side-field" contenteditable="true" data-placeholder="Training">Digital Marketing Basics</span></div>
+    <div class="side-row"><span class="side-field" contenteditable="true" data-placeholder="Training">Social Media Management</span></div>
+  </div>
+
+  <div class="content">
+    <div class="name" contenteditable="true" data-placeholder="Your Name">Juana Dela Cruz</div>
+    <div class="job-title" contenteditable="true" data-placeholder="Job Title">MARKETING ASSISTANT</div>
+
+    <div class="section-header">ABOUT ME</div>
+    <div class="about-text" contenteditable="true" data-placeholder="Short intro about yourself">Motivated and detail-oriented professional with a background in marketing, excited to drive growth and create meaningful connections.</div>
+
+    <div class="section-header">WORK EXPERIENCE</div>
+    <div class="exp-entry">
+      <div class="exp-position" contenteditable="true" data-placeholder="Job Position">Marketing Assistant</div>
+      <div class="exp-company" contenteditable="true" data-placeholder="Company">ABC Corporation</div>
+      <div class="exp-dates" contenteditable="true" data-placeholder="Dates">Jan 2022 - Present</div>
+      <div class="exp-bullet" contenteditable="true" data-placeholder="Responsibility">Assisted in development and execution of marketing campaigns.</div>
+      <div class="exp-bullet" contenteditable="true" data-placeholder="Responsibility">Managed social media accounts and created engaging content.</div>
+    </div>
+    <div class="exp-entry">
+      <div class="exp-position" contenteditable="true" data-placeholder="Job Position">Customer Service Representative</div>
+      <div class="exp-company" contenteditable="true" data-placeholder="Company">XYZ Corporation</div>
+      <div class="exp-dates" contenteditable="true" data-placeholder="Dates">Jun 2020 - Dec 2021</div>
+      <div class="exp-bullet" contenteditable="true" data-placeholder="Responsibility">Assisted customers via phone, email, and chat.</div>
+      <div class="exp-bullet" contenteditable="true" data-placeholder="Responsibility">Resolved customer inquiries and complaints efficiently.</div>
+    </div>
+
+    <div class="section-header">ACHIEVEMENTS</div>
+    <div class="exp-bullet" contenteditable="true" data-placeholder="Achievement">Increased social media engagement by 40% in 3 months.</div>
+    <div class="exp-bullet" contenteditable="true" data-placeholder="Achievement">Recognized as Top Performing Staff.</div>
+  </div>
+
+</div></div></div>
+
+<script>
+  function fitPageToScreen() {
+    var page = document.querySelector('.page');
+    page.style.zoom = 1;
+    var pageWidth = 380;
+    var pageHeight = page.offsetHeight;
+    if (!pageHeight || pageHeight < 10) { pageHeight = 620; }
+    var scaleW = window.innerWidth / pageWidth;
+    var scaleH = window.innerHeight / pageHeight;
+    var scale = Math.min(scaleW, scaleH);
+    page.style.zoom = scale;
+  }
+  document.addEventListener('DOMContentLoaded', fitPageToScreen);
+  window.addEventListener('load', fitPageToScreen);
+  setTimeout(fitPageToScreen, 150);
+  window.addEventListener('resize', fitPageToScreen);
+</script>
+
+</body>
+</html>

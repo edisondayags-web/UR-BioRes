@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 100%; background: #F5F6F8;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  .page {
+    width: 100%; max-width: 500px; margin: 0 auto; background: white;
+    min-height: 100vh; padding: 28px 22px;
+  }
+  .header { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; }
+  .avatar-wrap { position: relative; width: 76px; height: 76px; flex-shrink: 0; }
+  .avatar-circle {
+    width: 76px; height: 76px; border-radius: 50%; background: #EEF1F5;
+    border: 2px solid #2B6CB0;
+  }
+  .avatar-plus {
+    position: absolute; bottom: -2px; right: -2px; width: 22px; height: 22px; border-radius: 50%;
+    background: #2B6CB0; color: white; display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: bold; border: 2px solid white;
+  }
+  .name { font-size: 22px; font-weight: 800; color: #1A2332; outline: none; line-height: 1.2; }
+  .title { font-size: 12.5px; color: #2B6CB0; font-weight: 600; margin-top: 2px; outline: none; }
+
+  .section { margin-bottom: 20px; }
+  .section-label {
+    font-size: 11px; font-weight: 800; color: #2B6CB0; letter-spacing: 1px;
+    margin-bottom: 8px; padding-bottom: 5px; border-bottom: 2px solid #2B6CB0;
+  }
+  .about-text { font-size: 11.5px; color: #444; line-height: 1.5; outline: none; }
+
+  .row { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; font-size: 11px; color: #333; }
+  .row-icon { width: 14px; flex-shrink: 0; color: #2B6CB0; font-size: 12px; }
+  .row-field { outline: none; flex: 1; }
+
+  .two-col { display: flex; gap: 18px; }
+  .col { flex: 1; min-width: 0; }
+
+  .edu-block { margin-bottom: 10px; }
+  .edu-deg { font-size: 11.5px; font-weight: 700; color: #1A2332; outline: none; }
+  .edu-sch { font-size: 10.5px; color: #555; outline: none; margin-top: 1px; }
+  .edu-yr { font-size: 10px; color: #2B6CB0; font-weight: 600; outline: none; margin-top: 1px; }
+
+  .skill-row { display: flex; align-items: center; gap: 7px; margin-bottom: 6px; font-size: 10.5px; color: #333; }
+  .skill-dot { width: 5px; height: 5px; border-radius: 50%; background: #2B6CB0; flex-shrink: 0; }
+  .skill-field { outline: none; flex: 1; }
+
+  .exp-entry { margin-bottom: 12px; padding-left: 12px; border-left: 2px solid #DCE3EC; }
+  .exp-pos { font-size: 11.5px; font-weight: 700; color: #1A2332; outline: none; }
+  .exp-co { font-size: 10.5px; color: #2B6CB0; font-weight: 600; outline: none; margin-top: 1px; }
+  .exp-dates { font-size: 9.5px; color: #888; outline: none; margin-top: 1px; }
+  .exp-desc { font-size: 10.5px; color: #444; outline: none; margin-top: 4px; line-height: 1.4; }
+
+  .ref-card { margin-bottom: 10px; }
+  .ref-name { font-size: 11px; font-weight: 700; color: #1A2332; outline: none; }
+  .ref-detail { font-size: 10px; color: #666; outline: none; margin-top: 1px; }
+
+  [contenteditable="true"]:empty:before { content: attr(data-placeholder); color: #A8B0BC; }
+  [contenteditable="true"]:focus { background: #EAF2FB; outline: 1px dashed #2B6CB0; border-radius: 2px; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <div class="avatar-wrap">
+      <div class="avatar-circle"></div>
+      <div class="avatar-plus">+</div>
+    </div>
+    <div>
+      <div class="name" contenteditable="true" data-placeholder="Ex: Your Name">Ex: Your Name</div>
+      <div class="title" contenteditable="true" data-placeholder="Ex: Professional Title">Ex: Professional Title</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">ABOUT ME</div>
+    <div class="about-text" contenteditable="true" data-placeholder="Write a short introduction about yourself.">Ex: Dedicated and motivated professional with strong communication skills.</div>
+  </div>
+
+  <div class="two-col">
+    <div class="col">
+      <div class="section">
+        <div class="section-label">CONTACT</div>
+        <div class="row"><span class="row-icon">&#128222;</span><span class="row-field" contenteditable="true" data-placeholder="Phone">Ex: 0912 345 6789</span></div>
+        <div class="row"><span class="row-icon">&#9993;</span><span class="row-field" contenteditable="true" data-placeholder="Email">Ex: youremail@email.com</span></div>
+        <div class="row"><span class="row-icon">&#128205;</span><span class="row-field" contenteditable="true" data-placeholder="Location">Ex: City, Province</span></div>
+        <div class="row"><span class="row-icon">&#128279;</span><span class="row-field" contenteditable="true" data-placeholder="LinkedIn">Ex: linkedin.com/in/you</span></div>
+      </div>
+      <div class="section">
+        <div class="section-label">SKILLS</div>
+        <div class="skill-row"><span class="skill-dot"></span><span class="skill-field" contenteditable="true" data-placeholder="Skill">Ex: Problem Solving</span></div>
+        <div class="skill-row"><span class="skill-dot"></span><span class="skill-field" contenteditable="true" data-placeholder="Skill">Ex: Communication</span></div>
+        <div class="skill-row"><span class="skill-dot"></span><span class="skill-field" contenteditable="true" data-placeholder="Skill">Ex: Teamwork</span></div>
+        <div class="skill-row"><span class="skill-dot"></span><span class="skill-field" contenteditable="true" data-placeholder="Skill">Ex: Leadership</span></div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="section">
+        <div class="section-label">EDUCATION</div>
+        <div class="edu-block">
+          <div class="edu-deg" contenteditable="true" data-placeholder="Degree">Ex: BS Information Technology</div>
+          <div class="edu-sch" contenteditable="true" data-placeholder="School">Ex: University Name</div>
+          <div class="edu-yr" contenteditable="true" data-placeholder="Years">Ex: 2018 - 2022</div>
+        </div>
+        <div class="edu-block">
+          <div class="edu-deg" contenteditable="true" data-placeholder="Degree">Ex: Senior High School</div>
+          <div class="edu-sch" contenteditable="true" data-placeholder="School">Ex: School Name</div>
+          <div class="edu-yr" contenteditable="true" data-placeholder="Years">Ex: 2016 - 2018</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">EXPERIENCE</div>
+    <div class="exp-entry">
+      <div class="exp-pos" contenteditable="true" data-placeholder="Job Position">Ex: IT Support Specialist</div>
+      <div class="exp-co" contenteditable="true" data-placeholder="Company">Ex: ABC Company</div>
+      <div class="exp-dates" contenteditable="true" data-placeholder="Dates">Ex: Jan 2023 - Present</div>
+      <div class="exp-desc" contenteditable="true" data-placeholder="Describe your role">Ex: Provided technical support and ensured smooth IT operations.</div>
+    </div>
+    <div class="exp-entry">
+      <div class="exp-pos" contenteditable="true" data-placeholder="Job Position">Ex: Web Developer</div>
+      <div class="exp-co" contenteditable="true" data-placeholder="Company">Ex: XYZ Solutions</div>
+      <div class="exp-dates" contenteditable="true" data-placeholder="Dates">Ex: Jun 2021 - Dec 2022</div>
+      <div class="exp-desc" contenteditable="true" data-placeholder="Describe your role">Ex: Developed and maintained websites for clients.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">REFERENCES</div>
+    <div class="two-col">
+      <div class="col ref-card">
+        <div class="ref-name" contenteditable="true" data-placeholder="Name">Ex: Reference Name</div>
+        <div class="ref-detail" contenteditable="true" data-placeholder="Position">Ex: Position / Company</div>
+        <div class="ref-detail" contenteditable="true" data-placeholder="Phone">Ex: 0912 111 2222</div>
+      </div>
+      <div class="col ref-card">
+        <div class="ref-name" contenteditable="true" data-placeholder="Name">Ex: Reference Name</div>
+        <div class="ref-detail" contenteditable="true" data-placeholder="Position">Ex: Position / Company</div>
+        <div class="ref-detail" contenteditable="true" data-placeholder="Phone">Ex: 0912 111 2222</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

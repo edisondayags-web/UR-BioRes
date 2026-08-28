@@ -81,8 +81,22 @@ class MainActivity : ComponentActivity() {
                     composable(Screen.ResumeMoreTemplates.route) {
                         ResumeTemplateGalleryScreen(
                             onTemplateSelected = { templateName ->
-                                navController.navigate(Screen.ResumeTemplateForm.createRoute(templateName))
+                                if (templateName.endsWith(".html")) {
+                                    navController.navigate(Screen.AiTemplate.createRoute(templateName))
+                                } else {
+                                    navController.navigate(Screen.ResumeTemplateForm.createRoute(templateName))
+                                }
                             },
+                            onBack = { navController.popBackStack() }
+                        )
+                    }
+                    composable(
+                        Screen.AiTemplate.route,
+                        arguments = listOf(navArgument("htmlFile") { type = NavType.StringType })
+                    ) { backStackEntry ->
+                        val htmlFile = backStackEntry.arguments?.getString("htmlFile") ?: ""
+                        com.saltech.urdocs.ui.screens.AiTemplateScreen(
+                            htmlFileName = htmlFile,
                             onBack = { navController.popBackStack() }
                         )
                     }
