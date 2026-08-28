@@ -55,7 +55,7 @@ class MainActivity : ComponentActivity() {
                             onChoose = { choice ->
                                 when (choice) {
                                     "traditional" -> navController.navigate(Screen.ResumeTraditional.route)
-                                    "hybrid" -> navController.navigate(Screen.ResumeHybrid.route)
+                                    "ai_html" -> navController.navigate(Screen.AiTemplate.createRoute("ai_template_02.html"))
                                     "gallery" -> navController.navigate(Screen.ResumeMoreTemplates.route)
                                     else -> navController.navigate(Screen.ResumeChronological.route)
                                 }
