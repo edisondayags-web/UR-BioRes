@@ -5,12 +5,12 @@
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body {
-    width: 100%; height: 100%; overflow: hidden; background: #0D1B2A;
+    width: 100%; background: #0D1B2A;
     font-family: Arial, Helvetica, sans-serif;
   }
-  .page-wrapper { width: 100%; height: 100vh; overflow: hidden; }
+  
   .page {
-    width: 380px; margin: 0 auto; background: white; transform-origin: top center;
+    width: 100%; max-width: 420px; margin: 0 auto; background: white;
   }
   .container { display: flex; width: 380px; }
 
@@ -54,7 +54,7 @@
 </style>
 </head>
 <body>
-<div class="page-wrapper"><div class="page"><div class="container">
+<div class="page"><div class="container">
 
   <div class="sidebar">
     <div class="avatar-circle"></div>
@@ -112,25 +112,8 @@
     <div class="exp-bullet" contenteditable="true" data-placeholder="Achievement">Recognized as Top Performing Staff.</div>
   </div>
 
-</div></div></div>
-
-<script>
-  function fitPageToScreen() {
-    var page = document.querySelector('.page');
-    page.style.zoom = 1;
-    var pageWidth = 380;
-    var pageHeight = page.offsetHeight;
-    if (!pageHeight || pageHeight < 10) { pageHeight = 620; }
-    var scaleW = window.innerWidth / pageWidth;
-    var scaleH = window.innerHeight / pageHeight;
-    var scale = Math.min(scaleW, scaleH);
-    page.style.zoom = scale;
-  }
-  document.addEventListener('DOMContentLoaded', fitPageToScreen);
-  window.addEventListener('load', fitPageToScreen);
-  setTimeout(fitPageToScreen, 150);
-  window.addEventListener('resize', fitPageToScreen);
-</script>
+</div>
+</div>
 
 </body>
 </html>
