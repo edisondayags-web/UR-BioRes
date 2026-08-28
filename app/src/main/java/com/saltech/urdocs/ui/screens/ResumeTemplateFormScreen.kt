@@ -200,23 +200,9 @@ fun ResumeTemplateFormScreen(
         ) {
             Icon(Icons.Filled.ArrowBack, contentDescription = "Back", tint = Color.White)
         }
-        val paperWidthDp = 850.dp
-        androidx.compose.foundation.layout.BoxWithConstraints(
-            modifier = Modifier.fillMaxSize().padding(top = 56.dp)
+        Column(
+            modifier = Modifier.fillMaxSize().padding(top = 56.dp).verticalScroll(rememberScrollState())
         ) {
-            var debugTick by remember { mutableStateOf(0) }
-            androidx.compose.material3.Text(
-                text = com.saltech.urdocs.util.DebugInfo.text,
-                color = Color.Yellow,
-                fontSize = 10.sp,
-                modifier = Modifier.align(Alignment.TopStart).background(Color.Black).zIndex(10f)
-            )
-            ScaledToFitContent(
-                availableWidth = maxWidth,
-                availableHeight = maxHeight,
-                modifier = Modifier.align(Alignment.TopCenter)
-            ) {
-                Box(modifier = Modifier.requiredWidth(paperWidthDp)) {
         when (templateName) {
             "resume_template_01" -> ResumeTemplate01Screen(data, { data = it }, onBack)
             "resume_template_02" -> ResumeTemplate02Screen(data, { data = it }, onBack)
@@ -1924,8 +1910,6 @@ fun ResumeTemplateFormScreen(
                 otherInfo = data.otherInfo,
                 onFieldChange = { k, v -> data = applyFieldChange(data, k, v) }
             )
-        }
-            }
         }
         }
     }
