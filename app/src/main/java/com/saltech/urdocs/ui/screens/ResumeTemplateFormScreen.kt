@@ -39,6 +39,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.unit.Constraints
@@ -204,6 +205,12 @@ fun ResumeTemplateFormScreen(
             modifier = Modifier.fillMaxSize().padding(top = 56.dp)
         ) {
             var debugTick by remember { mutableStateOf(0) }
+            androidx.compose.material3.Text(
+                text = com.saltech.urdocs.util.DebugInfo.text,
+                color = Color.Yellow,
+                fontSize = 10.sp,
+                modifier = Modifier.align(Alignment.TopStart).background(Color.Black).zIndex(10f)
+            )
             ScaledToFitContent(
                 availableWidth = maxWidth,
                 availableHeight = maxHeight,
