@@ -174,6 +174,7 @@ fun ScaledToFitContent(
         )
         val scaledWidth = (placeable.width * scale).toInt()
         val scaledHeight = (placeable.height * scale).toInt()
+        com.saltech.urdocs.util.DebugInfo.text = "pW=" + placeable.width + " pH=" + placeable.height + " aW=" + availableWidthPx.toInt() + " aH=" + availableHeightPx.toInt() + " scale=" + scale + " sW=" + scaledWidth + " sH=" + scaledHeight
         layout(scaledWidth, scaledHeight) {
             placeable.placeWithLayer(0, 0) {
                 scaleX = scale
@@ -202,6 +203,7 @@ fun ResumeTemplateFormScreen(
         androidx.compose.foundation.layout.BoxWithConstraints(
             modifier = Modifier.fillMaxSize().padding(top = 56.dp)
         ) {
+            var debugTick by remember { mutableStateOf(0) }
             ScaledToFitContent(
                 availableWidth = maxWidth,
                 availableHeight = maxHeight,
