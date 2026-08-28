@@ -22,7 +22,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Email
@@ -146,7 +145,7 @@ fun ResumeTemplate06_PixelPerfect(
     val nameFontSize = autoShrinkNameFontSize(userName)
 
     Box(Modifier.fillMaxWidth()) {
-    Box(Modifier.fillMaxWidth().background(Color(0xFF050505)).padding(0.dp).verticalScroll(rememberScrollState())) {
+    Box(Modifier.fillMaxWidth().background(Color(0xFF050505)).padding(0.dp)) {
         Box(Modifier.fillMaxWidth().defaultMinSize(minHeight = 700.dp).padding(10.dp).border(1.dp, accent.copy(alpha=0.35f), RoundedCornerShape(topStart=14.dp, topEnd=0.dp, bottomStart=0.dp, bottomEnd=14.dp)).drawWithContent {
                 graphicsLayer.record { this@drawWithContent.drawContent() }
                 drawLayer(graphicsLayer)
