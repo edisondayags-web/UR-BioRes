@@ -79,11 +79,15 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                     composable(Screen.ResumeMoreTemplates.route) {
-                        MoreTemplatesScreen(
-                            onBack = { navController.popBackStack() },
-                            onPackageSelected = { pkg ->
-                                navController.navigate(Screen.ResumeTemplateGallery.route)
-                            }
+                        ResumeTemplateGalleryScreen(
+                            onTemplateSelected = { templateName ->
+                                if (templateName.endsWith(".html")) {
+                                    navController.navigate(Screen.AiTemplate.createRoute(templateName))
+                                } else {
+                                    navController.navigate(Screen.ResumeTemplateForm.createRoute(templateName))
+                                }
+                            },
+                            onBack = { navController.popBackStack() }
                         )
                     }
                     composable(Screen.ResumeTemplateGallery.route) {
