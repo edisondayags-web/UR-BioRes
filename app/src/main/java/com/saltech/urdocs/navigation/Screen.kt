@@ -10,6 +10,7 @@ sealed class Screen(val route: String) {
     object AiTemplate : Screen("ai_template/{htmlFile}") {
       fun createRoute(htmlFile: String) = "ai_template/$htmlFile"
     }
+    object HtmlTemplateGallery : Screen("html_template_gallery")
     object ResumeTemplateForm : Screen("resume_template_form/{templateName}") {
       fun createRoute(templateName: String) = "resume_template_form/$templateName"
     }

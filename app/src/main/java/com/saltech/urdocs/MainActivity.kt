@@ -55,7 +55,7 @@ class MainActivity : ComponentActivity() {
                             onChoose = { choice ->
                                 when (choice) {
                                     "traditional" -> navController.navigate(Screen.ResumeTraditional.route)
-                                    "ai_html" -> navController.navigate(Screen.AiTemplate.createRoute("ai_template_02.html"))
+                                    "ai_html" -> navController.navigate(Screen.HtmlTemplateGallery.route)
                                     "gallery" -> navController.navigate(Screen.ResumeMoreTemplates.route)
                                     else -> navController.navigate(Screen.ResumeChronological.route)
                                 }
@@ -86,6 +86,14 @@ class MainActivity : ComponentActivity() {
                                 } else {
                                     navController.navigate(Screen.ResumeTemplateForm.createRoute(templateName))
                                 }
+                            },
+                            onBack = { navController.popBackStack() }
+                        )
+                    }
+                    composable(Screen.HtmlTemplateGallery.route) {
+                        com.saltech.urdocs.ui.screens.HtmlTemplateGalleryScreen(
+                            onTemplateSelected = { fileName ->
+                                navController.navigate(Screen.AiTemplate.createRoute(fileName))
                             },
                             onBack = { navController.popBackStack() }
                         )
