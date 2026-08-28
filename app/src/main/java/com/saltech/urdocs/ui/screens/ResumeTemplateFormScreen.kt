@@ -202,11 +202,6 @@ fun ResumeTemplateFormScreen(
         androidx.compose.foundation.layout.BoxWithConstraints(
             modifier = Modifier.fillMaxSize().padding(top = 56.dp)
         ) {
-            androidx.compose.material3.Text(
-                text = "avail=" + maxWidth.toString() + " x " + maxHeight.toString(),
-                color = Color.Yellow,
-                modifier = Modifier.align(Alignment.TopStart).background(Color.Black)
-            )
             ScaledToFitContent(
                 availableWidth = maxWidth,
                 availableHeight = maxHeight,
