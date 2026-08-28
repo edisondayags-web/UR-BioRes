@@ -24,16 +24,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlin.math.sin
 
-/**
- * "More Templates" screen.
- * - Animated flowing gradient lines in the background (blue -> pink sweep)
- * - Package 1 / Package 2 pill selector with a glowing scan-line
- *   sweeping across whichever card is active
- *
- * NOTE: No resume template previews here on purpose — those are handled
- * elsewhere. This screen is purely the picker UI.
- */
-
 private val NeonBlue = Color(0xFF3E7BFA)
 private val NeonPink = Color(0xFFFF4FA3)
 private val BgBlack = Color(0xFF05060A)
@@ -87,7 +77,6 @@ fun MoreTemplatesScreen(
             ) {
                 PackagePillCard(
                     label = "Package 1",
-                    crownColor = NeonBlue,
                     glowColor = NeonBlue,
                     selected = selectedPackage == 1,
                     modifier = Modifier.weight(1f),
@@ -98,7 +87,6 @@ fun MoreTemplatesScreen(
                 )
                 PackagePillCard(
                     label = "Package 2",
-                    crownColor = NeonPink,
                     glowColor = NeonPink,
                     selected = selectedPackage == 2,
                     modifier = Modifier.weight(1f),
@@ -108,21 +96,13 @@ fun MoreTemplatesScreen(
                     }
                 )
             }
-
-            // Rest of the screen (template list, etc.) is intentionally
-            // left out here — plug in your existing templates UI below.
         }
     }
 }
 
-/**
- * A single "Package" pill card with a rounded glowing border and an
- * animated scan-line that sweeps top-to-bottom only when selected.
- */
 @Composable
 private fun PackagePillCard(
     label: String,
-    crownColor: Color,
     glowColor: Color,
     selected: Boolean,
     modifier: Modifier = Modifier,
@@ -161,7 +141,6 @@ private fun PackagePillCard(
             )
             .clickable { onClick() }
     ) {
-        // Scan-line glow, clipped to the pill shape
         if (selected) {
             Canvas(
                 modifier = Modifier
@@ -205,11 +184,6 @@ private fun PackagePillCard(
     }
 }
 
-/**
- * Flowing gradient "wave" lines drifting across the background,
- * blue on the left sweeping into pink on the right — matching the
- * dark hero background used across the app's intro/format screens.
- */
 @Composable
 private fun AnimatedBackgroundLines(modifier: Modifier = Modifier) {
     val infinite = rememberInfiniteTransition(label = "bgLines")

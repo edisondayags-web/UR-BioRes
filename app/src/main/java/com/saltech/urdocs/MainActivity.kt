@@ -79,6 +79,14 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                     composable(Screen.ResumeMoreTemplates.route) {
+                        MoreTemplatesScreen(
+                            onBack = { navController.popBackStack() },
+                            onPackageSelected = { pkg ->
+                                navController.navigate(Screen.ResumeTemplateGallery.route)
+                            }
+                        )
+                    }
+                    composable(Screen.ResumeTemplateGallery.route) {
                         ResumeTemplateGalleryScreen(
                             onTemplateSelected = { templateName ->
                                 if (templateName.endsWith(".html")) {
