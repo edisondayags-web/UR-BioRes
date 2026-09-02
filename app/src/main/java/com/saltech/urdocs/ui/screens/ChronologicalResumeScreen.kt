@@ -152,7 +152,7 @@ fun ChronologicalResumeScreen() {
         BoxWithConstraints(
             modifier = Modifier.weight(1f).background(Color.Transparent)
         ) {
-        val fitScale = minOf(maxWidth / paperWidthDp, maxHeight / paperHeightDp)
+        val fitScale = maxWidth / paperWidthDp
             var scale by remember { mutableStateOf(fitScale) }
 
         Box(
@@ -169,7 +169,7 @@ fun ChronologicalResumeScreen() {
                     translationX = offset.x, translationY = offset.y
                 )
                 .requiredWidth(paperWidthDp)
-                .requiredHeight(paperHeightDp)
+                .wrapContentHeight()
                 .clipToBounds()
                 .drawWithCache {
                     val width = this.size.width.toInt().coerceAtLeast(1)
@@ -420,7 +420,7 @@ private fun ContactFieldInline(icon: String, value: String, onChange: (String) -
             textStyle = TextStyle(fontSize = 12.sp, color = Color.Black),
             cursorBrush = SolidColor(Color.Black),
             interactionSource = interactionSource,
-            modifier = Modifier.width(130.dp).background(if (isFocused) Color(0xFFFFF3CD) else Color.Transparent)
+            modifier = Modifier.width(180.dp).background(if (isFocused) Color(0xFFFFF3CD) else Color.Transparent)
         )
     }
 }
