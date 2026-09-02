@@ -15,6 +15,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -63,11 +67,17 @@ private val htmlColorTemplates = listOf(
     HtmlColorInfo("ai_template_11_indigo_dark1.html", "Indigo Dark", Color(0xFF6B4FF3), Color(0xFF3A2B85)),
 )
 
+private val htmlPackage2Templates = listOf(
+    HtmlColorInfo("ai_template_03.html", "AI-3", Color(0xFF6FBE44), Color(0xFF1E2A3A)),
+)
+
 @Composable
 fun HtmlTemplateGalleryScreen(
     onTemplateSelected: (String) -> Unit,
     onBack: () -> Unit = {}
 ) {
+    var selectedPackage by remember { mutableStateOf(1) }
+
     Box(modifier = Modifier.fillMaxSize().background(Color(0xFF0B1530))) {
         PremiumWaveBackground()
         Column(modifier = Modifier.fillMaxSize()) {
@@ -82,6 +92,28 @@ fun HtmlTemplateGalleryScreen(
                 Text("tap kalang dyan luv🩵", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp)
             }
 
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 4.dp),
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                PackageTab(
+                    label = "Package 1",
+                    selected = selectedPackage == 1,
+                    onClick = { selectedPackage = 1 },
+                    modifier = Modifier.weight(1f)
+                )
+                PackageTab(
+                    label = "Package 2",
+                    selected = selectedPackage == 2,
+                    onClick = { selectedPackage = 2 },
+                    modifier = Modifier.weight(1f)
+                )
+            }
+
+            val currentTemplates = if (selectedPackage == 1) htmlColorTemplates else htmlPackage2Templates
+
             LazyVerticalGrid(
                 columns = GridCells.Fixed(5),
                 contentPadding = PaddingValues(10.dp),
@@ -89,7 +121,7 @@ fun HtmlTemplateGalleryScreen(
                 verticalArrangement = Arrangement.spacedBy(10.dp),
                 modifier = Modifier.fillMaxSize()
             ) {
-                items(htmlColorTemplates, key = { it.fileName }) { t ->
+                items(currentTemplates, key = { it.fileName }) { t ->
                     Box(
                         modifier = Modifier
                             .padding(4.dp)
@@ -121,6 +153,26 @@ fun HtmlTemplateGalleryScreen(
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun PackageTab(
+    label: String,
+    selected: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .clip(RoundedCornerShape(12.dp))
+            .background(if (selected) Color(0xFF3B6FE0) else Color.Black.copy(alpha = 0.4f))
+            .border(1.dp, Color(0xFF3B6FE0).copy(alpha = if (selected) 1f else 0.4f), RoundedCornerShape(12.dp))
+            .clickable { onClick() }
+            .padding(vertical = 10.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(label, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 14.sp)
     }
 }
 
