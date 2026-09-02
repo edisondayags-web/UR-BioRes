@@ -134,6 +134,10 @@ private val htmlPackage3Templates = listOf(
     HtmlColorInfo("ai_template_p3_30.html", "Ocean Breeze (Reverse Diagonal)", Color(0xFF38BDF8), Color(0xFF0D1B2E)),
 )
 
+private val htmlPackage4Templates = listOf(
+    HtmlColorInfo("ai_template_p4_01.html", "Teal Chevron", Color(0xFF1AB5A3), Color(0xFF191D24)),
+)
+
 @Composable
 fun HtmlTemplateGalleryScreen(
     onTemplateSelected: (String) -> Unit,
@@ -179,9 +183,15 @@ fun HtmlTemplateGalleryScreen(
                     onClick = { selectedPackage = 3 },
                     modifier = Modifier.weight(1f)
                 )
+                PackageTab(
+                    label = "Package 4",
+                    selected = selectedPackage == 4,
+                    onClick = { selectedPackage = 4 },
+                    modifier = Modifier.weight(1f)
+                )
             }
 
-            val currentTemplates = when (selectedPackage) { 1 -> htmlColorTemplates; 2 -> htmlPackage2Templates; else -> htmlPackage3Templates }
+            val currentTemplates = when (selectedPackage) { 1 -> htmlColorTemplates; 2 -> htmlPackage2Templates; 3 -> htmlPackage3Templates; else -> htmlPackage4Templates }
 
             LazyVerticalGrid(
                 columns = GridCells.Fixed(5),
