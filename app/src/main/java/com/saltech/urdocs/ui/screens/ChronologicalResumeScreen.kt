@@ -58,6 +58,8 @@ import androidx.compose.material3.TextButton
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.AnnotatedString
 
+private val NavyColor = Color(0xFF1B2A4A)
+
 /**
  * "Chronological" na Resume -- ATS-friendly single-header + two-column style.
  * JOB TITLE (malaki) sa taas, pangalan sa ibaba, contact row (phone | email | location | linkedin),
@@ -194,9 +196,9 @@ fun ChronologicalResumeScreen() {
                 // ===== HEADER (centered) — job title malaki sa taas, pangalan sa ibaba =====
                 BasicTextFieldCentered(
                     value = data.jobTitle,
-                    fontSize = 26.sp,
+                    fontSize = 28.sp,
                     bold = true,
-                    letterSpacing = 1.sp,
+                    letterSpacing = 2.sp,
                     placeholder = "PROFESSIONAL TITLE",
                     onChange = { data = data.copy(jobTitle = it) }
                 )
@@ -205,6 +207,7 @@ fun ChronologicalResumeScreen() {
                     value = data.name,
                     fontSize = 15.sp,
                     bold = false,
+                    letterSpacing = 2.sp,
                     placeholder = "YOUR NAME",
                     onChange = { data = data.copy(name = it) }
                 )
@@ -223,17 +226,18 @@ fun ChronologicalResumeScreen() {
                     ContactFieldInline("🔗", data.linkedin) { data = data.copy(linkedin = it) }
                 }
                 Spacer(Modifier.height(10.dp))
-                Spacer(Modifier.fillMaxWidth().height(1.dp).background(Color.Black))
+                Spacer(Modifier.fillMaxWidth().height(1.dp).background(NavyColor))
                 Spacer(Modifier.height(16.dp))
+
+                // ===== PROFESSIONAL SUMMARY (full width, sarili lang na row) =====
+                SectionHeader2("", "PROFESSIONAL SUMMARY")
+                ParagraphField(data.summary) { data = data.copy(summary = it) }
+                Spacer(Modifier.height(14.dp))
 
                 // ===== TWO COLUMNS =====
                 Row(modifier = Modifier.weight(1f)) {
-                    // LEFT COLUMN (wider) — summary, experience, education
+                    // LEFT COLUMN (wider) — experience, education
                     Column(modifier = Modifier.weight(2f)) {
-                        SectionHeader2("", "PROFESSIONAL SUMMARY")
-                        ParagraphField(data.summary) { data = data.copy(summary = it) }
-
-                        Spacer(Modifier.height(14.dp))
                         SectionHeader2("", "PROFESSIONAL EXPERIENCE")
                         data.work.forEachIndexed { i, entry ->
                             Row(modifier = Modifier.fillMaxWidth().padding(top = 6.dp)) {
@@ -375,9 +379,9 @@ private fun Modifier.bottomLine2(color: Color = Color.Black, thickness: Dp = 1.d
 private fun SectionHeader2(icon: String, title: String) {
     Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(bottom = 4.dp)) {
         if (icon.isNotEmpty()) Text("$icon  ", fontSize = 15.sp)
-        Text(title, fontWeight = FontWeight.Bold, fontSize = 15.sp, color = Color.Black, letterSpacing = 0.5.sp)
+        Text(title, fontWeight = FontWeight.Bold, fontSize = 15.sp, color = NavyColor, letterSpacing = 0.5.sp)
     }
-    Spacer(Modifier.fillMaxWidth().height(1.dp).background(Color.Black))
+    Spacer(Modifier.fillMaxWidth().height(1.dp).background(NavyColor))
     Spacer(Modifier.height(6.dp))
 }
 
@@ -398,7 +402,7 @@ private fun BasicTextFieldCentered(
             textStyle = TextStyle(
                 fontSize = fontSize,
                 fontWeight = if (bold) FontWeight.Bold else FontWeight.Normal,
-                color = Color.Black,
+                color = NavyColor,
                 textAlign = TextAlign.Center,
                 letterSpacing = letterSpacing
             ),
