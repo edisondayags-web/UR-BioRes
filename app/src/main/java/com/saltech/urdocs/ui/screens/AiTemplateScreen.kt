@@ -113,9 +113,11 @@ fun AiTemplateScreen(htmlFileName: String, onBack: () -> Unit = {}) {
             Button(
                 onClick = {
                     val wv = webViewRef
-                    if (wv != null && wv.width > 0 && wv.height > 0) {
-                        val bmp = Bitmap.createBitmap(wv.width, wv.height, Bitmap.Config.ARGB_8888)
+                    if (wv != null && wv.width > 0) {
+                        val fullHeight = (wv.contentHeight * wv.scale).toInt().coerceAtLeast(wv.height)
+                        val bmp = Bitmap.createBitmap(wv.width, fullHeight, Bitmap.Config.ARGB_8888)
                         val canvas = Canvas(bmp)
+                        canvas.drawColor(android.graphics.Color.WHITE)
                         wv.draw(canvas)
                         saveBitmapToGallery(context, bmp, htmlFileName.removeSuffix(".html"))
                     }
