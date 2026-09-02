@@ -2,14 +2,9 @@ package com.saltech.urdocs.ui.screens
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.pdf.PdfRenderer
+import android.graphics.Canvas
+import android.graphics.Matrix
 import android.net.Uri
-import android.os.CancellationSignal
-import android.os.ParcelFileDescriptor
-import android.print.PageRange
-import android.print.PrintAttributes
-import android.print.PrintDocumentAdapter
-import android.print.PrintDocumentInfo
 import android.util.Base64
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -41,63 +36,43 @@ import com.saltech.urdocs.ml.FaceCropHelper
 import com.saltech.urdocs.ui.templates.saveBitmapToGallery
 import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
-import java.io.File
 
-private fun exportWebViewToBitmap(
-    context: android.content.Context,
-    webView: WebView,
-    onDone: (Bitmap?) -> Unit
-) {
+private fun captureFullWebView(webView: WebView): Bitmap {
+    val originalLayerType = webView.layerType
+    webView.setLayerType(android.view.View.LAYER_TYPE_SOFTWARE, null)
     val fullHeight = (webView.contentHeight * webView.scale).toInt().coerceAtLeast(webView.height)
-    val width = webView.width.coerceAtLeast(1)
+    val bmp = Bitmap.createBitmap(webView.width, fullHeight, Bitmap.Config.ARGB_8888)
+    val canvas = Canvas(bmp)
+    canvas.drawColor(android.graphics.Color.WHITE)
+    webView.draw(canvas)
+    webView.setLayerType(originalLayerType, null)
+    return bmp
+}
 
-    val dpi = 150
-    val widthMils = ((width.toFloat() / dpi) * 1000).toInt().coerceAtLeast(1)
-    val heightMils = ((fullHeight.toFloat() / dpi) * 1000).toInt().coerceAtLeast(1)
+private fun shrinkToA4(source: Bitmap): Bitmap {
+    // A4 ratio at 300dpi
+    val pageWidth = 2480
+    val pageHeight = 3508
 
-    val mediaSize = PrintAttributes.MediaSize("resume", "resume", widthMils, heightMils)
-    val attributes = PrintAttributes.Builder()
-        .setMediaSize(mediaSize)
-        .setResolution(PrintAttributes.Resolution("res", "res", dpi, dpi))
-        .setMinMargins(PrintAttributes.Margins.NO_MARGINS)
-        .build()
+    val scale = minOf(
+        pageWidth.toFloat() / source.width,
+        pageHeight.toFloat() / source.height
+    )
+    val scaledWidth = (source.width * scale).toInt().coerceAtLeast(1)
+    val scaledHeight = (source.height * scale).toInt().coerceAtLeast(1)
 
-    val adapter = webView.createPrintDocumentAdapter("resume_export")
+    val page = Bitmap.createBitmap(pageWidth, pageHeight, Bitmap.Config.ARGB_8888)
+    val canvas = Canvas(page)
+    canvas.drawColor(android.graphics.Color.WHITE)
 
-    adapter.onLayout(null, attributes, CancellationSignal(), object : PrintDocumentAdapter.LayoutResultCallback() {
-        override fun onLayoutFinished(info: PrintDocumentInfo?, changed: Boolean) {
-            try {
-                val file = File(context.cacheDir, "export_${System.currentTimeMillis()}.pdf")
-                val writePfd = ParcelFileDescriptor.open(
-                    file,
-                    ParcelFileDescriptor.MODE_CREATE or ParcelFileDescriptor.MODE_READ_WRITE or ParcelFileDescriptor.MODE_TRUNCATE
-                )
-                adapter.onWrite(arrayOf(PageRange.ALL_PAGES), writePfd, CancellationSignal(), object : PrintDocumentAdapter.WriteResultCallback() {
-                    override fun onWriteFinished(pages: Array<out PageRange>?) {
-                        try {
-                            writePfd.close()
-                            val readPfd = ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)
-                            val renderer = PdfRenderer(readPfd)
-                            val page = renderer.openPage(0)
-                            val bmp = Bitmap.createBitmap(width, fullHeight, Bitmap.Config.ARGB_8888)
-                            val canvas = android.graphics.Canvas(bmp)
-                            canvas.drawColor(android.graphics.Color.WHITE)
-                            page.render(bmp, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
-                            page.close()
-                            renderer.close()
-                            readPfd.close()
-                            file.delete()
-                            onDone(bmp)
-                        } catch (e: Exception) {
-                            onDone(null)
-                        }
-                    }
-                })
-            } catch (e: Exception) {
-                onDone(null)
-            }
-        }
-    }, null)
+    val left = (pageWidth - scaledWidth) / 2f
+    val top = 0f
+    val matrix = Matrix()
+    matrix.postScale(scale, scale)
+    matrix.postTranslate(left, top)
+    canvas.drawBitmap(source, matrix, null)
+
+    return page
 }
 
 @Composable
@@ -178,11 +153,9 @@ fun AiTemplateScreen(htmlFileName: String, onBack: () -> Unit = {}) {
                 onClick = {
                     val wv = webViewRef
                     if (wv != null && wv.width > 0) {
-                        exportWebViewToBitmap(context, wv) { bmp ->
-                            if (bmp != null) {
-                                saveBitmapToGallery(context, bmp, htmlFileName.removeSuffix(".html"))
-                            }
-                        }
+                        val full = captureFullWebView(wv)
+                        val fitted = shrinkToA4(full)
+                        saveBitmapToGallery(context, fitted, htmlFileName.removeSuffix(".html"))
                     }
                 },
                 shape = RoundedCornerShape(50),
