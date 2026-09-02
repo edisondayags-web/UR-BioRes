@@ -233,5 +233,50 @@
   </div>
 
 </div>
+<!-- AUTO-SHRINK-NAME -->
+<script>
+(function(){
+  function getTargets(el){
+    if(!el) return [];
+    if(el.classList.contains('name-row2') || el.classList.contains('name-row')){
+      return Array.prototype.filter.call(el.children, function(c){ return c.tagName === 'SPAN'; });
+    }
+    return [el];
+  }
+  function shrinkToFit(el){
+    if(!el) return;
+    var targets = getTargets(el);
+    if(!targets.length) return;
+    if(!el.dataset.baseFont){
+      el.dataset.baseFont = parseFloat(getComputedStyle(targets[0]).fontSize) || 22;
+    }
+    var baseFont = parseFloat(el.dataset.baseFont);
+    var minFont = baseFont * 0.5;
+    var maxWidth = el.parentElement ? el.parentElement.clientWidth : el.clientWidth;
+    var fs = baseFont;
+    targets.forEach(function(t){ t.style.fontSize = fs + 'px'; });
+    var guard = 0;
+    while(el.scrollWidth > maxWidth && fs > minFont && guard < 80){
+      fs -= 0.5;
+      targets.forEach(function(t){ t.style.fontSize = fs + 'px'; });
+      guard++;
+    }
+  }
+  function init(){
+    var el = document.querySelector('.name-row2, .name-row, .h-name, .name');
+    if(!el) return;
+    el.style.whiteSpace = 'nowrap';
+    shrinkToFit(el);
+    el.addEventListener('input', function(){ shrinkToFit(el); });
+    window.addEventListener('resize', function(){ shrinkToFit(el); });
+    window.addEventListener('load', function(){ shrinkToFit(el); });
+  }
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
 </body>
 </html>
