@@ -149,21 +149,6 @@ fun ChronologicalResumeScreen() {
     Box(modifier = Modifier.fillMaxSize()) {
         PremiumWaveBackground()
         Column(modifier = Modifier.fillMaxSize()) {
-        AndroidView(
-            factory = { ctx ->
-                AdView(ctx).apply {
-                    val displayMetrics = ctx.resources.displayMetrics
-                    val adWidthPixels = displayMetrics.widthPixels.toFloat()
-                    val density = displayMetrics.density
-                    val adWidth = (adWidthPixels / density).toInt()
-                    setAdSize(AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(ctx, adWidth))
-                    adUnitId = "ca-app-pub-3134240485602899/5923255956"
-                    loadAd(AdRequest.Builder().build())
-                }
-            },
-            modifier = Modifier.fillMaxWidth()
-        )
-
         BoxWithConstraints(
             modifier = Modifier.weight(1f).background(Color.Transparent)
         ) {
