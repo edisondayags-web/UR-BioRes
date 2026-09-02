@@ -59,9 +59,10 @@ import androidx.compose.ui.text.AnnotatedString
 
 /**
  * "Chronological" na Resume -- ATS-friendly single-header + two-column style.
- * NAME (malaki) sa taas, job title, contact row (phone | email | location | linkedin),
+ * JOB TITLE (malaki) sa taas, pangalan sa ibaba, contact row (phone | email | location | linkedin),
  * Professional Summary + Work Experience + Education sa kaliwa (mas malapad),
  * Soft Skills + Technical Skills + Languages + Interests sa kanan (mas makitid).
+ * May prefilled guide text (editable) para hindi blangko ang preview.
  */
 data class ChronoWorkEntry(
     val role: String = "",
@@ -72,21 +73,47 @@ data class ChronoWorkEntry(
 )
 
 data class ChronologicalResumeFields(
-    val name: String = "",
-    val jobTitle: String = "",
-    val phone: String = "",
-    val email: String = "",
-    val location: String = "",
-    val linkedin: String = "",
-    val summary: String = "",
-    val work: List<ChronoWorkEntry> = List(2) { ChronoWorkEntry() },
-    val eduDegree: String = "",
-    val eduSchool: String = "",
-    val eduYear: String = "",
-    val softSkills: List<String> = List(5) { "" },
-    val technicalSkills: List<String> = List(4) { "" },
-    val languages: List<String> = List(2) { "" },
-    val interests: List<String> = List(2) { "" }
+    val name: String = "Fanny Cooper",
+    val jobTitle: String = "Sales Representative",
+    val phone: String = "123 456 7890",
+    val email: String = "fannycooper@email.com",
+    val location: String = "Chicago",
+    val linkedin: String = "linkedin.com/in/fannycooper",
+    val summary: String = "With a background in marketing and sales, and a Master's degree in Business Development, I bring a strong combination of field experience and client relationship management. Through two roles in direct sales, I have developed the ability to prospect, understand customer needs, negotiate effectively, and build long-term client loyalty. Autonomous, detail-oriented, and results-driven, I am eager to contribute to your company's commercial growth through a personalized and performance-focused approach.",
+    val work: List<ChronoWorkEntry> = listOf(
+        ChronoWorkEntry(
+            role = "Sales Assistant",
+            company = "Mod'Style Boutique, Chicago",
+            from = "2019",
+            to = "2021",
+            bullets = listOf(
+                "In a direct BtoC sales context, I adapted my prospecting and closing techniques to each customer profile, which allowed me to exceed 110% of monthly objectives for 10 consecutive months.",
+                "Faced with a need to improve customer follow-up, I designed and structured a personalized reminder file, which generated a 30% increase in the revisit rate in 6 months.",
+                "Responsible for integrating two new recruits, I trained them in sales techniques and product pitches, promoting their autonomy and rapid growth in skills."
+            )
+        ),
+        ChronoWorkEntry(
+            role = "Bartender",
+            company = "Le Patio, Chicago",
+            from = "2013",
+            to = "2018",
+            bullets = listOf(
+                "Analyzed customer preferences by age group and tailored beverage recommendations accordingly, resulting in a 25% increase in sales.",
+                "Built strong relationships with regular customers by creating authentic, personalized interactions, driving long-term loyalty and repeat business.",
+                "Maintained fast, high-quality service during peak hours by effectively managing pressure and prioritizing tasks to ensure customer satisfaction."
+            )
+        )
+    ),
+    val eduDegree: String = "Bachelor Negotiation and Digitalization of Customer Relations",
+    val eduSchool: String = "Lycée Gustave Eiffel – Chicago",
+    val eduYear: String = "Class of 2018",
+    val softSkills: List<String> = listOf(
+        "Analytical thinking", "Adaptability", "Resilience under pressure",
+        "Strong communication skills", "Problem-solving mindset", "Self-discipline and time management"
+    ),
+    val technicalSkills: List<String> = listOf("Google Analytics", "Google Ads", "Meta Ads Manager", "HubSpot"),
+    val languages: List<String> = listOf("French: Full professional proficiency", "Spanish: Professional proficiency"),
+    val interests: List<String> = listOf("Hiking – Helps me develop endurance, consistency, and perseverance, qualities that are essential in sales roles.")
 )
 
 @Composable
@@ -177,22 +204,22 @@ fun ChronologicalResumeScreen() {
               ) {
             Column(modifier = Modifier.fillMaxSize()) {
 
-                // ===== HEADER (centered) =====
-                BasicTextFieldCentered(
-                    value = data.name,
-                    fontSize = 28.sp,
-                    bold = true,
-                    placeholder = "YOUR NAME",
-                    onChange = { data = data.copy(name = it) }
-                )
-                Spacer(Modifier.height(4.dp))
+                // ===== HEADER (centered) — job title malaki sa taas, pangalan sa ibaba =====
                 BasicTextFieldCentered(
                     value = data.jobTitle,
-                    fontSize = 13.sp,
-                    bold = false,
+                    fontSize = 26.sp,
+                    bold = true,
                     letterSpacing = 1.sp,
                     placeholder = "PROFESSIONAL TITLE",
                     onChange = { data = data.copy(jobTitle = it) }
+                )
+                Spacer(Modifier.height(4.dp))
+                BasicTextFieldCentered(
+                    value = data.name,
+                    fontSize = 15.sp,
+                    bold = false,
+                    placeholder = "YOUR NAME",
+                    onChange = { data = data.copy(name = it) }
                 )
                 Spacer(Modifier.height(8.dp))
                 Row(
@@ -237,7 +264,6 @@ fun ChronologicalResumeScreen() {
                             MiniField2("", entry.role, Modifier.fillMaxWidth()) { v ->
                                 data = data.copy(work = data.work.toMutableList().also { it[i] = entry.copy(role = v) })
                             }
-                            Text("(Position / Role)", fontSize = 9.sp, fontStyle = FontStyle.Italic, color = Color.Black)
                             BulletLines2(entry.bullets) { idx, v ->
                                 val newBullets = entry.bullets.toMutableList().also { it[idx] = v }
                                 data = data.copy(work = data.work.toMutableList().also { it[i] = entry.copy(bullets = newBullets) })
@@ -247,9 +273,9 @@ fun ChronologicalResumeScreen() {
 
                         Spacer(Modifier.height(14.dp))
                         SectionHeader2("", "EDUCATION")
-                        FieldLine("Degree/Course", data.eduDegree) { data = data.copy(eduDegree = it) }
-                        FieldLine("School - City", data.eduSchool) { data = data.copy(eduSchool = it) }
-                        FieldLine("Year", data.eduYear) { data = data.copy(eduYear = it) }
+                        EduLine(data.eduSchool, bold = false) { data = data.copy(eduSchool = it) }
+                        EduLine(data.eduDegree, bold = true) { data = data.copy(eduDegree = it) }
+                        EduLine(data.eduYear, bold = false) { data = data.copy(eduYear = it) }
                     }
 
                     Spacer(Modifier.width(20.dp))
@@ -406,7 +432,7 @@ private fun ContactFieldInline(icon: String, value: String, onChange: (String) -
             textStyle = TextStyle(fontSize = 10.sp, color = Color.Black),
             cursorBrush = SolidColor(Color.Black),
             interactionSource = interactionSource,
-            modifier = Modifier.width(110.dp).background(if (isFocused) Color(0xFFFFF3CD) else Color.Transparent)
+            modifier = Modifier.width(130.dp).background(if (isFocused) Color(0xFFFFF3CD) else Color.Transparent)
         )
     }
 }
@@ -425,21 +451,20 @@ private fun ParagraphField(value: String, onChange: (String) -> Unit) {
 }
 
 @Composable
-private fun FieldLine(label: String, value: String, onChange: (String) -> Unit) {
+private fun EduLine(value: String, bold: Boolean, onChange: (String) -> Unit) {
     val interactionSource = remember { MutableInteractionSource() }
     val isFocused by interactionSource.collectIsFocusedAsState()
-    Column(modifier = Modifier.fillMaxWidth().padding(top = 6.dp)) {
-        Row(verticalAlignment = Alignment.Bottom) {
-            Text("$label: ", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = Color.Black)
-            BasicTextField(
-                value = value, onValueChange = onChange,
-                textStyle = TextStyle(fontSize = 11.sp, color = Color.Black),
-                cursorBrush = SolidColor(Color.Black),
-                interactionSource = interactionSource,
-                modifier = Modifier.weight(1f).background(if (isFocused) Color(0xFFFFF3CD) else Color.Transparent)
-            )
-        }
-    }
+    BasicTextField(
+        value = value, onValueChange = onChange,
+        textStyle = TextStyle(
+            fontSize = 11.sp,
+            fontWeight = if (bold) FontWeight.Bold else FontWeight.Normal,
+            color = Color.Black
+        ),
+        cursorBrush = SolidColor(Color.Black),
+        interactionSource = interactionSource,
+        modifier = Modifier.fillMaxWidth().padding(top = 4.dp).background(if (isFocused) Color(0xFFFFF3CD) else Color.Transparent)
+    )
 }
 
 @Composable
