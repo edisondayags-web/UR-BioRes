@@ -4,12 +4,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { width: 100%; min-height: 100%; background: #0A1931; font-family: Arial, Helvetica, sans-serif; }
+  html, body { width: 100%; min-height: 100%; background: white; font-family: Arial, Helvetica, sans-serif; }
   .page { width: 100%; max-width: 420px; margin: 0 auto; background: white; }
   .body-flex { display: flex; }
 
   /* ===== SIDEBAR (photo + about + skills + awards + languages) ===== */
   .sidebar { width: 34%; background: #0A1931; color: white; padding: 0 0 14px 0; }
+  .sidebar { position: relative; }
+  .corner-accent { position: absolute; top: 0; left: 0; width: 40px; height: 40px; background: #8BC34A; clip-path: polygon(0 0, 100% 0, 0 100%); z-index: 2; }
   .photo-box {
     width: 100%; aspect-ratio: 3 / 4; position: relative;
     background-image: linear-gradient(45deg, #16305A 25%, transparent 25%), linear-gradient(-45deg, #16305A 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #16305A 75%), linear-gradient(-45deg, transparent 75%, #16305A 75%);
@@ -91,6 +93,7 @@
 
   <div class="body-flex">
     <div class="sidebar">
+      <div class="corner-accent"></div>
       <div class="photo-box">PHOTO</div>
       <div class="side-pad">
         <div class="side-header"><div class="head-icon">&#9776;</div><div class="side-title">ABOUT ME</div></div>
