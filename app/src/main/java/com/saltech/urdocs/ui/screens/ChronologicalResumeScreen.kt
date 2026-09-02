@@ -123,7 +123,7 @@ data class ChronologicalResumeFields(
 fun ChronologicalResumeScreen() {
     //SecureScreen()
     val paperWidthDp = 850.dp
-    val paperHeightDp = 1100.dp
+    val paperHeightDp = 1500.dp
 
     var data by remember { mutableStateOf(ChronologicalResumeFields()) }
     var offset by remember { mutableStateOf(Offset.Zero) }
@@ -153,7 +153,7 @@ fun ChronologicalResumeScreen() {
         BoxWithConstraints(
             modifier = Modifier.weight(1f).background(Color.Transparent)
         ) {
-        val fitScale = maxHeight / paperHeightDp
+        val fitScale = minOf(maxWidth / paperWidthDp, maxHeight / paperHeightDp)
             var scale by remember { mutableStateOf(fitScale) }
 
         Box(
