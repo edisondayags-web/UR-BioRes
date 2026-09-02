@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 100%; min-height: 100%; background: white; font-family: Arial, Helvetica, sans-serif; }
+  .page { width: 100%; max-width: 460px; margin: 0 auto; background: white; min-height: 100vh; display: flex; }
+
+  /* ===== SIDEBAR ===== */
+  .sidebar { width: 34%; background: #14161A; color: white; }
+  .photo-header { position: relative; padding: 26px 0 16px 0; overflow: hidden; text-align: center; }
+  .tri-1 { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #73DC3B; clip-path: polygon(0 0, 100% 0, 100% 100%, 45% 100%, 75% 45%); z-index: 0; }
+  .tri-2 { position: absolute; top: 0; left: 0; width: 65%; height: 100%; background: white; clip-path: polygon(0 0, 70% 0, 70% 100%, 45% 100%, 55% 40%); z-index: 1; opacity: 0.25; }
+  .photo-circle {
+    width: 76%; aspect-ratio: 1/1; margin: 0 auto; border-radius: 50%; border: 4px solid white;
+    background: #eee; display: flex; align-items: center; justify-content: center;
+    font-size: 7px; color: #999; position: relative; z-index: 2; box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  }
+
+  .side-block { padding: 10px 14px 4px 14px; }
+  .side-title { font-size: 9px; font-weight: 800; color: white; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .side-divider { height: 1.5px; background: #73DC3B; margin-bottom: 8px; }
+
+  .contact-item { margin-bottom: 8px; }
+  .contact-label-row { display: flex; align-items: center; gap: 5px; }
+  .contact-icon { width: 14px; height: 14px; border-radius: 50%; background: #73DC3B; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 6.5px; color: white; }
+  .contact-label { font-size: 6px; font-weight: 800; color: white; letter-spacing: 0.5px; }
+  .contact-value { font-size: 6px; color: rgba(255,255,255,0.8); outline: none; margin-left: 19px; margin-top: 1px; word-break: break-word; }
+
+  .skill-row { margin-bottom: 7px; }
+  .skill-name { font-size: 6px; color: white; outline: none; margin-bottom: 2px; }
+  .skill-bar-wrap { display: flex; align-items: center; gap: 5px; }
+  .skill-bar-bg { flex: 1; height: 3px; background: rgba(255,255,255,0.2); border-radius: 3px; position: relative; }
+  .skill-bar-fill { height: 100%; background: #73DC3B; border-radius: 3px; position: relative; }
+  .skill-bar-fill:after { content: ""; position: absolute; right: -3px; top: 50%; transform: translateY(-50%); width: 6px; height: 6px; border-radius: 50%; background: white; border: 1.5px solid #73DC3B; }
+  .skill-pct { font-size: 5.5px; color: rgba(255,255,255,0.8); flex-shrink: 0; width: 20px; text-align: right; outline: none; }
+
+  .cert-item { font-size: 6px; color: rgba(255,255,255,0.85); outline: none; margin-bottom: 4px; padding-left: 8px; position: relative; line-height: 1.3; }
+  .cert-item:before { content: "•"; color: #73DC3B; position: absolute; left: 0; }
+
+  /* ===== MAIN ===== */
+  .main-content { width: 66%; background: white; padding: 26px 16px 16px 16px; }
+  .name-row2 { line-height: 1; }
+  .name-accent { font-size: 22px; font-weight: 900; color: #73DC3B; outline: none; }
+  .name-dark { font-size: 22px; font-weight: 300; color: #222; outline: none; }
+  .role-sub { font-size: 8.5px; color: #666; letter-spacing: 2px; outline: none; margin-top: 4px; }
+  .name-underline { width: 40px; height: 2.5px; background: #73DC3B; margin-top: 8px; margin-bottom: 14px; }
+
+  .m-section { margin-bottom: 14px; }
+  .m-header-row { display: flex; align-items: center; gap: 7px; margin-bottom: 8px; }
+  .m-icon { width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid #73DC3B; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #73DC3B; }
+  .m-title { font-size: 10px; font-weight: 800; color: #222; letter-spacing: 0.5px; }
+
+  .m-text { font-size: 6.5px; color: #444; outline: none; line-height: 1.5; font-style: italic; }
+
+  .exp-block { display: flex; gap: 8px; margin-bottom: 10px; }
+  .exp-marker-col { display: flex; flex-direction: column; align-items: center; padding-top: 3px; }
+  .exp-marker { width: 6px; height: 6px; background: #73DC3B; flex-shrink: 0; }
+  .exp-line { flex: 1; width: 1px; background: #ccc; margin-top: 3px; min-height: 14px; }
+  .exp-role { font-size: 7.5px; font-weight: 800; color: #222; outline: none; }
+  .exp-org { font-size: 6px; color: #666; outline: none; margin-top: 1px; }
+  .exp-date { font-size: 6px; color: #888; outline: none; }
+  .exp-bullet { font-size: 6px; color: #444; outline: none; margin-left: 8px; margin-bottom: 1px; position: relative; line-height: 1.3; }
+  .exp-bullet:before { content: "•"; position: absolute; left: -8px; }
+
+  .edu-degree { font-size: 7px; font-weight: 800; color: #222; outline: none; }
+  .edu-school { font-size: 6px; color: #666; outline: none; margin-top: 1px; }
+  .edu-year { font-size: 6px; color: #888; outline: none; }
+
+  [contenteditable="true"]:empty:before { content: attr(data-placeholder); color: #999; }
+  [contenteditable="true"]:focus { background: rgba(31,143,224,0.15); outline: 1px dashed #73DC3B; }
+
+  .tool-row { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+  .tool-badge { width: 16px; height: 16px; border-radius: 3px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 6px; font-weight: 800; color: white; }
+  .tool-name { font-size: 6px; color: white; outline: none; }
+
+  .proj-block { margin-bottom: 8px; }
+  .proj-title2 { font-size: 6.5px; font-weight: 800; color: #222; outline: none; }
+  .proj-desc2 { font-size: 6px; color: #555; outline: none; line-height: 1.4; margin-top: 1px; }
+
+  .ach-item { font-size: 6.5px; color: #444; outline: none; margin-bottom: 3px; padding-left: 9px; position: relative; }
+  .ach-item:before { content: "•"; color: #73DC3B; position: absolute; left: 0; }
+
+  .link-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .link-item { display: flex; align-items: center; gap: 4px; font-size: 6px; color: #333; }
+  .link-icon { width: 12px; height: 12px; border-radius: 3px; background: #73DC3B; color: white; display: flex; align-items: center; justify-content: center; font-size: 5.5px; flex-shrink: 0; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="sidebar">
+    <div class="photo-header">
+      <div class="tri-1"></div>
+      <div class="tri-2"></div>
+      <div class="photo-circle">PHOTO</div>
+    </div>
+
+    <div class="side-block">
+      <div class="side-title">CONTACT</div>
+      <div class="side-divider"></div>
+      <div class="contact-item">
+        <div class="contact-label-row"><div class="contact-icon">&#9742;</div><div class="contact-label">PHONE</div></div>
+        <div class="contact-value" contenteditable="true">+63 912 345 6789</div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-label-row"><div class="contact-icon">&#9993;</div><div class="contact-label">EMAIL</div></div>
+        <div class="contact-value" contenteditable="true">youremail@email.com</div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-label-row"><div class="contact-icon">&#128205;</div><div class="contact-label">ADDRESS</div></div>
+        <div class="contact-value" contenteditable="true">Your location goes here, City, Country</div>
+      </div>
+    </div>
+
+    <div class="side-block">
+      <div class="side-title">PRO SKILLS</div>
+      <div class="side-divider"></div>
+      <div class="skill-row"><div class="skill-name" contenteditable="true">Adobe Illustrator</div><div class="skill-bar-wrap"><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:90%"></div></div><div class="skill-pct" contenteditable="true">90%</div></div></div>
+      <div class="skill-row"><div class="skill-name" contenteditable="true">Adobe Photoshop</div><div class="skill-bar-wrap"><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:90%"></div></div><div class="skill-pct" contenteditable="true">90%</div></div></div>
+      <div class="skill-row"><div class="skill-name" contenteditable="true">InDesign</div><div class="skill-bar-wrap"><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:80%"></div></div><div class="skill-pct" contenteditable="true">80%</div></div></div>
+      <div class="skill-row"><div class="skill-name" contenteditable="true">Figma</div><div class="skill-bar-wrap"><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:90%"></div></div><div class="skill-pct" contenteditable="true">90%</div></div></div>
+      <div class="skill-row"><div class="skill-name" contenteditable="true">UI/UX Design</div><div class="skill-bar-wrap"><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:100%"></div></div><div class="skill-pct" contenteditable="true">100%</div></div></div>
+    </div>
+
+    <div class="side-block">
+      <div class="side-title">LANGUAGES</div>
+      <div class="side-divider"></div>
+      <div class="skill-row"><div class="skill-name" contenteditable="true">English</div><div class="skill-bar-wrap"><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:100%"></div></div><div class="skill-pct" contenteditable="true">100%</div></div></div>
+      <div class="skill-row"><div class="skill-name" contenteditable="true">Filipino</div><div class="skill-bar-wrap"><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:100%"></div></div><div class="skill-pct" contenteditable="true">100%</div></div></div>
+    </div>
+
+    <div class="side-block" style="padding-bottom: 16px;">
+      <div class="side-title">CERTIFICATIONS</div>
+      <div class="side-divider"></div>
+      <div class="cert-item" contenteditable="true">Google Design Certification</div>
+      <div class="cert-item" contenteditable="true">UX Design Basics - Online Course</div>
+    </div>
+
+    <div class="side-block" style="padding-bottom: 16px;">
+      <div class="side-title">SOFTWARE / TOOLS</div>
+      <div class="side-divider"></div>
+      <div class="tool-row"><div class="tool-badge" style="background:#E8792C;">Ai</div><div class="tool-name" contenteditable="true">Adobe Illustrator</div></div>
+      <div class="tool-row"><div class="tool-badge" style="background:#31A8DE;">Ps</div><div class="tool-name" contenteditable="true">Adobe Photoshop</div></div>
+      <div class="tool-row"><div class="tool-badge" style="background:#FF3366;">Id</div><div class="tool-name" contenteditable="true">Adobe InDesign</div></div>
+      <div class="tool-row"><div class="tool-badge" style="background:#0ACF83;">Fi</div><div class="tool-name" contenteditable="true">Figma</div></div>
+      <div class="tool-row"><div class="tool-badge" style="background:#00C4CC;">Cv</div><div class="tool-name" contenteditable="true">Canva</div></div>
+      <div class="tool-row"><div class="tool-badge" style="background:#FF61F6;">Xd</div><div class="tool-name" contenteditable="true">Adobe XD</div></div>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <div class="name-row2">
+      <span class="name-accent" contenteditable="true">JUAN</span>
+      <span class="name-dark" contenteditable="true"> DELA CRUZ</span>
+    </div>
+    <div class="role-sub" contenteditable="true">GRAPHIC DESIGNER</div>
+    <div class="name-underline"></div>
+
+    <div class="m-section">
+      <div class="m-header-row"><div class="m-icon">&#128100;</div><div class="m-title">ABOUT ME</div></div>
+      <div class="m-text" contenteditable="true">Creative and detail-oriented Graphic Designer with 5+ years of experience in visual storytelling, branding, and print design. Passionate about delivering attractive solutions and bringing ideas to life with modern design.</div>
+    </div>
+
+    <div class="m-section">
+      <div class="m-header-row"><div class="m-icon">&#128188;</div><div class="m-title">WORK EXPERIENCE</div></div>
+      <div class="exp-block">
+        <div class="exp-marker-col"><div class="exp-marker"></div><div class="exp-line"></div></div>
+        <div>
+          <div class="exp-role" contenteditable="true">Senior Graphic Designer</div>
+          <div class="exp-org" contenteditable="true">Studio Name</div>
+          <div class="exp-date" contenteditable="true">2021 - Present</div>
+          <div class="exp-bullet" contenteditable="true">Worked on various visual identity and digital ad campaigns for corporate and startup clients.</div>
+          <div class="exp-bullet" contenteditable="true">Collaborated with cross-functional teams to deliver creative marketing assets.</div>
+        </div>
+      </div>
+      <div class="exp-block">
+        <div class="exp-marker-col"><div class="exp-marker"></div></div>
+        <div>
+          <div class="exp-role" contenteditable="true">Junior Designer</div>
+          <div class="exp-org" contenteditable="true">Creative Agency Name</div>
+          <div class="exp-date" contenteditable="true">2018 - 2020</div>
+          <div class="exp-bullet" contenteditable="true">Assisted senior visual artists for print & digital projects.</div>
+          <div class="exp-bullet" contenteditable="true">Developed social media posts, brand elements and marketing collateral layouts.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="m-section">
+      <div class="m-header-row"><div class="m-icon">&#128295;</div><div class="m-title">SKILLS</div></div>
+      <div class="m-text" contenteditable="true">Highly proficient in Adobe Illustrator, Photoshop and InDesign. Skilled in wireframing, prototyping, UI/UX design and brand identity. Strong understanding of typography, color theory, layout design and visual hierarchy.</div>
+    </div>
+
+    <div class="m-section">
+      <div class="m-header-row"><div class="m-icon">&#127891;</div><div class="m-title">EDUCATION</div></div>
+      <div class="edu-degree" contenteditable="true">Bachelor of Design</div>
+      <div class="edu-school" contenteditable="true">Art & Design Institute</div>
+      <div class="edu-year" contenteditable="true">Graduated: 2018</div>
+    </div>
+
+    <div class="m-section">
+      <div class="m-header-row"><div class="m-icon">&#128193;</div><div class="m-title">PROJECTS</div></div>
+      <div class="proj-block">
+        <div class="proj-title2" contenteditable="true">Brand Identity Design</div>
+        <div class="proj-desc2" contenteditable="true">Created a complete brand identity for a local coffee shop including logo, color palette, and brand guidelines.</div>
+      </div>
+      <div class="proj-block">
+        <div class="proj-title2" contenteditable="true">Social Media Campaign</div>
+        <div class="proj-desc2" contenteditable="true">Designed social media creatives and promotional materials that increased engagement by 40%.</div>
+      </div>
+      <div class="proj-block">
+        <div class="proj-title2" contenteditable="true">UI/UX Design Project</div>
+        <div class="proj-desc2" contenteditable="true">Designed mobile app interfaces with user-centered design approach and interactive prototypes.</div>
+      </div>
+    </div>
+
+    <div class="m-section">
+      <div class="m-header-row"><div class="m-icon">&#127942;</div><div class="m-title">ACHIEVEMENTS</div></div>
+      <div class="ach-item" contenteditable="true">Employee Recognition for Outstanding Design Contribution (2022)</div>
+      <div class="ach-item" contenteditable="true">Top 10 Finalist - National Design Competition (2019)</div>
+      <div class="ach-item" contenteditable="true">Completed Advanced Graphic Design Training (2020)</div>
+    </div>
+
+    <div class="m-section">
+      <div class="m-header-row"><div class="m-icon">&#127760;</div><div class="m-title">PORTFOLIO / LINKS</div></div>
+      <div class="link-row">
+        <div class="link-item"><div class="link-icon">&#127760;</div><span contenteditable="true">www.yourportfolio.com</span></div>
+        <div class="link-item"><div class="link-icon">Be</div><span contenteditable="true">behance.net/yourname</span></div>
+        <div class="link-item"><div class="link-icon">in</div><span contenteditable="true">linkedin.com/in/yourname</span></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
