@@ -121,7 +121,7 @@ data class ChronologicalResumeFields(
 fun ChronologicalResumeScreen() {
     //SecureScreen()
     val paperWidthDp = 850.dp
-    val paperHeightDp = 1000.dp
+    val paperHeightDp = 1202.dp
 
     var data by remember { mutableStateOf(ChronologicalResumeFields()) }
     var offset by remember { mutableStateOf(Offset.Zero) }
@@ -258,7 +258,7 @@ fun ChronologicalResumeScreen() {
                                 MiniField2("", entry.from, Modifier.width(60.dp)) { v ->
                                     data = data.copy(work = data.work.toMutableList().also { it[i] = entry.copy(from = v) })
                                 }
-                                Text("-", fontSize = 11.sp, color = Color.Black)
+                                Text(" - ", fontSize = 11.sp, color = Color.Black)
                                 MiniField2("", entry.to, Modifier.width(60.dp)) { v ->
                                     data = data.copy(work = data.work.toMutableList().also { it[i] = entry.copy(to = v) })
                                 }
