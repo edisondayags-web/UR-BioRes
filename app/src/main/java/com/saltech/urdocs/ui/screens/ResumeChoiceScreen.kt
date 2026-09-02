@@ -168,7 +168,7 @@ private fun ResumeChoiceCard(
         }
         Spacer(Modifier.width(16.dp))
         Column(modifier = Modifier.weight(1f)) {
-            Text(title, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+            Text(title, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 16.sp, maxLines = 1, softWrap = false)
             Text(subtitle, color = RGray, fontSize = 13.sp)
         }
         Icon(Icons.Filled.ChevronRight, contentDescription = null, tint = RGreen, modifier = Modifier.size(24.dp))
