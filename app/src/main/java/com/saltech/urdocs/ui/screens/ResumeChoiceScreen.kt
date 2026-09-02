@@ -12,7 +12,6 @@ import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.GridView
-import androidx.compose.material.icons.filled.Layers
 import androidx.compose.material.icons.filled.Work
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -127,14 +126,6 @@ fun ResumeChoiceScreen(onChoose: (String) -> Unit, onBack: () -> Unit = {}) {
                 onClick = { onChoose("chronological") }
             )
 
-            Spacer(Modifier.height(16.dp))
-
-            ResumeChoiceCard(
-                icon = { Icon(Icons.Filled.Layers, contentDescription = null, tint = Color.White, modifier = it) },
-                title = "Hybrid Resume",
-                subtitle = "(Ito naman may 2x2 to)",
-                onClick = { onChoose("hybrid") }
-            )
 
             Spacer(Modifier.height(16.dp))
 

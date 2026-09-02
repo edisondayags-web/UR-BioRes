@@ -42,7 +42,6 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 var resumeSelfie by remember { mutableStateOf<Bitmap?>(null) }
                 var biodataSelfie by remember { mutableStateOf<Bitmap?>(null) }
-                var hybridSelfie by remember { mutableStateOf<Bitmap?>(null) }
                 val isConnected by rememberConnectivityState()
 
                 if (isConnected) {
@@ -71,12 +70,6 @@ class MainActivity : ComponentActivity() {
                     }
                     composable(Screen.ResumeChronological.route) {
                         ChronologicalResumeScreen()
-                    }
-                    composable(Screen.ResumeHybrid.route) {
-                        HybridResumeScreen(
-                            processedSelfie = hybridSelfie,
-                            onBack = { navController.popBackStack() }
-                        )
                     }
                     composable(Screen.ResumeMoreTemplates.route) {
                         ResumeTemplateGalleryScreen(
