@@ -1,6 +1,8 @@
 package com.saltech.urdocs.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -167,6 +169,10 @@ private val htmlPackage4Templates = listOf(
     HtmlColorInfo("ai_template_p4_30.html", "Blue Chevron", Color(0xFF5039C5), Color(0xFF171329)),
 )
 
+private val htmlPackage5Templates = listOf(
+    HtmlColorInfo("ai_template_p5_01.html", "Sky Circle", Color(0xFF1F8FE0), Color(0xFF14161A)),
+)
+
 @Composable
 fun HtmlTemplateGalleryScreen(
     onTemplateSelected: (String) -> Unit,
@@ -191,6 +197,7 @@ fun HtmlTemplateGalleryScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .horizontalScroll(rememberScrollState())
                     .padding(horizontal = 16.dp, vertical = 4.dp),
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
@@ -198,29 +205,35 @@ fun HtmlTemplateGalleryScreen(
                     label = "Package 1",
                     selected = selectedPackage == 1,
                     onClick = { selectedPackage = 1 },
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.width(110.dp)
                 )
                 PackageTab(
                     label = "Package 2",
                     selected = selectedPackage == 2,
                     onClick = { selectedPackage = 2 },
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.width(110.dp)
                 )
                 PackageTab(
                     label = "Package 3",
                     selected = selectedPackage == 3,
                     onClick = { selectedPackage = 3 },
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.width(110.dp)
                 )
                 PackageTab(
                     label = "Package 4",
                     selected = selectedPackage == 4,
                     onClick = { selectedPackage = 4 },
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.width(110.dp)
+                )
+                PackageTab(
+                    label = "Package 5",
+                    selected = selectedPackage == 5,
+                    onClick = { selectedPackage = 5 },
+                    modifier = Modifier.width(110.dp)
                 )
             }
 
-            val currentTemplates = when (selectedPackage) { 1 -> htmlColorTemplates; 2 -> htmlPackage2Templates; 3 -> htmlPackage3Templates; else -> htmlPackage4Templates }
+            val currentTemplates = when (selectedPackage) { 1 -> htmlColorTemplates; 2 -> htmlPackage2Templates; 3 -> htmlPackage3Templates; 4 -> htmlPackage4Templates; else -> htmlPackage5Templates }
 
             LazyVerticalGrid(
                 columns = GridCells.Fixed(5),
