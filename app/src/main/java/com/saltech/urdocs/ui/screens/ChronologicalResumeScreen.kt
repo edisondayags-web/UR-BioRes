@@ -202,7 +202,7 @@ fun ChronologicalResumeScreen() {
                 ) {
                     ContactFieldInline("📞", data.phone) { data = data.copy(phone = it) }
                     Text("   •   ", fontSize = 10.sp, color = Color.Black)
-                    ContactFieldInline("✉", data.email) { data = data.copy(email = it) }
+                    ContactFieldInline("📧", data.email) { data = data.copy(email = it) }
                     Text("   •   ", fontSize = 10.sp, color = Color.Black)
                     ContactFieldInline("📍", data.location) { data = data.copy(location = it) }
                     Text("   •   ", fontSize = 10.sp, color = Color.Black)
