@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 100%; min-height: 100%; background: white; font-family: Arial, Helvetica, sans-serif; }
+  .page { width: 100%; max-width: 460px; margin: 0 auto; background: white; min-height: 100vh; display: flex; }
+
+  /* ===== SIDEBAR ===== */
+  .sidebar { width: 32%; background: #242913; color: white; position: relative; }
+  .photo-wrap { padding: 22px 14px 10px 14px; }
+  .photo-circle {
+    width: 100%; aspect-ratio: 1/1; border-radius: 50%; border: 4px solid #A8C539;
+    background: #ffffff; display: flex; align-items: center; justify-content: center;
+    font-size: 7px; color: #999;
+  }
+  .ribbon {
+    background: #A8C539; color: white; font-weight: 800; font-size: 8px; letter-spacing: 0.5px;
+    padding: 6px 10px; margin-top: 14px; position: relative; clip-path: polygon(0 0, 92% 0, 100% 50%, 92% 100%, 0 100%);
+  }
+  .side-block { padding: 8px 12px 4px 12px; }
+  .contact-row { display: flex; align-items: flex-start; gap: 6px; margin-bottom: 8px; font-size: 6px; color: rgba(255,255,255,0.9); }
+  .contact-icon { width: 12px; height: 12px; border-radius: 50%; background: #A8C539; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 6px; color: #242913; }
+  .contact-field { outline: none; word-break: break-word; padding-top: 1px; }
+
+  .skill-row { margin-bottom: 6px; }
+  .skill-name { font-size: 6px; color: white; outline: none; margin-bottom: 2px; }
+  .skill-bar-bg { width: 100%; height: 3px; background: rgba(255,255,255,0.2); border-radius: 3px; }
+  .skill-bar-fill { height: 100%; background: #A8C539; border-radius: 3px; }
+
+  .interest-grid { display: flex; flex-wrap: wrap; gap: 6px; }
+  .interest-item { width: 44%; text-align: center; font-size: 5.5px; color: white; }
+  .interest-icon { font-size: 12px; margin-bottom: 2px; }
+
+  .strength-row { display: flex; align-items: center; gap: 5px; margin-bottom: 5px; font-size: 6px; color: white; }
+  .strength-icon { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.1); border: 1px solid #A8C539; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 5.5px; }
+
+  .social-row { display: flex; gap: 6px; justify-content: center; margin-top: 6px; }
+  .social-icon { width: 14px; height: 14px; border-radius: 50%; background: rgba(255,255,255,0.12); display: flex; align-items: center; justify-content: center; font-size: 6px; color: white; }
+  .social-handle { text-align: center; font-size: 6px; color: white; margin-top: 6px; outline: none; }
+
+  /* ===== MAIN CONTENT ===== */
+  .main-content { width: 68%; background: white; position: relative; }
+  .header-area { padding: 22px 16px 10px 16px; position: relative; overflow: hidden; }
+  .chevron-left { position: absolute; top: 0; left: -10%; width: 40%; height: 100%; background: #242913; clip-path: polygon(0 0, 70% 0, 100% 50%, 70% 100%, 0 100%); z-index: 0; }
+  .chevron-right { position: absolute; top: 0; right: 0; width: 22%; height: 55%; background: #A8C539; clip-path: polygon(20% 0, 100% 0, 100% 100%, 20% 100%, 40% 75%, 20% 50%, 40% 25%); z-index: 0; opacity: 0.9; }
+  .header-inner { position: relative; z-index: 1; padding-left: 8%; }
+  .h-name { font-size: 20px; font-weight: 900; color: #111; outline: none; letter-spacing: 0.5px; }
+  .h-title { font-size: 10px; font-weight: 700; color: #A8C539; outline: none; letter-spacing: 1px; margin-top: 2px; padding-bottom: 4px; border-bottom: 2px solid #A8C539; display: inline-block; }
+  .h-desc { font-size: 6.5px; color: #444; outline: none; line-height: 1.5; margin-top: 8px; max-width: 92%; }
+
+  .content-pad { padding: 4px 16px 14px 16px; }
+  .sec-header { display: flex; align-items: center; gap: 6px; margin-top: 12px; margin-bottom: 8px; }
+  .sec-icon { width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid #A8C539; display: flex; align-items: center; justify-content: center; font-size: 9px; color: #A8C539; flex-shrink: 0; }
+  .sec-title { font-size: 12px; font-weight: 900; color: #111; letter-spacing: 0.5px; }
+  .sec-lines { flex: 1; height: 6px; background: repeating-linear-gradient(to bottom, #A8C539 0px, #A8C539 1px, transparent 1px, transparent 3px); opacity: 0.5; margin-left: 4px; }
+  .sec-line-single { flex: 1; height: 1.5px; background: #A8C539; margin-left: 4px; }
+
+  .about-text { font-size: 6.5px; color: #333; outline: none; line-height: 1.5; }
+
+  .tl-block { position: relative; padding-left: 14px; margin-bottom: 10px; border-left: 1.2px solid #A8C539; }
+  .tl-block:before { content: ""; position: absolute; left: -4px; top: 1px; width: 7px; height: 7px; border-radius: 50%; background: white; border: 2px solid #A8C539; }
+  .tl-row { display: flex; gap: 10px; }
+  .tl-date { font-size: 6px; font-weight: 700; color: #333; width: 44px; flex-shrink: 0; outline: none; }
+  .tl-content { flex: 1; }
+  .tl-role { font-size: 7px; font-weight: 800; color: #111; outline: none; }
+  .tl-org { font-size: 6px; font-weight: 700; color: #A8C539; outline: none; margin-top: 1px; }
+  .tl-desc { font-size: 5.5px; color: #555; outline: none; line-height: 1.4; margin-top: 1px; }
+
+  .proj-columns { display: flex; gap: 10px; margin-top: 2px; }
+  .proj-col { flex: 1; min-width: 0; }
+  .proj-title { font-size: 6.5px; font-weight: 800; color: #111; outline: none; margin-bottom: 2px; }
+  .proj-title:before { content: "• "; color: #A8C539; }
+  .proj-desc { font-size: 5.5px; color: #555; outline: none; line-height: 1.4; }
+  .proj-tech { font-size: 5.5px; color: #333; outline: none; margin-top: 3px; }
+  .proj-tech b { color: #111; }
+
+  .cert-row { display: flex; gap: 8px; margin-bottom: 5px; align-items: flex-start; }
+  .cert-year { font-size: 6px; font-weight: 800; color: #A8C539; width: 24px; flex-shrink: 0; outline: none; }
+  .cert-title { font-size: 6px; font-weight: 700; color: #111; outline: none; }
+  .cert-issuer { font-size: 5.5px; color: #666; outline: none; }
+
+  .ref-columns { display: flex; gap: 10px; margin-top: 2px; }
+  .ref-col { flex: 1; min-width: 0; }
+  .ref-name { font-size: 6.5px; font-weight: 800; color: #111; outline: none; }
+  .ref-role { font-size: 5.5px; color: #A8C539; font-weight: 700; outline: none; margin-bottom: 3px; }
+  .ref-line { display: flex; align-items: center; gap: 4px; font-size: 5.5px; color: #333; margin-bottom: 1px; }
+  .ref-icon { color: #A8C539; font-size: 6px; }
+
+  [contenteditable="true"]:empty:before { content: attr(data-placeholder); color: #999; }
+  [contenteditable="true"]:focus { background: rgba(26,181,163,0.15); outline: 1px dashed #A8C539; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="sidebar">
+    <div class="photo-wrap"><div class="photo-circle">PHOTO</div></div>
+
+    <div class="ribbon">CONTACT</div>
+    <div class="side-block">
+      <div class="contact-row"><span class="contact-icon">&#9742;</span><span class="contact-field" contenteditable="true">+63 912 345 6789</span></div>
+      <div class="contact-row"><span class="contact-icon">&#9993;</span><span class="contact-field" contenteditable="true">youremail@email.com</span></div>
+      <div class="contact-row"><span class="contact-icon">&#128205;</span><span class="contact-field" contenteditable="true">Your Address, City Province, 1234</span></div>
+      <div class="contact-row"><span class="contact-icon">&#127760;</span><span class="contact-field" contenteditable="true">www.yourwebsite.com</span></div>
+      <div class="contact-row"><span class="contact-icon">in</span><span class="contact-field" contenteditable="true">linkedin.com/in/yourprofile</span></div>
+    </div>
+
+    <div class="ribbon">SKILLS</div>
+    <div class="side-block">
+      <div class="skill-row"><div class="skill-name" contenteditable="true">Web Design</div><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:88%"></div></div></div>
+      <div class="skill-row"><div class="skill-name" contenteditable="true">Graphic Design</div><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:82%"></div></div></div>
+      <div class="skill-row"><div class="skill-name" contenteditable="true">UI/UX Design</div><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:85%"></div></div></div>
+      <div class="skill-row"><div class="skill-name" contenteditable="true">SEO Marketing</div><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:70%"></div></div></div>
+      <div class="skill-row"><div class="skill-name" contenteditable="true">Adobe Photoshop</div><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:80%"></div></div></div>
+      <div class="skill-row"><div class="skill-name" contenteditable="true">Adobe Illustrator</div><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:75%"></div></div></div>
+      <div class="skill-row"><div class="skill-name" contenteditable="true">Microsoft Office</div><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:90%"></div></div></div>
+      <div class="skill-row"><div class="skill-name" contenteditable="true">Project Management</div><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:78%"></div></div></div>
+    </div>
+
+    <div class="ribbon">LANGUAGES</div>
+    <div class="side-block">
+      <div class="skill-row"><div class="skill-name" contenteditable="true">English</div><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:95%"></div></div></div>
+      <div class="skill-row"><div class="skill-name" contenteditable="true">Filipino</div><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:100%"></div></div></div>
+      <div class="skill-row"><div class="skill-name" contenteditable="true">Japanese</div><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:40%"></div></div></div>
+    </div>
+
+    <div class="ribbon">INTERESTS</div>
+    <div class="side-block">
+      <div class="interest-grid">
+        <div class="interest-item"><div class="interest-icon">&#9992;</div><div contenteditable="true">Travel</div></div>
+        <div class="interest-item"><div class="interest-icon">&#9999;</div><div contenteditable="true">Writing</div></div>
+        <div class="interest-item"><div class="interest-icon">&#128247;</div><div contenteditable="true">Photography</div></div>
+        <div class="interest-item"><div class="interest-icon">&#127925;</div><div contenteditable="true">Music</div></div>
+      </div>
+    </div>
+
+    <div class="ribbon">STRENGTHS</div>
+    <div class="side-block">
+      <div class="strength-row"><span class="strength-icon">&#128161;</span><span contenteditable="true">Problem Solving</span></div>
+      <div class="strength-row"><span class="strength-icon">&#128101;</span><span contenteditable="true">Teamwork</span></div>
+      <div class="strength-row"><span class="strength-icon">&#9200;</span><span contenteditable="true">Time Management</span></div>
+      <div class="strength-row"><span class="strength-icon">&#9889;</span><span contenteditable="true">Creativity</span></div>
+      <div class="strength-row"><span class="strength-icon">&#128172;</span><span contenteditable="true">Communication</span></div>
+      <div class="strength-row"><span class="strength-icon">&#128200;</span><span contenteditable="true">Adaptability</span></div>
+    </div>
+
+    <div class="ribbon">SOCIAL MEDIA</div>
+    <div class="side-block" style="padding-bottom:18px;">
+      <div class="social-row">
+        <div class="social-icon">f</div>
+        <div class="social-icon">t</div>
+        <div class="social-icon">ig</div>
+        <div class="social-icon">gh</div>
+      </div>
+      <div class="social-handle" contenteditable="true">@yourusername</div>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <div class="header-area">
+      <div class="chevron-left"></div>
+      <div class="chevron-right"></div>
+      <div class="header-inner">
+        <div class="h-name" contenteditable="true">YOUR NAME</div>
+        <div class="h-title" contenteditable="true">PROFESSIONAL TITLE</div>
+        <div class="h-desc" contenteditable="true">Dedicated and detail-oriented professional with experience in delivering high-quality results. Passionate about continuous learning, problem-solving, and contributing to a dynamic team.</div>
+      </div>
+    </div>
+
+    <div class="content-pad">
+      <div class="sec-header"><div class="sec-icon">&#128100;</div><div class="sec-title">ABOUT ME</div><div class="sec-lines"></div></div>
+      <div class="about-text" contenteditable="true">I am a motivated professional with a strong background in my field of expertise. I enjoy solving problems, learning new technologies, and delivering value through innovative solutions. I thrive in collaborative environments and am committed to personal and professional growth.</div>
+
+      <div class="sec-header"><div class="sec-icon">&#127891;</div><div class="sec-title">EDUCATION</div></div>
+      <div class="tl-block">
+        <div class="tl-row">
+          <div class="tl-date" contenteditable="true">2016 - 2020</div>
+          <div class="tl-content">
+            <div class="tl-role" contenteditable="true">Bachelor of Science in Information Technology</div>
+            <div class="tl-org" contenteditable="true">University Name</div>
+            <div class="tl-desc" contenteditable="true">City, Country — Focused on software development, database systems, networking, and web technologies.</div>
+          </div>
+        </div>
+      </div>
+      <div class="tl-block">
+        <div class="tl-row">
+          <div class="tl-date" contenteditable="true">2014 - 2016</div>
+          <div class="tl-content">
+            <div class="tl-role" contenteditable="true">Senior High School - STEM</div>
+            <div class="tl-org" contenteditable="true">School Name</div>
+            <div class="tl-desc" contenteditable="true">City, Country — Completed with honors. Relevant coursework in Programming, Mathematics, and Science.</div>
+          </div>
+        </div>
+      </div>
+      <div class="tl-block">
+        <div class="tl-row">
+          <div class="tl-date" contenteditable="true">2010 - 2014</div>
+          <div class="tl-content">
+            <div class="tl-role" contenteditable="true">Junior High School</div>
+            <div class="tl-org" contenteditable="true">School Name</div>
+            <div class="tl-desc" contenteditable="true">City, Country — Active in various school activities and clubs. Consistent honor student.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sec-header"><div class="sec-icon">&#128188;</div><div class="sec-title">EXPERIENCE</div></div>
+      <div class="tl-block">
+        <div class="tl-row">
+          <div class="tl-date" contenteditable="true">2022 - Present</div>
+          <div class="tl-content">
+            <div class="tl-role" contenteditable="true">Job Position</div>
+            <div class="tl-org" contenteditable="true">Company Name | City, Country</div>
+            <div class="tl-desc" contenteditable="true">Responsible for managing projects, creating solutions, and ensuring client satisfaction. Collaborated with cross-functional teams to achieve goals.</div>
+          </div>
+        </div>
+      </div>
+      <div class="tl-block">
+        <div class="tl-row">
+          <div class="tl-date" contenteditable="true">2020 - 2022</div>
+          <div class="tl-content">
+            <div class="tl-role" contenteditable="true">Job Position</div>
+            <div class="tl-org" contenteditable="true">Company Name | City, Country</div>
+            <div class="tl-desc" contenteditable="true">Handled day-to-day operations, developed reports, and supported team objectives. Improved efficiency and workflow by implementing new processes.</div>
+          </div>
+        </div>
+      </div>
+      <div class="tl-block">
+        <div class="tl-row">
+          <div class="tl-date" contenteditable="true">2019 - 2020</div>
+          <div class="tl-content">
+            <div class="tl-role" contenteditable="true">Intern</div>
+            <div class="tl-org" contenteditable="true">Company Name | City, Country</div>
+            <div class="tl-desc" contenteditable="true">Assisted in project tasks, data gathering, and analysis. Gained hands-on experience in real-world projects.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sec-header"><div class="sec-icon">&#128421;</div><div class="sec-title">PROJECTS</div></div>
+      <div class="proj-columns">
+        <div class="proj-col">
+          <div class="proj-title" contenteditable="true">Project Name 1</div>
+          <div class="proj-desc" contenteditable="true">A web application that helps users manage tasks and track progress efficiently.</div>
+          <div class="proj-tech" contenteditable="true"><b>Technologies:</b> HTML, CSS, JavaScript, PHP, MySQL</div>
+        </div>
+        <div class="proj-col">
+          <div class="proj-title" contenteditable="true">Project Name 2</div>
+          <div class="proj-desc" contenteditable="true">A mobile application that provides real-time updates and useful tools for users.</div>
+          <div class="proj-tech" contenteditable="true"><b>Technologies:</b> React Native, Firebase, API</div>
+        </div>
+      </div>
+
+      <div class="sec-header"><div class="sec-icon">&#127942;</div><div class="sec-title">CERTIFICATIONS</div></div>
+      <div class="cert-row">
+        <div class="cert-year" contenteditable="true">2021</div>
+        <div><div class="cert-title" contenteditable="true">Google Analytics Individual Qualification (GAIQ)</div><div class="cert-issuer" contenteditable="true">Issued by Google</div></div>
+      </div>
+      <div class="cert-row">
+        <div class="cert-year" contenteditable="true">2020</div>
+        <div><div class="cert-title" contenteditable="true">Responsive Web Design Certification</div><div class="cert-issuer" contenteditable="true">Issued by freeCodeCamp</div></div>
+      </div>
+
+      <div class="sec-header"><div class="sec-icon">&#128101;</div><div class="sec-title">REFERENCES</div><div class="sec-line-single"></div></div>
+      <div class="ref-columns">
+        <div class="ref-col">
+          <div class="ref-name" contenteditable="true">John Doe</div>
+          <div class="ref-role" contenteditable="true">Position / Company Name</div>
+          <div class="ref-line"><span class="ref-icon">&#9742;</span><span contenteditable="true">+63 912 345 6789</span></div>
+          <div class="ref-line"><span class="ref-icon">&#9993;</span><span contenteditable="true">johndoe@email.com</span></div>
+          <div class="ref-line"><span class="ref-icon">&#128205;</span><span contenteditable="true">City, Country</span></div>
+        </div>
+        <div class="ref-col">
+          <div class="ref-name" contenteditable="true">Jane Smith</div>
+          <div class="ref-role" contenteditable="true">Position / Company Name</div>
+          <div class="ref-line"><span class="ref-icon">&#9742;</span><span contenteditable="true">+63 912 345 6789</span></div>
+          <div class="ref-line"><span class="ref-icon">&#9993;</span><span contenteditable="true">janesmith@email.com</span></div>
+          <div class="ref-line"><span class="ref-icon">&#128205;</span><span contenteditable="true">City, Country</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
