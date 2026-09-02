@@ -113,7 +113,7 @@ fun ResumeChoiceScreen(onChoose: (String) -> Unit, onBack: () -> Unit = {}) {
             ResumeChoiceCard(
                 icon = { Icon(Icons.Filled.Description, contentDescription = null, tint = Color.White, modifier = it) },
                 title = "HTML",
-                subtitle = "(Ito luv maganda din Dito)",
+                subtitle = "(dito pogi luv kasi hanggang package 5)",
                 onClick = { onChoose("ai_html") }
             )
 
