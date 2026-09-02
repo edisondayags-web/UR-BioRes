@@ -99,7 +99,7 @@ fun HtmlTemplateGalleryScreen(
                     Icon(Icons.Filled.ArrowBack, contentDescription = "Back", tint = Color.White)
                 }
                 Spacer(Modifier.width(8.dp))
-                Text("Pili ng Kulay luv", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                Text("tap kalang dyan luv🩵", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp)
             }
 
             LazyVerticalGrid(
