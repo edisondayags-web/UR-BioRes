@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 100%; background: #E8ECEF; font-family: Arial, Helvetica, sans-serif; }
+  .page { width: 100%; max-width: 420px; margin: 0 auto; background: white; }
+  .body-flex { display: flex; }
+
+  /* ===== SIDEBAR ===== */
+  .sidebar { width: 34%; background: #251133; color: white; padding: 0 0 16px 0; position: relative; }
+  .photo-box {
+    width: 100%; aspect-ratio: 1 / 1; position: relative;
+    background-image: linear-gradient(45deg, #333 25%, transparent 25%), linear-gradient(-45deg, #333 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #333 75%), linear-gradient(-45deg, transparent 75%, #333 75%);
+    background-size: 10px 10px; background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+    background-color: #444; clip-path: polygon(0 0, 100% 0, 100% 78%, 78% 100%, 0 100%);
+    border-bottom: 3px solid #9B59B6; border-right: 3px solid #9B59B6;
+  }
+  .side-pad { padding: 12px 10px 0 10px; }
+  .side-section { margin-bottom: 12px; }
+  .side-icon-row { display: flex; align-items: center; gap: 5px; margin-bottom: 6px; }
+  .side-dot {
+    width: 16px; height: 16px; border-radius: 50%; background: #9B59B6; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-size: 8px;
+  }
+  .side-title { font-size: 8px; font-weight: 800; color: white; letter-spacing: 0.3px; }
+  .side-divider { height: 1px; background: rgba(255,255,255,0.25); margin: 4px 0 6px 0; }
+  .side-text { font-size: 6px; color: rgba(255,255,255,0.75); outline: none; line-height: 1.4; }
+  .skill-bullet { font-size: 6px; color: white; outline: none; margin-bottom: 3px; margin-left: 4px; }
+  .side-contact-row { display: flex; align-items: flex-start; gap: 6px; margin-bottom: 7px; }
+  .side-contact-icon {
+    width: 14px; height: 14px; border-radius: 50%; background: #9B59B6; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-size: 7px; margin-top: 1px;
+  }
+  .side-contact-label { font-size: 5.5px; font-weight: 700; color: #9B59B6; }
+  .side-contact-value { font-size: 6px; color: white; outline: none; line-height: 1.3; }
+  .lang-row2 { margin-bottom: 6px; }
+  .lang-name { font-size: 6px; color: white; outline: none; margin-bottom: 2px; }
+  .lang-dots { display: flex; gap: 2px; }
+  .lang-dot { width: 5px; height: 5px; border-radius: 50%; background: #9B59B6; }
+  .lang-dot.off { background: rgba(255,255,255,0.25); }
+  .ref-block { margin-bottom: 8px; }
+  .ref-name { font-size: 6.5px; font-weight: 700; color: white; outline: none; }
+  .ref-detail { font-size: 5.5px; color: rgba(255,255,255,0.7); outline: none; line-height: 1.3; }
+
+  /* ===== MAIN ===== */
+  .main-content { width: 66%; padding: 14px 12px; background: white; }
+  .name-row { line-height: 1; }
+  .name-green { font-size: 22px; font-weight: 900; color: #9B59B6; outline: none; }
+  .name-navy { font-size: 22px; font-weight: 900; color: #251133; outline: none; }
+  .job-title2 { font-size: 10px; font-weight: 800; color: #9B59B6; outline: none; letter-spacing: 0.5px; margin-top: 3px; }
+  .intro-text2 { font-size: 6px; color: #555; outline: none; line-height: 1.4; margin-top: 6px; margin-bottom: 12px; }
+
+  .main-section { margin-bottom: 12px; }
+  .main-header-row { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+  .main-dot { width: 15px; height: 15px; border-radius: 50%; background: #9B59B6; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 8px; }
+  .main-title { font-size: 9px; font-weight: 800; color: #251133; }
+  .main-divider { height: 1.5px; background: #9B59B6; margin-bottom: 7px; }
+
+  .timeline-entry { display: flex; gap: 6px; margin-bottom: 7px; }
+  .timeline-dot-col { display: flex; flex-direction: column; align-items: center; padding-top: 2px; }
+  .timeline-dot { width: 5px; height: 5px; border-radius: 50%; background: #9B59B6; }
+  .timeline-line { flex: 1; width: 1px; background: #9B59B6; opacity: 0.4; min-height: 14px; margin-top: 2px; }
+  .timeline-body { flex: 1; }
+  .timeline-year { font-size: 6px; color: #9B59B6; font-weight: 700; outline: none; }
+  .timeline-headline { font-size: 7px; font-weight: 700; color: #251133; outline: none; margin-top: 1px; }
+  .timeline-sub { font-size: 6px; color: #555; outline: none; margin-top: 1px; }
+  .timeline-desc { font-size: 6px; color: #888; outline: none; margin-top: 1px; line-height: 1.3; }
+  .timeline-bullet { font-size: 6px; color: #888; outline: none; margin-top: 2px; margin-left: 8px; position: relative; line-height: 1.3; }
+  .timeline-bullet:before { content: "•"; position: absolute; left: -8px; }
+  .timeline-label { font-size: 6px; font-weight: 700; color: #251133; outline: none; }
+
+  .interests-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .interest-item { display: flex; align-items: center; gap: 3px; }
+  .interest-icon { width: 12px; height: 12px; border-radius: 3px; background: #F0F0F0; display: flex; align-items: center; justify-content: center; font-size: 7px; }
+  .interest-label { font-size: 5.5px; color: #333; outline: none; }
+
+  [contenteditable="true"]:empty:before { content: attr(data-placeholder); color: #aaa; }
+  [contenteditable="true"]:focus { background: #fff3cd; outline: 1px dashed #999; }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="body-flex">
+
+    <div class="sidebar">
+      <div class="photo-box"></div>
+
+      <div class="side-pad">
+        <div class="side-section">
+          <div class="side-icon-row"><div class="side-dot">&#128100;</div><div class="side-title">ABOUT ME</div></div>
+          <div class="side-divider"></div>
+          <div class="side-text" contenteditable="true" data-placeholder="About you">Motivated and detail-oriented professional with a strong passion for design and problem-solving. I enjoy turning ideas into creative solutions that deliver meaningful results.</div>
+        </div>
+
+        <div class="side-section">
+          <div class="side-icon-row"><div class="side-dot">&#128100;</div><div class="side-title">PERSONAL SKILLS</div></div>
+          <div class="side-divider"></div>
+          <div class="skill-bullet" contenteditable="true" data-placeholder="Skill">• Graphic Design</div>
+          <div class="skill-bullet" contenteditable="true" data-placeholder="Skill">• Web Development</div>
+          <div class="skill-bullet" contenteditable="true" data-placeholder="Skill">• Creativity</div>
+          <div class="skill-bullet" contenteditable="true" data-placeholder="Skill">• Time Management</div>
+          <div class="skill-bullet" contenteditable="true" data-placeholder="Skill">• Problem Solving</div>
+        </div>
+
+        <div class="side-section">
+          <div class="side-icon-row"><div class="side-dot">&#9881;</div><div class="side-title">PROFESSIONAL SKILLS</div></div>
+          <div class="side-divider"></div>
+          <div class="skill-bullet" contenteditable="true" data-placeholder="Skill">• Design System</div>
+          <div class="skill-bullet" contenteditable="true" data-placeholder="Skill">• UI/UX Design & Prototyping</div>
+          <div class="skill-bullet" contenteditable="true" data-placeholder="Skill">• Market Analysis & Research</div>
+          <div class="skill-bullet" contenteditable="true" data-placeholder="Skill">• Project Management</div>
+          <div class="skill-bullet" contenteditable="true" data-placeholder="Skill">• Adobe Photoshop</div>
+        </div>
+
+        <div class="side-section">
+          <div class="side-icon-row"><div class="side-dot">&#128222;</div><div class="side-title">CONTACT</div></div>
+          <div class="side-divider"></div>
+          <div class="side-contact-row"><div class="side-contact-icon">&#128222;</div><div><div class="side-contact-label">Phone</div><div class="side-contact-value" contenteditable="true" data-placeholder="Phone">0912 345 6789</div></div></div>
+          <div class="side-contact-row"><div class="side-contact-icon">&#9993;</div><div><div class="side-contact-label">Email</div><div class="side-contact-value" contenteditable="true" data-placeholder="Email">yourname@email.com</div></div></div>
+          <div class="side-contact-row"><div class="side-contact-icon">&#127760;</div><div><div class="side-contact-label">Website</div><div class="side-contact-value" contenteditable="true" data-placeholder="Website">www.yoursite.com</div></div></div>
+          <div class="side-contact-row"><div class="side-contact-icon">&#128205;</div><div><div class="side-contact-label">Location</div><div class="side-contact-value" contenteditable="true" data-placeholder="Location">City, Province, Philippines</div></div></div>
+        </div>
+
+        <div class="side-section">
+          <div class="side-icon-row"><div class="side-dot">&#127760;</div><div class="side-title">LANGUAGES</div></div>
+          <div class="side-divider"></div>
+          <div class="lang-row2">
+            <div class="lang-name" contenteditable="true" data-placeholder="Language">English</div>
+            <div class="lang-dots"><div class="lang-dot"></div><div class="lang-dot"></div><div class="lang-dot"></div><div class="lang-dot"></div><div class="lang-dot off"></div></div>
+          </div>
+          <div class="lang-row2">
+            <div class="lang-name" contenteditable="true" data-placeholder="Language">Filipino</div>
+            <div class="lang-dots"><div class="lang-dot"></div><div class="lang-dot"></div><div class="lang-dot"></div><div class="lang-dot"></div><div class="lang-dot off"></div></div>
+          </div>
+        </div>
+
+        <div class="side-section">
+          <div class="side-icon-row"><div class="side-dot">&#128101;</div><div class="side-title">REFERENCES</div></div>
+          <div class="side-divider"></div>
+          <div class="ref-block">
+            <div class="ref-name" contenteditable="true" data-placeholder="Name">Jane Doe</div>
+            <div class="ref-detail" contenteditable="true" data-placeholder="Position / Company">Position / Company</div>
+            <div class="ref-detail" contenteditable="true" data-placeholder="Phone">0912 345 6789</div>
+            <div class="ref-detail" contenteditable="true" data-placeholder="Email">janedoe@email.com</div>
+          </div>
+          <div class="ref-block">
+            <div class="ref-name" contenteditable="true" data-placeholder="Name">Michael Brown</div>
+            <div class="ref-detail" contenteditable="true" data-placeholder="Position / Company">Position / Company</div>
+            <div class="ref-detail" contenteditable="true" data-placeholder="Phone">0987 654 3210</div>
+            <div class="ref-detail" contenteditable="true" data-placeholder="Email">michaelb@email.com</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <div class="name-row">
+        <span class="name-green" contenteditable="true" data-placeholder="First">JOHN</span>
+        <span class="name-navy" contenteditable="true" data-placeholder="Last"> SMITH</span>
+      </div>
+      <div class="job-title2" contenteditable="true" data-placeholder="Designation">DESIGNATION</div>
+      <div class="intro-text2" contenteditable="true" data-placeholder="Short intro">Motivated and detail-oriented professional with a strong passion for design and problem-solving. I enjoy turning ideas into creative solutions that deliver meaningful results. Eager to contribute my skills, learn continuously, and grow with a dynamic team.</div>
+
+      <div class="main-section">
+        <div class="main-header-row"><div class="main-dot">&#127891;</div><div class="main-title">EDUCATION</div></div>
+        <div class="main-divider"></div>
+        <div class="timeline-entry">
+          <div class="timeline-dot-col"><div class="timeline-dot"></div><div class="timeline-line"></div></div>
+          <div class="timeline-body">
+            <div class="timeline-year" contenteditable="true" data-placeholder="Year">2019 - 2021</div>
+            <div class="timeline-headline" contenteditable="true" data-placeholder="Degree">Degree Name / Major</div>
+            <div class="timeline-sub" contenteditable="true" data-placeholder="School">University / College Name</div>
+            <div class="timeline-desc" contenteditable="true" data-placeholder="City, Province">City, Province</div>
+            <div class="timeline-desc" contenteditable="true" data-placeholder="GPA">GPA: 3.80 / 4.00</div>
+          </div>
+        </div>
+        <div class="timeline-entry">
+          <div class="timeline-dot-col"><div class="timeline-dot"></div></div>
+          <div class="timeline-body">
+            <div class="timeline-year" contenteditable="true" data-placeholder="Year">2017 - 2019</div>
+            <div class="timeline-headline" contenteditable="true" data-placeholder="School">Senior High School</div>
+            <div class="timeline-sub" contenteditable="true" data-placeholder="School Name">School Name</div>
+            <div class="timeline-desc" contenteditable="true" data-placeholder="City, Province">City, Province</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="main-section">
+        <div class="main-header-row"><div class="main-dot">&#128188;</div><div class="main-title">WORK EXPERIENCE</div></div>
+        <div class="main-divider"></div>
+        <div class="timeline-entry">
+          <div class="timeline-dot-col"><div class="timeline-dot"></div><div class="timeline-line"></div></div>
+          <div class="timeline-body">
+            <div class="timeline-year" contenteditable="true" data-placeholder="Year">2019 - 2021</div>
+            <div class="timeline-headline" contenteditable="true" data-placeholder="Job Title">Your Job Title Here</div>
+            <div class="timeline-sub" contenteditable="true" data-placeholder="Company">Company Name | City, Province</div>
+            <div class="timeline-bullet" contenteditable="true" data-placeholder="Bullet">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div>
+            <div class="timeline-bullet" contenteditable="true" data-placeholder="Bullet">Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</div>
+          </div>
+        </div>
+        <div class="timeline-entry">
+          <div class="timeline-dot-col"><div class="timeline-dot"></div></div>
+          <div class="timeline-body">
+            <div class="timeline-year" contenteditable="true" data-placeholder="Year">2017 - 2019</div>
+            <div class="timeline-headline" contenteditable="true" data-placeholder="Job Title">Your Job Title Here</div>
+            <div class="timeline-sub" contenteditable="true" data-placeholder="Company">Company Name | City, Province</div>
+            <div class="timeline-bullet" contenteditable="true" data-placeholder="Bullet">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="main-section">
+        <div class="main-header-row"><div class="main-dot">&#127942;</div><div class="main-title">ACHIEVEMENTS</div></div>
+        <div class="main-divider"></div>
+        <div class="timeline-entry">
+          <div class="timeline-dot-col"><div class="timeline-dot"></div><div class="timeline-line"></div></div>
+          <div class="timeline-body">
+            <div class="timeline-year" contenteditable="true" data-placeholder="Year">2019 - 2021</div>
+            <div class="timeline-headline" contenteditable="true" data-placeholder="Title">Achievement Title</div>
+            <div class="timeline-sub" contenteditable="true" data-placeholder="Org">Organization / Company</div>
+          </div>
+        </div>
+        <div class="timeline-entry">
+          <div class="timeline-dot-col"><div class="timeline-dot"></div></div>
+          <div class="timeline-body">
+            <div class="timeline-year" contenteditable="true" data-placeholder="Year">2017 - 2019</div>
+            <div class="timeline-headline" contenteditable="true" data-placeholder="Title">Achievement Title</div>
+            <div class="timeline-sub" contenteditable="true" data-placeholder="Org">Organization / Company</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="main-section">
+        <div class="main-header-row"><div class="main-dot">&#127942;</div><div class="main-title">CERTIFICATIONS</div></div>
+        <div class="main-divider"></div>
+        <div class="timeline-bullet" contenteditable="true" data-placeholder="Cert">2021 - Certification Title Here</div>
+        <div class="timeline-bullet" contenteditable="true" data-placeholder="Cert">2019 - Certification Title Here</div>
+        <div class="timeline-bullet" contenteditable="true" data-placeholder="Cert">2018 - Certification Title Here</div>
+      </div>
+
+      <div class="main-section">
+        <div class="main-header-row"><div class="main-dot">&#128187;</div><div class="main-title">PROJECTS</div></div>
+        <div class="main-divider"></div>
+        <div class="timeline-entry">
+          <div class="timeline-dot-col"><div class="timeline-dot"></div><div class="timeline-line"></div></div>
+          <div class="timeline-body">
+            <div class="timeline-headline" contenteditable="true" data-placeholder="Project">2021 - Project Name</div>
+            <div class="timeline-desc" contenteditable="true" data-placeholder="Desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
+            <div class="timeline-desc" contenteditable="true" data-placeholder="Role">Role: Your Role</div>
+          </div>
+        </div>
+        <div class="timeline-entry">
+          <div class="timeline-dot-col"><div class="timeline-dot"></div></div>
+          <div class="timeline-body">
+            <div class="timeline-headline" contenteditable="true" data-placeholder="Project">2019 - Project Name</div>
+            <div class="timeline-desc" contenteditable="true" data-placeholder="Desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="main-section">
+        <div class="main-header-row"><div class="main-dot">&#10084;</div><div class="main-title">INTERESTS</div></div>
+        <div class="main-divider"></div>
+        <div class="interests-row">
+          <div class="interest-item"><div class="interest-icon">&#128247;</div><div class="interest-label" contenteditable="true">Photography</div></div>
+          <div class="interest-item"><div class="interest-icon">&#128218;</div><div class="interest-label" contenteditable="true">Reading</div></div>
+          <div class="interest-item"><div class="interest-icon">&#127925;</div><div class="interest-label" contenteditable="true">Music</div></div>
+          <div class="interest-item"><div class="interest-icon">&#9992;</div><div class="interest-label" contenteditable="true">Traveling</div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>
