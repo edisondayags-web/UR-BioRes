@@ -32,6 +32,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -55,47 +56,37 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.TextButton
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.AnnotatedString
+
 /**
- * "Chronological" na Resume -- tech/CV style, walang photo box.
- * NAME: line sa taas, contact row (phone | email | location | github),
- * Profile / Education / Technical Skills / Personal Skills / References
- * sa kaliwa, Work Experience / Projects / Certifications / Declaration
- * sa kanan. Parehong "papel" + pinch-zoom + Download pattern.
+ * "Chronological" na Resume -- ATS-friendly single-header + two-column style.
+ * NAME (malaki) sa taas, job title, contact row (phone | email | location | linkedin),
+ * Professional Summary + Work Experience + Education sa kaliwa (mas malapad),
+ * Soft Skills + Technical Skills + Languages + Interests sa kanan (mas makitid).
  */
 data class ChronoWorkEntry(
     val role: String = "",
+    val company: String = "",
     val from: String = "",
     val to: String = "",
-    val bullets: List<String> = List(5) { "" }
-)
-
-data class ChronoProjectEntry(
-    val name: String = "",
-    val status: String = "",
     val bullets: List<String> = List(3) { "" }
 )
 
 data class ChronologicalResumeFields(
     val name: String = "",
+    val jobTitle: String = "",
     val phone: String = "",
     val email: String = "",
     val location: String = "",
-    val github: String = "",
-    val profile: List<String> = List(5) { "" },
+    val linkedin: String = "",
+    val summary: String = "",
+    val work: List<ChronoWorkEntry> = List(2) { ChronoWorkEntry() },
     val eduDegree: String = "",
     val eduSchool: String = "",
-    val eduCity: String = "",
     val eduYear: String = "",
-    val programmingLangs: List<String> = List(3) { "" },
-    val frameworks: List<String> = List(3) { "" },
-    val tools: List<String> = List(3) { "" },
-    val otherSkills: List<String> = List(3) { "" },
-    val personalSkills: List<String> = List(4) { "" },
-    val work: List<ChronoWorkEntry> = List(3) { ChronoWorkEntry() },
-    val projects: List<ChronoProjectEntry> = List(3) { ChronoProjectEntry() },
-    val certifications: List<String> = List(3) { "" },
-    val signatureName: String = "",
-    val date: String = ""
+    val softSkills: List<String> = List(5) { "" },
+    val technicalSkills: List<String> = List(4) { "" },
+    val languages: List<String> = List(2) { "" },
+    val interests: List<String> = List(2) { "" }
 )
 
 @Composable
@@ -112,25 +103,6 @@ fun ChronologicalResumeScreen() {
     var hasPaid by remember { mutableStateOf(false) }
     val picture = remember { Picture() }
     val coroutineScope = rememberCoroutineScope()
-
-    //if (showPaymentDialog) {
-        //AlertDialog(
- //           onDismissRequest = { showPaymentDialog = false },
-  //          title = { Text("₱5 to Continue 💙") },
-  //          text = { Text("paste mo lang yung nasa clipboard mo. Send Money → Bank Transfer/InstaPay → Tonik Bank. I-paste mo na lang sa GCash/bank app mo.") },
-  //          confirmButton = {
-  //              Button(onClick = {
- //                   clipboardManager.setText(AnnotatedString("60843949330007"))
-  //                  android.widget.Toast.makeText(context, "Number copied! 📋", android.widget.Toast.LENGTH_SHORT).show()
-  //              }) { Text("Copy Number") }
- //           },
-  //          dismissButton = {
- //               TextButton(onClick = { hasPaid = true; showPaymentDialog = false }) {
- //                   Text("I've Paid ✅")
-  //              }
-//            }
-//        )
- //   }
 
     var interstitialAd by remember { mutableStateOf<InterstitialAd?>(null) }
     LaunchedEffect(Unit) {
@@ -205,92 +177,67 @@ fun ChronologicalResumeScreen() {
               ) {
             Column(modifier = Modifier.fillMaxSize()) {
 
-                // ===== HEADER =====
-                FieldLine("NAME", data.name, bigLabel = true) { data = data.copy(name = it) }
-                Spacer(Modifier.height(10.dp))
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    ContactField("📞", data.phone, Modifier.weight(1f)) { data = data.copy(phone = it) }
-                    Text(" | ", color = Color.Black)
-                    ContactField("✉", data.email, Modifier.weight(1f)) { data = data.copy(email = it) }
-                    Text(" | ", color = Color.Black)
-                    ContactField("📍", data.location, Modifier.weight(1f)) { data = data.copy(location = it) }
-                    Text(" | ", color = Color.Black)
-                    ContactField("🐙", data.github, Modifier.weight(1f)) { data = data.copy(github = it) }
+                // ===== HEADER (centered) =====
+                BasicTextFieldCentered(
+                    value = data.name,
+                    fontSize = 28.sp,
+                    bold = true,
+                    placeholder = "YOUR NAME",
+                    onChange = { data = data.copy(name = it) }
+                )
+                Spacer(Modifier.height(4.dp))
+                BasicTextFieldCentered(
+                    value = data.jobTitle,
+                    fontSize = 13.sp,
+                    bold = false,
+                    letterSpacing = 1.sp,
+                    placeholder = "PROFESSIONAL TITLE",
+                    onChange = { data = data.copy(jobTitle = it) }
+                )
+                Spacer(Modifier.height(8.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    ContactFieldInline("📞", data.phone) { data = data.copy(phone = it) }
+                    Text("   •   ", fontSize = 10.sp, color = Color.Black)
+                    ContactFieldInline("✉", data.email) { data = data.copy(email = it) }
+                    Text("   •   ", fontSize = 10.sp, color = Color.Black)
+                    ContactFieldInline("📍", data.location) { data = data.copy(location = it) }
+                    Text("   •   ", fontSize = 10.sp, color = Color.Black)
+                    ContactFieldInline("🔗", data.linkedin) { data = data.copy(linkedin = it) }
                 }
-                Spacer(Modifier.height(6.dp))
+                Spacer(Modifier.height(10.dp))
                 Spacer(Modifier.fillMaxWidth().height(1.dp).background(Color.Black))
-                Spacer(Modifier.height(18.dp))
+                Spacer(Modifier.height(16.dp))
 
                 // ===== TWO COLUMNS =====
                 Row(modifier = Modifier.weight(1f)) {
-                    // LEFT COLUMN
-                    Column(modifier = Modifier.weight(1f)) {
-                        SectionHeader2("👤", "PROFILE")
-                        MultiLineField2(data.profile) { idx, v ->
-                            data = data.copy(profile = data.profile.toMutableList().also { it[idx] = v })
-                        }
+                    // LEFT COLUMN (wider) — summary, experience, education
+                    Column(modifier = Modifier.weight(2f)) {
+                        SectionHeader2("", "PROFESSIONAL SUMMARY")
+                        ParagraphField(data.summary) { data = data.copy(summary = it) }
 
                         Spacer(Modifier.height(14.dp))
-                        SectionHeader2("🎓", "EDUCATION")
-                        FieldLine("Degree/Course", data.eduDegree) { data = data.copy(eduDegree = it) }
-                        FieldLine("School/University", data.eduSchool) { data = data.copy(eduSchool = it) }
-                        FieldLine("City, Country", data.eduCity) { data = data.copy(eduCity = it) }
-                        FieldLine("Year", data.eduYear) { data = data.copy(eduYear = it) }
-
-                        Spacer(Modifier.height(14.dp))
-                        SectionHeader2("⚙", "TECHNICAL SKILLS")
-                        Text("Programming Languages:", fontSize = 12.sp, color = Color.Black, modifier = Modifier.padding(top = 4.dp))
-                        BulletLines2(data.programmingLangs) { idx, v ->
-                            data = data.copy(programmingLangs = data.programmingLangs.toMutableList().also { it[idx] = v })
-                        }
-                        Text("Frameworks & Libraries:", fontSize = 12.sp, color = Color.Black, modifier = Modifier.padding(top = 8.dp))
-                        BulletLines2(data.frameworks) { idx, v ->
-                            data = data.copy(frameworks = data.frameworks.toMutableList().also { it[idx] = v })
-                        }
-                        Text("Tools & Technologies:", fontSize = 12.sp, color = Color.Black, modifier = Modifier.padding(top = 8.dp))
-                        BulletLines2(data.tools) { idx, v ->
-                            data = data.copy(tools = data.tools.toMutableList().also { it[idx] = v })
-                        }
-                        Text("Other Skills:", fontSize = 12.sp, color = Color.Black, modifier = Modifier.padding(top = 8.dp))
-                        BulletLines2(data.otherSkills) { idx, v ->
-                            data = data.copy(otherSkills = data.otherSkills.toMutableList().also { it[idx] = v })
-                        }
-
-                        Spacer(Modifier.height(14.dp))
-                        SectionHeader2("⭐", "PERSONAL SKILLS")
-                        BulletLines2(data.personalSkills) { idx, v ->
-                            data = data.copy(personalSkills = data.personalSkills.toMutableList().also { it[idx] = v })
-                        }
-
-                        Spacer(Modifier.height(14.dp))
-                        SectionHeader2("👤", "REFERENCES")
-                        Text(
-                            "Available upon request.",
-                            fontSize = 12.sp, fontStyle = FontStyle.Italic, color = Color.Black,
-                            modifier = Modifier.padding(top = 4.dp)
-                        )
-                    }
-
-                    Spacer(Modifier.width(24.dp))
-
-                    // RIGHT COLUMN
-                    Column(modifier = Modifier.weight(1f)) {
-                        SectionHeader2("💼", "WORK EXPERIENCE")
+                        SectionHeader2("", "PROFESSIONAL EXPERIENCE")
                         data.work.forEachIndexed { i, entry ->
                             Row(modifier = Modifier.fillMaxWidth().padding(top = 6.dp)) {
-                                MiniField2("", entry.role, Modifier.weight(1f)) { v ->
-                                    data = data.copy(work = data.work.toMutableList().also { it[i] = entry.copy(role = v) })
+                                MiniField2("", entry.company, Modifier.weight(1f)) { v ->
+                                    data = data.copy(work = data.work.toMutableList().also { it[i] = entry.copy(company = v) })
                                 }
-                                Spacer(Modifier.width(8.dp))
-                                MiniField2("", entry.from, Modifier.width(70.dp)) { v ->
+                                MiniField2("", entry.from, Modifier.width(60.dp)) { v ->
                                     data = data.copy(work = data.work.toMutableList().also { it[i] = entry.copy(from = v) })
                                 }
-                                Text(" - ", fontSize = 12.sp, color = Color.Black)
-                                MiniField2("", entry.to, Modifier.width(70.dp)) { v ->
+                                Text("-", fontSize = 11.sp, color = Color.Black)
+                                MiniField2("", entry.to, Modifier.width(60.dp)) { v ->
                                     data = data.copy(work = data.work.toMutableList().also { it[i] = entry.copy(to = v) })
                                 }
                             }
-                            Text("(Position / Role)", fontSize = 10.sp, fontStyle = FontStyle.Italic, color = Color.Black)
+                            MiniField2("", entry.role, Modifier.fillMaxWidth()) { v ->
+                                data = data.copy(work = data.work.toMutableList().also { it[i] = entry.copy(role = v) })
+                            }
+                            Text("(Position / Role)", fontSize = 9.sp, fontStyle = FontStyle.Italic, color = Color.Black)
                             BulletLines2(entry.bullets) { idx, v ->
                                 val newBullets = entry.bullets.toMutableList().also { it[idx] = v }
                                 data = data.copy(work = data.work.toMutableList().also { it[i] = entry.copy(bullets = newBullets) })
@@ -299,41 +246,37 @@ fun ChronologicalResumeScreen() {
                         }
 
                         Spacer(Modifier.height(14.dp))
-                        SectionHeader2("📁", "PROJECTS")
-                        data.projects.forEachIndexed { i, entry ->
-                            Row(modifier = Modifier.fillMaxWidth().padding(top = 6.dp)) {
-                                MiniField2("", entry.name, Modifier.weight(1f)) { v ->
-                                    data = data.copy(projects = data.projects.toMutableList().also { it[i] = entry.copy(name = v) })
-                                }
-                            }
-                            Text("(In Progress / In Development / Completed)", fontSize = 10.sp, fontStyle = FontStyle.Italic, color = Color.Black)
-                            BulletLines2(entry.bullets) { idx, v ->
-                                val newBullets = entry.bullets.toMutableList().also { it[idx] = v }
-                                data = data.copy(projects = data.projects.toMutableList().also { it[i] = entry.copy(bullets = newBullets) })
-                            }
-                            if (i != data.projects.lastIndex) Spacer(Modifier.height(12.dp))
+                        SectionHeader2("", "EDUCATION")
+                        FieldLine("Degree/Course", data.eduDegree) { data = data.copy(eduDegree = it) }
+                        FieldLine("School - City", data.eduSchool) { data = data.copy(eduSchool = it) }
+                        FieldLine("Year", data.eduYear) { data = data.copy(eduYear = it) }
+                    }
+
+                    Spacer(Modifier.width(20.dp))
+
+                    // RIGHT COLUMN (narrower) — soft skills, technical skills, languages, interests
+                    Column(modifier = Modifier.weight(1f)) {
+                        SectionHeader2("", "SOFT SKILLS")
+                        BulletLines2(data.softSkills) { idx, v ->
+                            data = data.copy(softSkills = data.softSkills.toMutableList().also { it[idx] = v })
                         }
 
                         Spacer(Modifier.height(14.dp))
-                        SectionHeader2("🏅", "CERTIFICATIONS")
-                        BulletLines2(data.certifications) { idx, v ->
-                            data = data.copy(certifications = data.certifications.toMutableList().also { it[idx] = v })
+                        SectionHeader2("", "TECHNICAL SKILLS")
+                        BulletLines2(data.technicalSkills) { idx, v ->
+                            data = data.copy(technicalSkills = data.technicalSkills.toMutableList().also { it[idx] = v })
                         }
 
                         Spacer(Modifier.height(14.dp))
-                        SectionHeader2("✏", "DECLARATION")
-                        Text(
-                            "I hereby declare that the information above is true and correct to the best of my knowledge and belief.",
-                            fontSize = 11.sp, color = Color.Black, modifier = Modifier.padding(top = 4.dp, bottom = 12.dp)
-                        )
-                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                            Column(horizontalAlignment = Alignment.End) {
-                                MiniField2("", data.signatureName, Modifier.width(180.dp)) { data = data.copy(signatureName = it) }
-                                Text("(Signature)", fontSize = 10.sp, fontStyle = FontStyle.Italic, color = Color.Black)
-                                Spacer(Modifier.height(6.dp))
-                                MiniField2("", data.date, Modifier.width(180.dp)) { data = data.copy(date = it) }
-                                Text("(Date)", fontSize = 10.sp, fontStyle = FontStyle.Italic, color = Color.Black)
-                            }
+                        SectionHeader2("", "LANGUAGES")
+                        BulletLines2(data.languages) { idx, v ->
+                            data = data.copy(languages = data.languages.toMutableList().also { it[idx] = v })
+                        }
+
+                        Spacer(Modifier.height(14.dp))
+                        SectionHeader2("", "INTERESTS")
+                        BulletLines2(data.interests) { idx, v ->
+                            data = data.copy(interests = data.interests.toMutableList().also { it[idx] = v })
                         }
                     }
                 }
@@ -364,20 +307,12 @@ fun ChronologicalResumeScreen() {
                     interstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
                         override fun onAdDismissedFullScreenContent() {
                             interstitialAd = null
-                            if (!hasPaid) {
-                                doSave()
-                            } else {
-                                doSave()
-                            }
+                            doSave()
                         }
                     }
                     interstitialAd?.show(activity)
                 } else {
-                    if (!hasPaid) {
-                        doSave()
-                    } else {
-                        doSave()
-                    }
+                    doSave()
                }
             },
             colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = Color.Transparent),
@@ -397,7 +332,6 @@ fun ChronologicalResumeScreen() {
     }
     }
 }
-        
 
 private fun saveBitmapToGalleryChrono(context: android.content.Context, bitmap: Bitmap) {
     val filename = "Resume_Chronological_${System.currentTimeMillis()}.png"
@@ -426,45 +360,77 @@ private fun Modifier.bottomLine2(color: Color = Color.Black, thickness: Dp = 1.d
 @Composable
 private fun SectionHeader2(icon: String, title: String) {
     Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(bottom = 4.dp)) {
-        Text("$icon  ", fontSize = 14.sp)
-        Text(title, fontWeight = FontWeight.Bold, fontSize = 14.sp, color = Color.Black)
+        if (icon.isNotEmpty()) Text("$icon  ", fontSize = 13.sp)
+        Text(title, fontWeight = FontWeight.Bold, fontSize = 12.5.sp, color = Color.Black, letterSpacing = 0.5.sp)
     }
     Spacer(Modifier.fillMaxWidth().height(1.dp).background(Color.Black))
     Spacer(Modifier.height(6.dp))
 }
 
 @Composable
-private fun FieldLine(label: String, value: String, bigLabel: Boolean = false, onChange: (String) -> Unit) {
+private fun BasicTextFieldCentered(
+    value: String,
+    fontSize: androidx.compose.ui.unit.TextUnit,
+    bold: Boolean,
+    letterSpacing: androidx.compose.ui.unit.TextUnit = 0.sp,
+    placeholder: String,
+    onChange: (String) -> Unit
+) {
     val interactionSource = remember { MutableInteractionSource() }
     val isFocused by interactionSource.collectIsFocusedAsState()
-    Column(modifier = Modifier.fillMaxWidth().padding(top = 6.dp)) {
-        Row(verticalAlignment = Alignment.Bottom) {
-            Text(
-                "$label: ",
-                fontSize = if (bigLabel) 20.sp else 12.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.Black
-            )
-            BasicTextField(
-                value = value, onValueChange = onChange,
-                textStyle = TextStyle(fontSize = if (bigLabel) 20.sp else 12.sp, color = Color.Black),
-                cursorBrush = SolidColor(Color.Black),
-                interactionSource = interactionSource,
-                modifier = Modifier.weight(1f).background(if (isFocused) Color(0xFFFFF3CD) else Color.Transparent)
-            )
-        }
-        Spacer(Modifier.height(2.dp))
-        Spacer(Modifier.fillMaxWidth().bottomLine2())
+    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+        BasicTextField(
+            value = value, onValueChange = onChange,
+            textStyle = TextStyle(
+                fontSize = fontSize,
+                fontWeight = if (bold) FontWeight.Bold else FontWeight.Normal,
+                color = Color.Black,
+                textAlign = TextAlign.Center,
+                letterSpacing = letterSpacing
+            ),
+            cursorBrush = SolidColor(Color.Black),
+            interactionSource = interactionSource,
+            modifier = Modifier.fillMaxWidth(0.9f).background(if (isFocused) Color(0xFFFFF3CD) else Color.Transparent)
+        )
     }
 }
 
 @Composable
-private fun ContactField(icon: String, value: String, modifier: Modifier = Modifier, onChange: (String) -> Unit) {
+private fun ContactFieldInline(icon: String, value: String, onChange: (String) -> Unit) {
     val interactionSource = remember { MutableInteractionSource() }
     val isFocused by interactionSource.collectIsFocusedAsState()
-    Column(modifier = modifier) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Text("$icon ", fontSize = 10.sp)
+        BasicTextField(
+            value = value, onValueChange = onChange,
+            textStyle = TextStyle(fontSize = 10.sp, color = Color.Black),
+            cursorBrush = SolidColor(Color.Black),
+            interactionSource = interactionSource,
+            modifier = Modifier.width(110.dp).background(if (isFocused) Color(0xFFFFF3CD) else Color.Transparent)
+        )
+    }
+}
+
+@Composable
+private fun ParagraphField(value: String, onChange: (String) -> Unit) {
+    val interactionSource = remember { MutableInteractionSource() }
+    val isFocused by interactionSource.collectIsFocusedAsState()
+    BasicTextField(
+        value = value, onValueChange = onChange,
+        textStyle = TextStyle(fontSize = 11.5.sp, color = Color.Black, lineHeight = 16.sp),
+        cursorBrush = SolidColor(Color.Black),
+        interactionSource = interactionSource,
+        modifier = Modifier.fillMaxWidth().background(if (isFocused) Color(0xFFFFF3CD) else Color.Transparent)
+    )
+}
+
+@Composable
+private fun FieldLine(label: String, value: String, onChange: (String) -> Unit) {
+    val interactionSource = remember { MutableInteractionSource() }
+    val isFocused by interactionSource.collectIsFocusedAsState()
+    Column(modifier = Modifier.fillMaxWidth().padding(top = 6.dp)) {
         Row(verticalAlignment = Alignment.Bottom) {
-            Text("$icon  ", fontSize = 12.sp)
+            Text("$label: ", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = Color.Black)
             BasicTextField(
                 value = value, onValueChange = onChange,
                 textStyle = TextStyle(fontSize = 11.sp, color = Color.Black),
@@ -473,8 +439,6 @@ private fun ContactField(icon: String, value: String, modifier: Modifier = Modif
                 modifier = Modifier.weight(1f).background(if (isFocused) Color(0xFFFFF3CD) else Color.Transparent)
             )
         }
-        Spacer(Modifier.height(2.dp))
-        Spacer(Modifier.fillMaxWidth().bottomLine2())
     }
 }
 
@@ -487,33 +451,11 @@ private fun MiniField2(label: String, value: String, modifier: Modifier = Modifi
             if (label.isNotEmpty()) Text("$label: ", fontSize = 12.sp, color = Color.Black)
             BasicTextField(
                 value = value, onValueChange = onChange,
-                textStyle = TextStyle(fontSize = 12.sp, color = Color.Black),
+                textStyle = TextStyle(fontSize = 11.5.sp, fontWeight = FontWeight.Bold, color = Color.Black),
                 cursorBrush = SolidColor(Color.Black),
                 interactionSource = interactionSource,
                 modifier = Modifier.weight(1f).background(if (isFocused) Color(0xFFFFF3CD) else Color.Transparent)
             )
-        }
-        Spacer(Modifier.height(2.dp))
-        Spacer(Modifier.fillMaxWidth().bottomLine2())
-    }
-}
-
-@Composable
-private fun MultiLineField2(values: List<String>, onChange: (Int, String) -> Unit) {
-    Column {
-        values.forEachIndexed { i, v ->
-            val interactionSource = remember { MutableInteractionSource() }
-            val isFocused by interactionSource.collectIsFocusedAsState()
-            BasicTextField(
-                value = v, onValueChange = { onChange(i, it) },
-                textStyle = TextStyle(fontSize = 12.sp, color = Color.Black),
-                cursorBrush = SolidColor(Color.Black),
-                interactionSource = interactionSource,
-                modifier = Modifier.fillMaxWidth().background(if (isFocused) Color(0xFFFFF3CD) else Color.Transparent)
-            )
-            Spacer(Modifier.height(2.dp))
-            Spacer(Modifier.fillMaxWidth().bottomLine2())
-            Spacer(Modifier.height(4.dp))
         }
     }
 }
@@ -524,18 +466,16 @@ private fun BulletLines2(values: List<String>, onChange: (Int, String) -> Unit) 
         values.forEachIndexed { i, v ->
             val interactionSource = remember { MutableInteractionSource() }
             val isFocused by interactionSource.collectIsFocusedAsState()
-            Row(verticalAlignment = Alignment.Bottom, modifier = Modifier.padding(top = 4.dp)) {
-                Text("•  ", fontSize = 12.sp, color = Color.Black)
+            Row(verticalAlignment = Alignment.Top, modifier = Modifier.padding(top = 4.dp)) {
+                Text("•  ", fontSize = 11.sp, color = Color.Black)
                 BasicTextField(
                     value = v, onValueChange = { onChange(i, it) },
-                    textStyle = TextStyle(fontSize = 12.sp, color = Color.Black),
+                    textStyle = TextStyle(fontSize = 10.5.sp, color = Color.Black, lineHeight = 14.sp),
                     cursorBrush = SolidColor(Color.Black),
                     interactionSource = interactionSource,
                     modifier = Modifier.weight(1f).background(if (isFocused) Color(0xFFFFF3CD) else Color.Transparent)
                 )
             }
-            Spacer(Modifier.height(2.dp))
-            Spacer(Modifier.fillMaxWidth().padding(start = 16.dp).bottomLine2())
         }
     }
 }
