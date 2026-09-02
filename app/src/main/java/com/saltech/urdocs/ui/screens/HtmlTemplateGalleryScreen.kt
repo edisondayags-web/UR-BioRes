@@ -15,6 +15,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -109,7 +110,7 @@ fun HtmlTemplateGalleryScreen(
     onTemplateSelected: (String) -> Unit,
     onBack: () -> Unit = {}
 ) {
-    var selectedPackage by remember { mutableStateOf(1) }
+    var selectedPackage by rememberSaveable { mutableStateOf(1) }
 
     Box(modifier = Modifier.fillMaxSize().background(Color(0xFF0B1530))) {
         PremiumWaveBackground()
