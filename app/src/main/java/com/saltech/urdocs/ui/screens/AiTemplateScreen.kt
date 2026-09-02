@@ -17,6 +17,7 @@ fun AiTemplateScreen(htmlFileName: String, onBack: () -> Unit = {}) {
                 settings.javaScriptEnabled = true
                 settings.useWideViewPort = true
                 settings.loadWithOverviewMode = true
+                setBackgroundColor(android.graphics.Color.parseColor("#0A1931"))
                 loadUrl("file:///android_asset/templates/$htmlFileName")
             }
         }

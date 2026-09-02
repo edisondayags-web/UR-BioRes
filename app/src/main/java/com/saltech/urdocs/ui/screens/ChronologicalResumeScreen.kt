@@ -152,7 +152,7 @@ fun ChronologicalResumeScreen() {
         BoxWithConstraints(
             modifier = Modifier.weight(1f).background(Color.Transparent)
         ) {
-        val fitScale = maxWidth / paperWidthDp
+        val fitScale = minOf(maxWidth / paperWidthDp, maxHeight / paperHeightDp)
             var scale by remember { mutableStateOf(fitScale) }
 
         Box(
@@ -169,7 +169,7 @@ fun ChronologicalResumeScreen() {
                     translationX = offset.x, translationY = offset.y
                 )
                 .requiredWidth(paperWidthDp)
-                .wrapContentHeight()
+                .requiredHeight(paperHeightDp)
                 .clipToBounds()
                 .drawWithCache {
                     val width = this.size.width.toInt().coerceAtLeast(1)
