@@ -70,6 +70,21 @@
 
   [contenteditable="true"]:empty:before { content: attr(data-placeholder); color: #999; }
   [contenteditable="true"]:focus { background: rgba(31,143,224,0.15); outline: 1px dashed #1F8FE0; }
+
+  .tool-row { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+  .tool-badge { width: 16px; height: 16px; border-radius: 3px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 6px; font-weight: 800; color: white; }
+  .tool-name { font-size: 6px; color: white; outline: none; }
+
+  .proj-block { margin-bottom: 8px; }
+  .proj-title2 { font-size: 6.5px; font-weight: 800; color: #222; outline: none; }
+  .proj-desc2 { font-size: 6px; color: #555; outline: none; line-height: 1.4; margin-top: 1px; }
+
+  .ach-item { font-size: 6.5px; color: #444; outline: none; margin-bottom: 3px; padding-left: 9px; position: relative; }
+  .ach-item:before { content: "•"; color: #1F8FE0; position: absolute; left: 0; }
+
+  .link-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .link-item { display: flex; align-items: center; gap: 4px; font-size: 6px; color: #333; }
+  .link-icon { width: 12px; height: 12px; border-radius: 3px; background: #1F8FE0; color: white; display: flex; align-items: center; justify-content: center; font-size: 5.5px; flex-shrink: 0; }
 </style>
 </head>
 <body>
@@ -95,7 +110,7 @@
       </div>
       <div class="contact-item">
         <div class="contact-label-row"><div class="contact-icon">&#128205;</div><div class="contact-label">ADDRESS</div></div>
-        <div class="contact-value" contenteditable="true">Your location goes here</div>
+        <div class="contact-value" contenteditable="true">Your location goes here, City, Country</div>
       </div>
     </div>
 
@@ -121,6 +136,17 @@
       <div class="side-divider"></div>
       <div class="cert-item" contenteditable="true">Google Design Certification</div>
       <div class="cert-item" contenteditable="true">UX Design Basics - Online Course</div>
+    </div>
+
+    <div class="side-block" style="padding-bottom: 16px;">
+      <div class="side-title">SOFTWARE / TOOLS</div>
+      <div class="side-divider"></div>
+      <div class="tool-row"><div class="tool-badge" style="background:#E8792C;">Ai</div><div class="tool-name" contenteditable="true">Adobe Illustrator</div></div>
+      <div class="tool-row"><div class="tool-badge" style="background:#31A8DE;">Ps</div><div class="tool-name" contenteditable="true">Adobe Photoshop</div></div>
+      <div class="tool-row"><div class="tool-badge" style="background:#FF3366;">Id</div><div class="tool-name" contenteditable="true">Adobe InDesign</div></div>
+      <div class="tool-row"><div class="tool-badge" style="background:#0ACF83;">Fi</div><div class="tool-name" contenteditable="true">Figma</div></div>
+      <div class="tool-row"><div class="tool-badge" style="background:#00C4CC;">Cv</div><div class="tool-name" contenteditable="true">Canva</div></div>
+      <div class="tool-row"><div class="tool-badge" style="background:#FF61F6;">Xd</div><div class="tool-name" contenteditable="true">Adobe XD</div></div>
     </div>
   </div>
 
@@ -171,6 +197,38 @@
       <div class="edu-degree" contenteditable="true">Bachelor of Design</div>
       <div class="edu-school" contenteditable="true">Art & Design Institute</div>
       <div class="edu-year" contenteditable="true">Graduated: 2018</div>
+    </div>
+
+    <div class="m-section">
+      <div class="m-header-row"><div class="m-icon">&#128193;</div><div class="m-title">PROJECTS</div></div>
+      <div class="proj-block">
+        <div class="proj-title2" contenteditable="true">Brand Identity Design</div>
+        <div class="proj-desc2" contenteditable="true">Created a complete brand identity for a local coffee shop including logo, color palette, and brand guidelines.</div>
+      </div>
+      <div class="proj-block">
+        <div class="proj-title2" contenteditable="true">Social Media Campaign</div>
+        <div class="proj-desc2" contenteditable="true">Designed social media creatives and promotional materials that increased engagement by 40%.</div>
+      </div>
+      <div class="proj-block">
+        <div class="proj-title2" contenteditable="true">UI/UX Design Project</div>
+        <div class="proj-desc2" contenteditable="true">Designed mobile app interfaces with user-centered design approach and interactive prototypes.</div>
+      </div>
+    </div>
+
+    <div class="m-section">
+      <div class="m-header-row"><div class="m-icon">&#127942;</div><div class="m-title">ACHIEVEMENTS</div></div>
+      <div class="ach-item" contenteditable="true">Employee Recognition for Outstanding Design Contribution (2022)</div>
+      <div class="ach-item" contenteditable="true">Top 10 Finalist - National Design Competition (2019)</div>
+      <div class="ach-item" contenteditable="true">Completed Advanced Graphic Design Training (2020)</div>
+    </div>
+
+    <div class="m-section">
+      <div class="m-header-row"><div class="m-icon">&#127760;</div><div class="m-title">PORTFOLIO / LINKS</div></div>
+      <div class="link-row">
+        <div class="link-item"><div class="link-icon">&#127760;</div><span contenteditable="true">www.yourportfolio.com</span></div>
+        <div class="link-item"><div class="link-icon">Be</div><span contenteditable="true">behance.net/yourname</span></div>
+        <div class="link-item"><div class="link-icon">in</div><span contenteditable="true">linkedin.com/in/yourname</span></div>
+      </div>
     </div>
   </div>
 
