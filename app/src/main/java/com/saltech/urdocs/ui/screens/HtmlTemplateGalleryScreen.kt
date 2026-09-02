@@ -50,7 +50,37 @@ private val htmlColorTemplates = listOf(
     HtmlColorInfo("ai_template_08_pink_light.html", "Pink Light", Color(0xFFF34FC0), Color(0xFFFDE4F5)),
     HtmlColorInfo("ai_template_09_gray_light.html", "Gray Light", Color(0xFFB0B0B0), Color(0xFFF3F3F3)),
     HtmlColorInfo("ai_template_10_gold_light.html", "Gold Light", Color(0xFFF3D14F), Color(0xFFFDF8E4)),
-    HtmlColorInfo("ai_template_11_indigo_light.html", "Indigo Light", Color(0xFF6B4FF3), Color(0xFFE8E4FD))
+    HtmlColorInfo("ai_template_11_indigo_light.html", "Indigo Light", Color(0xFF6B4FF3), Color(0xFFE8E4FD)),
+    HtmlColorInfo("ai_template_02_dark1.html", "Blue Dark 1", Color(0xFF4FC3F7), Color(0xFF112A36)),
+    HtmlColorInfo("ai_template_02_dark2.html", "Blue Dark 2", Color(0xFF4FC3F7), Color(0xFF0B1B22)),
+    HtmlColorInfo("ai_template_02_dark3.html", "Blue Dark 3", Color(0xFF4FC3F7), Color(0xFF050D11)),
+    HtmlColorInfo("ai_template_03_green_dark1.html", "Green Dark 1", Color(0xFF4FF3A0), Color(0xFF113523)),
+    HtmlColorInfo("ai_template_03_green_dark2.html", "Green Dark 2", Color(0xFF4FF3A0), Color(0xFF0B2216)),
+    HtmlColorInfo("ai_template_03_green_dark3.html", "Green Dark 3", Color(0xFF4FF3A0), Color(0xFF05110B)),
+    HtmlColorInfo("ai_template_04_purple_dark1.html", "Purple Dark 1", Color(0xFFB14FF3), Color(0xFF261135)),
+    HtmlColorInfo("ai_template_04_purple_dark2.html", "Purple Dark 2", Color(0xFFB14FF3), Color(0xFF180B22)),
+    HtmlColorInfo("ai_template_04_purple_dark3.html", "Purple Dark 3", Color(0xFFB14FF3), Color(0xFF0C0511)),
+    HtmlColorInfo("ai_template_05_maroon_dark1.html", "Maroon Dark 1", Color(0xFFF34F6C), Color(0xFF351117)),
+    HtmlColorInfo("ai_template_05_maroon_dark2.html", "Maroon Dark 2", Color(0xFFF34F6C), Color(0xFF220B0F)),
+    HtmlColorInfo("ai_template_05_maroon_dark3.html", "Maroon Dark 3", Color(0xFFF34F6C), Color(0xFF110507)),
+    HtmlColorInfo("ai_template_06_orange_dark1.html", "Orange Dark 1", Color(0xFFF3A94F), Color(0xFF352511)),
+    HtmlColorInfo("ai_template_06_orange_dark2.html", "Orange Dark 2", Color(0xFFF3A94F), Color(0xFF22170B)),
+    HtmlColorInfo("ai_template_06_orange_dark3.html", "Orange Dark 3", Color(0xFFF3A94F), Color(0xFF110B05)),
+    HtmlColorInfo("ai_template_07_teal_dark1.html", "Teal Dark 1", Color(0xFF4FE0F3), Color(0xFF113135)),
+    HtmlColorInfo("ai_template_07_teal_dark2.html", "Teal Dark 2", Color(0xFF4FE0F3), Color(0xFF0B1F22)),
+    HtmlColorInfo("ai_template_07_teal_dark3.html", "Teal Dark 3", Color(0xFF4FE0F3), Color(0xFF050F11)),
+    HtmlColorInfo("ai_template_08_pink_dark1.html", "Pink Dark 1", Color(0xFFF34FC0), Color(0xFF35112A)),
+    HtmlColorInfo("ai_template_08_pink_dark2.html", "Pink Dark 2", Color(0xFFF34FC0), Color(0xFF220B1A)),
+    HtmlColorInfo("ai_template_08_pink_dark3.html", "Pink Dark 3", Color(0xFFF34FC0), Color(0xFF11050D)),
+    HtmlColorInfo("ai_template_09_gray_dark1.html", "Gray Dark 1", Color(0xFFB0B0B0), Color(0xFF262626)),
+    HtmlColorInfo("ai_template_09_gray_dark2.html", "Gray Dark 2", Color(0xFFB0B0B0), Color(0xFF181818)),
+    HtmlColorInfo("ai_template_09_gray_dark3.html", "Gray Dark 3", Color(0xFFB0B0B0), Color(0xFF0C0C0C)),
+    HtmlColorInfo("ai_template_10_gold_dark1.html", "Gold Dark 1", Color(0xFFF3D14F), Color(0xFF352D11)),
+    HtmlColorInfo("ai_template_10_gold_dark2.html", "Gold Dark 2", Color(0xFFF3D14F), Color(0xFF221D0B)),
+    HtmlColorInfo("ai_template_10_gold_dark3.html", "Gold Dark 3", Color(0xFFF3D14F), Color(0xFF110E05)),
+    HtmlColorInfo("ai_template_11_indigo_dark1.html", "Indigo Dark 1", Color(0xFF6B4FF3), Color(0xFF171135)),
+    HtmlColorInfo("ai_template_11_indigo_dark2.html", "Indigo Dark 2", Color(0xFF6B4FF3), Color(0xFF0E0B22)),
+    HtmlColorInfo("ai_template_11_indigo_dark3.html", "Indigo Dark 3", Color(0xFF6B4FF3), Color(0xFF070511))
 )
 
 @Composable
@@ -62,30 +92,32 @@ fun HtmlTemplateGalleryScreen(
         PremiumWaveBackground()
         Column(modifier = Modifier.fillMaxSize()) {
             Row(
-                modifier = Modifier.fillMaxWidth().padding(16.dp),
+                modifier = Modifier.fillMaxWidth().padding(top = 24.dp, start = 8.dp, bottom = 8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 IconButton(onClick = onBack) {
                     Icon(Icons.Filled.ArrowBack, contentDescription = "Back", tint = Color.White)
                 }
                 Spacer(Modifier.width(8.dp))
-                Text("Choose a Template", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                Text("Pili ng Kulay luv", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp)
             }
 
             LazyVerticalGrid(
-                columns = GridCells.Fixed(3),
-                modifier = Modifier.fillMaxSize().padding(horizontal = 12.dp),
-                contentPadding = PaddingValues(8.dp)
+                columns = GridCells.Fixed(5),
+                contentPadding = PaddingValues(10.dp),
+                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+                modifier = Modifier.fillMaxSize()
             ) {
                 items(htmlColorTemplates, key = { it.fileName }) { t ->
                     Box(
                         modifier = Modifier
-                            .padding(6.dp)
+                            .padding(4.dp)
                             .fillMaxWidth()
-                            .height(190.dp)
-                            .clip(RoundedCornerShape(12.dp))
+                            .height(150.dp)
+                            .clip(RoundedCornerShape(10.dp))
                             .background(t.contentBg)
-                            .border(1.dp, t.accent.copy(alpha = 0.6f), RoundedCornerShape(12.dp))
+                            .border(1.dp, t.accent.copy(alpha = 0.6f), RoundedCornerShape(10.dp))
                             .clickable { onTemplateSelected(t.fileName) }
                     ) {
                         Column(modifier = Modifier.fillMaxSize()) {
@@ -99,10 +131,10 @@ fun HtmlTemplateGalleryScreen(
                                     .fillMaxWidth()
                                     .background(t.contentBg)
                                     .border(width = 1.dp, color = t.accent.copy(alpha = 0.4f))
-                                    .padding(6.dp),
+                                    .padding(4.dp),
                                 horizontalArrangement = Arrangement.Center
                             ) {
-                                Text(t.label, color = t.accent, fontWeight = FontWeight.Bold, fontSize = 11.sp)
+                                Text(t.label, color = t.accent, fontWeight = FontWeight.Bold, fontSize = 8.sp)
                             }
                         }
                     }
@@ -114,32 +146,34 @@ fun HtmlTemplateGalleryScreen(
 
 @Composable
 private fun HtmlMiniPreview(accent: Color, contentBg: Color, modifier: Modifier = Modifier) {
-    val textColor = if (contentBg == Color.White) Color.Black.copy(alpha = 0.55f) else Color.Black.copy(alpha = 0.6f)
+    val isDark = (contentBg.red + contentBg.green + contentBg.blue) < 1.2f
+    val textColor = if (isDark) Color.White.copy(alpha = 0.85f) else Color.Black.copy(alpha = 0.55f)
+    val nameColor = if (isDark) Color.White else Color.Black.copy(alpha = 0.75f)
     Row(modifier = modifier) {
         Column(
             modifier = Modifier
                 .fillMaxHeight()
-                .width(40.dp)
+                .width(32.dp)
                 .background(accent)
-                .padding(5.dp)
+                .padding(4.dp)
         ) {
-            Box(modifier = Modifier.size(18.dp).clip(CircleShape).background(Color.White.copy(alpha = 0.3f)).border(1.dp, Color.White, CircleShape))
-            Spacer(Modifier.height(8.dp))
-            repeat(4) {
+            Box(modifier = Modifier.size(14.dp).clip(CircleShape).background(Color.White.copy(alpha = 0.3f)).border(1.dp, Color.White, CircleShape))
+            Spacer(Modifier.height(6.dp))
+            repeat(3) {
                 Box(modifier = Modifier.fillMaxWidth().height(2.dp).background(Color.White.copy(alpha = 0.8f)))
-                Spacer(Modifier.height(5.dp))
+                Spacer(Modifier.height(4.dp))
             }
         }
-        Column(modifier = Modifier.weight(1f).background(contentBg).padding(8.dp)) {
-            Box(modifier = Modifier.fillMaxWidth(0.7f).height(5.dp).background(Color.Black.copy(alpha = 0.75f)))
+        Column(modifier = Modifier.weight(1f).background(contentBg).padding(6.dp)) {
+            Box(modifier = Modifier.fillMaxWidth(0.7f).height(4.dp).background(nameColor))
             Spacer(Modifier.height(3.dp))
-            Box(modifier = Modifier.fillMaxWidth(0.4f).height(3.dp).background(accent))
-            Spacer(Modifier.height(10.dp))
-            repeat(3) {
+            Box(modifier = Modifier.fillMaxWidth(0.4f).height(2.dp).background(accent))
+            Spacer(Modifier.height(8.dp))
+            repeat(2) {
                 Box(modifier = Modifier.fillMaxWidth().height(2.dp).background(textColor))
                 Spacer(Modifier.height(2.dp))
                 Box(modifier = Modifier.fillMaxWidth(0.75f).height(2.dp).background(textColor))
-                Spacer(Modifier.height(6.dp))
+                Spacer(Modifier.height(5.dp))
             }
         }
     }
