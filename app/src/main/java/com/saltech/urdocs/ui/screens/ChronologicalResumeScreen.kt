@@ -148,8 +148,7 @@ fun ChronologicalResumeScreen() {
         )
     }
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        PremiumWaveBackground()
+    Box(modifier = Modifier.fillMaxSize().background(Color.White)) {
         Column(modifier = Modifier.fillMaxSize()) {
         BoxWithConstraints(
             modifier = Modifier.weight(1f).background(Color.Transparent)
