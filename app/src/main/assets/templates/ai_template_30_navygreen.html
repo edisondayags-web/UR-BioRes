@@ -8,11 +8,10 @@
   .page { width: 100%; max-width: 420px; margin: 0 auto; background: white; }
 
   /* ===== TOP BANNER ===== */
-  .banner { position: relative; background: #0A1931; padding: 14px 12px 20px 12px; overflow: hidden; }
+  .banner { position: relative; background: #0A1931; padding: 14px 12px 20px 128px; overflow: hidden; min-height: 110px; }
   .banner-stripe { position: absolute; top: 0; right: 0; width: 55%; height: 100%; background: #8BC34A; clip-path: polygon(35% 0, 100% 0, 100% 100%, 0 100%); opacity: 0.9; z-index: 0; }
-  .banner-row { position: relative; z-index: 1; display: flex; align-items: center; gap: 10px; }
-  .photo-box { flex-shrink: 0; width: 64px; height: 64px; background: #16305A; border: 2px solid #8BC34A; clip-path: polygon(12% 0, 100% 0, 100% 88%, 88% 100%, 0 100%, 0 12%); display: flex; align-items: center; justify-content: center; font-size: 6px; color: rgba(255,255,255,0.5); text-align: center; }
-  .header-info { flex: 1; }
+  .photo-box { position: absolute; top: 0; left: 0; width: 116px; height: 100%; background: #16305A; border-right: 3px solid #8BC34A; clip-path: polygon(0 0, 100% 0, 82% 100%, 0 100%); display: flex; align-items: center; justify-content: center; font-size: 7px; color: rgba(255,255,255,0.5); text-align: center; z-index: 1; }
+  .banner-row { position: relative; z-index: 1; }
   .name { font-size: 15px; font-weight: 900; color: white; line-height: 1.1; outline: none; }
   .name .accent { color: #8BC34A; }
   .job-title { font-size: 7px; letter-spacing: 1px; color: rgba(255,255,255,0.85); outline: none; margin-top: 2px; }
@@ -22,9 +21,10 @@
   .contact-field { outline: none; word-break: break-word; }
 
   /* ===== BODY ===== */
-  .body-columns { display: flex; }
+  .body-columns { display: flex; position: relative; }
   .sidebar { width: 34%; background: #0A1931; color: white; padding: 12px 8px; }
-  .content { width: 66%; padding: 12px 10px; background: white; color: #1a1a1a; }
+  .content { width: 66%; padding: 12px 10px; background: white; color: #1a1a1a; position: relative; }
+  .content:before { content: ""; position: absolute; top: 0; left: -14px; width: 20px; height: 20px; background: #8BC34A; clip-path: polygon(0 0, 100% 0, 0 100%); }
 
   .side-header, .main-header { display: flex; align-items: center; gap: 5px; margin-top: 10px; margin-bottom: 6px; }
   .head-icon { width: 12px; height: 12px; border-radius: 50%; border: 1.2px solid #8BC34A; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 6px; color: #8BC34A; }
@@ -35,10 +35,11 @@
 
   .about-text { font-size: 6px; color: rgba(255,255,255,0.8); outline: none; line-height: 1.4; }
 
-  .skill-row { margin-bottom: 5px; }
+  .skill-row { margin-bottom: 6px; }
   .skill-name { font-size: 6px; color: white; outline: none; margin-bottom: 2px; }
-  .skill-bar-bg { width: 100%; height: 2.5px; background: rgba(255,255,255,0.2); border-radius: 2px; position: relative; }
-  .skill-bar-fill { height: 100%; background: #8BC34A; border-radius: 2px; }
+  .skill-bar-bg { width: 100%; height: 1.5px; background: rgba(255,255,255,0.25); border-radius: 2px; position: relative; }
+  .skill-bar-fill { height: 100%; background: #8BC34A; border-radius: 2px; position: relative; }
+  .skill-bar-fill:after { content: ""; position: absolute; right: -2.5px; top: 50%; transform: translateY(-50%); width: 5px; height: 5px; border-radius: 50%; background: #8BC34A; }
 
   .award-block { margin-bottom: 7px; padding-bottom: 5px; border-bottom: 1px solid rgba(255,255,255,0.15); }
   .award-year { font-size: 5.5px; color: rgba(255,255,255,0.6); outline: none; }
@@ -50,7 +51,8 @@
   .dot { width: 5px; height: 5px; border-radius: 50%; background: #8BC34A; }
   .dot.off { background: rgba(255,255,255,0.25); }
 
-  .edu-block, .exp-block { margin-bottom: 8px; }
+  .timeline-block { position: relative; padding-left: 10px; margin-bottom: 8px; border-left: 1.5px solid #8BC34A; }
+  .timeline-block:before { content: ""; position: absolute; left: -4.5px; top: 2px; width: 7px; height: 7px; border-radius: 50%; background: #8BC34A; border: 1.5px solid white; }
   .edu-year, .exp-year { font-size: 5.5px; color: rgba(0,0,0,0.5); outline: none; }
   .edu-degree { font-size: 7px; font-weight: 800; color: #6B9E2E; outline: none; margin-top: 1px; }
   .edu-school { font-size: 6px; font-weight: 600; color: #333; outline: none; }
@@ -63,11 +65,13 @@
 
   .expertise-grid { display: flex; justify-content: space-between; gap: 4px; margin-top: 4px; }
   .expertise-item { flex: 1; text-align: center; }
-  .expertise-icon { width: 20px; height: 20px; margin: 0 auto 3px auto; border-radius: 6px; background: #EEF6E4; border: 1px solid #8BC34A; }
+  .expertise-icon { width: 20px; height: 20px; margin: 0 auto 3px auto; border-radius: 6px; background: #EEF6E4; border: 1px solid #8BC34A; display: flex; align-items: center; justify-content: center; font-size: 10px; }
   .expertise-label { font-size: 5px; color: #333; outline: none; line-height: 1.2; }
 
-  .footer { background: #0A1931; padding: 8px 10px; display: flex; justify-content: space-around; flex-wrap: wrap; gap: 4px; }
-  .footer-item { font-size: 5.5px; color: white; outline: none; }
+  .footer { background: #0A1931; padding: 8px 10px; display: flex; justify-content: space-around; flex-wrap: wrap; gap: 6px; }
+  .footer-item { display: flex; align-items: center; gap: 3px; font-size: 5.5px; color: white; }
+  .footer-icon { width: 9px; height: 9px; border-radius: 50%; background: #8BC34A; display: flex; align-items: center; justify-content: center; font-size: 5px; color: #0A1931; flex-shrink: 0; }
+  .footer-text { outline: none; }
 
   [contenteditable="true"]:empty:before { content: attr(data-placeholder); color: #999; }
   [contenteditable="true"]:focus { background: rgba(255,255,0,0.15); outline: 1px dashed #999; }
@@ -78,12 +82,10 @@
 
   <div class="banner">
     <div class="banner-stripe"></div>
+    <div class="photo-box">PHOTO</div>
     <div class="banner-row">
-      <div class="photo-box">PHOTO</div>
-      <div class="header-info">
-        <div class="name" contenteditable="true">Juan <span class="accent">Dela Cruz</span></div>
-        <div class="job-title" contenteditable="true">SENIOR UI/UX DESIGNER</div>
-      </div>
+      <div class="name" contenteditable="true">Juan <span class="accent">Dela Cruz</span></div>
+      <div class="job-title" contenteditable="true">SENIOR UI/UX DESIGNER</div>
     </div>
     <div class="contact-grid">
       <div class="contact-row"><span class="contact-icon">&#9742;</span><span class="contact-field" contenteditable="true">+63 912 345 6789</span></div>
@@ -101,8 +103,12 @@
       <div class="side-header"><div class="head-icon">&#9733;</div><div class="side-title">SKILLS</div></div>
       <div class="skill-row"><div class="skill-name" contenteditable="true">UI Design</div><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:90%"></div></div></div>
       <div class="skill-row"><div class="skill-name" contenteditable="true">UX Design</div><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:85%"></div></div></div>
-      <div class="skill-row"><div class="skill-name" contenteditable="true">Research</div><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:75%"></div></div></div>
+      <div class="skill-row"><div class="skill-name" contenteditable="true">User Research</div><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:80%"></div></div></div>
+      <div class="skill-row"><div class="skill-name" contenteditable="true">Design Systems</div><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:85%"></div></div></div>
+      <div class="skill-row"><div class="skill-name" contenteditable="true">Figma / Adobe XD</div><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:88%"></div></div></div>
       <div class="skill-row"><div class="skill-name" contenteditable="true">Prototyping</div><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:80%"></div></div></div>
+      <div class="skill-row"><div class="skill-name" contenteditable="true">Interaction Design</div><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:75%"></div></div></div>
+      <div class="skill-row"><div class="skill-name" contenteditable="true">Wireframing</div><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:70%"></div></div></div>
 
       <div class="side-header"><div class="head-icon">&#127942;</div><div class="side-title">AWARDS</div></div>
       <div class="award-block">
@@ -123,47 +129,59 @@
 
     <div class="content">
       <div class="main-header"><div class="head-icon">&#127891;</div><div class="main-title">EDUCATION</div></div>
-      <div class="edu-block">
-        <div class="edu-year" contenteditable="true">2016 - 2020</div>
+      <div class="timeline-block">
+        <div class="edu-year" contenteditable="true">2010 - 2014</div>
         <div class="edu-degree" contenteditable="true">BACHELOR OF SCIENCE IN DESIGN</div>
         <div class="edu-school" contenteditable="true">University Name, City</div>
         <div class="edu-desc" contenteditable="true">Focused on visual communication, interface design, and user experience.</div>
       </div>
-      <div class="edu-block">
+      <div class="timeline-block">
+        <div class="edu-year" contenteditable="true">2014 - 2016</div>
+        <div class="edu-degree" contenteditable="true">MASTER OF SCIENCE IN INTERACTION DESIGN</div>
+        <div class="edu-school" contenteditable="true">Institute of Technology, City</div>
+        <div class="edu-desc" contenteditable="true">Specialized in advanced interaction design and usability testing.</div>
+      </div>
+      <div class="timeline-block">
         <div class="edu-year" contenteditable="true">2021</div>
         <div class="edu-degree" contenteditable="true">UX CERTIFICATION</div>
         <div class="edu-school" contenteditable="true">Online Course Provider</div>
       </div>
 
       <div class="main-header"><div class="head-icon">&#128188;</div><div class="main-title">WORK EXPERIENCE</div></div>
-      <div class="exp-block">
+      <div class="timeline-block">
         <div class="exp-year" contenteditable="true">2021 - Present</div>
         <div class="exp-role" contenteditable="true">Senior UI/UX Designer <span class="company">| Company Name</span></div>
         <div class="exp-bullet" contenteditable="true">Lead the design of web and mobile applications from concept to launch.</div>
         <div class="exp-bullet" contenteditable="true">Conduct user research and usability testing to drive product decisions.</div>
       </div>
-      <div class="exp-block">
+      <div class="timeline-block">
         <div class="exp-year" contenteditable="true">2018 - 2021</div>
         <div class="exp-role" contenteditable="true">UI/UX Designer <span class="company">| Studio Name</span></div>
         <div class="exp-bullet" contenteditable="true">Designed interfaces and interactions for mobile and web platforms.</div>
         <div class="exp-bullet" contenteditable="true">Created wireframes, prototypes, and high-fidelity mockups.</div>
       </div>
+      <div class="timeline-block">
+        <div class="exp-year" contenteditable="true">2016 - 2018</div>
+        <div class="exp-role" contenteditable="true">Jr. UI Designer <span class="company">| Agency Name</span></div>
+        <div class="exp-bullet" contenteditable="true">Assisted in the design of websites, landing pages, and mobile apps.</div>
+      </div>
 
       <div class="main-header"><div class="head-icon">&#9889;</div><div class="main-title">EXPERTISE</div></div>
       <div class="expertise-grid">
-        <div class="expertise-item"><div class="expertise-icon"></div><div class="expertise-label" contenteditable="true">User Research</div></div>
-        <div class="expertise-item"><div class="expertise-icon"></div><div class="expertise-label" contenteditable="true">Prototyping</div></div>
-        <div class="expertise-item"><div class="expertise-icon"></div><div class="expertise-label" contenteditable="true">Design Systems</div></div>
-        <div class="expertise-item"><div class="expertise-icon"></div><div class="expertise-label" contenteditable="true">Mobile Design</div></div>
-        <div class="expertise-item"><div class="expertise-icon"></div><div class="expertise-label" contenteditable="true">Problem Solving</div></div>
+        <div class="expertise-item"><div class="expertise-icon">&#128101;</div><div class="expertise-label" contenteditable="true">User Research</div></div>
+        <div class="expertise-item"><div class="expertise-icon">&#128187;</div><div class="expertise-label" contenteditable="true">Prototyping</div></div>
+        <div class="expertise-item"><div class="expertise-icon">&#128203;</div><div class="expertise-label" contenteditable="true">Design Systems</div></div>
+        <div class="expertise-item"><div class="expertise-icon">&#128241;</div><div class="expertise-label" contenteditable="true">Mobile Design</div></div>
+        <div class="expertise-item"><div class="expertise-icon">&#128161;</div><div class="expertise-label" contenteditable="true">Problem Solving</div></div>
       </div>
     </div>
   </div>
 
   <div class="footer">
-    <div class="footer-item" contenteditable="true">linkedin.com/in/you</div>
-    <div class="footer-item" contenteditable="true">behance.net/you</div>
-    <div class="footer-item" contenteditable="true">City, Philippines</div>
+    <div class="footer-item"><span class="footer-icon">in</span><span class="footer-text" contenteditable="true">linkedin.com/in/you</span></div>
+    <div class="footer-item"><span class="footer-icon">Be</span><span class="footer-text" contenteditable="true">behance.net/you</span></div>
+    <div class="footer-item"><span class="footer-icon">Dr</span><span class="footer-text" contenteditable="true">dribbble.com/you</span></div>
+    <div class="footer-item"><span class="footer-icon">&#128205;</span><span class="footer-text" contenteditable="true">City, Philippines</span></div>
   </div>
 
 </div>
