@@ -114,23 +114,15 @@ fun AiTemplateScreen(htmlFileName: String, onBack: () -> Unit = {}) {
                 onClick = {
                     val wv = webViewRef
                     if (wv != null && wv.width > 0) {
-                        val originalHeight = wv.height
+                        val originalLayerType = wv.layerType
+                        wv.setLayerType(android.view.View.LAYER_TYPE_SOFTWARE, null)
                         val fullHeight = (wv.contentHeight * wv.scale).toInt().coerceAtLeast(wv.height)
-                        wv.measure(
-                            android.view.View.MeasureSpec.makeMeasureSpec(wv.width, android.view.View.MeasureSpec.EXACTLY),
-                            android.view.View.MeasureSpec.makeMeasureSpec(fullHeight, android.view.View.MeasureSpec.EXACTLY)
-                        )
-                        wv.layout(0, 0, wv.width, fullHeight)
                         val bmp = Bitmap.createBitmap(wv.width, fullHeight, Bitmap.Config.ARGB_8888)
                         val canvas = Canvas(bmp)
                         canvas.drawColor(android.graphics.Color.WHITE)
                         wv.draw(canvas)
+                        wv.setLayerType(originalLayerType, null)
                         saveBitmapToGallery(context, bmp, htmlFileName.removeSuffix(".html"))
-                        wv.measure(
-                            android.view.View.MeasureSpec.makeMeasureSpec(wv.width, android.view.View.MeasureSpec.EXACTLY),
-                            android.view.View.MeasureSpec.makeMeasureSpec(originalHeight, android.view.View.MeasureSpec.EXACTLY)
-                        )
-                        wv.layout(0, 0, wv.width, originalHeight)
                     }
                 },
                 shape = RoundedCornerShape(50),
