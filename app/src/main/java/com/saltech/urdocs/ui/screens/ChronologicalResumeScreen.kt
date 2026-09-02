@@ -44,6 +44,7 @@ import com.saltech.urdocs.R
 import androidx.compose.foundation.Image
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.viewinterop.AndroidView
 import com.google.android.gms.ads.AdRequest
@@ -120,7 +121,7 @@ data class ChronologicalResumeFields(
 fun ChronologicalResumeScreen() {
     //SecureScreen()
     val paperWidthDp = 850.dp
-    val paperHeightDp = 1250.dp
+    val paperHeightDp = 1000.dp
 
     var data by remember { mutableStateOf(ChronologicalResumeFields()) }
     var offset by remember { mutableStateOf(Offset.Zero) }
@@ -166,12 +167,12 @@ fun ChronologicalResumeScreen() {
         BoxWithConstraints(
             modifier = Modifier.weight(1f).background(Color.Transparent)
         ) {
-        val fitScale = minOf(maxWidth / paperWidthDp, maxHeight / paperHeightDp)
+        val fitScale = maxOf(maxWidth / paperWidthDp, maxHeight / paperHeightDp)
             var scale by remember { mutableStateOf(fitScale) }
 
         Box(
             modifier = Modifier
-                .align(Alignment.Center)
+                .align(Alignment.TopCenter)
                 .pointerInput(Unit) {
                     detectTransformGestures { _, pan, zoom, _ ->
                         scale = (scale * zoom).coerceIn(fitScale, 4f)
@@ -184,6 +185,7 @@ fun ChronologicalResumeScreen() {
                 )
                 .requiredWidth(paperWidthDp)
                 .requiredHeight(paperHeightDp)
+                .clipToBounds()
                 .drawWithCache {
                     val width = this.size.width.toInt().coerceAtLeast(1)
                     val height = this.size.height.toInt().coerceAtLeast(1)
@@ -345,9 +347,10 @@ fun ChronologicalResumeScreen() {
             contentPadding = PaddingValues(0.dp),
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp, vertical = 14.dp)
-                .clip(androidx.compose.foundation.shape.RoundedCornerShape(24.dp))
+                .padding(bottom = 24.dp)
+                .wrapContentWidth()
+                .heightIn(min = 52.dp)
+                .clip(androidx.compose.foundation.shape.RoundedCornerShape(50))
                 .background(
                     androidx.compose.ui.graphics.Brush.horizontalGradient(
                         listOf(Color(0xFF3B6FE0), Color(0xFF1A1A1A), Color(0xFF0B1530))
