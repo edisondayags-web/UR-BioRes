@@ -121,7 +121,7 @@ data class ChronologicalResumeFields(
 fun ChronologicalResumeScreen() {
     //SecureScreen()
     val paperWidthDp = 850.dp
-    val paperHeightDp = 1202.dp
+    val paperHeightDp = 980.dp
 
     var data by remember { mutableStateOf(ChronologicalResumeFields()) }
     var offset by remember { mutableStateOf(Offset.Zero) }
