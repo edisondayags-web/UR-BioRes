@@ -2,8 +2,14 @@ package com.saltech.urdocs.ui.screens
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Canvas
+import android.graphics.pdf.PdfRenderer
 import android.net.Uri
+import android.os.CancellationSignal
+import android.os.ParcelFileDescriptor
+import android.print.PageRange
+import android.print.PrintAttributes
+import android.print.PrintDocumentAdapter
+import android.print.PrintDocumentInfo
 import android.util.Base64
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -35,6 +41,64 @@ import com.saltech.urdocs.ml.FaceCropHelper
 import com.saltech.urdocs.ui.templates.saveBitmapToGallery
 import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
+import java.io.File
+
+private fun exportWebViewToBitmap(
+    context: android.content.Context,
+    webView: WebView,
+    onDone: (Bitmap?) -> Unit
+) {
+    val fullHeight = (webView.contentHeight * webView.scale).toInt().coerceAtLeast(webView.height)
+    val width = webView.width.coerceAtLeast(1)
+
+    val dpi = 150
+    val widthMils = ((width.toFloat() / dpi) * 1000).toInt().coerceAtLeast(1)
+    val heightMils = ((fullHeight.toFloat() / dpi) * 1000).toInt().coerceAtLeast(1)
+
+    val mediaSize = PrintAttributes.MediaSize("resume", "resume", widthMils, heightMils)
+    val attributes = PrintAttributes.Builder()
+        .setMediaSize(mediaSize)
+        .setResolution(PrintAttributes.Resolution("res", "res", dpi, dpi))
+        .setMinMargins(PrintAttributes.Margins.NO_MARGINS)
+        .build()
+
+    val adapter = webView.createPrintDocumentAdapter("resume_export")
+
+    adapter.onLayout(null, attributes, CancellationSignal(), object : PrintDocumentAdapter.LayoutResultCallback() {
+        override fun onLayoutFinished(info: PrintDocumentInfo?, changed: Boolean) {
+            try {
+                val file = File(context.cacheDir, "export_${System.currentTimeMillis()}.pdf")
+                val writePfd = ParcelFileDescriptor.open(
+                    file,
+                    ParcelFileDescriptor.MODE_CREATE or ParcelFileDescriptor.MODE_READ_WRITE or ParcelFileDescriptor.MODE_TRUNCATE
+                )
+                adapter.onWrite(arrayOf(PageRange.ALL_PAGES), writePfd, CancellationSignal(), object : PrintDocumentAdapter.WriteResultCallback() {
+                    override fun onWriteFinished(pages: Array<out PageRange>?) {
+                        try {
+                            writePfd.close()
+                            val readPfd = ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)
+                            val renderer = PdfRenderer(readPfd)
+                            val page = renderer.openPage(0)
+                            val bmp = Bitmap.createBitmap(width, fullHeight, Bitmap.Config.ARGB_8888)
+                            val canvas = android.graphics.Canvas(bmp)
+                            canvas.drawColor(android.graphics.Color.WHITE)
+                            page.render(bmp, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
+                            page.close()
+                            renderer.close()
+                            readPfd.close()
+                            file.delete()
+                            onDone(bmp)
+                        } catch (e: Exception) {
+                            onDone(null)
+                        }
+                    }
+                })
+            } catch (e: Exception) {
+                onDone(null)
+            }
+        }
+    }, null)
+}
 
 @Composable
 fun AiTemplateScreen(htmlFileName: String, onBack: () -> Unit = {}) {
@@ -114,15 +178,11 @@ fun AiTemplateScreen(htmlFileName: String, onBack: () -> Unit = {}) {
                 onClick = {
                     val wv = webViewRef
                     if (wv != null && wv.width > 0) {
-                        val originalLayerType = wv.layerType
-                        wv.setLayerType(android.view.View.LAYER_TYPE_SOFTWARE, null)
-                        val fullHeight = (wv.contentHeight * wv.scale).toInt().coerceAtLeast(wv.height)
-                        val bmp = Bitmap.createBitmap(wv.width, fullHeight, Bitmap.Config.ARGB_8888)
-                        val canvas = Canvas(bmp)
-                        canvas.drawColor(android.graphics.Color.WHITE)
-                        wv.draw(canvas)
-                        wv.setLayerType(originalLayerType, null)
-                        saveBitmapToGallery(context, bmp, htmlFileName.removeSuffix(".html"))
+                        exportWebViewToBitmap(context, wv) { bmp ->
+                            if (bmp != null) {
+                                saveBitmapToGallery(context, bmp, htmlFileName.removeSuffix(".html"))
+                            }
+                        }
                     }
                 },
                 shape = RoundedCornerShape(50),
