@@ -217,7 +217,7 @@
     }
   }
   function run(){
-    document.querySelectorAll('.name-row2, .name-row, .h-name, .name, .name-accent, .name-dark, .name-green, .name-navy').forEach(shrinkToFit);
+    document.querySelectorAll('[class*="name"], [class*="title"], [class*="designation"], [class*="header"] span, h1, h2').forEach(shrinkToFit);
   }
   if(document.readyState === 'complete'){ run(); }
   else { window.addEventListener('load', run); }
