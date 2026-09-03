@@ -48,7 +48,7 @@ private suspend fun neutralizeViewportHeight(webView: WebView): Unit =
         val js = """
             (function(){
               var s = document.createElement('style');
-              s.innerHTML = 'html, body { height: auto !important; min-height: auto !important; }';
+              s.innerHTML = 'html, body, .page { height: auto !important; min-height: auto !important; }';
               document.head.appendChild(s);
             })();
         """.trimIndent()
@@ -69,6 +69,7 @@ private suspend fun captureFullWebView(webView: WebView, density: Float): Bitmap
     val originalHeight = webView.height
     val originalLayerType = webView.layerType
 
+    webView.setBackgroundColor(android.graphics.Color.WHITE)
     neutralizeViewportHeight(webView)
     delay(50)
     val docHeight = getDocumentHeightPx(webView, density).coerceAtLeast(1)
@@ -89,6 +90,7 @@ private suspend fun captureFullWebView(webView: WebView, density: Float): Bitmap
     webView.draw(canvas)
 
     // restore
+    webView.setBackgroundColor(android.graphics.Color.parseColor("#0A1931"))
     webView.setLayerType(originalLayerType, null)
     webView.measure(
         View.MeasureSpec.makeMeasureSpec(webView.width, View.MeasureSpec.EXACTLY),
