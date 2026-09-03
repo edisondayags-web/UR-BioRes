@@ -103,6 +103,14 @@ private suspend fun getContentBox(webView: WebView, density: Float): ContentBox 
         }
     }
 
+private suspend fun setZoom(webView: WebView, zoom: Float): Unit =
+    suspendCancellableCoroutine { cont ->
+        val js = "document.body.style.zoom = '" + zoom + "';"
+        webView.evaluateJavascript(js) {
+            if (cont.isActive) cont.resume(Unit) { }
+        }
+    }
+
 private suspend fun captureFullWebView(webView: WebView, density: Float): Bitmap {
     val originalHeight = webView.height
     val originalLayerType = webView.layerType
@@ -110,7 +118,16 @@ private suspend fun captureFullWebView(webView: WebView, density: Float): Bitmap
     webView.setBackgroundColor(android.graphics.Color.WHITE)
     neutralizeViewportHeight(webView)
     delay(50)
-    val docHeight = getDocumentHeightPx(webView, density).coerceAtLeast(1)
+    val rawHeight = getDocumentHeightPx(webView, density).coerceAtLeast(1)
+
+    val targetHeight = (webView.width * 1.4142f).toInt().coerceAtLeast(1)
+    var docHeight = rawHeight
+    if (rawHeight > targetHeight) {
+        val zoom = targetHeight.toFloat() / rawHeight.toFloat()
+        setZoom(webView, zoom)
+        delay(80)
+        docHeight = getDocumentHeightPx(webView, density).coerceAtLeast(1)
+    }
 
     webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
     webView.measure(
@@ -138,6 +155,7 @@ private suspend fun captureFullWebView(webView: WebView, density: Float): Bitmap
     }
 
     // restore
+    webView.evaluateJavascript("document.body.style.zoom = '1';", null)
     webView.setBackgroundColor(android.graphics.Color.parseColor("#0A1931"))
     webView.setLayerType(originalLayerType, null)
     webView.measure(
