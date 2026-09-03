@@ -43,6 +43,8 @@
   .dots { display: flex; gap: 2px; }
   .dot { width: 5px; height: 5px; border-radius: 50%; background: #1FD1B8; }
   .dot.off { background: rgba(255,255,255,0.25); }
+  .strength-item { display: flex; align-items: center; gap: 4px; font-size: 6px; color: white; margin-bottom: 4px; }
+  .strength-dot { width: 5px; height: 5px; border-radius: 50%; background: #E53950; flex-shrink: 0; }
 
   /* ===== MAIN (header strip + education + experience + expertise) ===== */
   .main-content { width: 66%; background: white; }
@@ -121,6 +123,15 @@
         <div class="skill-row"><div class="skill-name" contenteditable="true">Design Systems</div><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:85%"></div></div></div>
         <div class="skill-row"><div class="skill-name" contenteditable="true">Prototyping</div><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:80%"></div></div></div>
 
+
+        <div class="side-header"><div class="head-icon">&#9881;</div><div class="side-title">CORE STRENGTHS</div></div>
+        <div class="strength-item"><div class="strength-dot"></div><span contenteditable="true">Problem Solving</span></div>
+        <div class="strength-item"><div class="strength-dot"></div><span contenteditable="true">Team Collaboration</span></div>
+        <div class="strength-item"><div class="strength-dot"></div><span contenteditable="true">Communication</span></div>
+        <div class="strength-item"><div class="strength-dot"></div><span contenteditable="true">Attention to Detail</span></div>
+        <div class="strength-item"><div class="strength-dot"></div><span contenteditable="true">Time Management</span></div>
+        <div class="strength-item"><div class="strength-dot"></div><span contenteditable="true">Adaptability</span></div>
+
         <div class="side-header"><div class="head-icon">&#127942;</div><div class="side-title">AWARDS</div></div>
         <div class="award-block">
           <div class="award-year" contenteditable="true">2020 - 2021</div>
@@ -136,6 +147,13 @@
         <div class="side-header"><div class="head-icon">&#127760;</div><div class="side-title">LANGUAGES</div></div>
         <div class="lang-row"><span contenteditable="true">English</span><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot off"></div></div></div>
         <div class="lang-row"><span contenteditable="true">Filipino</span><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot off"></div><div class="dot off"></div></div></div>
+
+        <div class="side-header"><div class="head-icon">&#8505;</div><div class="side-title">ADDITIONAL INFO</div></div>
+        <div class="add-item"><span class="add-check">&#10003;</span><span contenteditable="true">Available for full-time employment</span></div>
+        <div class="add-item"><span class="add-check">&#10003;</span><span contenteditable="true">Willing to relocate</span></div>
+        <div class="add-item"><span class="add-check">&#10003;</span><span contenteditable="true">Can work independently and as part of a team</span></div>
+        <div class="add-item"><span class="add-check">&#10003;</span><span contenteditable="true">Willing to undergo training</span></div>
+        <div class="add-item"><span class="add-check">&#10003;</span><span contenteditable="true">Flexible with different time zones</span></div>
       </div>
     </div>
 
@@ -202,49 +220,23 @@
           <div class="expertise-item"><div class="expertise-icon">&#128161;</div><div class="expertise-label" contenteditable="true">Problem Solving</div></div>
         </div>
 
+        <div class="main-header"><div class="head-icon">&#128101;</div><div class="main-title">REFERENCES</div></div>
         <div class="sub-columns">
           <div class="sub-col">
-            <div class="main-header"><div class="head-icon">&#127942;</div><div class="main-title">CERTIFICATIONS</div></div>
-            <div class="cert-row"><div class="cert-title" contenteditable="true">Google UX Design Professional Certificate</div><div class="cert-year" contenteditable="true">2022</div></div>
-            <div class="cert-source" contenteditable="true">Google</div>
-            <div class="cert-row"><div class="cert-title" contenteditable="true">Adobe XD UI/UX Design</div><div class="cert-year" contenteditable="true">2021</div></div>
-            <div class="cert-source" contenteditable="true">Adobe</div>
-            <div class="cert-row"><div class="cert-title" contenteditable="true">Responsive Web Design</div><div class="cert-year" contenteditable="true">2019</div></div>
-            <div class="cert-source" contenteditable="true">freeCodeCamp</div>
-          </div>
-          <div class="sub-col">
-            <div class="main-header"><div class="head-icon">&#127891;</div><div class="main-title">TRAININGS & SEMINARS</div></div>
-            <div class="cert-row"><div class="cert-title" contenteditable="true">Design Thinking Workshop</div><div class="cert-year" contenteditable="true">2024</div></div>
-            <div class="cert-source" contenteditable="true">Design Institute Philippines</div>
-            <div class="cert-row"><div class="cert-title" contenteditable="true">UI/UX Design Bootcamp</div><div class="cert-year" contenteditable="true">2023</div></div>
-            <div class="cert-source" contenteditable="true">UXPH Academy</div>
-            <div class="cert-row"><div class="cert-title" contenteditable="true">User Research and Usability Testing</div><div class="cert-year" contenteditable="true">2022</div></div>
-            <div class="cert-source" contenteditable="true">CareerConf</div>
-          </div>
-        </div>
-
-        <div class="sub-columns">
-          <div class="sub-col">
-            <div class="main-header"><div class="head-icon">&#8505;</div><div class="main-title">ADDITIONAL INFORMATION</div></div>
-            <div class="add-item"><span class="add-check">&#10003;</span><span contenteditable="true">Available for full-time employment</span></div>
-            <div class="add-item"><span class="add-check">&#10003;</span><span contenteditable="true">Willing to relocate</span></div>
-            <div class="add-item"><span class="add-check">&#10003;</span><span contenteditable="true">Can work independently and as part of a team</span></div>
-            <div class="add-item"><span class="add-check">&#10003;</span><span contenteditable="true">Willing to undergo training</span></div>
-            <div class="add-item"><span class="add-check">&#10003;</span><span contenteditable="true">Flexible with different time zones</span></div>
-          </div>
-          <div class="sub-col">
-            <div class="main-header"><div class="head-icon">&#128101;</div><div class="main-title">REFERENCES</div></div>
             <div class="ref-block-light">
               <div class="ref-name-light" contenteditable="true">Michael Reyes</div>
               <div class="ref-role-light" contenteditable="true">Design Director | Company Name</div>
               <div class="ref-contact-light" contenteditable="true">0912 345 6780 | michael.reyes@email.com</div>
             </div>
+          </div>
+          <div class="sub-col">
             <div class="ref-block-light">
               <div class="ref-name-light" contenteditable="true">Anna Bautista</div>
               <div class="ref-role-light" contenteditable="true">Product Manager | Company Name</div>
               <div class="ref-contact-light" contenteditable="true">0912 345 6781 | anna.bautista@email.com</div>
             </div>
           </div>
+        </div>
         </div>
       </div>
     </div>
