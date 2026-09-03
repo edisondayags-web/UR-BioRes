@@ -95,28 +95,28 @@ fun InterviewScreen(
             InterviewChoiceCard(
                 icon = { Icon(Icons.Filled.RecordVoiceOver, contentDescription = null, tint = Color.White, modifier = it) },
                 title = "Local (BPO) • Traditional",
-                subtitle = "Live Q&A, kausap ka",
+                subtitle = "ito Perfect to ulit ulitin",
                 onClick = { onSelect("local_traditional") }
             )
             Spacer(Modifier.height(16.dp))
             InterviewChoiceCard(
                 icon = { Icon(Icons.Filled.Videocam, contentDescription = null, tint = Color.White, modifier = it) },
                 title = "Local (BPO) • Async Video",
-                subtitle = "Record answer, may time limit",
+                subtitle = "Ito international",
                 onClick = { onSelect("local_async") }
             )
             Spacer(Modifier.height(16.dp))
             InterviewChoiceCard(
                 icon = { Icon(Icons.Filled.Public, contentDescription = null, tint = Color.White, modifier = it) },
                 title = "International • Traditional",
-                subtitle = "Live Q&A, kausap ka",
+                subtitle = "ito luv try mo din",
                 onClick = { onSelect("intl_traditional") }
             )
             Spacer(Modifier.height(16.dp))
             InterviewChoiceCard(
                 icon = { Icon(Icons.Filled.Language, contentDescription = null, tint = Color.White, modifier = it) },
                 title = "International • Async Video",
-                subtitle = "Record answer, may time limit",
+                subtitle = "ito international interview to",
                 onClick = { onSelect("intl_async") }
             )
         }
