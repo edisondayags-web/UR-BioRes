@@ -113,7 +113,7 @@ fun ResumeChoiceScreen(onChoose: (String) -> Unit, onBack: () -> Unit = {}) {
             ResumeChoiceCard(
                 icon = { Icon(Icons.Filled.Description, contentDescription = null, tint = Color.White, modifier = it) },
                 title = "HTML",
-                subtitle = "(dito pogi luv kasi hanggang package 5)",
+                subtitle = "(dito ang pogi luv kasi hanggang package 5)",
                 onClick = { onChoose("ai_html") }
             )
 
@@ -122,7 +122,7 @@ fun ResumeChoiceScreen(onChoose: (String) -> Unit, onBack: () -> Unit = {}) {
             ResumeChoiceCard(
                 icon = { Icon(Icons.Filled.Work, contentDescription = null, tint = Color.White, modifier = it) },
                 title = "Chronological Resume",
-                subtitle = "(3 ATS-friendly template styles)",
+                subtitle = "(Dito pang ATS to at ito required ng HR)",
                 onClick = { onChoose("chronological") }
             )
 
@@ -132,7 +132,7 @@ fun ResumeChoiceScreen(onChoose: (String) -> Unit, onBack: () -> Unit = {}) {
             ResumeChoiceCard(
                 icon = { Icon(Icons.Filled.GridView, contentDescription = null, tint = Color.White, modifier = it) },
                 title = "More Templates",
-                subtitle = "(Ito luv dark theme to)",
+                subtitle = "(Ito luv dark theme naman to)",
                 onClick = { onChoose("gallery") }
             )
         }
