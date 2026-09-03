@@ -151,7 +151,7 @@ fun ChronologicalResumeScreen() {
         )
     }
 
-    Box(modifier = Modifier.fillMaxSize().background(Color.White)) {
+    Box(modifier = Modifier.fillMaxSize().background(Color.Black)) {
         Column(modifier = Modifier.fillMaxSize()) {
         BoxWithConstraints(
             modifier = Modifier.weight(1f).background(Color.Transparent)
