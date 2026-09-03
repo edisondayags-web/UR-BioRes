@@ -198,7 +198,7 @@ fun ChronologicalResumeScreen() {
                 // ===== HEADER (centered) — job title malaki sa taas, pangalan sa ibaba =====
                 BasicTextFieldCentered(
                     value = data.jobTitle,
-                    fontSize = 28.sp,
+                    fontSize = 32.sp,
                     bold = true,
                     letterSpacing = 2.sp,
                     placeholder = "PROFESSIONAL TITLE",
@@ -207,7 +207,7 @@ fun ChronologicalResumeScreen() {
                 Spacer(Modifier.height(4.dp))
                 BasicTextFieldCentered(
                     value = data.name,
-                    fontSize = 18.sp,
+                    fontSize = 20.sp,
                     bold = false,
                     letterSpacing = 2.sp,
                     placeholder = "YOUR NAME",
@@ -220,11 +220,11 @@ fun ChronologicalResumeScreen() {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     ContactFieldInline("📞", data.phone) { data = data.copy(phone = it) }
-                    Text("   •   ", fontSize = 13.sp, color = Color.Black)
+                    Text("   •   ", fontSize = 14.sp, color = Color.Black)
                     ContactFieldInline("📧", data.email) { data = data.copy(email = it) }
-                    Text("   •   ", fontSize = 13.sp, color = Color.Black)
+                    Text("   •   ", fontSize = 14.sp, color = Color.Black)
                     ContactFieldInline("📍", data.location) { data = data.copy(location = it) }
-                    Text("   •   ", fontSize = 13.sp, color = Color.Black)
+                    Text("   •   ", fontSize = 14.sp, color = Color.Black)
                     ContactFieldInline("🔗", data.linkedin) { data = data.copy(linkedin = it) }
                 }
                 Spacer(Modifier.height(10.dp))
@@ -257,7 +257,7 @@ fun ChronologicalResumeScreen() {
                             MiniField2("", entry.from, Modifier.width(60.dp)) { v ->
                                 data = data.copy(work = data.work.toMutableList().also { it[i] = entry.copy(from = v) })
                             }
-                            Text(" - ", fontSize = 15.sp, color = Color.Black)
+                            Text(" - ", fontSize = 17.sp, color = Color.Black)
                             MiniField2("", entry.to, Modifier.width(60.dp)) { v ->
                                 data = data.copy(work = data.work.toMutableList().also { it[i] = entry.copy(to = v) })
                             }
@@ -513,8 +513,8 @@ private fun Modifier.bottomLine2(color: Color = Color.Black, thickness: Dp = 1.d
 @Composable
 private fun SectionHeader2(icon: String, title: String) {
     Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(bottom = 4.dp)) {
-        if (icon.isNotEmpty()) Text("$icon  ", fontSize = 17.sp)
-        Text(title, fontWeight = FontWeight.Bold, fontSize = 17.sp, color = NavyColor, letterSpacing = 0.5.sp)
+        if (icon.isNotEmpty()) Text("$icon  ", fontSize = 19.sp)
+        Text(title, fontWeight = FontWeight.Bold, fontSize = 19.sp, color = NavyColor, letterSpacing = 0.5.sp)
     }
     Spacer(Modifier.fillMaxWidth().height(1.dp).background(NavyColor))
     Spacer(Modifier.height(6.dp))
@@ -553,10 +553,10 @@ private fun ContactFieldInline(icon: String, value: String, onChange: (String) -
     val interactionSource = remember { MutableInteractionSource() }
     val isFocused by interactionSource.collectIsFocusedAsState()
     Row(verticalAlignment = Alignment.CenterVertically) {
-        Text("$icon ", fontSize = 13.sp)
+        Text("$icon ", fontSize = 14.sp)
         BasicTextField(
             value = value, onValueChange = onChange,
-            textStyle = TextStyle(fontSize = 13.sp, color = Color.Black),
+            textStyle = TextStyle(fontSize = 14.sp, color = Color.Black),
             cursorBrush = SolidColor(Color.Black),
             interactionSource = interactionSource,
             modifier = Modifier.width(190.dp).background(if (isFocused) Color(0xFFFFF3CD) else Color.Transparent)
@@ -570,7 +570,7 @@ private fun ParagraphField(value: String, onChange: (String) -> Unit) {
     val isFocused by interactionSource.collectIsFocusedAsState()
     BasicTextField(
         value = value, onValueChange = onChange,
-        textStyle = TextStyle(fontSize = 15.sp, color = Color.Black, lineHeight = 21.sp),
+        textStyle = TextStyle(fontSize = 17.sp, color = Color.Black, lineHeight = 23.sp),
         cursorBrush = SolidColor(Color.Black),
         interactionSource = interactionSource,
         modifier = Modifier.fillMaxWidth().background(if (isFocused) Color(0xFFFFF3CD) else Color.Transparent)
@@ -584,7 +584,7 @@ private fun EduLine(value: String, bold: Boolean, onChange: (String) -> Unit) {
     BasicTextField(
         value = value, onValueChange = onChange,
         textStyle = TextStyle(
-            fontSize = 14.sp,
+            fontSize = 16.sp,
             fontWeight = if (bold) FontWeight.Bold else FontWeight.Normal,
             color = Color.Black
         ),
@@ -600,10 +600,10 @@ private fun MiniField2(label: String, value: String, modifier: Modifier = Modifi
     val isFocused by interactionSource.collectIsFocusedAsState()
     Column(modifier = modifier) {
         Row(verticalAlignment = Alignment.Bottom) {
-            if (label.isNotEmpty()) Text("$label: ", fontSize = 15.sp, color = Color.Black)
+            if (label.isNotEmpty()) Text("$label: ", fontSize = 17.sp, color = Color.Black)
             BasicTextField(
                 value = value, onValueChange = onChange,
-                textStyle = TextStyle(fontSize = 15.sp, fontWeight = FontWeight.Bold, color = Color.Black),
+                textStyle = TextStyle(fontSize = 17.sp, fontWeight = FontWeight.Bold, color = Color.Black),
                 cursorBrush = SolidColor(Color.Black),
                 interactionSource = interactionSource,
                 modifier = Modifier.weight(1f).background(if (isFocused) Color(0xFFFFF3CD) else Color.Transparent)
@@ -619,10 +619,10 @@ private fun BulletLines2(values: List<String>, onChange: (Int, String) -> Unit) 
             val interactionSource = remember { MutableInteractionSource() }
             val isFocused by interactionSource.collectIsFocusedAsState()
             Row(verticalAlignment = Alignment.Top, modifier = Modifier.padding(top = 4.dp)) {
-                Text("•  ", fontSize = 14.sp, color = Color.Black)
+                Text("•  ", fontSize = 16.sp, color = Color.Black)
                 BasicTextField(
                     value = v, onValueChange = { onChange(i, it) },
-                    textStyle = TextStyle(fontSize = 14.sp, color = Color.Black, lineHeight = 19.sp),
+                    textStyle = TextStyle(fontSize = 16.sp, color = Color.Black, lineHeight = 21.sp),
                     cursorBrush = SolidColor(Color.Black),
                     interactionSource = interactionSource,
                     modifier = Modifier.weight(1f).background(if (isFocused) Color(0xFFFFF3CD) else Color.Transparent)
