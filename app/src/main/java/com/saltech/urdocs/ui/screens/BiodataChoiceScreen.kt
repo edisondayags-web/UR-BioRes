@@ -105,7 +105,7 @@ fun BiodataChoiceScreen(onChoose: (String) -> Unit, onBack: () -> Unit = {}) {
             BiodataChoiceCard(
                 icon = { Icon(Icons.Filled.Badge, contentDescription = null, tint = Color.White, modifier = it) },
                 title = "PH Job Application Bio-Data",
-                subtitle = "(Traditional)",
+                subtitle = "(Ito Traditional to luv)",
                 onClick = { onChoose("ph_form") }
             )
 
@@ -114,7 +114,7 @@ fun BiodataChoiceScreen(onChoose: (String) -> Unit, onBack: () -> Unit = {}) {
             BiodataChoiceCard(
                 icon = { Icon(Icons.Filled.EditNote, contentDescription = null, tint = Color.White, modifier = it) },
                 title = "More Templates",
-                subtitle = "(Iba pang designs)",
+                subtitle = "(Dito maraming design luv?)",
                 onClick = { onChoose("more_templates") }
             )
 
