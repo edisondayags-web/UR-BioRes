@@ -40,6 +40,23 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import java.io.ByteArrayOutputStream
 
+private suspend fun neutralizeViewportHeight(webView: WebView): Unit =
+    suspendCancellableCoroutine { cont ->
+        // 100vh / min-height:100vh sa CSS ay sumusukat base sa screen height ng WebView,
+        // hindi sa totoong laman -- kaya mali yung scrollHeight na nababasa natin pag
+        // may ganyang CSS. I-neutralize muna bago tayo sumukat.
+        val js = """
+            (function(){
+              var s = document.createElement('style');
+              s.innerHTML = 'html, body { height: auto !important; min-height: auto !important; }';
+              document.head.appendChild(s);
+            })();
+        """.trimIndent()
+        webView.evaluateJavascript(js) {
+            if (cont.isActive) cont.resume(Unit) { }
+        }
+    }
+
 private suspend fun getDocumentHeightPx(webView: WebView, density: Float): Int =
     suspendCancellableCoroutine { cont ->
         webView.evaluateJavascript("document.body.scrollHeight.toString()") { result ->
@@ -52,7 +69,9 @@ private suspend fun captureFullWebView(webView: WebView, density: Float): Bitmap
     val originalHeight = webView.height
     val originalLayerType = webView.layerType
 
-    val docHeight = getDocumentHeightPx(webView, density).coerceAtLeast(originalHeight)
+    neutralizeViewportHeight(webView)
+    delay(50)
+    val docHeight = getDocumentHeightPx(webView, density).coerceAtLeast(1)
 
     webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
     webView.measure(
