@@ -47,8 +47,25 @@ private suspend fun neutralizeViewportHeight(webView: WebView): Unit =
         // may ganyang CSS. I-neutralize muna bago tayo sumukat.
         val js = """
             (function(){
+              var selectors = [];
+              try {
+                for (var i=0; i<document.styleSheets.length; i++){
+                  var sheet = document.styleSheets[i];
+                  var rules;
+                  try { rules = sheet.cssRules || sheet.rules; } catch(e){ continue; }
+                  if(!rules) continue;
+                  for (var j=0; j<rules.length; j++){
+                    var rule = rules[j];
+                    if(rule.style && rule.selectorText && /vh/.test(rule.cssText)){
+                      selectors.push(rule.selectorText);
+                    }
+                  }
+                }
+              } catch(e){}
               var s = document.createElement('style');
-              s.innerHTML = 'html, body, .page { height: auto !important; min-height: auto !important; }';
+              var base = 'html, body { height: auto !important; min-height: auto !important; }';
+              var extra = selectors.length ? (selectors.join(',') + ' { height: auto !important; min-height: auto !important; }') : '';
+              s.innerHTML = base + extra;
               document.head.appendChild(s);
             })();
         """.trimIndent()
