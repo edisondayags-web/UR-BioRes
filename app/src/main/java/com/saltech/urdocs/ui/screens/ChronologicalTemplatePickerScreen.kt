@@ -1,5 +1,6 @@
 package com.saltech.urdocs.ui.screens
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -13,6 +14,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -31,44 +34,100 @@ fun ChronologicalTemplatePickerScreen(
             IconButton(onClick = onBack) {
                 Icon(Icons.Filled.ArrowBack, contentDescription = "Back", tint = Color.White)
             }
-            Text("Choose a Template", color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+            Text("tap kalang dyan luv💙", color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold)
         }
 
-        Column(
-            modifier = Modifier.fillMaxSize().padding(20.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+        Row(
+            modifier = Modifier.fillMaxSize().padding(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            TemplatePickerCard(
-                title = "Classic Navy",
-                subtitle = "Centered header, navy accents — ATS-friendly",
+            TemplateGalleryCard(
+                label = "Classic Navy",
+                modifier = Modifier.weight(1f),
                 onClick = { onTemplateSelected(1) }
-            )
-            TemplatePickerCard(
-                title = "Modern Minimal",
-                subtitle = "Clean teal accents, extra white space — ATS-friendly",
+            ) { accent ->
+                // centered header mockup
+                Canvas(modifier = Modifier.fillMaxSize()) {
+                    val w = size.width
+                    drawRect(Color.White, Offset.Zero, size)
+                    drawRect(accent, Offset(w * 0.3f, 12f), Size(w * 0.4f, 8f))
+                    drawRect(Color.Gray, Offset(w * 0.35f, 26f), Size(w * 0.3f, 5f))
+                    drawRect(accent, Offset(8f, 42f), Size(w - 16f, 2f))
+                    for (i in 0..5) {
+                        val y = 55f + i * 14f
+                        drawRect(Color.LightGray, Offset(8f, y), Size(w - 16f, 5f))
+                    }
+                }
+            }
+            TemplateGalleryCard(
+                label = "Modern Minimal",
+                modifier = Modifier.weight(1f),
                 onClick = { onTemplateSelected(2) }
-            )
-            TemplatePickerCard(
-                title = "Executive Classic",
-                subtitle = "Monochrome, double-line dividers — ATS-friendly",
+            ) { accent ->
+                // left-aligned header mockup
+                Canvas(modifier = Modifier.fillMaxSize()) {
+                    val w = size.width
+                    drawRect(Color.White, Offset.Zero, size)
+                    drawRect(accent, Offset(8f, 12f), Size(w * 0.5f, 8f))
+                    drawRect(Color.Gray, Offset(8f, 26f), Size(w * 0.35f, 5f))
+                    drawRect(accent, Offset(8f, 42f), Size(w - 16f, 2f))
+                    for (i in 0..5) {
+                        val y = 55f + i * 14f
+                        drawRect(Color.LightGray, Offset(8f, y), Size(w - 16f, 5f))
+                    }
+                }
+            }
+            TemplateGalleryCard(
+                label = "Executive Classic",
+                modifier = Modifier.weight(1f),
                 onClick = { onTemplateSelected(3) }
-            )
+            ) { accent ->
+                // double-line monochrome mockup
+                Canvas(modifier = Modifier.fillMaxSize()) {
+                    val w = size.width
+                    drawRect(Color.White, Offset.Zero, size)
+                    drawRect(accent, Offset(w * 0.25f, 12f), Size(w * 0.5f, 8f))
+                    drawRect(Color.Gray, Offset(w * 0.3f, 26f), Size(w * 0.4f, 5f))
+                    drawRect(accent, Offset(8f, 40f), Size(w - 16f, 2f))
+                    drawRect(accent, Offset(8f, 44f), Size(w - 16f, 2f))
+                    for (i in 0..5) {
+                        val y = 58f + i * 14f
+                        drawRect(Color.LightGray, Offset(8f, y), Size(w - 16f, 5f))
+                    }
+                }
+            }
         }
     }
 }
 
 @Composable
-private fun TemplatePickerCard(title: String, subtitle: String, onClick: () -> Unit) {
+private fun TemplateGalleryCard(
+    label: String,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+    preview: @Composable (Color) -> Unit
+) {
+    val accent = when (label) {
+        "Classic Navy" -> Color(0xFF1B2A4A)
+        "Modern Minimal" -> Color(0xFF0F766E)
+        else -> Color(0xFF000000)
+    }
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(16.dp))
+        modifier = modifier
+            .clip(RoundedCornerShape(12.dp))
             .background(Color(0xFF1A2440))
             .clickable(onClick = onClick)
-            .padding(20.dp)
+            .padding(8.dp)
     ) {
-        Text(title, color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.Bold)
-        Spacer(Modifier.height(4.dp))
-        Text(subtitle, color = Color(0xFFB0B8C9), fontSize = 13.sp)
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(0.7f)
+                .clip(RoundedCornerShape(6.dp))
+        ) {
+            preview(accent)
+        }
+        Spacer(Modifier.height(6.dp))
+        Text(label, color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.Bold)
     }
 }
