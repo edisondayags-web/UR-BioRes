@@ -139,17 +139,29 @@ private suspend fun captureFullWebView(webView: WebView, density: Float): Bitmap
     // give Chromium time to actually paint the newly expanded area
     delay(500)
 
-    val fullBmp = Bitmap.createBitmap(webView.width, docHeight, Bitmap.Config.ARGB_8888)
+    // 2x na resolution multiplier -- para kahit lumiit ang laman (zoom-fit), manatiling
+    // sharp/malinaw ang text (hindi blurry) kapag na-scale papunta sa final output size.
+    val renderScale = 2f
+    val fullBmp = Bitmap.createBitmap(
+        (webView.width * renderScale).toInt().coerceAtLeast(1),
+        (docHeight * renderScale).toInt().coerceAtLeast(1),
+        Bitmap.Config.ARGB_8888
+    )
     val fullCanvas = Canvas(fullBmp)
     fullCanvas.drawColor(android.graphics.Color.WHITE)
+    fullCanvas.scale(renderScale, renderScale)
     webView.draw(fullCanvas)
 
     // sukatin totoong content box (.page) at i-crop dun -- para mawala black/blank bars sa gilid
     val box = getContentBox(webView, density)
-    val cropWidth = box.width.coerceAtMost(fullBmp.width - box.left).coerceAtLeast(1)
-    val cropHeight = box.height.coerceAtMost(fullBmp.height - box.top).coerceAtLeast(1)
+    val scaledLeft = (box.left * renderScale).toInt()
+    val scaledTop = (box.top * renderScale).toInt()
+    val scaledWidth = (box.width * renderScale).toInt().coerceAtLeast(1)
+    val scaledHeight = (box.height * renderScale).toInt().coerceAtLeast(1)
+    val cropWidth = scaledWidth.coerceAtMost(fullBmp.width - scaledLeft).coerceAtLeast(1)
+    val cropHeight = scaledHeight.coerceAtMost(fullBmp.height - scaledTop).coerceAtLeast(1)
     val cropped = try {
-        Bitmap.createBitmap(fullBmp, box.left, box.top, cropWidth, cropHeight)
+        Bitmap.createBitmap(fullBmp, scaledLeft, scaledTop, cropWidth, cropHeight)
     } catch (e: Exception) {
         fullBmp
     }
