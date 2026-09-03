@@ -40,6 +40,35 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import java.io.ByteArrayOutputStream
 
+private suspend fun shrinkOverflowingText(webView: WebView): Unit =
+    suspendCancellableCoroutine { cont ->
+        // Generic fix: kahit anong text element (pangalan, title, atbp) na lumalampas
+        // sa lapad ng container niya (overflow horizontally) ay awtomatikong lilitaw
+        // ang font-size hanggang kumasya -- gumagana sa lahat ng 150 templates nang
+        // hindi na kailangang i-edit isa-isa.
+        val js = """
+            (function(){
+              var all = document.querySelectorAll('h1,h2,h3,.name,.title,.header,.job-title,div,span,p');
+              for (var i=0; i<all.length; i++){
+                var el = all[i];
+                var cs = window.getComputedStyle(el);
+                if (cs.whiteSpace === 'nowrap' || el.scrollWidth > el.clientWidth + 2) {
+                  var tries = 0;
+                  var size = parseFloat(cs.fontSize);
+                  while (el.scrollWidth > el.clientWidth + 2 && tries < 30 && size > 6) {
+                    size = size * 0.94;
+                    el.style.setProperty('font-size', size + 'px', 'important');
+                    tries++;
+                  }
+                }
+              }
+            })();
+        """.trimIndent()
+        webView.evaluateJavascript(js) {
+            if (cont.isActive) cont.resume(Unit) { }
+        }
+    }
+
 private suspend fun neutralizeViewportHeight(webView: WebView): Unit =
     suspendCancellableCoroutine { cont ->
         // Gumagamit ng computed style (hindi CSSOM/stylesheet scan) kaya gumagana
@@ -117,6 +146,7 @@ private suspend fun captureFullWebView(webView: WebView, density: Float): Bitmap
 
     webView.setBackgroundColor(android.graphics.Color.WHITE)
     neutralizeViewportHeight(webView)
+    shrinkOverflowingText(webView)
     delay(50)
     val rawHeight = getDocumentHeightPx(webView, density).coerceAtLeast(1)
 
