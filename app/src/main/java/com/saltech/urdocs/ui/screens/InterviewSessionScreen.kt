@@ -459,7 +459,7 @@ fun InterviewSessionScreen(
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     when (phase) {
                         "prep" -> {
-                            Text("Handa ka na?", color = UrGray, fontSize = 15.sp)
+                            Text("Handa ka naba luv?", color = UrGray, fontSize = 15.sp)
                             Spacer(Modifier.height(14.dp))
                             Box(
                                 modifier = Modifier
@@ -490,7 +490,7 @@ fun InterviewSessionScreen(
                         }
                         "recording" -> {
                             Text(
-                                if (isRecording) "Nagre-record..." else "Handa ka na? I-tap ang mic",
+                                if (isRecording) "Nagre-record..." else "tap mo mic luv",
                                 color = UrGray,
                                 fontSize = 13.sp
                             )
@@ -603,7 +603,7 @@ fun InterviewSessionScreen(
                                 .padding(horizontal = 28.dp, vertical = 14.dp)
                         ) {
                             Text(
-                                if (qIndex < asyncQaList.lastIndex) "Susunod" else "Tapos na",
+                                if (qIndex < asyncQaList.lastIndex) "Play" else "Done na luv? ulitin mo ulit luv🤗",
                                 color = Color.White,
                                 fontWeight = FontWeight.Bold
                             )
