@@ -288,6 +288,8 @@
 (function(){
   function shrinkToFit(el){
     if(!el) return;
+    el.style.whiteSpace = 'nowrap';
+    if(!el) return;
     var parent = el.parentElement;
     var maxWidth = parent ? parent.clientWidth : el.clientWidth;
     if(!maxWidth) return;
