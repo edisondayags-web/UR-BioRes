@@ -308,5 +308,34 @@
 })();
 </script>
 
+
+<!-- AUTO-COMPACT-SPACING-V2 -->
+<script>
+(function(){
+  function compactV2(){
+    document.querySelectorAll('body *').forEach(function(el){
+      var cs = window.getComputedStyle(el);
+      var mt = parseFloat(cs.marginTop) || 0;
+      var mb = parseFloat(cs.marginBottom) || 0;
+      var pt = parseFloat(cs.paddingTop) || 0;
+      var pb = parseFloat(cs.paddingBottom) || 0;
+      var lh = parseFloat(cs.lineHeight);
+      var fs = parseFloat(cs.fontSize);
+      if (mt > 8) el.style.marginTop = (mt * 0.5) + 'px';
+      if (mb > 8) el.style.marginBottom = (mb * 0.5) + 'px';
+      if (el.children.length === 0) {
+        if (pt > 8) el.style.paddingTop = (pt * 0.55) + 'px';
+        if (pb > 8) el.style.paddingBottom = (pb * 0.55) + 'px';
+        if (!isNaN(lh) && !isNaN(fs) && lh > fs * 1.3) {
+          el.style.lineHeight = (fs * 1.25) + 'px';
+        }
+      }
+    });
+  }
+  if (document.readyState === 'complete') { compactV2(); }
+  else { window.addEventListener('load', compactV2); }
+})();
+</script>
+
 </body>
 </html>
