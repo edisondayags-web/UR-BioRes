@@ -81,27 +81,11 @@ private suspend fun captureFullWebView(webView: WebView, density: Float): Bitmap
 }
 
 private fun shrinkToA4(source: Bitmap): Bitmap {
-    val pageWidth = 2480
-    val pageHeight = 3508
+    val targetWidth = 1600
+    val scale = targetWidth.toFloat() / source.width
+    val targetHeight = (source.height * scale).toInt().coerceAtLeast(1)
 
-    val scale = minOf(
-        pageWidth.toFloat() / source.width,
-        pageHeight.toFloat() / source.height
-    )
-    val scaledWidth = (source.width * scale).toInt().coerceAtLeast(1)
-    val scaledHeight = (source.height * scale).toInt().coerceAtLeast(1)
-
-    val page = Bitmap.createBitmap(pageWidth, pageHeight, Bitmap.Config.ARGB_8888)
-    val canvas = Canvas(page)
-    canvas.drawColor(android.graphics.Color.WHITE)
-
-    val left = (pageWidth - scaledWidth) / 2f
-    val matrix = Matrix()
-    matrix.postScale(scale, scale)
-    matrix.postTranslate(left, 0f)
-    canvas.drawBitmap(source, matrix, null)
-
-    return page
+    return Bitmap.createScaledBitmap(source, targetWidth, targetHeight, true)
 }
 
 @Composable
