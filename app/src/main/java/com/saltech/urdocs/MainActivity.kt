@@ -56,7 +56,7 @@ class MainActivity : ComponentActivity() {
                                     "traditional" -> navController.navigate(Screen.ResumeTraditional.route)
                                     "ai_html" -> navController.navigate(Screen.HtmlTemplateGallery.route)
                                     "gallery" -> navController.navigate(Screen.ResumeMoreTemplates.route)
-                                    else -> navController.navigate(Screen.ResumeChronological.route)
+                                    else -> navController.navigate(Screen.ResumeChronologicalPicker.route)
                                 }
                             },
                             onBack = { navController.popBackStack() }
@@ -70,6 +70,24 @@ class MainActivity : ComponentActivity() {
                     }
                     composable(Screen.ResumeChronological.route) {
                         ChronologicalResumeScreen()
+                    }
+                    composable(Screen.ResumeChronologicalPicker.route) {
+                        ChronologicalTemplatePickerScreen(
+                            onTemplateSelected = { choice ->
+                                when (choice) {
+                                    1 -> navController.navigate(Screen.ResumeChronological.route)
+                                    2 -> navController.navigate(Screen.ResumeChronological2.route)
+                                    else -> navController.navigate(Screen.ResumeChronological3.route)
+                                }
+                            },
+                            onBack = { navController.popBackStack() }
+                        )
+                    }
+                    composable(Screen.ResumeChronological2.route) {
+                        ChronologicalResumeScreen2()
+                    }
+                    composable(Screen.ResumeChronological3.route) {
+                        ChronologicalResumeScreen3()
                     }
                     composable(Screen.ResumeMoreTemplates.route) {
                         ResumeTemplateGalleryScreen(

@@ -122,7 +122,7 @@ fun ResumeChoiceScreen(onChoose: (String) -> Unit, onBack: () -> Unit = {}) {
             ResumeChoiceCard(
                 icon = { Icon(Icons.Filled.Work, contentDescription = null, tint = Color.White, modifier = it) },
                 title = "Chronological Resume",
-                subtitle = "(Ito tech/CV style at ATS friendly)",
+                subtitle = "(3 ATS-friendly template styles)",
                 onClick = { onChoose("chronological") }
             )
 
