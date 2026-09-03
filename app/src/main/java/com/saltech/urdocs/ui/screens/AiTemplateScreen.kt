@@ -42,31 +42,21 @@ import java.io.ByteArrayOutputStream
 
 private suspend fun neutralizeViewportHeight(webView: WebView): Unit =
     suspendCancellableCoroutine { cont ->
-        // 100vh / min-height:100vh sa CSS ay sumusukat base sa screen height ng WebView,
-        // hindi sa totoong laman -- kaya mali yung scrollHeight na nababasa natin pag
-        // may ganyang CSS. I-neutralize muna bago tayo sumukat.
+        // Gumagamit ng computed style (hindi CSSOM/stylesheet scan) kaya gumagana
+        // kahit external .css file ang pinagmulan ng vh rule (na minsan naka-block
+        // ng WebView security policy sa file:// URLs).
         val js = """
             (function(){
-              var selectors = [];
-              try {
-                for (var i=0; i<document.styleSheets.length; i++){
-                  var sheet = document.styleSheets[i];
-                  var rules;
-                  try { rules = sheet.cssRules || sheet.rules; } catch(e){ continue; }
-                  if(!rules) continue;
-                  for (var j=0; j<rules.length; j++){
-                    var rule = rules[j];
-                    if(rule.style && rule.selectorText && /vh/.test(rule.cssText)){
-                      selectors.push(rule.selectorText);
-                    }
-                  }
-                }
-              } catch(e){}
-              var s = document.createElement('style');
-              var base = 'html, body { height: auto !important; min-height: auto !important; }';
-              var extra = selectors.length ? (selectors.join(',') + ' { height: auto !important; min-height: auto !important; }') : '';
-              s.innerHTML = base + extra;
-              document.head.appendChild(s);
+              var vh = window.innerHeight;
+              var all = document.querySelectorAll('*');
+              for (var i=0; i<all.length; i++){
+                var el = all[i];
+                var cs = window.getComputedStyle(el);
+                var mh = parseFloat(cs.minHeight);
+                var h = parseFloat(cs.height);
+                if (mh && mh >= vh * 0.85) { el.style.setProperty('min-height','auto','important'); }
+                if (h && h >= vh * 0.85 && cs.position !== 'fixed') { el.style.setProperty('height','auto','important'); }
+              }
             })();
         """.trimIndent()
         webView.evaluateJavascript(js) {
@@ -79,6 +69,37 @@ private suspend fun getDocumentHeightPx(webView: WebView, density: Float): Int =
         webView.evaluateJavascript("document.body.scrollHeight.toString()") { result ->
             val cssHeight = result?.replace("\"", "")?.toFloatOrNull() ?: 0f
             if (cont.isActive) cont.resume((cssHeight * density).toInt()) { }
+        }
+    }
+
+private data class ContentBox(val left: Int, val top: Int, val width: Int, val height: Int)
+
+private suspend fun getContentBox(webView: WebView, density: Float): ContentBox =
+    suspendCancellableCoroutine { cont ->
+        val js = """
+            (function(){
+              var el = document.querySelector('.page') || document.body.firstElementChild || document.body;
+              var r = el.getBoundingClientRect();
+              return JSON.stringify({l:r.left, t:r.top, w:r.width, h:r.height});
+            })();
+        """.trimIndent()
+        webView.evaluateJavascript(js) { result ->
+            try {
+                val clean = result?.replace("\\", "")?.trim('"') ?: "{}"
+                val l = Regex(""""l":([\-0-9.]+)""").find(clean)?.groupValues?.get(1)?.toFloatOrNull() ?: 0f
+                val t = Regex(""""t":([\-0-9.]+)""").find(clean)?.groupValues?.get(1)?.toFloatOrNull() ?: 0f
+                val w = Regex(""""w":([\-0-9.]+)""").find(clean)?.groupValues?.get(1)?.toFloatOrNull() ?: 0f
+                val h = Regex(""""h":([\-0-9.]+)""").find(clean)?.groupValues?.get(1)?.toFloatOrNull() ?: 0f
+                val box = ContentBox(
+                    left = (l * density).toInt().coerceAtLeast(0),
+                    top = (t * density).toInt().coerceAtLeast(0),
+                    width = (w * density).toInt().coerceAtLeast(1),
+                    height = (h * density).toInt().coerceAtLeast(1)
+                )
+                if (cont.isActive) cont.resume(box) { }
+            } catch (e: Exception) {
+                if (cont.isActive) cont.resume(ContentBox(0, 0, webView.width, webView.height)) { }
+            }
         }
     }
 
@@ -101,10 +122,20 @@ private suspend fun captureFullWebView(webView: WebView, density: Float): Bitmap
     // give Chromium time to actually paint the newly expanded area
     delay(500)
 
-    val bmp = Bitmap.createBitmap(webView.width, docHeight, Bitmap.Config.ARGB_8888)
-    val canvas = Canvas(bmp)
-    canvas.drawColor(android.graphics.Color.WHITE)
-    webView.draw(canvas)
+    val fullBmp = Bitmap.createBitmap(webView.width, docHeight, Bitmap.Config.ARGB_8888)
+    val fullCanvas = Canvas(fullBmp)
+    fullCanvas.drawColor(android.graphics.Color.WHITE)
+    webView.draw(fullCanvas)
+
+    // sukatin totoong content box (.page) at i-crop dun -- para mawala black/blank bars sa gilid
+    val box = getContentBox(webView, density)
+    val cropWidth = box.width.coerceAtMost(fullBmp.width - box.left).coerceAtLeast(1)
+    val cropHeight = box.height.coerceAtMost(fullBmp.height - box.top).coerceAtLeast(1)
+    val cropped = try {
+        Bitmap.createBitmap(fullBmp, box.left, box.top, cropWidth, cropHeight)
+    } catch (e: Exception) {
+        fullBmp
+    }
 
     // restore
     webView.setBackgroundColor(android.graphics.Color.parseColor("#0A1931"))
@@ -115,7 +146,7 @@ private suspend fun captureFullWebView(webView: WebView, density: Float): Bitmap
     )
     webView.layout(0, 0, webView.width, originalHeight)
 
-    return bmp
+    return cropped
 }
 
 private fun shrinkToA4(source: Bitmap): Bitmap {
