@@ -278,5 +278,29 @@
   }
 })();
 </script>
+
+<!-- AUTO-COMPACT-SPACING -->
+<script>
+(function(){
+  function compact(){
+    document.querySelectorAll('body *').forEach(function(el){
+      var cs = window.getComputedStyle(el);
+      var mt = parseFloat(cs.marginTop) || 0;
+      var mb = parseFloat(cs.marginBottom) || 0;
+      var pt = parseFloat(cs.paddingTop) || 0;
+      var pb = parseFloat(cs.paddingBottom) || 0;
+      if (mt > 28) el.style.marginTop = (mt * 0.45) + 'px';
+      if (mb > 28) el.style.marginBottom = (mb * 0.45) + 'px';
+      if (el.children.length === 0) {
+        if (pt > 28) el.style.paddingTop = (pt * 0.5) + 'px';
+        if (pb > 28) el.style.paddingBottom = (pb * 0.5) + 'px';
+      }
+    });
+  }
+  if (document.readyState === 'complete') { compact(); }
+  else { window.addEventListener('load', compact); }
+})();
+</script>
+
 </body>
 </html>

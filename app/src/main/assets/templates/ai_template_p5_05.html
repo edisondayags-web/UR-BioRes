@@ -233,5 +233,53 @@
   </div>
 
 </div>
+
+<!-- AUTO-SHRINK-NAME -->
+<script>
+(function(){
+  function shrinkToFit(el){
+    if(!el) return;
+    var parent = el.parentElement;
+    var maxWidth = parent ? parent.clientWidth : el.clientWidth;
+    if(!maxWidth) return;
+    var fontSize = parseFloat(window.getComputedStyle(el).fontSize) || 24;
+    var minFont = 10;
+    while(el.scrollWidth > maxWidth && fontSize > minFont){
+      fontSize -= 1;
+      el.style.fontSize = fontSize + 'px';
+    }
+  }
+  function run(){
+    document.querySelectorAll('.name-row2, .name-row, .h-name, .name, .name-accent, .name-dark, .name-green, .name-navy').forEach(shrinkToFit);
+  }
+  if(document.readyState === 'complete'){ run(); }
+  else { window.addEventListener('load', run); }
+})();
+</script>
+
+
+<!-- AUTO-COMPACT-SPACING -->
+<script>
+(function(){
+  function compact(){
+    document.querySelectorAll('body *').forEach(function(el){
+      var cs = window.getComputedStyle(el);
+      var mt = parseFloat(cs.marginTop) || 0;
+      var mb = parseFloat(cs.marginBottom) || 0;
+      var pt = parseFloat(cs.paddingTop) || 0;
+      var pb = parseFloat(cs.paddingBottom) || 0;
+      if (mt > 28) el.style.marginTop = (mt * 0.45) + 'px';
+      if (mb > 28) el.style.marginBottom = (mb * 0.45) + 'px';
+      if (el.children.length === 0) {
+        if (pt > 28) el.style.paddingTop = (pt * 0.5) + 'px';
+        if (pb > 28) el.style.paddingBottom = (pb * 0.5) + 'px';
+      }
+    });
+  }
+  if (document.readyState === 'complete') { compact(); }
+  else { window.addEventListener('load', compact); }
+})();
+</script>
+
 </body>
 </html>
