@@ -6,6 +6,7 @@ import android.graphics.Canvas
 import android.graphics.Matrix
 import android.net.Uri
 import android.util.Base64
+import android.view.View
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -34,23 +35,52 @@ import androidx.compose.ui.viewinterop.AndroidView
 import com.saltech.urdocs.ml.BackgroundHelper
 import com.saltech.urdocs.ml.FaceCropHelper
 import com.saltech.urdocs.ui.templates.saveBitmapToGallery
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 import java.io.ByteArrayOutputStream
 
-private fun captureFullWebView(webView: WebView): Bitmap {
+private suspend fun getDocumentHeightPx(webView: WebView, density: Float): Int =
+    suspendCancellableCoroutine { cont ->
+        webView.evaluateJavascript("document.body.scrollHeight.toString()") { result ->
+            val cssHeight = result?.replace("\"", "")?.toFloatOrNull() ?: 0f
+            if (cont.isActive) cont.resume((cssHeight * density).toInt()) { }
+        }
+    }
+
+private suspend fun captureFullWebView(webView: WebView, density: Float): Bitmap {
+    val originalHeight = webView.height
     val originalLayerType = webView.layerType
-    webView.setLayerType(android.view.View.LAYER_TYPE_SOFTWARE, null)
-    val fullHeight = (webView.contentHeight * webView.scale).toInt().coerceAtLeast(webView.height)
-    val bmp = Bitmap.createBitmap(webView.width, fullHeight, Bitmap.Config.ARGB_8888)
+
+    val docHeight = getDocumentHeightPx(webView, density).coerceAtLeast(originalHeight)
+
+    webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+    webView.measure(
+        View.MeasureSpec.makeMeasureSpec(webView.width, View.MeasureSpec.EXACTLY),
+        View.MeasureSpec.makeMeasureSpec(docHeight, View.MeasureSpec.EXACTLY)
+    )
+    webView.layout(0, 0, webView.width, docHeight)
+
+    // give Chromium time to actually paint the newly expanded area
+    delay(500)
+
+    val bmp = Bitmap.createBitmap(webView.width, docHeight, Bitmap.Config.ARGB_8888)
     val canvas = Canvas(bmp)
     canvas.drawColor(android.graphics.Color.WHITE)
     webView.draw(canvas)
+
+    // restore
     webView.setLayerType(originalLayerType, null)
+    webView.measure(
+        View.MeasureSpec.makeMeasureSpec(webView.width, View.MeasureSpec.EXACTLY),
+        View.MeasureSpec.makeMeasureSpec(originalHeight, View.MeasureSpec.EXACTLY)
+    )
+    webView.layout(0, 0, webView.width, originalHeight)
+
     return bmp
 }
 
 private fun shrinkToA4(source: Bitmap): Bitmap {
-    // A4 ratio at 300dpi
     val pageWidth = 2480
     val pageHeight = 3508
 
@@ -66,10 +96,9 @@ private fun shrinkToA4(source: Bitmap): Bitmap {
     canvas.drawColor(android.graphics.Color.WHITE)
 
     val left = (pageWidth - scaledWidth) / 2f
-    val top = 0f
     val matrix = Matrix()
     matrix.postScale(scale, scale)
-    matrix.postTranslate(left, top)
+    matrix.postTranslate(left, 0f)
     canvas.drawBitmap(source, matrix, null)
 
     return page
@@ -81,6 +110,7 @@ fun AiTemplateScreen(htmlFileName: String, onBack: () -> Unit = {}) {
     val scope = rememberCoroutineScope()
     var webViewRef by remember { mutableStateOf<WebView?>(null) }
     var isProcessing by remember { mutableStateOf(false) }
+    var isDownloading by remember { mutableStateOf(false) }
 
     val photoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
@@ -152,16 +182,24 @@ fun AiTemplateScreen(htmlFileName: String, onBack: () -> Unit = {}) {
             Button(
                 onClick = {
                     val wv = webViewRef
-                    if (wv != null && wv.width > 0) {
-                        val full = captureFullWebView(wv)
-                        val fitted = shrinkToA4(full)
-                        saveBitmapToGallery(context, fitted, htmlFileName.removeSuffix(".html"))
+                    if (wv != null && wv.width > 0 && !isDownloading) {
+                        isDownloading = true
+                        scope.launch {
+                            try {
+                                val density = context.resources.displayMetrics.density
+                                val full = captureFullWebView(wv, density)
+                                val fitted = shrinkToA4(full)
+                                saveBitmapToGallery(context, fitted, htmlFileName.removeSuffix(".html"))
+                            } finally {
+                                isDownloading = false
+                            }
+                        }
                     }
                 },
                 shape = RoundedCornerShape(50),
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF14161A))
             ) {
-                Text("\u2B07 Download")
+                Text(if (isDownloading) "\u23F3 Saving..." else "\u2B07 Download")
             }
         }
     }
