@@ -281,6 +281,17 @@
   function getTargets(container){
     return Array.prototype.filter.call(container.children, function(c){ return c.tagName === 'SPAN'; });
   }
+  function computeMaxWidth(container){
+    var parent = container.parentElement;
+    if(!parent) return container.clientWidth;
+    var parentRect = parent.getBoundingClientRect();
+    var containerRect = container.getBoundingClientRect();
+    var available = parentRect.right - containerRect.left;
+    if(!available || available <= 0){
+      available = parent.clientWidth - (containerRect.left - parentRect.left);
+    }
+    return available - 2;
+  }
   function shrinkToFit(container){
     var targets = getTargets(container);
     if(!targets.length) return;
@@ -288,14 +299,13 @@
       container.dataset.baseFont = parseFloat(getComputedStyle(targets[0]).fontSize) || 22;
     }
     var baseFont = parseFloat(container.dataset.baseFont);
-    var minFont = 7;
-    var parent = container.parentElement;
-    var maxWidth = parent ? parent.clientWidth : container.clientWidth;
-    if(!maxWidth) return;
+    var minFont = 5;
+    var maxWidth = computeMaxWidth(container);
+    if(!maxWidth || maxWidth <= 0) return;
     var fs = baseFont;
     targets.forEach(function(t){ t.style.fontSize = fs + 'px'; });
     var guard = 0;
-    while(container.scrollWidth > maxWidth && fs > minFont && guard < 100){
+    while(container.scrollWidth > maxWidth && fs > minFont && guard < 120){
       fs -= 0.5;
       targets.forEach(function(t){ t.style.fontSize = fs + 'px'; });
       guard++;
