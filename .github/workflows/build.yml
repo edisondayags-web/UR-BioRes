@@ -47,6 +47,8 @@ jobs:
           fi
       - name: Build debug APK
         run: ./gradlew assembleDebug --build-cache --build-cache
+      - name: Build release APK
+        run: ./gradlew assembleRelease --build-cache --build-cache
       - name: Create Release with APK
         uses: softprops/action-gh-release@v2
         with:
@@ -54,5 +56,6 @@ jobs:
           name: "Build ${{ github.run_number }}"
           files: |
             app/build/outputs/apk/debug/app-debug.apk
+            app/build/outputs/apk/release/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
