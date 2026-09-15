@@ -75,7 +75,7 @@ fun HomeScreen(
         Column(
             modifier = Modifier
                 .align(Alignment.TopStart)
-                .padding(top = 24.dp, start = 16.dp)
+                .padding(top = 36.dp, start = 16.dp)
                 .clickable { onNavigate("drafts") },
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
