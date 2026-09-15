@@ -19,11 +19,6 @@ import androidx.compose.ui.graphics.layer.GraphicsLayer
 import androidx.compose.ui.graphics.rememberGraphicsLayer
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.platform.LocalContext
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.FullScreenContentCallback
-import com.google.android.gms.ads.rewarded.RewardedAd
-import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
-import com.google.android.gms.ads.LoadAdError
 import androidx.core.content.FileProvider
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
@@ -81,25 +76,6 @@ fun TemplateExportMenu(
     val scope = rememberCoroutineScope()
     var showQr by remember { mutableStateOf(false) }
     var showBarcode by remember { mutableStateOf(false) }
-    var rewardedAd by remember { mutableStateOf<RewardedAd?>(null) }
-    var showWatchAdDialog by remember { mutableStateOf(false) }
-
-    LaunchedEffect(Unit) {
-        RewardedAd.load(
-            context,
-            "ca-app-pub-3134240485602899/3509642738",
-            AdRequest.Builder().build(),
-            object : RewardedAdLoadCallback() {
-                override fun onAdLoaded(ad: RewardedAd) {
-                    rewardedAd = ad
-                }
-                override fun onAdFailedToLoad(error: LoadAdError) {
-                    rewardedAd = null
-                }
-            }
-        )
-    }
-
     suspend fun captureBitmap(): Bitmap {
         val imageBitmap = graphicsLayer.toImageBitmap()
         return imageBitmap.asAndroidBitmap()
@@ -117,7 +93,10 @@ fun TemplateExportMenu(
         DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
             DropdownMenuItem(text = { Text("Download") }, onClick = {
                 expanded = false
-                showWatchAdDialog = true
+                scope.launch {
+                    val bmp = captureBitmap()
+                    saveBitmapToGallery(context, bmp, resumeName)
+                }
             })
             DropdownMenuItem(text = { Text("Send To") }, onClick = {
                 expanded = false
@@ -140,39 +119,6 @@ fun TemplateExportMenu(
                 onHome()
             })
         }
-    }
-
-    if (showWatchAdDialog) {
-        AlertDialog(
-            onDismissRequest = { showWatchAdDialog = false },
-            title = { Text("Watch ads to download this templates") },
-            text = { Text("Need talaga luv para ma download and pag e-cancel mo hindi talaga sya ma download? sayang naman🩵.") },
-            confirmButton = {
-                TextButton(onClick = {
-                    showWatchAdDialog = false
-                    val activity = context as? android.app.Activity
-                    fun proceedDownload() {
-                        scope.launch {
-                            val bmp = captureBitmap()
-                            saveBitmapToGallery(context, bmp, resumeName)
-                        }
-                    }
-                    if (activity != null && rewardedAd != null) {
-                        rewardedAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
-                            override fun onAdDismissedFullScreenContent() {
-                                rewardedAd = null
-                            }
-                        }
-                        rewardedAd?.show(activity) { proceedDownload() }
-                    } else {
-                        Toast.makeText(context, "wait lng luv ha🩵", Toast.LENGTH_SHORT).show()
-                    }
-                }) { Text("Ok") }
-            },
-            dismissButton = {
-                TextButton(onClick = { showWatchAdDialog = false }) { Text("Cancel") }
-            }
-        )
     }
 
     if (showQr) {
