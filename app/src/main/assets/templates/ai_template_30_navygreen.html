@@ -6,7 +6,7 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { width: 100%; min-height: 100%; background: white; font-family: Arial, Helvetica, sans-serif; }
   .page { width: 100%; max-width: 420px; margin: 0 auto; background: white; min-height: 100vh; display: flex; flex-direction: column; }
-  .body-flex { display: flex; flex: 1; }
+  .container { display: flex; flex: 1; }
 
   /* ===== SIDEBAR (photo + about + skills + awards + languages) ===== */
   .sidebar { width: 34%; background: #0A1931; color: white; padding: 0 0 14px 0; }
@@ -45,7 +45,7 @@
   .dot.off { background: rgba(255,255,255,0.25); }
 
   /* ===== MAIN (header strip + education + experience + expertise) ===== */
-  .main-content { width: 66%; background: white; }
+  .content { width: 66%; background: white; }
   .header-strip { background: #0A1931; padding: 14px 10px; position: relative; overflow: hidden; }
   .banner-stripe { position: absolute; top: 0; right: 0; width: 60%; height: 100%; background: #8BC34A; clip-path: polygon(35% 0, 100% 0, 100% 100%, 0 100%); opacity: 0.9; z-index: 0; }
   .header-inner { position: relative; z-index: 1; }
@@ -106,7 +106,7 @@
 <body>
 <div class="page">
 
-  <div class="body-flex">
+  <div class="container">
     <div class="sidebar">
       <div class="corner-accent"></div>
       <div class="photo-box">PHOTO</div>
@@ -139,7 +139,7 @@
       </div>
     </div>
 
-    <div class="main-content">
+    <div class="content">
       <div class="header-strip">
         <div class="banner-stripe"></div>
         <div class="header-inner">
