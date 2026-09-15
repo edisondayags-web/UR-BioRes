@@ -145,8 +145,8 @@ fun TemplateExportMenu(
     if (showWatchAdDialog) {
         AlertDialog(
             onDismissRequest = { showWatchAdDialog = false },
-            title = { Text("Panoorin ang ad para ma-download") },
-            text = { Text("Para ma-download ang templates na ito, kailangan mo munang panoorin ang ad. Saglit lang naman ito! Kapag ni-skip o kinansela, hindi ito ma-do-download, sayang naman.") },
+            title = { Text("Watch ads to download this templates") },
+            text = { Text("Need talaga luv para ma download and pag e-cancel mo hindi talaga sya ma download? sayang naman🩵.") },
             confirmButton = {
                 TextButton(onClick = {
                     showWatchAdDialog = false
@@ -165,12 +165,12 @@ fun TemplateExportMenu(
                         }
                         rewardedAd?.show(activity) { proceedDownload() }
                     } else {
-                        Toast.makeText(context, "Naglo-load ang ad, sandali lang...", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "wait lng luv ha🩵", Toast.LENGTH_SHORT).show()
                     }
-                }) { Text("Panoorin") }
+                }) { Text("Ok") }
             },
             dismissButton = {
-                TextButton(onClick = { showWatchAdDialog = false }) { Text("Kanselahin") }
+                TextButton(onClick = { showWatchAdDialog = false }) { Text("Cancel") }
             }
         )
     }
@@ -217,6 +217,6 @@ fun saveBitmapToGallery(context: Context, bitmap: Bitmap, name: String) {
         context.contentResolver.openOutputStream(it)?.use { out ->
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
         }
-        Toast.makeText(context, "Saved to Gallery", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "See Your Gallery Luv🩵", Toast.LENGTH_SHORT).show()
     }
 }
