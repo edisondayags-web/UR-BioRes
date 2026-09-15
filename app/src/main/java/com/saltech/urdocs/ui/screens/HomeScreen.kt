@@ -10,6 +10,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Folder
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -68,6 +69,25 @@ fun HomeScreen(
                 imageVector = Icons.Default.Settings,
                 contentDescription = "Settings",
                 tint = UrPink
+            )
+        }
+
+        Column(
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(top = 24.dp, start = 16.dp)
+                .clickable { onNavigate("drafts") },
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Icon(
+                imageVector = Icons.Default.Folder,
+                contentDescription = "Drafts",
+                tint = UrPink
+            )
+            Text(
+                text = "DRAFTS",
+                style = MaterialTheme.typography.labelSmall,
+                color = UrPink
             )
         }
 

@@ -34,6 +34,7 @@ sealed class Screen(val route: String) {
     }
     object JobResearcher : Screen("job_researcher")
     object Settings : Screen("settings")
+    object Drafts : Screen("drafts")
     object MyProfile : Screen("my_profile")
     object PrivacyPolicy : Screen("privacy_policy")
     object TermsConditions : Screen("terms_conditions")

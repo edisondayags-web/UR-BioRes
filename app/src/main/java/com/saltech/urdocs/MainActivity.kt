@@ -241,6 +241,11 @@ class MainActivity : ComponentActivity() {
                             onNavigate = { route -> navController.navigate(route) }
                         )
                     }
+                    composable(Screen.Drafts.route) {
+                        com.saltech.urdocs.ui.screens.DraftsListScreen(
+                            onBack = { navController.popBackStack() }
+                        )
+                    }
                     composable(Screen.MyProfile.route) {
                         MyProfileScreen(onBack = { navController.popBackStack() })
                     }
