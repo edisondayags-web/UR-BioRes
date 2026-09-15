@@ -167,7 +167,7 @@ private suspend fun captureFullWebView(webView: WebView, density: Float): Bitmap
     webView.layout(0, 0, webView.width, docHeight)
 
     // give Chromium time to actually paint the newly expanded area
-    delay(500)
+    delay(900)
 
     // 2x na resolution multiplier -- para kahit lumiit ang laman (zoom-fit), manatiling
     // sharp/malinaw ang text (hindi blurry) kapag na-scale papunta sa final output size.
