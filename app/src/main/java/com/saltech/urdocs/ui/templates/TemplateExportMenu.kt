@@ -99,8 +99,10 @@ fun TemplateExportMenu(
                         saveBitmapToGallery(context, bmp, resumeName)
                     }
                 } else {
-                    startTemplateCheckout(context, resumeName) { err ->
-                        android.widget.Toast.makeText(context, err, android.widget.Toast.LENGTH_SHORT).show()
+                    scope.launch {
+                        startTemplateCheckout(context, resumeName) { err ->
+                            android.widget.Toast.makeText(context, err, android.widget.Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
             })
