@@ -93,9 +93,15 @@ fun TemplateExportMenu(
         DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
             DropdownMenuItem(text = { Text("Download") }, onClick = {
                 expanded = false
-                scope.launch {
-                    val bmp = captureBitmap()
-                    saveBitmapToGallery(context, bmp, resumeName)
+                if (isTemplateUnlocked(context, resumeName)) {
+                    scope.launch {
+                        val bmp = captureBitmap()
+                        saveBitmapToGallery(context, bmp, resumeName)
+                    }
+                } else {
+                    startTemplateCheckout(context, resumeName) { err ->
+                        android.widget.Toast.makeText(context, err, android.widget.Toast.LENGTH_SHORT).show()
+                    }
                 }
             })
             DropdownMenuItem(text = { Text("Send To") }, onClick = {
