@@ -107,3 +107,47 @@ exports.enhance2x2Photo = onCall({ secrets: [GEMINI_API_KEY] }, async (request) 
 
   return { imageBase64: outData };
 });
+
+const PAYMONGO_SECRET_KEY = defineSecret("PAYMONGO_SECRET_KEY");
+
+exports.createCheckoutSession = onCall(
+  { secrets: [PAYMONGO_SECRET_KEY] },
+  async (request) => {
+    const { templateName, amount } = request.data || {};
+    if (!templateName || !amount) {
+      throw new HttpsError("invalid-argument", "Kailangan ng templateName at amount.");
+    }
+
+    const secretKey = PAYMONGO_SECRET_KEY.value();
+    const authHeader = "Basic " + Buffer.from(secretKey + ":").toString("base64");
+
+    const response = await fetch("https://api.paymongo.com/v2/checkout_sessions", {
+      method: "POST",
+      headers: {
+        "Authorization": authHeader,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        data: {
+          attributes: {
+            line_items: [{ name: templateName, amount: amount, currency: "PHP", quantity: 1 }],
+            payment_method_types: ["gcash", "card", "paymaya"],
+            success_url: "urbiores://payment-success",
+            cancel_url: "urbiores://payment-cancel"
+          }
+        }
+      })
+    });
+
+    if (!response.ok) {
+      const errText = await response.text();
+      throw new HttpsError("internal", `PayMongo error: ${errText}`);
+    }
+
+    const result = await response.json();
+    return {
+      checkoutUrl: result.data.attributes.checkout_url,
+      sessionId: result.data.id
+    };
+  }
+);
