@@ -20,9 +20,9 @@ body{background:#fff;font-family:Arial,Helvetica,sans-serif;color:#111;width:794
 .edu-s{font-size:12.5px;margin-top:3px}
 .srow{display:flex;align-items:center;padding:5px 20px;font-size:13.5px}
 .chk{width:17px;height:17px;border-radius:50%;background:#111;color:#fff;font-size:10px;display:flex;align-items:center;justify-content:center;flex:none;margin-right:12px}
-.main{flex:1;padding:44px 34px 28px 34px}
-.name{font-size:54px;font-weight:900;line-height:1.02;text-transform:uppercase;letter-spacing:-1px}
-.titlerow{display:flex;align-items:center;gap:10px;margin:14px 0 26px}
+.main{flex:1;min-width:0;padding:44px 34px 28px 34px}
+.name{font-size:54px;font-weight:900;line-height:1.02;text-transform:uppercase;letter-spacing:-1px;white-space:nowrap;overflow:hidden}
+.titlerow{display:flex;align-items:center;gap:10px;margin:14px 0 26px;overflow:hidden}
 .dm{width:7px;height:7px;background:#111;transform:rotate(45deg);flex:none}
 .ln{height:1.5px;background:#111;flex:1}
 .jt{font-size:22px;letter-spacing:2px;white-space:nowrap}
@@ -115,4 +115,23 @@ body{background:#fff;font-family:Arial,Helvetica,sans-serif;color:#111;width:794
     </div>
   </div>
 </div>
+<script>
+function fitName(){
+  var el=document.querySelector('.name'); if(!el) return;
+  var s=54; el.style.fontSize=s+'px';
+  while(el.scrollWidth>el.clientWidth+1 && s>20){ s-=1; el.style.fontSize=s+'px'; }
+}
+function fitTitle(){
+  var el=document.querySelector('.jt'), row=document.querySelector('.titlerow'); if(!el||!row) return;
+  var s=22; el.style.fontSize=s+'px';
+  while(row.scrollWidth>row.clientWidth+1 && s>10){ s-=1; el.style.fontSize=s+'px'; }
+}
+function fitAll(){ fitName(); fitTitle(); }
+window.fitAll=fitAll;
+window.addEventListener('load',fitAll);
+document.addEventListener('input',function(e){
+  var c=e.target.classList;
+  if(c && (c.contains('name')||c.contains('jt'))) fitAll();
+});
+</script>
 </body></html>
