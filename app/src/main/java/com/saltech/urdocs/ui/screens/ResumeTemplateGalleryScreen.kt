@@ -27,7 +27,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 
-private enum class LayoutStyle { CLASSIC_TWO_COL, ATS_SINGLE_COL, SIDEBAR_BOLD, MINIMAL_MONO, HEADER_BLOCK, LIGHT_SIDEBAR, BLUE_ARCH, TEAL_BAND, PILL_HEADER, NAVY_PHOTO }
+private enum class LayoutStyle { CLASSIC_TWO_COL, ATS_SINGLE_COL, SIDEBAR_BOLD, MINIMAL_MONO, HEADER_BLOCK, LIGHT_SIDEBAR, BLUE_ARCH, TEAL_BAND, PILL_HEADER, NAVY_PHOTO, SAGE_MOON }
 
 private data class TemplateInfo(
     val id: String,
@@ -69,6 +69,7 @@ private val resumeTemplates = listOf(
     TemplateInfo("ai_template_more_03.html", "03", Color(0xFF5F9E9A), Color(0xFFF4C7BE), LayoutStyle.TEAL_BAND),
     TemplateInfo("ai_template_more_04.html", "04", Color(0xFF2B2B2B), Color(0xFFFFFFFF), LayoutStyle.PILL_HEADER),
     TemplateInfo("ai_template_more_05.html", "05", Color(0xFF10375F), Color(0xFFFFFFFF), LayoutStyle.NAVY_PHOTO),
+    TemplateInfo("ai_template_more_06.html", "06", Color(0xFFA9C6C6), Color(0xFFFDF3A6), LayoutStyle.SAGE_MOON),
 )
 
 
@@ -168,6 +169,7 @@ private fun TemplatePreview(accent: Color, bg: Color, layout: LayoutStyle, modif
         LayoutStyle.TEAL_BAND -> TealBandPreview(modifier)
         LayoutStyle.PILL_HEADER -> PillHeaderPreview(modifier)
         LayoutStyle.NAVY_PHOTO -> NavyPhotoPreview(modifier)
+        LayoutStyle.SAGE_MOON -> SageMoonPreview(modifier)
     }
 }
 
@@ -501,6 +503,59 @@ private fun NavyPhotoPreview(modifier: Modifier = Modifier) {
                     Spacer(Modifier.height(2.dp))
                 }
                 Spacer(Modifier.height(8.dp))
+            }
+        }
+    }
+}
+
+@Composable
+private fun SageMoonPreview(modifier: Modifier = Modifier) {
+    val sage = Color(0xFFA9C6C6)
+    val cream = Color(0xFFFDF3A6)
+    val ink = Color(0xFF111111)
+    Column(modifier = modifier.background(sage).padding(8.dp)) {
+        Row(modifier = Modifier.fillMaxWidth().weight(1f)) {
+            Column(modifier = Modifier.weight(1f)) {
+                Box(modifier = Modifier.size(34.dp).clip(CircleShape).background(cream)) {
+                    Box(modifier = Modifier.padding(start = 6.dp, top = 2.dp).size(28.dp).clip(CircleShape).background(Color(0xFFDFE3E6)))
+                }
+                Spacer(Modifier.height(8.dp))
+                Box(modifier = Modifier.fillMaxWidth(0.8f).height(7.dp).background(ink))
+                Spacer(Modifier.height(3.dp))
+                Box(modifier = Modifier.fillMaxWidth(0.6f).height(7.dp).background(ink))
+                Spacer(Modifier.height(6.dp))
+                repeat(3) {
+                    Box(modifier = Modifier.fillMaxWidth().height(2.dp).background(ink.copy(alpha = 0.5f)))
+                    Spacer(Modifier.height(2.dp))
+                }
+            }
+            Spacer(Modifier.width(8.dp))
+            Column(modifier = Modifier.weight(1f)) {
+                repeat(2) {
+                    Box(modifier = Modifier.fillMaxWidth(0.7f).height(4.dp).background(ink))
+                    Spacer(Modifier.height(4.dp))
+                    repeat(3) {
+                        Box(modifier = Modifier.fillMaxWidth().height(2.dp).background(ink.copy(alpha = 0.5f)))
+                        Spacer(Modifier.height(2.dp))
+                    }
+                    Spacer(Modifier.height(10.dp))
+                }
+            }
+        }
+        Spacer(Modifier.height(6.dp))
+        Row(modifier = Modifier.fillMaxWidth().height(40.dp).background(cream).padding(6.dp)) {
+            Column(modifier = Modifier.weight(1f)) {
+                repeat(3) {
+                    Box(modifier = Modifier.fillMaxWidth(0.8f).height(3.dp).background(ink))
+                    Spacer(Modifier.height(4.dp))
+                }
+            }
+            Spacer(Modifier.width(6.dp))
+            Column(modifier = Modifier.weight(1f)) {
+                repeat(3) {
+                    Box(modifier = Modifier.fillMaxWidth(0.9f).height(3.dp).background(ink))
+                    Spacer(Modifier.height(4.dp))
+                }
             }
         }
     }

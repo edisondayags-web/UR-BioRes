@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=794, minimum-scale=0.1, maximum-scale=5, user-scalable=yes">
+<style>
+  :root{--sage:#a9c6c6;--cream:#fdf3a6;--ink:#111;--text:#2b3a3a}
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  html{background:#000}
+  body{background:#000;width:794px;font-family:'Montserrat','Poppins','Roboto','Helvetica Neue',Arial,sans-serif;color:var(--text)}
+  [contenteditable="true"]:focus{background:rgba(255,255,255,.6);outline:1px dashed #666}
+
+  .page{position:relative;width:794px;min-height:1123px;display:flex;flex-direction:column;background:var(--sage);overflow:hidden}
+
+  /* decorative dashed lines, top right */
+  .deco{position:absolute;top:28px;width:4px;height:250px;border-radius:2px;
+        background:repeating-linear-gradient(to bottom,#fff6c9 0 22px,transparent 22px 30px)}
+  .deco.a{right:62px}
+  .deco.b{right:44px;top:20px}
+
+  .top{display:flex;gap:69px;padding:70px 53px 0 44px}
+  .left{flex:0 0 338px;min-width:0}
+  .right{flex:1;min-width:0;padding-top:30px}
+
+  /* ---------- photo with crescent ---------- */
+  .moon{position:relative;width:330px;height:330px;border-radius:50%;background:var(--cream)}
+  .photo-circle{
+    position:absolute;left:38px;top:16px;width:292px;height:292px;border-radius:50%;
+    background:#dfe3e6 url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%23b8c0c4' d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v4h16v-4c0-2.66-5.33-4-8-4z'/></svg>") center/cover no-repeat;
+  }
+
+  /* ---------- left text ---------- */
+  .name{margin-top:36px;font-size:56px;font-weight:800;letter-spacing:6px;line-height:1.3;color:var(--ink);text-transform:uppercase;word-break:break-word}
+  .role{margin-top:26px;font-size:24px;font-weight:700;letter-spacing:4px;color:var(--ink);text-transform:uppercase;line-height:1.3}
+  .about{margin-top:12px;font-size:13.5px;line-height:1.75;text-align:justify;color:var(--text)}
+
+  /* ---------- right column ---------- */
+  .h{font-size:23px;font-weight:800;letter-spacing:5px;color:var(--ink);text-transform:uppercase;margin-bottom:20px}
+  .r-sec{margin-bottom:40px}
+  .ttl{font-size:13px;font-weight:700;letter-spacing:.9px;color:var(--ink);text-transform:uppercase;line-height:1.4}
+  .sub{font-size:12.5px;color:#3d4c4c;margin-top:4px;line-height:1.4}
+  .job{margin-bottom:26px}
+  .bul{list-style:disc;padding-left:16px;margin-top:12px}
+  .bul li{font-size:12.5px;line-height:1.6;text-align:justify;margin-bottom:2px}
+
+  /* ---------- bottom box ---------- */
+  .box{margin:auto 41px 81px 42px;background:var(--cream);min-height:222px;padding:28px 30px 26px;display:flex}
+  .contact{flex:0 0 340px;align-self:center;padding-right:10px}
+  .c-row{display:flex;align-items:center;gap:14px;margin-bottom:14px;font-size:13.5px;color:var(--ink);line-height:1.35}
+  .c-row:last-child{margin-bottom:0}
+  .c-row svg{flex:0 0 22px;width:22px;height:22px;fill:var(--ink)}
+  .c-row .t{min-width:0;word-break:break-word}
+  .skills{flex:1;min-width:0}
+  .sk-h{font-size:20px;font-weight:800;letter-spacing:4px;color:var(--ink);text-transform:uppercase;margin-bottom:12px}
+  .sk-row{display:flex;align-items:center;justify-content:space-between;gap:10px;height:28px;font-size:12.5px;color:var(--ink)}
+  .sk-row .n{flex:1;min-width:0}
+  .track{flex:0 0 84px;height:12px;border-radius:6px;background:rgba(255,255,255,.75);overflow:hidden;cursor:pointer}
+  .fill{height:100%;background:#0b0b0b;border-radius:6px}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="deco a"></div>
+  <div class="deco b"></div>
+
+  <div class="top">
+    <!-- ========== LEFT ========== -->
+    <div class="left">
+      <div class="moon"><div class="photo-circle"></div></div>
+      <div class="name" id="nameText" contenteditable="true" data-f="name">Olivia Wilson</div>
+      <div class="role" contenteditable="true" data-f="title">Digital Marketer</div>
+      <div class="about" contenteditable="true">I am a professional Digital Marketer with 7+ years of experience in digital marketing, branding, and business strategy across media and entertainment industries.</div>
+    </div>
+
+    <!-- ========== RIGHT ========== -->
+    <div class="right">
+      <div class="r-sec">
+        <div class="h" contenteditable="true">Education</div>
+        <div class="ttl" contenteditable="true">Bachelor of Design</div>
+        <div class="sub" contenteditable="true">Fauget University | 2012-2016</div>
+      </div>
+
+      <div class="r-sec">
+        <div class="h" contenteditable="true">Experience</div>
+        <div class="job">
+          <div class="ttl" contenteditable="true">Digital Marketing Lead</div>
+          <div class="sub" contenteditable="true">Studio Shodwe | 2018-present</div>
+          <ul class="bul">
+            <li contenteditable="true">Created and managed digital campaigns for top clients</li>
+            <li contenteditable="true">Increased two clients' digital presence and customer interaction by 200%</li>
+            <li contenteditable="true">Approves all content to be posted on social media</li>
+          </ul>
+        </div>
+        <div class="job">
+          <div class="ttl" contenteditable="true">Digital Marketer</div>
+          <div class="sub" contenteditable="true">Larana, Inc | 2016-2018</div>
+          <ul class="bul">
+            <li contenteditable="true">Contributed ideas for digital marketing campaigns for raising brand awareness</li>
+            <li contenteditable="true">Organizes all social media posts for the editorial department</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== BOTTOM BOX ========== -->
+  <div class="box">
+    <div class="contact">
+      <div class="c-row"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg><div class="t" contenteditable="true" data-f="email">hello@email.com</div></div>
+      <div class="c-row"><svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg><div class="t" contenteditable="true" data-f="phone">+123-456-7890</div></div>
+      <div class="c-row"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg><div class="t" contenteditable="true" data-f="address">123 Anywhere St., Any City</div></div>
+    </div>
+    <div class="skills">
+      <div class="sk-h" contenteditable="true">Skills</div>
+      <div class="sk-row"><span class="n" contenteditable="true">Market Strategy</span><div class="track"><div class="fill" style="width:60%"></div></div></div>
+      <div class="sk-row"><span class="n" contenteditable="true">Marketing Tools</span><div class="track"><div class="fill" style="width:90%"></div></div></div>
+      <div class="sk-row"><span class="n" contenteditable="true">Budgeting Planning</span><div class="track"><div class="fill" style="width:75%"></div></div></div>
+      <div class="sk-row"><span class="n" contenteditable="true">Project Management</span><div class="track"><div class="fill" style="width:70%"></div></div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* Name wraps to 2 lines like the reference; shrinks if it needs more */
+(function(){
+  var n=document.getElementById('nameText');
+  function fit(){
+    var s=56; n.style.fontSize=s+'px';
+    while(n.scrollHeight>s*1.3*2+2 && s>22){ s-=1; n.style.fontSize=s+'px'; }
+  }
+  n.addEventListener('input',fit);
+  window.addEventListener('load',fit); fit();
+})();
+
+/* Tap a skill bar to set its level */
+document.querySelectorAll('.track').forEach(function(t){
+  t.addEventListener('click',function(e){
+    var r=t.getBoundingClientRect();
+    var p=Math.round(((e.clientX-r.left)/r.width)*10)*10;
+    p=Math.max(10,Math.min(100,p));
+    t.querySelector('.fill').style.width=p+'%';
+  });
+});
+</script>
+</body>
+</html>
