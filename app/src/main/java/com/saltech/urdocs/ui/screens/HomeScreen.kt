@@ -212,15 +212,14 @@ fun HomeScreen(
             // Hamburger
             Box(
                 modifier = Modifier
-                    .padding(start = 16.dp, top = 40.dp)
-                    .size(40.dp)
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(Color.White.copy(alpha = 0.06f))
-                    .border(1.dp, Brush.verticalGradient(listOf(HcBlue, Color.Black)), RoundedCornerShape(12.dp))
+                    .statusBarsPadding()
+                    .padding(start = 6.dp, top = 0.dp)
+                    .size(48.dp)
+                    .clip(CircleShape)
                     .clickable { scope.launch { drawerState.open() } },
                 contentAlignment = Alignment.Center
             ) {
-                Icon(Icons.Default.Menu, contentDescription = "Menu", tint = HcBlue)
+                Icon(Icons.Default.Menu, contentDescription = "Menu", tint = HcBlue, modifier = Modifier.size(28.dp))
             }
 
             // Input bar
