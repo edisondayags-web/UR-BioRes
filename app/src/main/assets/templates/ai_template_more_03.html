@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=794, minimum-scale=0.1, maximum-scale=5, user-scalable=yes">
+<style>
+  :root{--teal:#5f9e9a;--pink:#f4c7be;--cream:#fbf3ee;--ink:#2f3a3a;--text:#3c4646}
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  html{background:#000}
+  body{background:#000;width:794px;font-family:'Roboto','Helvetica Neue',Arial,sans-serif;color:var(--text)}
+  [contenteditable="true"]:focus{background:#fff3cd;outline:1px dashed #999}
+  .side [contenteditable="true"]:focus{background:rgba(255,255,255,.25);outline:1px dashed #fff}
+
+  .page{width:794px;min-height:1123px;display:flex;align-items:stretch;background:var(--cream)}
+
+  /* ---------- SIDEBAR ---------- */
+  .side{flex:0 0 318px;background:var(--teal);color:#fff;padding:48px 30px 40px}
+  .photo-circle{
+    width:200px;height:200px;margin:0 auto 36px;border-radius:50%;border:5px solid #fff;
+    background:#dfe3f0 url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%23b9c0d8' d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v4h16v-4c0-2.66-5.33-4-8-4z'/></svg>") center/cover no-repeat;
+  }
+  .s-sec + .s-sec{margin-top:34px}
+  .s-title{font-size:16px;font-weight:700;letter-spacing:3px;text-transform:uppercase;margin-bottom:12px}
+  .profile{font-size:13px;line-height:1.65}
+  .c-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.45);font-size:13px;line-height:1.35;word-break:break-word}
+  .c-row:first-of-type{border-top:1px solid rgba(255,255,255,.45)}
+  .c-row svg{flex:0 0 18px;width:18px;height:18px;fill:#fff}
+
+  /* ---------- MAIN ---------- */
+  .main{flex:1;min-width:0}
+  .hero{background:var(--pink);min-height:250px;padding:62px 44px 36px}
+  .name{font-size:46px;font-weight:800;letter-spacing:4px;line-height:1.15;color:var(--ink);text-transform:uppercase;max-width:370px;word-break:break-word}
+  .job{margin-top:14px;font-size:17px;color:#4a5757}
+
+  .content{padding:36px 44px 40px}
+  .m-sec{margin-bottom:30px}
+  .m-head{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+  .arrow{flex:none;width:0;height:0;border-left:10px solid var(--teal);border-top:6px solid transparent;border-bottom:6px solid transparent}
+  .m-title{font-size:15px;font-weight:800;letter-spacing:2.5px;color:var(--ink);text-transform:uppercase}
+  .m-body{padding-left:22px}
+  .entry{margin-bottom:12px}
+  .e-h{font-size:13px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--ink);line-height:1.4}
+  .e-t{font-size:13px;line-height:1.55;margin-top:2px}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ========== SIDEBAR ========== -->
+  <div class="side">
+    <div class="photo-circle"></div>
+
+    <div class="s-sec">
+      <div class="s-title" contenteditable="true">Profile</div>
+      <div class="profile" contenteditable="true">Business administration student. I consider myself a responsible and orderly person. I am looking forward to my first work experience.</div>
+    </div>
+
+    <div class="s-sec">
+      <div class="s-title" contenteditable="true">Contact Me</div>
+      <div class="c-row"><svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg><span contenteditable="true" data-f="phone">0912 345 6789</span></div>
+      <div class="c-row"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg><span contenteditable="true" data-f="email">hello@email.com</span></div>
+      <div class="c-row"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg><span contenteditable="true" data-f="address">Barangay, City, Philippines</span></div>
+    </div>
+  </div>
+
+  <!-- ========== MAIN ========== -->
+  <div class="main">
+    <div class="hero">
+      <div class="name" id="nameText" contenteditable="true" data-f="name">Olivia Wilson</div>
+      <div class="job" contenteditable="true" data-f="title">Student</div>
+    </div>
+
+    <div class="content">
+      <div class="m-sec">
+        <div class="m-head"><span class="arrow"></span><div class="m-title" contenteditable="true">Education</div></div>
+        <div class="m-body">
+          <div class="entry"><div class="e-h" contenteditable="true">University Name</div><div class="e-t" contenteditable="true">Bachelor of Science in Business Administration</div><div class="e-t" contenteditable="true">2020 - 2024</div></div>
+          <div class="entry"><div class="e-h" contenteditable="true">Senior High School</div><div class="e-t" contenteditable="true">School Name</div><div class="e-t" contenteditable="true">2018 - 2020</div></div>
+        </div>
+      </div>
+
+      <div class="m-sec">
+        <div class="m-head"><span class="arrow"></span><div class="m-title" contenteditable="true">Language</div></div>
+        <div class="m-body">
+          <div class="e-t" contenteditable="true">Native: Filipino</div>
+          <div class="e-t" contenteditable="true">Advanced: English</div>
+        </div>
+      </div>
+
+      <div class="m-sec">
+        <div class="m-head"><span class="arrow"></span><div class="m-title" contenteditable="true">Computer Skills</div></div>
+        <div class="m-body">
+          <div class="e-t" contenteditable="true">Typing speed: 60 WPM</div>
+          <div class="e-t" contenteditable="true">Spreadsheet</div>
+          <div class="e-t" contenteditable="true">Slide presentations</div>
+        </div>
+      </div>
+
+      <div class="m-sec">
+        <div class="m-head"><span class="arrow"></span><div class="m-title" contenteditable="true">Volunteer Experience</div></div>
+        <div class="m-body">
+          <div class="entry"><div class="e-h" contenteditable="true">Organization Name</div><div class="e-t" contenteditable="true">Volunteer, 2022 - 2023</div><div class="e-t" contenteditable="true">Helped organize community activities and assisted with daily tasks of the team.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* Name wraps like the reference, but shrinks if it needs more than 3 lines */
+(function(){
+  var n=document.getElementById('nameText');
+  function fit(){
+    var s=46; n.style.fontSize=s+'px';
+    while(n.scrollHeight>s*1.15*3+2 && s>20){ s-=1; n.style.fontSize=s+'px'; }
+  }
+  n.addEventListener('input',fit);
+  window.addEventListener('load',fit); fit();
+})();
+</script>
+</body>
+</html>

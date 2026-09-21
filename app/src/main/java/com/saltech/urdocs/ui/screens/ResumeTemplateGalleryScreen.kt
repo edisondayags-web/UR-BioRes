@@ -27,7 +27,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 
-private enum class LayoutStyle { CLASSIC_TWO_COL, ATS_SINGLE_COL, SIDEBAR_BOLD, MINIMAL_MONO, HEADER_BLOCK, LIGHT_SIDEBAR, BLUE_ARCH }
+private enum class LayoutStyle { CLASSIC_TWO_COL, ATS_SINGLE_COL, SIDEBAR_BOLD, MINIMAL_MONO, HEADER_BLOCK, LIGHT_SIDEBAR, BLUE_ARCH, TEAL_BAND }
 
 private data class TemplateInfo(
     val id: String,
@@ -66,6 +66,7 @@ private val legacyDarkTemplates = listOf(
 private val resumeTemplates = listOf(
     TemplateInfo("resume_light_01.html", "01", Color(0xFF111111), Color(0xFFECEEF5), LayoutStyle.LIGHT_SIDEBAR),
     TemplateInfo("ai_template_more_02.html", "02", Color(0xFF0A3FA5), Color(0xFF040B26), LayoutStyle.BLUE_ARCH),
+    TemplateInfo("ai_template_more_03.html", "03", Color(0xFF5F9E9A), Color(0xFFF4C7BE), LayoutStyle.TEAL_BAND),
 )
 
 
@@ -162,6 +163,7 @@ private fun TemplatePreview(accent: Color, bg: Color, layout: LayoutStyle, modif
         LayoutStyle.HEADER_BLOCK -> HeaderBlockPreview(accent, modifier)
         LayoutStyle.LIGHT_SIDEBAR -> LightSidebarPreview(modifier)
         LayoutStyle.BLUE_ARCH -> BlueArchPreview(modifier)
+        LayoutStyle.TEAL_BAND -> TealBandPreview(modifier)
     }
 }
 
@@ -364,6 +366,51 @@ private fun BlueArchPreview(modifier: Modifier = Modifier) {
                         Spacer(Modifier.height(3.dp))
                     }
                     Spacer(Modifier.height(8.dp))
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun TealBandPreview(modifier: Modifier = Modifier) {
+    val teal = Color(0xFF5F9E9A)
+    val pink = Color(0xFFF4C7BE)
+    val ink = Color(0xFF2F3A3A)
+    val gray = Color(0xFF9AA0B0)
+    Row(modifier = modifier.background(Color(0xFFFBF3EE))) {
+        Column(
+            modifier = Modifier.fillMaxHeight().width(46.dp).background(teal).padding(6.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Box(modifier = Modifier.size(28.dp).clip(CircleShape).background(Color(0xFFDFE3F0)).border(2.dp, Color.White, CircleShape))
+            Spacer(Modifier.height(10.dp))
+            repeat(2) {
+                Box(modifier = Modifier.fillMaxWidth(0.7f).height(3.dp).background(Color.White))
+                Spacer(Modifier.height(3.dp))
+                repeat(3) {
+                    Box(modifier = Modifier.fillMaxWidth().height(2.dp).background(Color.White.copy(alpha = 0.6f)))
+                    Spacer(Modifier.height(2.dp))
+                }
+                Spacer(Modifier.height(8.dp))
+            }
+        }
+        Column(modifier = Modifier.weight(1f).fillMaxHeight()) {
+            Column(modifier = Modifier.fillMaxWidth().height(50.dp).background(pink).padding(8.dp)) {
+                Box(modifier = Modifier.fillMaxWidth(0.7f).height(7.dp).background(ink))
+                Spacer(Modifier.height(4.dp))
+                Box(modifier = Modifier.fillMaxWidth(0.4f).height(3.dp).background(teal))
+            }
+            Column(modifier = Modifier.padding(8.dp)) {
+                Spacer(Modifier.height(4.dp))
+                repeat(4) {
+                    Box(modifier = Modifier.fillMaxWidth(0.5f).height(4.dp).background(teal))
+                    Spacer(Modifier.height(3.dp))
+                    repeat(2) {
+                        Box(modifier = Modifier.fillMaxWidth().height(2.dp).background(gray))
+                        Spacer(Modifier.height(3.dp))
+                    }
+                    Spacer(Modifier.height(10.dp))
                 }
             }
         }
