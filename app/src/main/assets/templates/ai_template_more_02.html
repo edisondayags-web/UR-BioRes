@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=800, initial-scale=1">
+<style>
+  :root{
+    --navy:#040b26;
+    --blue:#0a3fa5;
+    --blue-dark:#0a3a9c;
+    --track:#4b7bd1;
+    --light:#8fb2ff;
+    --ink:#0b1533;
+    --text:#333a4d;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  html,body{background:#fff}
+  body{width:800px;font-family:'Roboto','Helvetica Neue',Arial,sans-serif;color:var(--text)}
+  [contenteditable]{outline:none}
+  [contenteditable]:focus{background:rgba(255,235,59,.35);border-radius:2px}
+
+  .page{position:relative;width:800px;min-height:1200px;display:flex;align-items:stretch;background:#fff}
+  .header-bg{position:absolute;top:0;left:0;right:0;height:244px;background:var(--navy)}
+
+  /* ---------- SIDEBAR ---------- */
+  .sidebar{
+    position:relative;z-index:1;flex:0 0 272px;margin:27px 0 0 18px;
+    background:var(--blue);border-radius:136px 136px 0 0;
+    padding:18px 21px 40px;color:#fff;
+  }
+  .photo{
+    width:238px;height:238px;margin:0 auto;border-radius:50%;
+    border:5px solid #fff;overflow:hidden;background:#dfe3f0;position:relative;
+  }
+  .photo img{width:100%;height:100%;object-fit:cover;display:block}
+  .photo svg.ph{position:absolute;left:50%;bottom:-8px;width:70%;transform:translateX(-50%);fill:#b9c0d8}
+  .photo img[src]:not([src=""]) ~ svg.ph{display:none}
+
+  .s-sec{margin-top:30px}
+  .s-head{display:flex;align-items:center;gap:12px}
+  .s-icon{flex:0 0 38px;width:38px;height:38px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center}
+  .s-icon svg{width:20px;height:20px;fill:var(--blue)}
+  .s-title{flex:1;font-size:19px;font-weight:700;padding-bottom:6px;border-bottom:1px solid rgba(255,255,255,.75);line-height:1.2;margin-top:4px}
+
+  .bars{margin-top:14px}
+  .bar-row{display:grid;grid-template-columns:92px 1fr 34px;align-items:center;column-gap:6px;height:37px}
+  .bar-row .lbl{font-size:14px;line-height:1.2}
+  .bar-row .track{height:5px;background:var(--track);border-radius:3px;overflow:hidden}
+  .bar-row .fill{height:100%;background:#fff;border-radius:3px}
+  .bar-row .pct{font-size:13px;text-align:right}
+
+  .contact{margin-top:12px}
+  .contact .k{font-size:11px;font-weight:700;letter-spacing:.4px;margin-top:10px}
+  .contact .v{font-size:14px;line-height:1.35;margin-top:2px}
+
+  .ref{margin-top:14px}
+  .ref .rn{font-size:18px;font-weight:700}
+  .ref .rt{font-size:12px;color:var(--light);text-transform:uppercase;margin-top:3px}
+  .ref .rl{font-size:14px;margin-top:6px;line-height:1.4}
+
+  /* ---------- MAIN ---------- */
+  .main{position:relative;z-index:1;flex:1;min-width:0}
+  .hero{height:244px;padding:44px 40px 0 50px;color:#fff}
+  .name-wrap{white-space:nowrap;overflow:hidden;font-weight:800;font-size:58px;line-height:1.05;letter-spacing:-1px}
+  .name-wrap .dot{color:#1a6bff}
+  .job{margin-top:10px;font-size:16px;font-weight:600;color:#1a6bff;text-transform:uppercase;letter-spacing:.3px}
+  .rule{width:58px;height:2px;background:#1a6bff;margin:9px 0 12px}
+  .summary{font-size:13px;line-height:1.55;color:#e8ecf7}
+
+  .content{padding:28px 48px 40px 37px}
+  .m-sec{margin-bottom:26px}
+  .m-head{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+  .m-icon{flex:0 0 34px;width:34px;height:34px;border-radius:50%;background:var(--blue-dark);display:flex;align-items:center;justify-content:center}
+  .m-icon svg{width:18px;height:18px;fill:#fff}
+  .m-title{flex:1;color:var(--blue-dark);font-size:19px;font-weight:700;line-height:1.2;padding-bottom:6px;border-bottom:2px solid var(--blue-dark);margin-top:6px}
+
+  .item{position:relative;display:grid;grid-template-columns:72px 30px 1fr;padding-bottom:16px}
+  .item::before{content:"";position:absolute;left:87px;top:0;bottom:0;width:2px;background:var(--blue-dark)}
+  .item:first-of-type::before{top:11px}
+  .item:last-of-type::before{bottom:auto;height:11px;top:0}
+  .item:first-of-type:last-of-type::before{display:none}
+  .item:last-of-type{padding-bottom:0}
+  .tag{height:22px;line-height:22px;background:var(--blue-dark);color:#fff;font-size:11px;font-weight:600;
+       padding-left:8px;clip-path:polygon(0 0,86% 0,100% 50%,86% 100%,0 100%);white-space:nowrap}
+  .dotcol{position:relative}
+  .dotcol::after{content:"";position:absolute;left:5px;top:6px;width:10px;height:10px;border-radius:50%;
+       background:#fff;border:2px solid var(--blue-dark);z-index:1}
+  .it-title{font-size:15px;font-weight:700;color:var(--ink);line-height:22px}
+  .it-desc{font-size:12.5px;line-height:1.5;margin-top:2px}
+</style>
+</head>
+<body>
+<!-- Photo slot: <div class="photo" id="photoSlot"><img id="photo"></div> -->
+<div class="page">
+  <div class="header-bg"></div>
+
+  <!-- ========== SIDEBAR ========== -->
+  <div class="sidebar">
+    <div class="photo" id="photoSlot">
+      <img id="photo" alt="">
+      <svg class="ph" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v4h16v-4c0-2.66-5.33-4-8-4z"/></svg>
+    </div>
+
+    <div class="s-sec">
+      <div class="s-head">
+        <div class="s-icon"><svg viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg></div>
+        <div class="s-title" contenteditable="true">Work Skills</div>
+      </div>
+      <div class="bars">
+        <div class="bar-row"><span class="lbl" contenteditable="true">UI Design</span><div class="track"><div class="fill" style="width:70%"></div></div><span class="pct" contenteditable="true">70%</span></div>
+        <div class="bar-row"><span class="lbl" contenteditable="true">UX Design</span><div class="track"><div class="fill" style="width:90%"></div></div><span class="pct" contenteditable="true">90%</span></div>
+        <div class="bar-row"><span class="lbl" contenteditable="true">User Research</span><div class="track"><div class="fill" style="width:50%"></div></div><span class="pct" contenteditable="true">50%</span></div>
+        <div class="bar-row"><span class="lbl" contenteditable="true">Design System</span><div class="track"><div class="fill" style="width:70%"></div></div><span class="pct" contenteditable="true">70%</span></div>
+        <div class="bar-row"><span class="lbl" contenteditable="true">Print Design</span><div class="track"><div class="fill" style="width:70%"></div></div><span class="pct" contenteditable="true">70%</span></div>
+      </div>
+    </div>
+
+    <div class="s-sec">
+      <div class="s-head">
+        <div class="s-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg></div>
+        <div class="s-title" contenteditable="true">Languages</div>
+      </div>
+      <div class="bars">
+        <div class="bar-row"><span class="lbl" contenteditable="true">English</span><div class="track"><div class="fill" style="width:85%"></div></div><span class="pct" contenteditable="true">85%</span></div>
+        <div class="bar-row"><span class="lbl" contenteditable="true">Filipino</span><div class="track"><div class="fill" style="width:95%"></div></div><span class="pct" contenteditable="true">95%</span></div>
+        <div class="bar-row"><span class="lbl" contenteditable="true">Bisaya</span><div class="track"><div class="fill" style="width:70%"></div></div><span class="pct" contenteditable="true">70%</span></div>
+      </div>
+    </div>
+
+    <div class="s-sec">
+      <div class="s-head">
+        <div class="s-icon"><svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg></div>
+        <div class="s-title" contenteditable="true">Contact</div>
+      </div>
+      <div class="contact">
+        <div class="k">PHONE:</div>
+        <div class="v" contenteditable="true">0912 345 6789</div>
+        <div class="k">EMAIL:</div>
+        <div class="v" contenteditable="true">juan@email.com</div>
+        <div class="k">ADDRESS:</div>
+        <div class="v" contenteditable="true">Barangay, City, Philippines</div>
+      </div>
+    </div>
+
+    <div class="s-sec">
+      <div class="s-head">
+        <div class="s-icon"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></div>
+        <div class="s-title" contenteditable="true">Reference</div>
+      </div>
+      <div class="ref">
+        <div class="rn" contenteditable="true">Maria Santos</div>
+        <div class="rt" contenteditable="true">Senior Manager</div>
+        <div class="rl" contenteditable="true">P: 0917 123 4567</div>
+        <div class="rl" style="margin-top:2px" contenteditable="true">E: maria@email.com</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== MAIN ========== -->
+  <div class="main">
+    <div class="hero">
+      <div class="name-wrap" id="nameWrap"><span id="nameText" contenteditable="true">JHENNY DOE</span><span class="dot">.</span></div>
+      <div class="job" contenteditable="true">Professional UI/UX Designer</div>
+      <div class="rule"></div>
+      <div class="summary" contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Duis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis.</div>
+    </div>
+
+    <div class="content">
+      <div class="m-sec">
+        <div class="m-head">
+          <div class="m-icon"><svg viewBox="0 0 24 24"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/></svg></div>
+          <div class="m-title" contenteditable="true">Education And Qualification</div>
+        </div>
+        <div class="item"><div class="tag" contenteditable="true">2016 - 2019</div><div class="dotcol"></div><div><div class="it-title" contenteditable="true">User Experience Design</div><div class="it-desc" contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div></div></div>
+        <div class="item"><div class="tag" contenteditable="true">2013 - 2016</div><div class="dotcol"></div><div><div class="it-title" contenteditable="true">User Experience Design</div><div class="it-desc" contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div></div></div>
+        <div class="item"><div class="tag" contenteditable="true">2010 - 2013</div><div class="dotcol"></div><div><div class="it-title" contenteditable="true">User Experience Design</div><div class="it-desc" contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div></div></div>
+      </div>
+
+      <div class="m-sec">
+        <div class="m-head">
+          <div class="m-icon"><svg viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg></div>
+          <div class="m-title" contenteditable="true">Work Experience</div>
+        </div>
+        <div class="item"><div class="tag" contenteditable="true">2020 - 2025</div><div class="dotcol"></div><div><div class="it-title" contenteditable="true">User Experience Design</div><div class="it-desc" contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div></div></div>
+        <div class="item"><div class="tag" contenteditable="true">2017 - 2020</div><div class="dotcol"></div><div><div class="it-title" contenteditable="true">User Experience Design</div><div class="it-desc" contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div></div></div>
+        <div class="item"><div class="tag" contenteditable="true">2014 - 2017</div><div class="dotcol"></div><div><div class="it-title" contenteditable="true">User Experience Design</div><div class="it-desc" contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div></div></div>
+      </div>
+
+      <div class="m-sec">
+        <div class="m-head">
+          <div class="m-icon"><svg viewBox="0 0 24 24"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/></svg></div>
+          <div class="m-title" contenteditable="true">Personal Achievement</div>
+        </div>
+        <div class="item"><div class="tag" contenteditable="true">2020 - 2025</div><div class="dotcol"></div><div><div class="it-title" contenteditable="true">User Experience Design</div><div class="it-desc" contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div></div></div>
+        <div class="item"><div class="tag" contenteditable="true">2017 - 2020</div><div class="dotcol"></div><div><div class="it-title" contenteditable="true">User Experience Design</div><div class="it-desc" contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div></div></div>
+        <div class="item"><div class="tag" contenteditable="true">2014 - 2017</div><div class="dotcol"></div><div><div class="it-title" contenteditable="true">User Experience Design</div><div class="it-desc" contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* AUTO-SHRINK-NAME: keeps the name on one line */
+(function(){
+  var wrap=document.getElementById('nameWrap');
+  function fit(){
+    var size=58; wrap.style.fontSize=size+'px';
+    while(wrap.scrollWidth>wrap.clientWidth && size>24){ size-=1; wrap.style.fontSize=size+'px'; }
+  }
+  document.getElementById('nameText').addEventListener('input',fit);
+  window.addEventListener('load',fit); fit();
+})();
+
+/* Sync skill/language bar with the typed percent */
+document.querySelectorAll('.bar-row').forEach(function(row){
+  var pct=row.querySelector('.pct'), fill=row.querySelector('.fill');
+  pct.addEventListener('input',function(){
+    var n=parseInt(pct.textContent.replace(/[^0-9]/g,''),10);
+    if(!isNaN(n)) fill.style.width=Math.max(0,Math.min(100,n))+'%';
+  });
+});
+</script>
+</body>
+</html>
