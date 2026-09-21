@@ -61,7 +61,7 @@ fun HomeDrawerContent(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { onNavigate("settings") }
+                    .clickable { onNavigate("my_profile") }
                     .padding(start = 20.dp, end = 20.dp, top = 16.dp, bottom = 14.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {

@@ -39,6 +39,8 @@ import com.saltech.urdocs.data.GeminiRepository
 import com.saltech.urdocs.model.LetterType
 import com.saltech.urdocs.ui.components.PremiumThinkingIndicator
 import kotlinx.coroutines.launch
+import androidx.compose.ui.platform.LocalContext
+import com.saltech.urdocs.drafts.DraftManager
 
 private val HcBlue = Color(0xFF4C8DFF)
 private val HcBlueDeep = Color(0xFF16255E)
@@ -57,6 +59,8 @@ fun HomeScreen(
     onNavigate: (String) -> Unit
 ) {
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
+    var recents by remember { mutableStateOf(listOf<String>()) }
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val listState = rememberLazyListState()
     val repository = remember { GeminiRepository() }
@@ -69,9 +73,19 @@ fun HomeScreen(
     var chats by remember { mutableStateOf(listOf<SavedChat>()) }
     var currentId by remember { mutableStateOf(System.currentTimeMillis()) }
 
-    val user = FirebaseAuth.getInstance().currentUser
-    val loggedIn = user != null && !user.isAnonymous
-    val email = user?.email
+    var authUser by remember { mutableStateOf(FirebaseAuth.getInstance().currentUser) }
+    DisposableEffect(Unit) {
+        val l = FirebaseAuth.AuthStateListener { authUser = it.currentUser }
+        FirebaseAuth.getInstance().addAuthStateListener(l)
+        onDispose { FirebaseAuth.getInstance().removeAuthStateListener(l) }
+    }
+    val u = authUser
+    val loggedIn = u != null && !u.isAnonymous
+    val email = u?.email
+
+    LaunchedEffect(drawerState.currentValue) {
+        recents = DraftManager.getAllDrafts(context).map { it.label }
+    }
 
     BackHandler(enabled = drawerState.isOpen) { scope.launch { drawerState.close() } }
 
@@ -145,7 +159,7 @@ fun HomeScreen(
                 email = email,
                 loggedIn = loggedIn,
                 chats = chats.map { DrawerChat(it.id, it.title) },
-                recents = emptyList(),
+                recents = recents,
                 onNavigate = { go(it) },
                 onNewChat = { newChat() },
                 onOpenChat = { openChat(it) },
@@ -156,6 +170,7 @@ fun HomeScreen(
                 onLogout = {
                     scope.launch { drawerState.close() }
                     FirebaseAuth.getInstance().signOut()
+                    FirebaseAuth.getInstance().signInAnonymously()
                 }
             )
         }

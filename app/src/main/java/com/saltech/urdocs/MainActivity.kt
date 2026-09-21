@@ -247,7 +247,16 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                     composable(Screen.MyProfile.route) {
-                        MyProfileScreen(onBack = { navController.popBackStack() })
+                        MyProfileScreen(
+                            onBack = { navController.popBackStack() },
+                            onLogin = { navController.navigate(Screen.Login.route) }
+                        )
+                    }
+                    composable(Screen.Login.route) {
+                        LoginScreen(
+                            onBack = { navController.popBackStack() },
+                            onDone = { navController.popBackStack() }
+                        )
                     }
                     composable(Screen.PrivacyPolicy.route) {
                         PrivacyPolicyScreen(onBack = { navController.popBackStack() })

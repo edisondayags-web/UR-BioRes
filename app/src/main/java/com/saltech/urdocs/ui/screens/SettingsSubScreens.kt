@@ -155,7 +155,7 @@ fun AboutDeveloperScreen(onBack: () -> Unit) {
 }
 
 @Composable
-fun MyProfileScreen(onBack: () -> Unit) {
+fun MyProfileScreen(onBack: () -> Unit, onLogin: () -> Unit = {}) {
     val context = LocalContext.current
     val prefs = remember { context.getSharedPreferences("ur_profile", android.content.Context.MODE_PRIVATE) }
     val fieldColors = OutlinedTextFieldDefaults.colors(
@@ -176,7 +176,41 @@ fun MyProfileScreen(onBack: () -> Unit) {
     var contactNumber by remember { mutableStateOf(prefs.getString("contact_number", "") ?: "") }
     var email by remember { mutableStateOf(prefs.getString("email", "") ?: "") }
 
+    val authState = remember { mutableStateOf(com.google.firebase.auth.FirebaseAuth.getInstance().currentUser) }
+    val isLoggedIn = authState.value != null && authState.value?.isAnonymous == false
+
     DetailScreenScaffold(title = "My Profile", onBack = onBack) {
+        BodyHeading("Account")
+        if (isLoggedIn) {
+            BodyText("Naka-login bilang: ${authState.value?.email}")
+            Spacer(modifier = Modifier.height(8.dp))
+            Button(
+                onClick = {
+                    val fa = com.google.firebase.auth.FirebaseAuth.getInstance()
+                    fa.signOut()
+                    fa.signInAnonymously()
+                    authState.value = null
+                },
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = SettingsColors.NeonPink,
+                    contentColor = SettingsColors.TextWhite
+                )
+            ) { Text("Log out") }
+        } else {
+            BodyText("Guest ka pa. Mag-login para may sarili kang account.")
+            Spacer(modifier = Modifier.height(8.dp))
+            Button(
+                onClick = onLogin,
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = SettingsColors.NeonPink,
+                    contentColor = SettingsColors.TextWhite
+                )
+            ) { Text("Mag-login / Mag-sign up") }
+        }
+        Spacer(modifier = Modifier.height(24.dp))
+
         BodyHeading("Your Information")
         BodyText("Fill this out once and it will be used to auto-fill your resumes, bio-data, and letters.")
 
