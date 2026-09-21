@@ -229,7 +229,7 @@ fun AiTemplateScreen(htmlFileName: String, onBack: () -> Unit = {}) {
 
     // Igitna ang page (light templates lang) para pantay ang itim sa taas at baba
     fun recenter(view: WebView) {
-        if (!(htmlFileName.startsWith("resume_light") || (htmlFileName.startsWith("ai_template_more_0") && htmlFileName != "ai_template_more_02.html"))) { topShift = 0f; return }
+        if (!(htmlFileName.startsWith("resume_light") || (htmlFileName.startsWith("ai_template_more_") && htmlFileName != "ai_template_more_02.html"))) { topShift = 0f; return }
         view.evaluateJavascript(
             "(function(){var e=document.querySelector('.page');return e?e.getBoundingClientRect().height:0;})()"
         ) { r ->
