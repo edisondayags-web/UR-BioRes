@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=800, initial-scale=1">
+<meta name="viewport" content="width=794, minimum-scale=0.1, maximum-scale=5, user-scalable=yes">
 <style>
   :root{
     --navy:#040b26;
@@ -14,27 +14,25 @@
     --text:#333a4d;
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  html,body{background:#fff}
-  body{width:800px;font-family:'Roboto','Helvetica Neue',Arial,sans-serif;color:var(--text)}
+  html{background:#000}
+  body{background:#000;width:794px;font-family:'Roboto','Helvetica Neue',Arial,sans-serif;color:var(--text)}
   [contenteditable]{outline:none}
-  [contenteditable]:focus{background:rgba(255,235,59,.35);border-radius:2px}
+  [contenteditable="true"]:focus{background:#fff3cd;outline:1px dashed #999}
+  .sidebar [contenteditable="true"]:focus,.hero [contenteditable="true"]:focus{background:rgba(255,255,255,.22);outline:1px dashed #fff}
 
-  .page{position:relative;width:800px;min-height:1200px;display:flex;align-items:stretch;background:#fff}
-  .header-bg{position:absolute;top:0;left:0;right:0;height:244px;background:var(--navy)}
+  .page{position:relative;width:794px;min-height:1123px;display:flex;align-items:stretch;background:#fff}
 
   /* ---------- SIDEBAR ---------- */
   .sidebar{
-    position:relative;z-index:1;flex:0 0 272px;margin:27px 0 0 18px;
+    position:relative;z-index:2;flex:0 0 272px;margin:27px 0 0 18px;
     background:var(--blue);border-radius:136px 136px 0 0;
     padding:18px 21px 40px;color:#fff;
   }
-  .photo{
+  .photo-circle{
     width:238px;height:238px;margin:0 auto;border-radius:50%;
-    border:5px solid #fff;overflow:hidden;background:#dfe3f0;position:relative;
+    border:5px solid #fff;
+    background:#dfe3f0 url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%23b9c0d8' d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v4h16v-4c0-2.66-5.33-4-8-4z'/></svg>") center/cover no-repeat;
   }
-  .photo img{width:100%;height:100%;object-fit:cover;display:block}
-  .photo svg.ph{position:absolute;left:50%;bottom:-8px;width:70%;transform:translateX(-50%);fill:#b9c0d8}
-  .photo img[src]:not([src=""]) ~ svg.ph{display:none}
 
   .s-sec{margin-top:30px}
   .s-head{display:flex;align-items:center;gap:12px}
@@ -60,7 +58,7 @@
 
   /* ---------- MAIN ---------- */
   .main{position:relative;z-index:1;flex:1;min-width:0}
-  .hero{height:244px;padding:44px 40px 0 50px;color:#fff}
+  .hero{min-height:244px;margin-left:-290px;padding:44px 40px 24px 340px;background:var(--navy);color:#fff}
   .name-wrap{white-space:nowrap;overflow:hidden;font-weight:800;font-size:58px;line-height:1.05;letter-spacing:-1px}
   .name-wrap .dot{color:#1a6bff}
   .job{margin-top:10px;font-size:16px;font-weight:600;color:#1a6bff;text-transform:uppercase;letter-spacing:.3px}
@@ -76,10 +74,10 @@
 
   .item{position:relative;display:grid;grid-template-columns:72px 30px 1fr;padding-bottom:16px}
   .item::before{content:"";position:absolute;left:87px;top:0;bottom:0;width:2px;background:var(--blue-dark)}
-  .item:first-of-type::before{top:11px}
-  .item:last-of-type::before{bottom:auto;height:11px;top:0}
-  .item:first-of-type:last-of-type::before{display:none}
-  .item:last-of-type{padding-bottom:0}
+  .m-head + .item::before{top:11px}
+  .item:last-child::before{bottom:auto;height:11px;top:0}
+  .m-head + .item:last-child::before{display:none}
+  .item:last-child{padding-bottom:0}
   .tag{height:22px;line-height:22px;background:var(--blue-dark);color:#fff;font-size:11px;font-weight:600;
        padding-left:8px;clip-path:polygon(0 0,86% 0,100% 50%,86% 100%,0 100%);white-space:nowrap}
   .dotcol{position:relative}
@@ -90,16 +88,11 @@
 </style>
 </head>
 <body>
-<!-- Photo slot: <div class="photo" id="photoSlot"><img id="photo"></div> -->
 <div class="page">
-  <div class="header-bg"></div>
 
   <!-- ========== SIDEBAR ========== -->
   <div class="sidebar">
-    <div class="photo" id="photoSlot">
-      <img id="photo" alt="">
-      <svg class="ph" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v4h16v-4c0-2.66-5.33-4-8-4z"/></svg>
-    </div>
+    <div class="photo-circle"></div>
 
     <div class="s-sec">
       <div class="s-head">
@@ -134,11 +127,11 @@
       </div>
       <div class="contact">
         <div class="k">PHONE:</div>
-        <div class="v" contenteditable="true">0912 345 6789</div>
+        <div class="v" contenteditable="true" data-f="phone">0912 345 6789</div>
         <div class="k">EMAIL:</div>
-        <div class="v" contenteditable="true">juan@email.com</div>
+        <div class="v" contenteditable="true" data-f="email">juan@email.com</div>
         <div class="k">ADDRESS:</div>
-        <div class="v" contenteditable="true">Barangay, City, Philippines</div>
+        <div class="v" contenteditable="true" data-f="address">Barangay, City, Philippines</div>
       </div>
     </div>
 
@@ -159,8 +152,8 @@
   <!-- ========== MAIN ========== -->
   <div class="main">
     <div class="hero">
-      <div class="name-wrap" id="nameWrap"><span id="nameText" contenteditable="true">JHENNY DOE</span><span class="dot">.</span></div>
-      <div class="job" contenteditable="true">Professional UI/UX Designer</div>
+      <div class="name-wrap" id="nameWrap"><span id="nameText" contenteditable="true" data-f="name">JHENNY DOE</span><span class="dot">.</span></div>
+      <div class="job" contenteditable="true" data-f="title">Professional UI/UX Designer</div>
       <div class="rule"></div>
       <div class="summary" contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Duis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis.</div>
     </div>
