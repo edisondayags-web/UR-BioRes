@@ -44,7 +44,7 @@ fun LoginScreen(onBack: () -> Unit, onDone: () -> Unit) {
     fun googleLogin() {
         val resId = context.resources.getIdentifier("default_web_client_id", "string", context.packageName)
         if (resId == 0) {
-            message = "Wala pang Google setup sa app (google-services.json)."
+            message = "Add Google(google-services.json)."
             return
         }
         val webClientId = context.getString(resId)
@@ -64,14 +64,14 @@ fun LoginScreen(onBack: () -> Unit, onDone: () -> Unit) {
                     auth.signInWithGoogleIdToken(token)
                     onDone()
                 } else {
-                    message = "Hindi natuloy ang login."
+                    message = "Failed."
                 }
             } catch (e: GetCredentialCancellationException) {
                 // kinansel ng user
             } catch (e: NoCredentialException) {
-                message = "Walang Google account sa selpon. Mag-add muna sa Settings."
+                message = "Add Google Account."
             } catch (e: Exception) {
-                message = "Hindi natuloy: ${e.localizedMessage ?: "subukan ulit"}"
+                message = "FAILED: ${e.localizedMessage ?: "subukan ulit"}"
             }
             loading = false
         }
@@ -99,10 +99,10 @@ fun LoginScreen(onBack: () -> Unit, onDone: () -> Unit) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("UR Docs", color = Color.White, fontSize = 34.sp, fontWeight = FontWeight.Bold)
+            Text("HELLO LUV", color = Color.White, fontSize = 34.sp, fontWeight = FontWeight.Bold)
             Spacer(Modifier.height(8.dp))
             Text(
-                "Mag-login para ma-save ang mga gawa mo 🩵",
+                "LOG IN KALANG LUV🩵",
                 color = LGray, fontSize = 14.sp, textAlign = TextAlign.Center
             )
         }
@@ -136,12 +136,12 @@ fun LoginScreen(onBack: () -> Unit, onDone: () -> Unit) {
                 }
                 Spacer(Modifier.width(12.dp))
                 Text(
-                    if (loading) "Sandali lang..." else "Continue with Google",
+                    if (loading) "WAIT..." else "Continue with Google",
                     color = Color.Black, fontSize = 17.sp, fontWeight = FontWeight.SemiBold
                 )
             }
             Spacer(Modifier.height(8.dp))
-            TextButton(onClick = onBack) { Text("Mamaya na (Guest)", color = LGray) }
+            TextButton(onClick = onBack) { Text("CANCEL", color = LGray) }
         }
     }
 }
