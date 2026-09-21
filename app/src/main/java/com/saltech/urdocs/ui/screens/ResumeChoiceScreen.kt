@@ -113,7 +113,7 @@ fun ResumeChoiceScreen(onChoose: (String) -> Unit, onBack: () -> Unit = {}) {
             ResumeChoiceCard(
                 icon = { Icon(Icons.Filled.Description, contentDescription = null, tint = Color.White, modifier = it) },
                 title = "HTML",
-                subtitle = "(dito ang pogi luv kasi hanggang package 5)",
+                subtitle = "(dito luv hanggang package 5 dito)",
                 onClick = { onChoose("ai_html") }
             )
 
@@ -132,7 +132,7 @@ fun ResumeChoiceScreen(onChoose: (String) -> Unit, onBack: () -> Unit = {}) {
             ResumeChoiceCard(
                 icon = { Icon(Icons.Filled.GridView, contentDescription = null, tint = Color.White, modifier = it) },
                 title = "More Templates",
-                subtitle = "(Ito luv dark theme naman to)",
+                subtitle = "(dito makapili ka luv)",
                 onClick = { onChoose("gallery") }
             )
         }
