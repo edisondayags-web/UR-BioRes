@@ -1,6 +1,16 @@
 package com.saltech.urdocs.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.graphics.drawscope.rotate
+import com.saltech.urdocs.BuildConfig
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -167,20 +177,8 @@ fun HomeDrawerContent(
                 }
             }
 
-            // ---- Upgrade (fixed) ----
-            val cardShape = RoundedCornerShape(14.dp)
-            Row(
-                modifier = Modifier
-                    .padding(horizontal = 14.dp, vertical = 8.dp)
-                    .fillMaxWidth()
-                    .shadow(10.dp, cardShape, ambientColor = DBlue, spotColor = DBlue)
-                    .clip(cardShape)
-                    .background(Brush.horizontalGradient(listOf(Color(0xFF0B1B44), Color(0xFF07122B))))
-                    .border(1.dp, DBlue, cardShape)
-                    .clickable { onUpgrade() }
-                    .padding(12.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+            // ---- Upgrade (fixed, may umiikot na scan line) ----
+            ScanBorderCard(onClick = onUpgrade) {
                 Box(
                     Modifier.size(36.dp).border(1.5.dp, DBlue, RoundedCornerShape(10.dp)),
                     contentAlignment = Alignment.Center
@@ -210,11 +208,36 @@ fun HomeDrawerContent(
                     Text(if (loggedIn) "Log out" else "Log in", color = DText, fontSize = 13.sp)
                 }
             }
-            Text(
-                "DEVELOPER: EDISON SUCLATAN DAYAGUIT",
-                color = DDim.copy(alpha = 0.45f), fontSize = 7.sp,
-                modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 0.dp, bottom = 8.dp)
+            Box(
+                Modifier.fillMaxWidth().height(1.dp)
+                    .background(Brush.horizontalGradient(listOf(Color.Transparent, DBlue.copy(alpha = 0.5f), Color.Transparent)))
             )
+            Column(
+                modifier = Modifier.fillMaxWidth().padding(top = 8.dp, bottom = 10.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(Icons.Outlined.Code, null, tint = DBlue, modifier = Modifier.size(22.dp))
+                    Spacer(Modifier.width(8.dp))
+                    Box(Modifier.width(1.dp).height(24.dp).background(DBlue.copy(alpha = 0.5f)))
+                    Spacer(Modifier.width(8.dp))
+                    Column {
+                        Text("DEVELOPER:", color = DDim, fontSize = 7.sp, letterSpacing = 2.sp)
+                        Text("EDISON SUCLATAN DAYAGUIT", color = DBlue, fontSize = 10.sp,
+                            fontWeight = FontWeight.Bold, letterSpacing = 1.5.sp)
+                    }
+                }
+                Spacer(Modifier.height(6.dp))
+                Text("© 2026 EDISON SUCLATAN DAYAGUIT", color = DDim.copy(alpha = 0.85f), fontSize = 7.sp, letterSpacing = 0.5.sp)
+                Text("ALL RIGHTS RESERVED", color = DDim.copy(alpha = 0.85f), fontSize = 7.sp, letterSpacing = 0.5.sp)
+                Spacer(Modifier.height(6.dp))
+                Box(
+                    Modifier.border(1.dp, DBlue, RoundedCornerShape(50))
+                        .padding(horizontal = 12.dp, vertical = 2.dp)
+                ) {
+                    Text("Version ${BuildConfig.VERSION_NAME}", color = DBlue, fontSize = 8.sp)
+                }
+            }
         }
     }
 }
@@ -234,5 +257,54 @@ private fun DrawerItem(icon: ImageVector, title: String, subtitle: String? = nul
             Text(title, color = Color.White, fontSize = 14.sp, fontWeight = FontWeight.Medium)
             if (subtitle != null) Text(subtitle, color = DBlue, fontSize = 10.sp)
         }
+    }
+}
+
+@Composable
+private fun ScanBorderCard(onClick: () -> Unit, content: @Composable RowScope.() -> Unit) {
+    val transition = rememberInfiniteTransition(label = "scan")
+    val angle by transition.animateFloat(
+        initialValue = 0f,
+        targetValue = 360f,
+        animationSpec = infiniteRepeatable(tween(3000, easing = LinearEasing), RepeatMode.Restart),
+        label = "scanAngle"
+    )
+    val outer = RoundedCornerShape(14.dp)
+    val inner = RoundedCornerShape(12.5.dp)
+    Box(
+        modifier = Modifier
+            .padding(horizontal = 14.dp, vertical = 8.dp)
+            .fillMaxWidth()
+            .shadow(10.dp, outer, ambientColor = DBlue, spotColor = DBlue)
+            .clip(outer)
+            .drawBehind {
+                val radius = kotlin.math.hypot(size.width, size.height) / 2f
+                rotate(angle, pivot = center) {
+                    drawCircle(
+                        brush = Brush.sweepGradient(
+                            0f to Color(0xFF1B3A7A),
+                            0.55f to Color(0xFF1B3A7A),
+                            0.85f to DBlue,
+                            0.95f to Color.White,
+                            1f to Color(0xFF1B3A7A),
+                            center = center
+                        ),
+                        radius = radius,
+                        center = center
+                    )
+                }
+            }
+            .padding(1.5.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(inner)
+                .background(Brush.horizontalGradient(listOf(Color(0xFF0B1B44), Color(0xFF07122B))))
+                .clickable { onClick() }
+                .padding(12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            content = content
+        )
     }
 }
