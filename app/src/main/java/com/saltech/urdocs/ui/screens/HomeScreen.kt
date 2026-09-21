@@ -13,7 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AttachFile
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Send
@@ -39,6 +39,15 @@ import com.saltech.urdocs.data.GeminiRepository
 import com.saltech.urdocs.model.LetterType
 import com.saltech.urdocs.ui.components.PremiumThinkingIndicator
 import kotlinx.coroutines.launch
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.material.icons.filled.Close
+import android.graphics.BitmapFactory
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import androidx.compose.ui.platform.LocalContext
 import com.saltech.urdocs.drafts.DraftManager
 
@@ -70,6 +79,10 @@ fun HomeScreen(
     var inputText by remember { mutableStateOf("") }
     var isTyping by remember { mutableStateOf(false) }
     var showComingSoon by remember { mutableStateOf(false) }
+    var attached by remember { mutableStateOf<android.net.Uri?>(null) }
+    val picker = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        if (uri != null) attached = uri
+    }
     var chats by remember { mutableStateOf(listOf<SavedChat>()) }
     var currentId by remember { mutableStateOf(System.currentTimeMillis()) }
 
@@ -124,11 +137,14 @@ fun HomeScreen(
     }
 
     fun send(text: String) {
-        if (text.isBlank() || isTyping) return
+        val img = attached
+        if ((text.isBlank() && img == null) || isTyping) return
         val clean = text.trim()
-        messages = messages + ChatMessage(clean, true)
-        history = history + ("user" to clean)
+        messages = messages + ChatMessage(clean, true, imageUri = img?.toString())
+        attached = null
         inputText = ""
+        if (clean.isBlank()) return
+        history = history + ("user" to clean)
         scope.launch {
             isTyping = true
             val reply = try {
@@ -222,6 +238,22 @@ fun HomeScreen(
                 Icon(Icons.Default.Menu, contentDescription = "Menu", tint = HcBlue, modifier = Modifier.size(28.dp))
             }
 
+            attached?.let { uri ->
+                Box(modifier = Modifier.align(Alignment.BottomStart).padding(start = 26.dp, bottom = 84.dp)) {
+                    PickedThumb(uri, 68)
+                    Box(
+                        modifier = Modifier
+                            .align(Alignment.TopEnd)
+                            .offset(x = 6.dp, y = (-6).dp)
+                            .size(22.dp)
+                            .clip(CircleShape)
+                            .background(Color(0xFF2A2A2A))
+                            .clickable { attached = null },
+                        contentAlignment = Alignment.Center
+                    ) { Icon(Icons.Filled.Close, contentDescription = "Remove", tint = Color.White, modifier = Modifier.size(14.dp)) }
+                }
+            }
+
             // Input bar
             Row(
                 modifier = Modifier
@@ -235,7 +267,10 @@ fun HomeScreen(
                     .padding(horizontal = 10.dp, vertical = 6.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(Icons.Filled.AttachFile, contentDescription = null, tint = HcBlue, modifier = Modifier.size(20.dp))
+                Icon(
+                    Icons.Filled.Add, contentDescription = "Attach photo", tint = HcBlue,
+                    modifier = Modifier.size(28.dp).clip(CircleShape).clickable(enabled = !isTyping) { picker.launch("image/*") }
+                )
                 Spacer(Modifier.width(8.dp))
                 TextField(
                     value = inputText,
@@ -260,12 +295,12 @@ fun HomeScreen(
                         .size(38.dp)
                         .clip(CircleShape)
                         .background(
-                            if (inputText.isNotBlank() && !isTyping)
+                            if ((inputText.isNotBlank() || attached != null) && !isTyping)
                                 Brush.verticalGradient(listOf(HcBlue, Color(0xFF1E4FD6)))
                             else
                                 Brush.verticalGradient(listOf(Color(0xFF2A2A2A), Color(0xFF2A2A2A)))
                         )
-                        .clickable(enabled = inputText.isNotBlank() && !isTyping) { send(inputText) },
+                        .clickable(enabled = (inputText.isNotBlank() || attached != null) && !isTyping) { send(inputText) },
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(Icons.Filled.Send, contentDescription = "Send", tint = Color.White, modifier = Modifier.size(18.dp))
@@ -339,7 +374,31 @@ private fun HomeChatBubble(msg: ChatMessage) {
                 Modifier.widthIn(max = 280.dp).padding(vertical = 4.dp)
             }
         ) {
-            Text(msg.text, color = Color.White, fontSize = 14.sp)
+            msg.imageUri?.let { PickedThumb(android.net.Uri.parse(it), 180) }
+            if (msg.text.isNotBlank()) {
+                if (msg.imageUri != null) Spacer(Modifier.height(6.dp))
+                Text(msg.text, color = Color.White, fontSize = 14.sp)
+            }
+        }
+    }
+}
+
+@Composable
+private fun PickedThumb(uri: android.net.Uri, sizeDp: Int) {
+    val context = androidx.compose.ui.platform.LocalContext.current
+    val bmp by produceState<android.graphics.Bitmap?>(null, uri) {
+        value = withContext(Dispatchers.IO) {
+            runCatching {
+                val opts = BitmapFactory.Options().apply { inSampleSize = 4 }
+                context.contentResolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it, null, opts) }
+            }.getOrNull()
+        }
+    }
+    Box(
+        Modifier.size(sizeDp.dp).clip(RoundedCornerShape(12.dp)).background(Color(0xFF16255E))
+    ) {
+        bmp?.let {
+            Image(it.asImageBitmap(), contentDescription = null, contentScale = ContentScale.Crop, modifier = Modifier.fillMaxSize())
         }
     }
 }

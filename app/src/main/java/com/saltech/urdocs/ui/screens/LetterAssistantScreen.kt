@@ -73,7 +73,8 @@ private val UrUserBubble = Color(0xFF1E4FD6)
 data class ChatMessage(
     val text: String,
     val isUser: Boolean,
-    val time: String = SimpleDateFormat("h:mm a", Locale.getDefault()).format(Date())
+    val time: String = SimpleDateFormat("h:mm a", Locale.getDefault()).format(Date()),
+    val imageUri: String? = null
 )
 
 @Composable
