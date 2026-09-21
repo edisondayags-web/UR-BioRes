@@ -3,6 +3,10 @@ on:
   push:
     branches: [ main ]
   workflow_dispatch:
+concurrency:
+  group: build
+  cancel-in-progress: true
+
 permissions:
   contents: write
 jobs:
@@ -47,15 +51,13 @@ jobs:
           fi
       - name: Build debug APK
         run: ./gradlew assembleDebug --build-cache --build-cache
-      - name: Build release APK
-        run: ./gradlew assembleRelease --build-cache --build-cache
       - name: Create Release with APK
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: build-${{ github.run_number }}
-          name: "Build ${{ github.run_number }}"
+          prerelease: true
+          tag_name: debug-${{ github.run_number }}
+          name: "Debug ${{ github.run_number }}"
           files: |
             app/build/outputs/apk/debug/app-debug.apk
-            app/build/outputs/apk/release/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
