@@ -182,12 +182,12 @@ fun HomeScreen(
                 Column(
                     modifier = Modifier.fillMaxSize().padding(bottom = 90.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(28.dp, Alignment.CenterVertically)
+                    verticalArrangement = Arrangement.spacedBy(44.dp, Alignment.CenterVertically)
                 ) {
-                    HomeChip(Icons.Outlined.Search, "Search a job near me", Color(0xFF4C8DFF)) { onNavigate("job_researcher") }
-                    HomeChip(Icons.Outlined.Description, "Make a resume", Color(0xFF7C6BFF)) { onNavigate("resume") }
-                    HomeChip(Icons.Outlined.Badge, "Make me a biodata", Color(0xFFC0508F)) { onNavigate("biodata") }
-                    HomeChip(Icons.Outlined.Mail, "Make me a letter", Color(0xFFFF4D6D)) { onNavigate("letters") }
+                    HomeChip(Icons.Outlined.Search, "Search a job near me", Color(0xFF4C8DFF), Color(0xFF5B7CFF)) { onNavigate("job_researcher") }
+                    HomeChip(Icons.Outlined.Description, "Make a resume", Color(0xFF5B7CFF), Color(0xFF9B5BFF)) { onNavigate("resume") }
+                    HomeChip(Icons.Outlined.Badge, "Make me a biodata", Color(0xFFA855D6), Color(0xFFE0508F)) { onNavigate("biodata") }
+                    HomeChip(Icons.Outlined.Mail, "Make me a letter", Color(0xFFE0508F), Color(0xFFFF3B5C)) { onNavigate("letters") }
                 }
             } else {
                 LazyColumn(
@@ -286,22 +286,23 @@ fun HomeScreen(
 }
 
 @Composable
-private fun HomeChip(icon: ImageVector, label: String, accent: Color, onClick: () -> Unit) {
+private fun HomeChip(icon: ImageVector, label: String, accent: Color, accent2: Color, onClick: () -> Unit) {
+    val shape = RoundedCornerShape(50)
     Row(
         modifier = Modifier
-            .fillMaxWidth(0.78f)
+            .fillMaxWidth(0.58f)
             .height(56.dp)
-            .shadow(14.dp, RoundedCornerShape(50), ambientColor = accent, spotColor = accent)
-            .clip(RoundedCornerShape(50))
-            .background(HcInputBg)
-            .border(1.5.dp, accent, RoundedCornerShape(50))
+            .shadow(16.dp, shape, ambientColor = accent2, spotColor = accent)
+            .clip(shape)
+            .background(Color(0xFF0E1226))
+            .border(1.5.dp, Brush.horizontalGradient(listOf(accent, accent2)), shape)
             .clickable { onClick() },
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(icon, contentDescription = null, tint = accent, modifier = Modifier.size(20.dp))
         Spacer(Modifier.width(8.dp))
-        Text(label, color = Color.White, fontSize = 17.sp, fontWeight = FontWeight.Medium)
+        Text(label, color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Medium, maxLines = 1)
     }
 }
 
