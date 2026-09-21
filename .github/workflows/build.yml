@@ -42,6 +42,13 @@ jobs:
           echo "OPENROUTER_API_KEY=$OPENROUTER_API_KEY" >> local.properties
       - name: Grant execute permission
         run: chmod +x ./gradlew
+      - name: Restore debug keystore
+        env:
+          DEBUG_KEYSTORE_B64: ${{ secrets.DEBUG_KEYSTORE_B64 }}
+        run: |
+          if [ -n "$DEBUG_KEYSTORE_B64" ]; then
+            echo "$DEBUG_KEYSTORE_B64" | base64 -d > app/debug.keystore
+          fi
       - name: Generate debug keystore
         run: |
           if [ ! -f app/debug.keystore ]; then
@@ -49,6 +56,8 @@ jobs:
               -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 \
               -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
           fi
+      - name: Print debug SHA-1
+        run: keytool -list -v -keystore app/debug.keystore -storepass android -alias androiddebugkey | grep -E "SHA1|SHA256"
       - name: Build debug APK
         run: ./gradlew assembleDebug --build-cache --build-cache
       - name: Create Release with APK
