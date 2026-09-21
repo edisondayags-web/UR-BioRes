@@ -302,8 +302,9 @@ fun AiTemplateScreen(htmlFileName: String, onBack: () -> Unit = {}) {
                         isDownloading = true
                         scope.launch {
                             try {
-                                val density = context.resources.displayMetrics.density
-                                val full = captureFullWebView(wv, density)
+                                @Suppress("DEPRECATION")
+                                val pageScale = wv.scale.takeIf { it > 0f } ?: context.resources.displayMetrics.density
+                                val full = captureFullWebView(wv, pageScale)
                                 val fitted = shrinkToA4(full)
                                 saveBitmapToGallery(context, fitted, htmlFileName.removeSuffix(".html"))
                             } finally {
