@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=794, minimum-scale=0.1, maximum-scale=5, user-scalable=yes">
+<style>
+  :root{--navy:#10375f;--navy2:#12305a;--ink:#1c2b3f;--text:#2d3a4b}
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  html{background:#000}
+  body{background:#000;width:794px;font-family:'Roboto','Helvetica Neue',Arial,sans-serif;color:var(--text)}
+  [contenteditable="true"]:focus{background:#fff3cd;outline:1px dashed #999}
+  .side [contenteditable="true"]:focus{background:rgba(255,255,255,.22);outline:1px dashed #fff}
+
+  .page{width:794px;min-height:1123px;display:flex;align-items:stretch;background:#fff}
+
+  /* ---------- SIDEBAR ---------- */
+  .side{flex:0 0 265px;background:var(--navy);color:#fff;padding:28px 24px 34px}
+  .photo-box{
+    width:217px;height:290px;margin:0 auto 30px;
+    background:#dde3ee url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%23b3bdd0' d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v4h16v-4c0-2.66-5.33-4-8-4z'/></svg>") center/cover no-repeat;
+  }
+  .s-sec{margin-bottom:28px}
+  .s-title{font-size:15px;letter-spacing:.8px;text-transform:uppercase;padding-bottom:7px;border-bottom:1px solid rgba(255,255,255,.75);margin-bottom:14px}
+  .c-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px;font-size:12.5px;line-height:1.45}
+  .c-ic{flex:0 0 24px;width:24px;height:24px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center}
+  .c-ic svg{width:13px;height:13px;fill:var(--navy)}
+  .c-row .t{word-break:break-word;padding-top:3px;min-width:0}
+  .skills{list-style:none}
+  .skills li{display:flex;align-items:center;gap:9px;font-size:12.5px;line-height:1.4;margin-bottom:7px}
+  .skills i{flex:0 0 5px;width:5px;height:5px;border-radius:50%;background:#fff}
+  .ed-t{font-size:12.5px;font-weight:700;line-height:1.4}
+  .ed-s{font-size:12.5px;line-height:1.5;margin-top:2px}
+  .plain{font-size:12.5px;line-height:1.5}
+
+  /* ---------- MAIN ---------- */
+  .main{flex:1;min-width:0;padding:34px 30px 34px 28px}
+  .name{font-size:42px;font-weight:700;color:var(--navy2);letter-spacing:.5px;white-space:nowrap;overflow:hidden;line-height:1.15;text-transform:uppercase}
+  .job{margin-top:2px;font-size:18px;letter-spacing:4px;color:#3a4a63;text-transform:uppercase;padding-bottom:10px;border-bottom:1px solid #d5dbe6;margin-bottom:22px}
+
+  .m-sec{margin-bottom:22px}
+  .m-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+  .m-ic{flex:0 0 32px;width:32px;height:32px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center}
+  .m-ic svg{width:17px;height:17px;fill:#fff}
+  .m-title{flex:1;font-size:14.5px;font-weight:700;letter-spacing:.3px;color:var(--navy2);text-transform:uppercase;padding-bottom:5px;border-bottom:1.5px solid var(--navy2);margin-top:6px}
+
+  .para{font-size:12.5px;line-height:1.55}
+  .job-blk{margin-bottom:14px}
+  .job-t{font-size:12.5px;font-weight:700;color:var(--ink);text-transform:uppercase}
+  .job-l{display:flex;justify-content:space-between;gap:12px;font-size:12.5px;margin-top:2px}
+  .job-l .d{font-style:italic;white-space:nowrap}
+  .bul{list-style:none;margin-top:4px}
+  .bul li{position:relative;padding-left:12px;font-size:12px;line-height:1.5}
+  .bul li:before{content:"\2022";position:absolute;left:0;top:0}
+
+  .pi{display:grid;grid-template-columns:96px 1fr;font-size:12.5px;line-height:1.75}
+  .pi .v:before{content:":";margin-right:8px}
+  .cert-h{font-size:12.5px;font-weight:700;margin-top:16px;text-transform:uppercase}
+  .cert-t{font-size:12px;line-height:1.5;margin-top:4px}
+  .sig{margin-top:12px;text-align:right}
+  .sig .s1{font-family:'Segoe Script','Brush Script MT','Snell Roundhand',cursive;font-style:italic;font-size:26px;color:var(--navy2);line-height:1.2}
+  .sig .s2{font-size:12.5px;font-weight:700;letter-spacing:.3px;margin-top:2px;text-transform:uppercase}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ========== SIDEBAR ========== -->
+  <div class="side">
+    <div class="photo-box"></div>
+
+    <div class="s-sec">
+      <div class="s-title" contenteditable="true">Contact</div>
+      <div class="c-row"><div class="c-ic"><svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg></div><div class="t" contenteditable="true" data-f="phone">+63 912 345 6789</div></div>
+      <div class="c-row"><div class="c-ic"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></div><div class="t" contenteditable="true" data-f="email">angelica.reyes@email.com</div></div>
+      <div class="c-row"><div class="c-ic"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg></div><div class="t" contenteditable="true" data-f="address">123 Sampaloc St., Barangay 10, Davao City, Philippines</div></div>
+    </div>
+
+    <div class="s-sec">
+      <div class="s-title" contenteditable="true">Skills</div>
+      <ul class="skills">
+        <li><i></i><span contenteditable="true">Cash Handling</span></li>
+        <li><i></i><span contenteditable="true">Customer Service</span></li>
+        <li><i></i><span contenteditable="true">POS System Operation</span></li>
+        <li><i></i><span contenteditable="true">Basic Math Skills</span></li>
+        <li><i></i><span contenteditable="true">Attention to Detail</span></li>
+        <li><i></i><span contenteditable="true">Time Management</span></li>
+        <li><i></i><span contenteditable="true">Communication Skills</span></li>
+        <li><i></i><span contenteditable="true">Honesty &amp; Integrity</span></li>
+        <li><i></i><span contenteditable="true">Teamwork</span></li>
+      </ul>
+    </div>
+
+    <div class="s-sec">
+      <div class="s-title" contenteditable="true">Education</div>
+      <div class="ed-t" contenteditable="true">Senior High School Graduate</div>
+      <div class="ed-s" contenteditable="true">Davao City National High School</div>
+      <div class="ed-s" contenteditable="true">S.Y. 2016 - 2017</div>
+    </div>
+
+    <div class="s-sec">
+      <div class="s-title" contenteditable="true">Character References</div>
+      <div class="plain" contenteditable="true">Available upon request.</div>
+    </div>
+  </div>
+
+  <!-- ========== MAIN ========== -->
+  <div class="main">
+    <div class="name" id="nameText" contenteditable="true" data-f="name">Angelica M. Reyes</div>
+    <div class="job" contenteditable="true" data-f="title">Cashier</div>
+
+    <div class="m-sec">
+      <div class="m-head"><div class="m-ic"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></div><div class="m-title" contenteditable="true">Professional Summary</div></div>
+      <div class="para" contenteditable="true">Reliable and detail-oriented professional with strong customer service and cash handling skills. Seeking a Cashier position in a reputable mall where I can contribute to excellent customer satisfaction and efficient store operations. Willing to learn and grow within the company.</div>
+    </div>
+
+    <div class="m-sec">
+      <div class="m-head"><div class="m-ic"><svg viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg></div><div class="m-title" contenteditable="true">Work Experience</div></div>
+      <div class="job-blk">
+        <div class="job-t" contenteditable="true">Sales Associate / Cashier</div>
+        <div class="job-l"><span contenteditable="true">SM Department Store - Davao City</span><span class="d" contenteditable="true">Jan 2023 - Present</span></div>
+        <ul class="bul">
+          <li contenteditable="true">Process customer transactions accurately and efficiently using POS system.</li>
+          <li contenteditable="true">Receive payments in cash, credit card, and e-wallet.</li>
+          <li contenteditable="true">Issue receipts and ensure correct change is given.</li>
+          <li contenteditable="true">Assist customers with inquiries and product information.</li>
+          <li contenteditable="true">Maintain cleanliness and organization of the cashier area.</li>
+          <li contenteditable="true">Balance cash drawer at the end of each shift.</li>
+        </ul>
+      </div>
+      <div class="job-blk">
+        <div class="job-t" contenteditable="true">Retail Associate</div>
+        <div class="job-l"><span contenteditable="true">Gaisano Grand Mall - Davao City</span><span class="d" contenteditable="true">Jun 2021 - Dec 2022</span></div>
+        <ul class="bul">
+          <li contenteditable="true">Assisted customers in finding products and answering questions.</li>
+          <li contenteditable="true">Arranged and restocked items on shelves.</li>
+          <li contenteditable="true">Helped in inventory counting and stock monitoring.</li>
+          <li contenteditable="true">Supported the cashier during busy hours.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="m-sec">
+      <div class="m-head"><div class="m-ic"><svg viewBox="0 0 24 24"><path d="M21 5c-1.11-.35-2.33-.5-3.5-.5-1.95 0-4.05.4-5.5 1.5-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.3 4.75 1.05.1.05.15.05.25.05.25 0 .5-.25.5-.5V6c-.6-.45-1.25-.75-2-1zm0 13.5c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5V8c1.35-.85 3.8-1.5 5.5-1.5 1.2 0 2.4.15 3.5.5v11.5z"/></svg></div><div class="m-title" contenteditable="true">Trainings / Seminars</div></div>
+      <ul class="bul">
+        <li contenteditable="true">Basic Customer Service Training - 2022</li>
+        <li contenteditable="true">POS System Training - 2022</li>
+      </ul>
+    </div>
+
+    <div class="m-sec">
+      <div class="m-head"><div class="m-ic"><svg viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm0 4c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm6 12H6v-1.4c0-2 4-3.1 6-3.1s6 1.1 6 3.1V19z"/></svg></div><div class="m-title" contenteditable="true">Personal Information</div></div>
+      <div class="pi">
+        <div class="k" contenteditable="true">Date of Birth</div><div class="v" contenteditable="true">March 12, 2001</div>
+        <div class="k" contenteditable="true">Civil Status</div><div class="v" contenteditable="true">Single</div>
+        <div class="k" contenteditable="true">Nationality</div><div class="v" contenteditable="true">Filipino</div>
+        <div class="k" contenteditable="true">Religion</div><div class="v" contenteditable="true">Roman Catholic</div>
+        <div class="k" contenteditable="true">Height</div><div class="v" contenteditable="true">5'2"</div>
+        <div class="k" contenteditable="true">Weight</div><div class="v" contenteditable="true">50 kg</div>
+      </div>
+      <div class="cert-h" contenteditable="true">I hereby certify</div>
+      <div class="cert-t" contenteditable="true">that the above information is true and correct to the best of my knowledge and belief.</div>
+      <div class="sig">
+        <div class="s1" contenteditable="true">Angelica M. Reyes</div>
+        <div class="s2" contenteditable="true">Angelica M. Reyes</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* Name stays on one line and shrinks to fit */
+(function(){
+  var n=document.getElementById('nameText');
+  function fit(){
+    var s=42; n.style.fontSize=s+'px';
+    while(n.scrollWidth>n.clientWidth+1 && s>18){ s-=1; n.style.fontSize=s+'px'; }
+  }
+  n.addEventListener('input',fit);
+  window.addEventListener('load',fit); fit();
+})();
+</script>
+</body>
+</html>
