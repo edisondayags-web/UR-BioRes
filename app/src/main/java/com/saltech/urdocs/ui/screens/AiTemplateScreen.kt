@@ -29,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -224,6 +225,21 @@ fun AiTemplateScreen(htmlFileName: String, onBack: () -> Unit = {}) {
     var webViewRef by remember { mutableStateOf<WebView?>(null) }
     var isProcessing by remember { mutableStateOf(false) }
     var isDownloading by remember { mutableStateOf(false) }
+    var topShift by remember { mutableStateOf(0f) }
+
+    // Igitna ang page (light templates lang) para pantay ang itim sa taas at baba
+    fun recenter(view: WebView) {
+        if (!htmlFileName.startsWith("resume_light")) { topShift = 0f; return }
+        view.evaluateJavascript(
+            "(function(){var e=document.querySelector('.page');return e?e.getBoundingClientRect().height:0;})()"
+        ) { r ->
+            val h = r?.replace("\"", "")?.toFloatOrNull() ?: 0f
+            @Suppress("DEPRECATION")
+            val sc = view.scale
+            val pageH = h * sc
+            topShift = if (h > 0f && sc > 0f && view.height > pageH) (view.height - pageH) / 2f else 0f
+        }
+    }
 
     val photoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
@@ -265,10 +281,17 @@ fun AiTemplateScreen(htmlFileName: String, onBack: () -> Unit = {}) {
 
     Box(modifier = Modifier.fillMaxSize()) {
         AndroidView(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize().graphicsLayer { translationY = topShift },
             factory = { ctx ->
                 WebView(ctx).apply {
-                    webViewClient = WebViewClient()
+                    webViewClient = object : WebViewClient() {
+                        override fun onPageFinished(view: WebView?, url: String?) {
+                            if (view != null) recenter(view)
+                        }
+                        override fun onScaleChanged(view: WebView?, oldScale: Float, newScale: Float) {
+                            if (view != null) recenter(view)
+                        }
+                    }
                     settings.javaScriptEnabled = true
                     settings.useWideViewPort = true
                     settings.loadWithOverviewMode = true
