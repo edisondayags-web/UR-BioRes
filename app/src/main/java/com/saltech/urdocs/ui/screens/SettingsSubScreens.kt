@@ -207,7 +207,7 @@ fun MyProfileScreen(onBack: () -> Unit, onLogin: () -> Unit = {}) {
                     containerColor = SettingsColors.NeonPink,
                     contentColor = SettingsColors.TextWhite
                 )
-            ) { Text("Mag-login / Mag-sign up") }
+            ) { Text("Continue with Google") }
         }
         Spacer(modifier = Modifier.height(24.dp))
 
