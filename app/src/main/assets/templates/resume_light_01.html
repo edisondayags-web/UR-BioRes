@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=794">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#fff;font-family:Arial,Helvetica,sans-serif;color:#111;width:794px}
+[contenteditable="true"]:focus{background:#fff3cd;outline:1px dashed #999}
+.page{width:794px;min-height:1123px;display:flex;background:#fff}
+.side{width:262px;background:#eceef5;padding-top:34px;padding-bottom:24px}
+.avatar-circle{width:190px;height:190px;border-radius:50%;border:6px solid #111;box-shadow:inset 0 0 0 4px #fff;background:#d9dce6 center/cover no-repeat;margin:0 auto 28px}
+.hdr{background:#111;color:#fff;font-weight:900;font-size:22px;letter-spacing:1px;padding:10px 0;text-align:center;margin:0 0 6px;clip-path:polygon(0 0,100% 0,calc(100% - 20px) 100%,0 100%);width:96%}
+.crow{display:flex;align-items:center;padding:12px 18px;border-bottom:1px solid #c9ccd6}
+.crow:last-of-type{border-bottom:0}
+.ic{width:34px;height:34px;border-radius:50%;background:#111;color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;flex:none;margin-right:12px}
+.lbl{font-weight:700;font-size:15px}
+.val{font-size:12.5px;line-height:1.3;word-break:break-word}
+.ewrap{margin:14px 18px 8px 26px;padding-left:22px;border-left:2px solid #111}
+.edu{position:relative;padding-bottom:14px}
+.edu:before{content:'';position:absolute;left:-28px;top:4px;width:10px;height:10px;border-radius:50%;background:#111}
+.edu-t{font-weight:700;font-size:15px;line-height:1.25}
+.edu-s{font-size:12.5px;margin-top:3px}
+.srow{display:flex;align-items:center;padding:5px 20px;font-size:13.5px}
+.chk{width:17px;height:17px;border-radius:50%;background:#111;color:#fff;font-size:10px;display:flex;align-items:center;justify-content:center;flex:none;margin-right:12px}
+.main{flex:1;padding:44px 34px 28px 34px}
+.name{font-size:54px;font-weight:900;line-height:1.02;text-transform:uppercase;letter-spacing:-1px}
+.titlerow{display:flex;align-items:center;gap:10px;margin:14px 0 26px}
+.dm{width:7px;height:7px;background:#111;transform:rotate(45deg);flex:none}
+.ln{height:1.5px;background:#111;flex:1}
+.jt{font-size:22px;letter-spacing:2px;white-space:nowrap}
+.sh{display:flex;align-items:center;margin-bottom:8px}
+.sh span{font-size:24px;font-weight:900;text-transform:uppercase}
+.sh i{flex:1;height:1.5px;background:#111;margin-left:16px}
+.tl{position:relative}
+.tl:before{content:'';position:absolute;left:84px;top:14px;bottom:14px;width:2px;background:#111}
+.job{display:flex;padding:16px 0;border-bottom:1px solid #c9ccd6}
+.job:last-child{border-bottom:0}
+.yr{width:70px;margin-right:14px;text-align:center;font-weight:700;font-size:15px;line-height:1.35;flex:none}
+.body{position:relative;flex:1;padding-left:26px}
+.body:before{content:'';position:absolute;left:-6px;top:5px;width:14px;height:14px;border-radius:50%;background:#111}
+.pos{font-size:20px;font-weight:700;line-height:1.2}
+.co{font-size:13px;font-style:italic;color:#333;margin:3px 0 8px}
+.bl{position:relative;padding-left:16px;font-size:13px;line-height:1.45;margin-bottom:6px}
+.bl:before{content:'\2022';position:absolute;left:3px}
+.refs{display:flex;margin-top:14px}
+.ref{flex:1;display:flex;gap:12px;padding:0 6px}
+.ref+.ref{border-left:1px solid #c9ccd6;padding-left:22px}
+.pic{width:44px;height:44px;border-radius:50%;background:#111;position:relative;flex:none}
+.pic:before{content:'';position:absolute;left:15px;top:9px;width:14px;height:14px;border-radius:50%;background:#fff}
+.pic:after{content:'';position:absolute;left:10px;top:26px;width:24px;height:12px;border-radius:12px 12px 0 0;background:#fff}
+.rn{font-weight:700;font-size:15px}
+.rs{font-size:12px;margin-bottom:6px}
+.rl{font-size:12.5px;line-height:1.5}
+</style></head><body>
+<div class="page">
+  <div class="side">
+    <div class="avatar-circle"></div>
+
+    <div class="hdr">CONTACT</div>
+    <div class="crow"><div class="ic">&#9742;&#xFE0E;</div><div><div class="lbl">Phone</div><div class="val" contenteditable="true" data-f="phone">0912 345 6789</div></div></div>
+    <div class="crow"><div class="ic">&#9993;&#xFE0E;</div><div><div class="lbl">Email</div><div class="val" contenteditable="true" data-f="email">juan@email.com</div></div></div>
+    <div class="crow"><div class="ic">&#9679;&#xFE0E;</div><div><div class="lbl">Address</div><div class="val" contenteditable="true" data-f="address">Barangay, City, Philippines</div></div></div>
+
+    <div class="hdr" style="margin-top:22px">EDUCATION</div>
+    <div class="ewrap">
+      <div class="edu"><div class="edu-t" contenteditable="true">Bachelor of Science in Business Administration</div><div class="edu-s" contenteditable="true">University Name</div><div class="edu-s" contenteditable="true">2016 - 2020</div></div>
+      <div class="edu"><div class="edu-t" contenteditable="true">Senior High School</div><div class="edu-s" contenteditable="true">School Name</div><div class="edu-s" contenteditable="true">2014 - 2016</div></div>
+    </div>
+
+    <div class="hdr" style="margin-top:14px">SKILLS</div>
+    <div style="margin-top:8px">
+      <div class="srow"><span class="chk">&#10003;</span><span contenteditable="true">Sales Strategies</span></div>
+      <div class="srow"><span class="chk">&#10003;</span><span contenteditable="true">Negotiation Skills</span></div>
+      <div class="srow"><span class="chk">&#10003;</span><span contenteditable="true">Problem-Solving</span></div>
+      <div class="srow"><span class="chk">&#10003;</span><span contenteditable="true">Time Management</span></div>
+      <div class="srow"><span class="chk">&#10003;</span><span contenteditable="true">Customer Service</span></div>
+    </div>
+
+    <div class="hdr" style="margin-top:14px">LANGUAGE</div>
+    <div style="margin-top:8px">
+      <div class="srow"><span class="chk">&#10003;</span><span contenteditable="true">English</span></div>
+      <div class="srow"><span class="chk">&#10003;</span><span contenteditable="true">Filipino</span></div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="name" contenteditable="true" data-f="name">Juan Dela Cruz</div>
+    <div class="titlerow"><span class="dm"></span><span class="ln"></span><span class="jt" contenteditable="true" data-f="title">Sales Representative</span><span class="ln"></span><span class="dm"></span></div>
+
+    <div class="sh"><span>Professional Experience</span><i></i></div>
+    <div class="tl">
+      <div class="job"><div class="yr" contenteditable="true">2021 - 2024</div><div class="body">
+        <div class="pos" contenteditable="true">Sales Representative</div>
+        <div class="co" contenteditable="true">Company Name | City</div>
+        <div class="bl" contenteditable="true">Developed and executed sales strategies that increased annual revenue by 25%.</div>
+        <div class="bl" contenteditable="true">Managed a portfolio of 50+ clients with a 95% retention rate.</div>
+      </div></div>
+      <div class="job"><div class="yr" contenteditable="true">2019 - 2021</div><div class="body">
+        <div class="pos" contenteditable="true">Sales Associate</div>
+        <div class="co" contenteditable="true">Company Name | City</div>
+        <div class="bl" contenteditable="true">Prospected and qualified leads through calls, emails, and networking events.</div>
+        <div class="bl" contenteditable="true">Increased sales by 20% through effective upselling strategies.</div>
+        <div class="bl" contenteditable="true">Provided excellent customer service and resolved issues promptly.</div>
+      </div></div>
+      <div class="job"><div class="yr" contenteditable="true">2017 - 2019</div><div class="body">
+        <div class="pos" contenteditable="true">Customer Service Representative</div>
+        <div class="co" contenteditable="true">Company Name | City</div>
+        <div class="bl" contenteditable="true">Assisted customers via phone, email, and chat with inquiries and concerns.</div>
+        <div class="bl" contenteditable="true">Maintained high customer satisfaction scores.</div>
+      </div></div>
+    </div>
+
+    <div class="sh" style="margin-top:22px"><span>References</span><i></i></div>
+    <div class="refs">
+      <div class="ref"><div class="pic"></div><div><div class="rn" contenteditable="true">Maria Santos</div><div class="rs" contenteditable="true">Company Name / Manager</div><div class="rl" contenteditable="true">0917 123 4567</div><div class="rl" contenteditable="true">maria@email.com</div></div></div>
+      <div class="ref"><div class="pic"></div><div><div class="rn" contenteditable="true">Pedro Reyes</div><div class="rs" contenteditable="true">Company Name / Supervisor</div><div class="rl" contenteditable="true">0918 765 4321</div><div class="rl" contenteditable="true">pedro@email.com</div></div></div>
+    </div>
+  </div>
+</div>
+</body></html>

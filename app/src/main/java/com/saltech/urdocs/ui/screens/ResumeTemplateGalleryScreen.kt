@@ -27,7 +27,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 
-private enum class LayoutStyle { CLASSIC_TWO_COL, ATS_SINGLE_COL, SIDEBAR_BOLD, MINIMAL_MONO, HEADER_BLOCK }
+private enum class LayoutStyle { CLASSIC_TWO_COL, ATS_SINGLE_COL, SIDEBAR_BOLD, MINIMAL_MONO, HEADER_BLOCK, LIGHT_SIDEBAR }
 
 private data class TemplateInfo(
     val id: String,
@@ -37,7 +37,7 @@ private data class TemplateInfo(
     val layout: LayoutStyle = LayoutStyle.CLASSIC_TWO_COL
 )
 
-private val resumeTemplates = listOf(
+private val legacyDarkTemplates = listOf(
     TemplateInfo("resume_template_01", "01", Color(0xFFD4AF37), Color(0xFF0E0E0E)),
     TemplateInfo("resume_template_02", "02", Color(0xFFFFFFFF), Color(0xFF1B3358)),
     TemplateInfo("resume_template_03", "03", Color(0xFF4CAF50), Color(0xFF0E2B1A)),
@@ -61,6 +61,10 @@ private val resumeTemplates = listOf(
     TemplateInfo("resume_template_21", "21", Color(0xFF7EC8E3), Color(0xFF0E1E26)),
     TemplateInfo("resume_template_22", "22", Color(0xFFFF8A65), Color(0xFF2B160E)),
     TemplateInfo("resume_template_23", "23", Color(0xFF80DEEA), Color(0xFF0E1F26)),
+)
+
+private val resumeTemplates = listOf(
+    TemplateInfo("resume_light_01.html", "01", Color(0xFF111111), Color(0xFFECEEF5), LayoutStyle.LIGHT_SIDEBAR),
 )
 
 
@@ -155,6 +159,7 @@ private fun TemplatePreview(accent: Color, bg: Color, layout: LayoutStyle, modif
         LayoutStyle.SIDEBAR_BOLD -> SidebarBoldPreview(accent, modifier)
         LayoutStyle.MINIMAL_MONO -> MinimalMonoPreview(accent, modifier.padding(12.dp))
         LayoutStyle.HEADER_BLOCK -> HeaderBlockPreview(accent, modifier)
+        LayoutStyle.LIGHT_SIDEBAR -> LightSidebarPreview(modifier)
     }
 }
 
@@ -278,6 +283,45 @@ private fun MiniColumn(accent: Color, modifier: Modifier = Modifier) {
                     .background(Color.White.copy(alpha = 0.5f))
             )
             Spacer(Modifier.height(3.dp))
+        }
+    }
+}
+
+@Composable
+private fun LightSidebarPreview(modifier: Modifier = Modifier) {
+    val ink = Color(0xFF111111)
+    val gray = Color(0xFF9AA0B0)
+    Row(modifier = modifier.background(Color.White)) {
+        Column(
+            modifier = Modifier.fillMaxHeight().width(38.dp).background(Color(0xFFECEEF5)).padding(5.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Box(modifier = Modifier.size(22.dp).clip(CircleShape).border(2.dp, ink, CircleShape))
+            Spacer(Modifier.height(8.dp))
+            repeat(3) {
+                Box(modifier = Modifier.fillMaxWidth().height(5.dp).background(ink))
+                Spacer(Modifier.height(4.dp))
+                repeat(2) {
+                    Box(modifier = Modifier.fillMaxWidth(0.8f).height(2.dp).background(gray))
+                    Spacer(Modifier.height(3.dp))
+                }
+                Spacer(Modifier.height(5.dp))
+            }
+        }
+        Column(modifier = Modifier.weight(1f).padding(8.dp)) {
+            Box(modifier = Modifier.fillMaxWidth(0.8f).height(8.dp).background(ink))
+            Spacer(Modifier.height(6.dp))
+            Box(modifier = Modifier.fillMaxWidth(0.5f).height(3.dp).background(gray))
+            Spacer(Modifier.height(10.dp))
+            repeat(3) {
+                Box(modifier = Modifier.fillMaxWidth(0.55f).height(4.dp).background(ink))
+                Spacer(Modifier.height(3.dp))
+                repeat(2) {
+                    Box(modifier = Modifier.fillMaxWidth().height(2.dp).background(gray))
+                    Spacer(Modifier.height(3.dp))
+                }
+                Spacer(Modifier.height(6.dp))
+            }
         }
     }
 }
