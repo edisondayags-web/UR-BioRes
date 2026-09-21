@@ -29,7 +29,7 @@ private val DBlue = Color(0xFF4C8DFF)
 private val DBg = Color(0xFF050A16)
 private val DText = Color(0xFFE8ECF5)
 private val DDim = Color(0xFFA9B4CC)
-private val ROW = 38.dp
+private val ROW = 32.dp
 
 data class DrawerChat(val id: Long, val title: String)
 
@@ -62,26 +62,26 @@ fun HomeDrawerContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable { onNavigate("my_profile") }
-                    .padding(start = 20.dp, end = 20.dp, top = 16.dp, bottom = 14.dp),
+                    .padding(start = 20.dp, end = 20.dp, top = 8.dp, bottom = 10.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Box(
                     modifier = Modifier
-                        .size(62.dp)
+                        .size(50.dp)
                         .shadow(14.dp, CircleShape, ambientColor = DBlue, spotColor = DBlue)
                         .clip(CircleShape)
                         .background(DBg)
                         .border(2.dp, DBlue, CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(Icons.Outlined.Person, null, tint = DDim, modifier = Modifier.size(32.dp))
+                    Icon(Icons.Outlined.Person, null, tint = DDim, modifier = Modifier.size(26.dp))
                 }
                 Spacer(Modifier.width(14.dp))
                 Column {
-                    Text("Profile", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                    Text("Profile", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 16.sp)
                     Text(
                         if (email.isNullOrBlank()) "Guest" else email,
-                        color = DBlue, fontSize = 13.sp, maxLines = 1, overflow = TextOverflow.Ellipsis
+                        color = DBlue, fontSize = 12.sp, maxLines = 1, overflow = TextOverflow.Ellipsis
                     )
                 }
             }
@@ -130,9 +130,9 @@ fun HomeDrawerContent(
                                     .padding(horizontal = 20.dp),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Icon(Icons.Outlined.ChatBubbleOutline, null, tint = DBlue, modifier = Modifier.size(20.dp))
+                                Icon(Icons.Outlined.ChatBubbleOutline, null, tint = DBlue, modifier = Modifier.size(18.dp))
                                 Spacer(Modifier.width(14.dp))
-                                Text(chat.title, color = DText, fontSize = 14.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                                Text(chat.title, color = DText, fontSize = 13.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
                             }
                         }
                     }
@@ -158,9 +158,9 @@ fun HomeDrawerContent(
                                     .padding(horizontal = 20.dp),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Icon(Icons.Outlined.Description, null, tint = DDim, modifier = Modifier.size(20.dp))
+                                Icon(Icons.Outlined.Description, null, tint = DDim, modifier = Modifier.size(18.dp))
                                 Spacer(Modifier.width(14.dp))
-                                Text(name, color = DDim, fontSize = 13.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                                Text(name, color = DDim, fontSize = 12.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
                             }
                         }
                     }
@@ -182,7 +182,7 @@ fun HomeDrawerContent(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Box(
-                    Modifier.size(42.dp).border(1.5.dp, DBlue, RoundedCornerShape(10.dp)),
+                    Modifier.size(36.dp).border(1.5.dp, DBlue, RoundedCornerShape(10.dp)),
                     contentAlignment = Alignment.Center
                 ) { Icon(Icons.Outlined.Star, null, tint = DBlue, modifier = Modifier.size(24.dp)) }
                 Spacer(Modifier.width(12.dp))
@@ -194,12 +194,12 @@ fun HomeDrawerContent(
             }
 
             // ---- Log out (lalabas lang kung may email login) ----
-            if (loggedIn) {
+            run {
                 Row(
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
-                        .clickable { onLogout() }
-                        .padding(horizontal = 16.dp, vertical = 6.dp),
+                        .clickable { if (loggedIn) onLogout() else onNavigate("login") }
+                        .padding(horizontal = 16.dp, vertical = 3.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Box(
@@ -207,13 +207,13 @@ fun HomeDrawerContent(
                         contentAlignment = Alignment.Center
                     ) { Icon(Icons.AutoMirrored.Outlined.Logout, null, tint = DBlue, modifier = Modifier.size(14.dp)) }
                     Spacer(Modifier.width(10.dp))
-                    Text("Log out", color = DText, fontSize = 14.sp)
+                    Text(if (loggedIn) "Log out" else "Log in", color = DText, fontSize = 13.sp)
                 }
             }
             Text(
                 "DEVELOPER: EDISON SUCLATAN DAYAGUIT",
-                color = DDim.copy(alpha = 0.45f), fontSize = 8.sp,
-                modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 2.dp, bottom = 10.dp)
+                color = DDim.copy(alpha = 0.45f), fontSize = 7.sp,
+                modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 0.dp, bottom = 8.dp)
             )
         }
     }
@@ -225,14 +225,14 @@ private fun DrawerItem(icon: ImageVector, title: String, subtitle: String? = nul
         modifier = Modifier
             .fillMaxWidth()
             .clickable { onClick() }
-            .padding(horizontal = 20.dp, vertical = 9.dp),
+            .padding(horizontal = 20.dp, vertical = 5.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(icon, null, tint = DBlue, modifier = Modifier.size(26.dp))
-        Spacer(Modifier.width(16.dp))
+        Icon(icon, null, tint = DBlue, modifier = Modifier.size(22.dp))
+        Spacer(Modifier.width(14.dp))
         Column {
-            Text(title, color = Color.White, fontSize = 15.sp, fontWeight = FontWeight.Medium)
-            if (subtitle != null) Text(subtitle, color = DBlue, fontSize = 11.sp)
+            Text(title, color = Color.White, fontSize = 14.sp, fontWeight = FontWeight.Medium)
+            if (subtitle != null) Text(subtitle, color = DBlue, fontSize = 10.sp)
         }
     }
 }
