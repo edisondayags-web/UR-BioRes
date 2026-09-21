@@ -27,7 +27,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 
-private enum class LayoutStyle { CLASSIC_TWO_COL, ATS_SINGLE_COL, SIDEBAR_BOLD, MINIMAL_MONO, HEADER_BLOCK, LIGHT_SIDEBAR, BLUE_ARCH, TEAL_BAND }
+private enum class LayoutStyle { CLASSIC_TWO_COL, ATS_SINGLE_COL, SIDEBAR_BOLD, MINIMAL_MONO, HEADER_BLOCK, LIGHT_SIDEBAR, BLUE_ARCH, TEAL_BAND, PILL_HEADER }
 
 private data class TemplateInfo(
     val id: String,
@@ -67,6 +67,7 @@ private val resumeTemplates = listOf(
     TemplateInfo("resume_light_01.html", "01", Color(0xFF111111), Color(0xFFECEEF5), LayoutStyle.LIGHT_SIDEBAR),
     TemplateInfo("ai_template_more_02.html", "02", Color(0xFF0A3FA5), Color(0xFF040B26), LayoutStyle.BLUE_ARCH),
     TemplateInfo("ai_template_more_03.html", "03", Color(0xFF5F9E9A), Color(0xFFF4C7BE), LayoutStyle.TEAL_BAND),
+    TemplateInfo("ai_template_more_04.html", "04", Color(0xFF2B2B2B), Color(0xFFFFFFFF), LayoutStyle.PILL_HEADER),
 )
 
 
@@ -164,6 +165,7 @@ private fun TemplatePreview(accent: Color, bg: Color, layout: LayoutStyle, modif
         LayoutStyle.LIGHT_SIDEBAR -> LightSidebarPreview(modifier)
         LayoutStyle.BLUE_ARCH -> BlueArchPreview(modifier)
         LayoutStyle.TEAL_BAND -> TealBandPreview(modifier)
+        LayoutStyle.PILL_HEADER -> PillHeaderPreview(modifier)
     }
 }
 
@@ -411,6 +413,51 @@ private fun TealBandPreview(modifier: Modifier = Modifier) {
                         Spacer(Modifier.height(3.dp))
                     }
                     Spacer(Modifier.height(10.dp))
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun PillHeaderPreview(modifier: Modifier = Modifier) {
+    val dark = Color(0xFF2B2B2B)
+    val gray = Color(0xFF9AA0B0)
+    Column(modifier = modifier.background(Color.White).padding(6.dp)) {
+        Row(modifier = Modifier.fillMaxWidth().height(34.dp)) {
+            Box(modifier = Modifier.size(26.dp).clip(CircleShape).background(Color(0xFFDDDDDD)))
+            Spacer(Modifier.width(16.dp))
+            Column {
+                Box(modifier = Modifier.width(40.dp).height(6.dp).background(dark))
+                Spacer(Modifier.height(3.dp))
+                Box(modifier = Modifier.width(40.dp).height(6.dp).background(dark))
+                Spacer(Modifier.height(3.dp))
+                Box(modifier = Modifier.width(24.dp).height(3.dp).background(gray))
+            }
+        }
+        Spacer(Modifier.height(6.dp))
+        Row(modifier = Modifier.fillMaxWidth().weight(1f)) {
+            Column(modifier = Modifier.width(34.dp)) {
+                repeat(4) {
+                    Box(modifier = Modifier.width(28.dp).height(6.dp).background(dark, RoundedCornerShape(topEnd = 3.dp, bottomEnd = 3.dp)))
+                    Spacer(Modifier.height(3.dp))
+                    repeat(2) {
+                        Box(modifier = Modifier.fillMaxWidth(0.8f).height(2.dp).background(gray))
+                        Spacer(Modifier.height(2.dp))
+                    }
+                    Spacer(Modifier.height(6.dp))
+                }
+            }
+            Spacer(Modifier.width(8.dp))
+            Column(modifier = Modifier.weight(1f)) {
+                repeat(3) {
+                    Box(modifier = Modifier.fillMaxWidth().height(6.dp).background(dark, RoundedCornerShape(3.dp)))
+                    Spacer(Modifier.height(3.dp))
+                    repeat(3) {
+                        Box(modifier = Modifier.fillMaxWidth().height(2.dp).background(gray))
+                        Spacer(Modifier.height(2.dp))
+                    }
+                    Spacer(Modifier.height(8.dp))
                 }
             }
         }

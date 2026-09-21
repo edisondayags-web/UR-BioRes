@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=794, minimum-scale=0.1, maximum-scale=5, user-scalable=yes">
+<style>
+  :root{--dark:#2b2b2b;--ink:#262626;--text:#333;--soft:#555}
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  html{background:#000}
+  body{background:#000;width:794px;font-family:'Poppins','Montserrat','Roboto','Helvetica Neue',Arial,sans-serif;color:var(--text)}
+  [contenteditable="true"]:focus{background:#fff3cd;outline:1px dashed #999}
+  .pill[contenteditable="true"]:focus{background:#4d4d4d;outline:1px dashed #fff}
+
+  .page{width:794px;min-height:1123px;display:grid;grid-template-columns:262px 1fr;grid-template-rows:auto 1fr;background:#fff}
+
+  /* ---------- HEADER ---------- */
+  .photo-cell{padding:52px 0 40px 54px}
+  .photo-circle{
+    width:156px;height:156px;border-radius:50%;
+    background:#e2e2e2 url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%23b5b5b5' d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v4h16v-4c0-2.66-5.33-4-8-4z'/></svg>") center/cover no-repeat;
+  }
+  .name-cell{padding:46px 50px 40px 46px;min-width:0}
+  .name{font-size:62px;font-weight:800;line-height:1.05;letter-spacing:-1px;color:var(--ink);word-break:break-word}
+  .jobtitle{margin-top:12px;font-size:22px;font-weight:400;color:#444}
+
+  /* ---------- PILLS ---------- */
+  .pill{background:var(--dark);color:#fff;font-weight:700;font-size:19px;height:38px;line-height:38px;padding-left:30px;white-space:nowrap;overflow:hidden}
+  .pill-l{width:202px;border-radius:0 19px 19px 0}
+  .pill-r{width:100%;border-radius:19px}
+
+  /* ---------- LEFT ---------- */
+  .left{padding-bottom:40px}
+  .l-sec{margin-bottom:26px}
+  .l-body{padding:14px 20px 0 40px}
+  .ci{display:flex;gap:10px;margin-bottom:12px}
+  .ci svg{flex:0 0 16px;width:16px;height:16px;fill:var(--ink);margin-top:2px}
+  .ci .k{font-size:13.5px;font-weight:700;color:var(--ink)}
+  .ci .v{font-size:11.5px;line-height:1.45;color:var(--text);word-break:break-word}
+  .ed{margin-bottom:12px}
+  .ed .t{font-size:15px;color:#222;line-height:1.3}
+  .ed .u{font-size:13px;font-weight:700;color:var(--ink);margin-top:2px}
+  .ed .y{font-size:11.5px;color:var(--soft);margin-top:2px}
+  .skills{list-style:disc;padding-left:16px}
+  .skills li{font-size:11.5px;line-height:1.5;margin-bottom:9px}
+  .aw{margin-bottom:14px}
+  .aw .d{font-size:10.5px;color:var(--soft)}
+  .aw .t{font-size:11.5px;font-weight:700;color:var(--ink);margin-top:1px}
+
+  /* ---------- RIGHT ---------- */
+  .right{padding:0 50px 40px 46px;min-width:0}
+  .r-sec{margin-bottom:26px}
+  .r-body{padding:14px 6px 0}
+  .about{font-size:12.5px;line-height:1.65;text-align:justify}
+  .job{margin-bottom:16px}
+  .job .h{font-size:13.5px;color:#222;line-height:1.35}
+  .job .y{font-size:12.5px;font-weight:700;font-style:italic;color:var(--ink);margin-top:2px}
+  .job .d{font-size:11.5px;line-height:1.55;text-align:justify;margin-top:3px}
+  .refs{display:grid;grid-template-columns:1fr 1fr;column-gap:24px}
+  .ref .n{font-size:16px;font-weight:700;color:var(--ink)}
+  .ref .r{font-size:13px;color:#444;margin-top:1px}
+  .ref .c{font-size:11px;margin-top:8px;line-height:1.5;word-break:break-word}
+  .ref .c b{font-weight:700}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ===== HEADER ROW ===== -->
+  <div class="photo-cell"><div class="photo-circle"></div></div>
+  <div class="name-cell">
+    <div class="name" id="nameText" contenteditable="true" data-f="name">Henrietta Mitchell</div>
+    <div class="jobtitle" contenteditable="true" data-f="title">Graphic Designer</div>
+  </div>
+
+  <!-- ===== LEFT COLUMN ===== -->
+  <div class="left">
+    <div class="l-sec">
+      <div class="pill pill-l" contenteditable="true">Contact</div>
+      <div class="l-body">
+        <div class="ci"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg><div><div class="k" contenteditable="true">Address</div><div class="v" contenteditable="true" data-f="address">123 Anywhere St., Any City, ST 15678</div></div></div>
+        <div class="ci"><svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg><div><div class="k" contenteditable="true">Phone</div><div class="v" contenteditable="true" data-f="phone">+123-456-3422</div><div class="v" contenteditable="true">+123-456-7890</div></div></div>
+        <div class="ci"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg><div><div class="k" contenteditable="true">Web</div><div class="v" contenteditable="true" data-f="email">hello@email.com</div><div class="v" contenteditable="true">www.yourwebsite.com</div></div></div>
+      </div>
+    </div>
+
+    <div class="l-sec">
+      <div class="pill pill-l" contenteditable="true">Education</div>
+      <div class="l-body">
+        <div class="ed"><div class="t" contenteditable="true">BA Sales and Commerce</div><div class="u" contenteditable="true">Wardiere University</div><div class="y" contenteditable="true">2011 - 2015</div></div>
+        <div class="ed"><div class="t" contenteditable="true">BA Sales and Commerce</div><div class="u" contenteditable="true">Wardiere University</div><div class="y" contenteditable="true">2019 - 2020</div></div>
+      </div>
+    </div>
+
+    <div class="l-sec">
+      <div class="pill pill-l" contenteditable="true">Skill</div>
+      <div class="l-body">
+        <ul class="skills">
+          <li contenteditable="true">Fast-moving Consumer Goods</li>
+          <li contenteditable="true">Packaged Consumer Goods Sales</li>
+          <li contenteditable="true">Corporate sales account management</li>
+          <li contenteditable="true">Graphic Design</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="l-sec">
+      <div class="pill pill-l" contenteditable="true">Awards</div>
+      <div class="l-body">
+        <div class="aw"><div class="d" contenteditable="true">Oct 2019 | Ingoude Company</div><div class="t" contenteditable="true">The Best Employee of the Year</div></div>
+        <div class="aw"><div class="d" contenteditable="true">May 2020 | Timmerman Industries</div><div class="t" contenteditable="true">The Best Employee of the Year</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== RIGHT COLUMN ===== -->
+  <div class="right">
+    <div class="r-sec">
+      <div class="pill pill-r" contenteditable="true">About Me</div>
+      <div class="r-body">
+        <div class="about" contenteditable="true">Experienced graphic designer with 6 years of experience. Excited to help your company expand social media engagement with captivating content, video and static assets.</div>
+      </div>
+    </div>
+
+    <div class="r-sec">
+      <div class="pill pill-r" contenteditable="true">Work Experience</div>
+      <div class="r-body">
+        <div class="job"><div class="h" contenteditable="true">Ginyard International Co. | Consumer Goods Seller</div><div class="y" contenteditable="true">2026 - Present</div><div class="d" contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam pharetra in lorem at laoreet. Donec hendrerit libero eget est tempor, quis tempus arcu elementum. In elementum elit at dui tristique feugiat.</div></div>
+        <div class="job"><div class="h" contenteditable="true">Ingoude Company | Junior/Investment Analyst</div><div class="y" contenteditable="true">2020 - 2026</div><div class="d" contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam pharetra in lorem at laoreet. Donec hendrerit libero eget est tempor, quis tempus arcu elementum. In elementum elit at dui tristique feugiat.</div></div>
+        <div class="job"><div class="h" contenteditable="true">Timmerman Industries | FMCG Sales Agent</div><div class="y" contenteditable="true">2020 - 2024</div><div class="d" contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam pharetra in lorem at laoreet. Donec hendrerit libero eget est tempor, quis tempus arcu elementum. In elementum elit at dui tristique feugiat.</div></div>
+        <div class="job"><div class="h" contenteditable="true">Ingoude Company | Sales Agent</div><div class="y" contenteditable="true">2015 - 2018</div><div class="d" contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam pharetra in lorem at laoreet. Donec hendrerit libero eget est tempor, quis tempus arcu elementum. In elementum elit at dui tristique feugiat.</div></div>
+      </div>
+    </div>
+
+    <div class="r-sec">
+      <div class="pill pill-r" contenteditable="true">References</div>
+      <div class="r-body">
+        <div class="refs">
+          <div class="ref"><div class="n" contenteditable="true">Estelle Darcy</div><div class="r" contenteditable="true">Wardiere Inc. / CEO</div><div class="c" contenteditable="true"><b>Phone:</b> +123-456-7890</div><div class="c" style="margin-top:0" contenteditable="true"><b>Email:</b> hello@email.com</div></div>
+          <div class="ref"><div class="n" contenteditable="true">Harper Russo</div><div class="r" contenteditable="true">Wardiere Inc. / CEO</div><div class="c" contenteditable="true"><b>Phone:</b> +123-456-7890</div><div class="c" style="margin-top:0" contenteditable="true"><b>Email:</b> hello@email.com</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* Name wraps to 2 lines like the reference; shrinks if it needs more */
+(function(){
+  var n=document.getElementById('nameText');
+  function fit(){
+    var s=62; n.style.fontSize=s+'px';
+    while(n.scrollHeight>s*1.05*2+2 && s>26){ s-=1; n.style.fontSize=s+'px'; }
+  }
+  n.addEventListener('input',fit);
+  window.addEventListener('load',fit); fit();
+})();
+</script>
+</body>
+</html>
