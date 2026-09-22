@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f2f2f2;
+  }
+  .page {
+    width: 850px;
+    min-height: 1100px;
+    display: flex;
+    background: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+  .blob-tr {
+    position: absolute;
+    top: 0; right: 0;
+    width: 110px; height: 110px;
+    background: #B9BFEA;
+    border-bottom-left-radius: 110px;
+  }
+  .sidebar {
+    width: 34%;
+    background: #C7CCF0;
+    padding: 44px 26px;
+    border-top-right-radius: 160px;
+    position: relative;
+    z-index: 1;
+  }
+  .photo-slot {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: #D94C3D;
+    margin: 0 auto 26px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 12px;
+  }
+  .photo-slot img { width:100%; height:100%; object-fit:cover; }
+  .side-h { font-size:14px; font-weight:700; letter-spacing:1px; margin-bottom:10px; color:#222; border-bottom: 2px solid #222; padding-bottom: 4px; }
+  .side-block { margin-bottom: 24px; }
+  .side-line { color:#333; font-size:12px; line-height:1.9; }
+  .side-icon { display:flex; align-items:center; gap:8px; margin-bottom: 6px; }
+  .side-icon .dot { width:5px; height:5px; border-radius:50%; background:#222; flex-shrink:0; }
+  .edu-item { margin-bottom: 10px; }
+  .edu-item .yr { font-size: 11px; font-weight:700; color:#222; }
+  .edu-item .school { font-size: 11.5px; font-weight:700; color:#222; }
+  .edu-item .deg { font-size: 11px; color:#333; }
+  .main { width: 66%; padding: 44px 44px; position: relative; z-index: 1; }
+  .name-row { font-size: 26px; margin-bottom: 4px; }
+  .name-bold { font-weight: 700; color:#1a1a1a; }
+  .name-reg { font-weight: 400; color:#1a1a1a; }
+  .subtitle { font-size: 13px; letter-spacing: 1px; color:#666; margin-bottom: 10px; }
+  .accent-line { width: 40px; height: 3px; background: #B9BFEA; margin-bottom: 28px; }
+  .sec-h { font-size: 15px; font-weight:700; letter-spacing:0.5px; color:#1a1a1a; margin-bottom: 10px; margin-top: 24px; border-bottom: 1px solid #ddd; padding-bottom: 6px; }
+  .profile-text { font-size: 12.5px; color:#555; line-height:1.7; }
+  .exp-item { margin-bottom: 16px; position: relative; padding-left: 16px; }
+  .exp-item::before { content:''; position:absolute; left:0; top:5px; width:7px; height:7px; border-radius:50%; background:#B9BFEA; }
+  .exp-head { display:flex; justify-content:space-between; align-items:baseline; }
+  .exp-company { font-size: 13.5px; font-weight:700; color:#1a1a1a; }
+  .exp-date { font-size: 11px; color:#888; }
+  .exp-role { font-size: 12px; color:#555; margin-bottom: 4px; }
+  .exp-desc { font-size: 11.5px; color:#555; line-height:1.6; }
+  .exp-desc li { margin-left: 16px; }
+  .ref-grid { display:flex; gap: 40px; }
+  .ref-item .name { font-size:13px; font-weight:700; color:#1a1a1a; }
+  .ref-item .role { font-size:11.5px; color:#888; margin-bottom:6px; }
+  .ref-item .contact { font-size:11px; color:#555; }
+  [contenteditable="true"]:focus { outline: 1px dashed #999; background: #fffef0; }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="blob-tr"></div>
+
+  <div class="sidebar">
+    <div class="photo-slot" id="photoSlot"><span id="photoHint">2x2 Photo</span></div>
+
+    <div class="side-block">
+      <div class="side-h">CONTACT</div>
+      <div class="side-icon"><div class="dot"></div><span class="side-line" contenteditable="true">+123-456-7890</span></div>
+      <div class="side-icon"><div class="dot"></div><span class="side-line" contenteditable="true">hello@email.com</span></div>
+      <div class="side-icon"><div class="dot"></div><span class="side-line" contenteditable="true">123 Anywhere St., Any City</span></div>
+      <div class="side-icon"><div class="dot"></div><span class="side-line" contenteditable="true">www.website.com</span></div>
+    </div>
+
+    <div class="side-block">
+      <div class="side-h">EDUCATION</div>
+      <div class="edu-item">
+        <div class="yr" contenteditable="true">2029 - 2030</div>
+        <div class="school" contenteditable="true">WARDIERE UNIVERSITY</div>
+        <div class="deg" contenteditable="true">Master of Business Management</div>
+      </div>
+      <div class="edu-item">
+        <div class="yr" contenteditable="true">2025 - 2029</div>
+        <div class="school" contenteditable="true">WARDIERE UNIVERSITY</div>
+        <div class="deg" contenteditable="true">Bachelor of Business, GPA: 3.8/4.0</div>
+      </div>
+    </div>
+
+    <div class="side-block">
+      <div class="side-h">SKILLS</div>
+      <div class="side-line" contenteditable="true">Project Management</div>
+      <div class="side-line" contenteditable="true">Public Relations</div>
+      <div class="side-line" contenteditable="true">Teamwork</div>
+      <div class="side-line" contenteditable="true">Time Management</div>
+      <div class="side-line" contenteditable="true">Leadership</div>
+      <div class="side-line" contenteditable="true">Effective Communication</div>
+      <div class="side-line" contenteditable="true">Critical Thinking</div>
+    </div>
+
+    <div class="side-block">
+      <div class="side-h">LANGUAGES</div>
+      <div class="side-line" contenteditable="true">English (Fluent)</div>
+      <div class="side-line" contenteditable="true">French (Fluent)</div>
+      <div class="side-line" contenteditable="true">German (Basics)</div>
+      <div class="side-line" contenteditable="true">Spanish (Intermediate)</div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="name-row"><span class="name-bold" contenteditable="true">STACEY</span> <span class="name-reg" contenteditable="true">SEVILLEJA</span></div>
+    <div class="subtitle" contenteditable="true">MARKETING MANAGER</div>
+    <div class="accent-line"></div>
+
+    <div class="sec-h">PROFILE</div>
+    <div class="profile-text" contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.</div>
+
+    <div class="sec-h">WORK EXPERIENCE</div>
+    <div class="exp-item">
+      <div class="exp-head">
+        <span class="exp-company" contenteditable="true">Borcelle Studio</span>
+        <span class="exp-date" contenteditable="true">2030 - PRESENT</span>
+      </div>
+      <div class="exp-role" contenteditable="true">Marketing Manager & Specialist</div>
+      <ul class="exp-desc" contenteditable="true">
+        <li>Develop and execute comprehensive marketing strategies and campaigns aligned with company goals.</li>
+        <li>Lead and mentor a high-performing marketing team.</li>
+        <li>Monitor brand consistency across channels and materials.</li>
+      </ul>
+    </div>
+    <div class="exp-item">
+      <div class="exp-head">
+        <span class="exp-company" contenteditable="true">Fauget Studio</span>
+        <span class="exp-date" contenteditable="true">2025 - 2029</span>
+      </div>
+      <div class="exp-role" contenteditable="true">Marketing Manager & Specialist</div>
+      <ul class="exp-desc" contenteditable="true">
+        <li>Created and managed the marketing budget, optimizing ROI.</li>
+        <li>Oversaw market research to identify emerging trends and competitor strategies.</li>
+      </ul>
+    </div>
+    <div class="exp-item">
+      <div class="exp-head">
+        <span class="exp-company" contenteditable="true">Studio Shodwe</span>
+        <span class="exp-date" contenteditable="true">2024 - 2025</span>
+      </div>
+      <div class="exp-role" contenteditable="true">Marketing Manager & Specialist</div>
+      <ul class="exp-desc" contenteditable="true">
+        <li>Developed and maintained strong relationships with partners and agencies.</li>
+      </ul>
+    </div>
+
+    <div class="sec-h">REFERENCE</div>
+    <div class="ref-grid">
+      <div class="ref-item">
+        <div class="name" contenteditable="true">Estelle Darcy</div>
+        <div class="role" contenteditable="true">Wardiere Inc. / CTO</div>
+        <div class="contact" contenteditable="true">Phone: 123-456-7890</div>
+        <div class="contact" contenteditable="true">Email: hello@email.com</div>
+      </div>
+      <div class="ref-item">
+        <div class="name" contenteditable="true">Harper Richard</div>
+        <div class="role" contenteditable="true">Wardiere Inc. / CEO</div>
+        <div class="contact" contenteditable="true">Phone: 123-456-7890</div>
+        <div class="contact" contenteditable="true">Email: hello@email.com</div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
