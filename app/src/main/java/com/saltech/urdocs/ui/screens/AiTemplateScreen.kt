@@ -299,6 +299,7 @@ fun AiTemplateScreen(htmlFileName: String, onBack: () -> Unit = {}) {
                     settings.builtInZoomControls = true
                     settings.displayZoomControls = false
                     setBackgroundColor(android.graphics.Color.parseColor("#0A1931"))
+                    setInitialScale(130)
                     loadUrl("file:///android_asset/templates/$htmlFileName")
                     webViewRef = this
                 }
