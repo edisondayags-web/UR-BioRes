@@ -3,47 +3,72 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=794, minimum-scale=0.1, maximum-scale=5, user-scalable=yes">
+<meta name="format-detection" content="telephone=no, email=no, address=no">
 <style>
   :root{
     --brown:#8B6F5C;
-    --brown-dark:#5c4a3d;
     --charcoal:#2E2A26;
-    --ink:#0b1533;
-    --text:#333a4d;
+    --cream:#F7F1EB;
+    --text:#3a3a3a;
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   html{background:#000}
   body{background:#000;width:794px;font-family:'Roboto','Helvetica Neue',Arial,sans-serif;color:var(--text)}
   [contenteditable]{outline:none}
   [contenteditable="true"]:focus{background:#fff3cd;outline:1px dashed #999}
-  .header [contenteditable="true"]:focus{background:rgba(255,255,255,.22);outline:1px dashed #fff}
+  .header-left [contenteditable="true"]:focus{background:rgba(255,255,255,.22);outline:1px dashed #fff}
+  a{color:inherit;text-decoration:none}
 
-  .page{position:relative;width:794px;min-height:1123px;background:#fff}
+  .page{position:relative;width:794px;background:var(--cream);display:flex;flex-direction:column}
 
-  .header{display:flex;height:280px}
-  .header-left{flex:1;background:var(--brown);color:#fff;padding:24px;display:flex;flex-direction:column;justify-content:flex-end}
-  .name-wrap{white-space:nowrap;overflow:hidden;font-weight:800;font-size:32px;letter-spacing:1px}
-  .job{margin-top:6px;font-size:14px;opacity:.85}
-  .summary{margin-top:10px;font-size:11px;line-height:1.5;opacity:.9}
-  .header-right{flex:1;background:var(--charcoal);background-size:cover;background-position:center}
-  .header-right img{width:100%;height:100%;object-fit:cover}
+  .header{position:relative;display:flex;height:300px}
+  .header-left{
+    position:relative;z-index:2;width:58%;background:var(--brown);color:#fff;
+    padding:34px 30px;display:flex;flex-direction:column;justify-content:flex-end;
+    border-radius:0 46px 0 0;
+  }
+  .name-wrap{white-space:nowrap;overflow:hidden;font-weight:800;font-size:38px;letter-spacing:1px}
+  .job{margin-top:4px;font-size:15px;opacity:.85}
+  .summary{margin-top:14px;font-size:12px;line-height:1.6;opacity:.92;max-width:400px}
+  .header-right{width:42%;background:var(--charcoal);display:flex;align-items:center;justify-content:center}
+  .header-right img{width:100%;height:100%;object-fit:cover;display:block}
+  .ph-placeholder{width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center}
+  .ph-placeholder svg{width:56px;height:56px;fill:rgba(255,255,255,.45)}
 
-  .body-row{display:flex}
-  .col-left{width:38%;padding:20px}
-  .col-right{width:62%;padding:20px 24px}
-  .s-title{background:var(--brown);color:#fff;padding:8px 14px;font-size:14px;font-weight:700;letter-spacing:.5px;margin:20px 0 12px}
-  .s-title:first-child{margin-top:0}
-  .contact .v{font-size:12px;margin-bottom:10px}
-  .edu-item,.skill-item{font-size:12px;margin-bottom:10px;line-height:1.4}
-  .edu-item .school{font-weight:600}
+  .body-row{display:flex;flex:1 1 auto}
+  .col-left{width:35%;padding:30px 22px 40px}
+  .col-right{width:65%;padding:30px 34px 40px}
 
-  .m-title{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:700;color:var(--charcoal);
-    margin:20px 0 14px;border-bottom:2px solid var(--brown);padding-bottom:6px}
-  .m-title:first-child{margin-top:0}
-  .item{margin-bottom:16px}
-  .it-title{font-weight:700;font-size:13px}
-  .it-meta{display:flex;justify-content:space-between;font-size:11px;color:#666;margin-bottom:4px}
-  .it-desc{font-size:11px;color:#444;line-height:1.5}
+  .pill{
+    background:var(--brown);color:#fff;font-size:15px;font-weight:700;letter-spacing:.4px;
+    padding:10px 18px;border-radius:0 24px 24px 0;margin:26px 0 16px;
+  }
+  .pill:first-child{margin-top:0}
+
+  .c-row{display:flex;align-items:flex-start;gap:10px;font-size:12.5px;margin-bottom:14px;line-height:1.4}
+  .c-row .ic{flex:0 0 16px;margin-top:1px}
+  .c-row .ic svg{width:14px;height:14px;fill:var(--brown)}
+
+  .bullet-item{position:relative;padding-left:16px;font-size:12.5px;margin-bottom:14px;line-height:1.5}
+  .bullet-item::before{content:"";position:absolute;left:0;top:6px;width:6px;height:6px;border-radius:50%;background:var(--brown)}
+  .bullet-item .bold{font-weight:700;color:var(--charcoal);display:block}
+
+  .r-title{display:flex;align-items:center;gap:12px;margin:0 0 20px}
+  .r-title:not(:first-child){margin-top:30px}
+  .r-icon{flex:0 0 34px;width:34px;height:34px;border-radius:50%;background:var(--brown);display:flex;align-items:center;justify-content:center}
+  .r-icon svg{width:17px;height:17px;fill:#fff}
+  .r-title .r-text{font-size:19px;font-weight:700;color:var(--charcoal)}
+
+  .timeline{position:relative;padding-left:26px}
+  .timeline::before{content:"";position:absolute;left:5px;top:6px;bottom:6px;width:2px;background:var(--brown)}
+  .t-item{position:relative;margin-bottom:22px}
+  .t-item:last-child{margin-bottom:0}
+  .t-item::before{content:"";position:absolute;left:-26px;top:4px;width:11px;height:11px;border-radius:50%;background:#fff;border:2.5px solid var(--brown)}
+  .t-row{display:flex;justify-content:space-between;align-items:baseline}
+  .t-title{font-size:14px;font-weight:700;color:var(--charcoal)}
+  .t-date{font-size:11.5px;color:var(--brown);font-weight:600;white-space:nowrap}
+  .t-org{font-size:12px;color:#8a7a6f;margin-top:1px}
+  .t-desc{font-size:11.5px;line-height:1.55;margin-top:5px;color:#555}
 </style>
 </head>
 <body>
@@ -53,54 +78,72 @@
     <div class="header-left">
       <div class="name-wrap" id="nameWrap"><span id="nameText" contenteditable="true" data-f="name">JHENNY DOE</span></div>
       <div class="job" contenteditable="true" data-f="title">Professional Graphic Designer</div>
-      <div class="summary" contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</div>
+      <div class="summary" contenteditable="true">I'm a graphic designer who loves turning ideas into visual stories. My passion is creating clean, creative, and meaningful designs that connect brands with people.</div>
     </div>
-    <div class="header-right"><img src="" alt=""></div>
+    <div class="header-right">
+      <div class="ph-placeholder"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v4h16v-4c0-2.66-5.33-4-8-4z"/></svg></div>
+    </div>
   </div>
 
   <div class="body-row">
     <div class="col-left">
-      <div class="s-title" contenteditable="true">Contact</div>
-      <div class="contact">
-        <div class="v" contenteditable="true" data-f="phone">0912 345 6789</div>
-        <div class="v" contenteditable="true" data-f="email">juan@email.com</div>
-        <div class="v" contenteditable="true" data-f="address">Barangay, City, Philippines</div>
-      </div>
+      <div class="pill" contenteditable="true">Contact</div>
+      <div class="c-row"><span class="ic"><svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg></span><span contenteditable="true" data-f="phone">0912 345 6789</span></div>
+      <div class="c-row"><span class="ic"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></span><span contenteditable="true" data-f="email">juan@email.com</span></div>
+      <div class="c-row"><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg></span><span contenteditable="true" data-f="address">Barangay, City, Philippines</span></div>
 
-      <div class="s-title" contenteditable="true">Education</div>
-      <div class="edu-item">
-        <div class="school" contenteditable="true">Fauget High School, 2020</div>
-        <div contenteditable="true">Science major</div>
-      </div>
-      <div class="edu-item">
-        <div class="school" contenteditable="true">Borcelle University, 2024</div>
-        <div contenteditable="true">Bachelor of Visual Communication</div>
-      </div>
+      <div class="pill" contenteditable="true">Education</div>
+      <div class="bullet-item"><span class="bold" contenteditable="true">Fauget High School, 2020</span><span contenteditable="true">Science major</span></div>
+      <div class="bullet-item"><span class="bold" contenteditable="true">Borcelle University, 2024</span><span contenteditable="true">Bachelor of Visual Communication</span></div>
 
-      <div class="s-title" contenteditable="true">Skills</div>
-      <div class="skill-item" contenteditable="true">Illustration Design</div>
-      <div class="skill-item" contenteditable="true">Social Media Optimization</div>
-      <div class="skill-item" contenteditable="true">Creative Advertising Copywriting</div>
+      <div class="pill" contenteditable="true">Skills</div>
+      <div class="bullet-item" contenteditable="true">Illustration Design</div>
+      <div class="bullet-item" contenteditable="true">Social Media Optimization</div>
+      <div class="bullet-item" contenteditable="true">Creative Advertising Copywriting</div>
+      <div class="bullet-item" contenteditable="true">Adobe Photoshop &amp; Illustrator</div>
+
+      <div class="pill" contenteditable="true">Reference</div>
+      <div class="bullet-item"><span class="bold" contenteditable="true">Maria Santos</span><span contenteditable="true">Senior Manager · 0917 123 4567</span></div>
     </div>
 
     <div class="col-right">
-      <div class="m-title" contenteditable="true">Education</div>
-      <div class="item">
-        <div class="it-title" contenteditable="true">Bachelor of Business Management</div>
-        <div class="it-meta"><span contenteditable="true">Borcelle University</span><span contenteditable="true">2016 - 2020</span></div>
-        <div class="it-desc" contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
+      <div class="r-title">
+        <div class="r-icon"><svg viewBox="0 0 24 24"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/></svg></div>
+        <div class="r-text" contenteditable="true">Education</div>
+      </div>
+      <div class="timeline">
+        <div class="t-item">
+          <div class="t-row"><span class="t-title" contenteditable="true">Bachelor of Business Management</span><span class="t-date" contenteditable="true">2016 - 2020</span></div>
+          <div class="t-org" contenteditable="true">Borcelle University</div>
+          <div class="t-desc" contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div>
+        </div>
+        <div class="t-item">
+          <div class="t-row"><span class="t-title" contenteditable="true">Bachelor of Business Management</span><span class="t-date" contenteditable="true">2020 - 2023</span></div>
+          <div class="t-org" contenteditable="true">Borcelle University</div>
+          <div class="t-desc" contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div>
+        </div>
       </div>
 
-      <div class="m-title" contenteditable="true">Experience</div>
-      <div class="item">
-        <div class="it-title" contenteditable="true">Product Design Manager</div>
-        <div class="it-meta"><span contenteditable="true">Arowwai Industries</span><span contenteditable="true">2016 - 2020</span></div>
-        <div class="it-desc" contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
+      <div class="r-title">
+        <div class="r-icon"><svg viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg></div>
+        <div class="r-text" contenteditable="true">Experience</div>
       </div>
-      <div class="item">
-        <div class="it-title" contenteditable="true">Marketing Manager</div>
-        <div class="it-meta"><span contenteditable="true">Arowwai Industries</span><span contenteditable="true">2019 - 2020</span></div>
-        <div class="it-desc" contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
+      <div class="timeline">
+        <div class="t-item">
+          <div class="t-row"><span class="t-title" contenteditable="true">Product Design Manager</span><span class="t-date" contenteditable="true">2020 - 2025</span></div>
+          <div class="t-org" contenteditable="true">Arowwai Industries</div>
+          <div class="t-desc" contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div>
+        </div>
+        <div class="t-item">
+          <div class="t-row"><span class="t-title" contenteditable="true">Marketing Manager</span><span class="t-date" contenteditable="true">2017 - 2020</span></div>
+          <div class="t-org" contenteditable="true">Arowwai Industries</div>
+          <div class="t-desc" contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div>
+        </div>
+        <div class="t-item">
+          <div class="t-row"><span class="t-title" contenteditable="true">Junior Designer</span><span class="t-date" contenteditable="true">2014 - 2017</span></div>
+          <div class="t-org" contenteditable="true">Studio Nine</div>
+          <div class="t-desc" contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div>
+        </div>
       </div>
     </div>
   </div>
@@ -110,8 +153,8 @@
 (function(){
   var wrap=document.getElementById('nameWrap');
   function fit(){
-    var size=32; wrap.style.fontSize=size+'px';
-    while(wrap.scrollWidth>wrap.clientWidth && size>16){ size-=1; wrap.style.fontSize=size+'px'; }
+    var size=38; wrap.style.fontSize=size+'px';
+    while(wrap.scrollWidth>wrap.clientWidth && size>18){ size-=1; wrap.style.fontSize=size+'px'; }
   }
   document.getElementById('nameText').addEventListener('input',fit);
   window.addEventListener('load',fit); fit();
