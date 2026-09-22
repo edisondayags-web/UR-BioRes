@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=794, minimum-scale=0.1, maximum-scale=5, user-scalable=yes">
+<meta name="format-detection" content="telephone=no, email=no, address=no">
+<style>
+  :root{
+    --dark:#2E332F;
+    --lav:#F1ECF3;
+    --ink:#1c1c1c;
+    --text:#3a3a3a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  html{background:#000}
+  body{background:#000;width:794px;font-family:'Poppins','Roboto','Helvetica Neue',Arial,sans-serif;color:var(--text)}
+  [contenteditable]{outline:none}
+  [contenteditable="true"]:focus{background:#fff3cd;outline:1px dashed #999}
+  .sidebar [contenteditable="true"]:focus{background:rgba(255,255,255,.2);outline:1px dashed #fff}
+  a{color:inherit;text-decoration:none}
+
+  .page{position:relative;width:794px;min-height:1123px;display:flex;background:#fff}
+
+  .sidebar{width:262px;background:var(--dark);color:#fff;padding:34px 26px 40px;flex-shrink:0}
+  .photo-wrap{width:170px;height:170px;border-radius:50%;overflow:hidden;margin:0 auto 30px;background:#555;
+    display:flex;align-items:center;justify-content:center}
+  .photo-wrap img{width:100%;height:100%;object-fit:cover;display:block}
+  .photo-wrap svg{width:80px;height:80px;fill:rgba(255,255,255,.4)}
+
+  .sb-title{font-size:18px;font-weight:700;margin-bottom:8px;padding-bottom:8px;border-bottom:2px solid rgba(255,255,255,.35)}
+  .sb-sec{margin-bottom:26px}
+  .sb-sec:last-child{margin-bottom:0}
+  .about-text{font-size:11.5px;line-height:1.6;opacity:.85;margin-bottom:14px}
+  .c-row{display:flex;align-items:flex-start;gap:8px;font-size:11.5px;margin-bottom:8px;line-height:1.4}
+  .c-row .ic{flex:0 0 14px;margin-top:2px}
+  .c-row .ic svg{width:13px;height:13px;fill:#fff}
+
+  .edu-item{font-size:11.5px;margin-bottom:12px;line-height:1.5}
+  .edu-item .school{font-weight:700}
+  .edu-item .yr{opacity:.75}
+
+  .skill-item{position:relative;padding-left:14px;font-size:11.5px;margin-bottom:8px}
+  .skill-item::before{content:"";position:absolute;left:0;top:6px;width:5px;height:5px;border-radius:50%;background:#fff}
+
+  .main{flex:1;min-width:0;display:flex;flex-direction:column}
+  .name-band{background:var(--lav);padding:34px 40px}
+  .name-wrap{white-space:nowrap;overflow:hidden;font-weight:400;font-size:30px;letter-spacing:.5px;color:var(--ink)}
+  .name-wrap .last{font-weight:800}
+  .job{margin-top:4px;font-size:16px;font-weight:600;color:#555}
+
+  .content{padding:32px 40px 40px}
+  .sec-title{font-size:20px;font-weight:700;color:var(--ink);padding-bottom:8px;border-bottom:2px solid var(--dark);margin-bottom:18px}
+  .sec-title:not(:first-child){margin-top:30px}
+
+  .xp-item{margin-bottom:20px}
+  .xp-item:last-child{margin-bottom:0}
+  .xp-row{display:flex;justify-content:space-between;align-items:baseline}
+  .xp-role{font-size:13.5px;font-weight:700;color:var(--ink)}
+  .xp-date{font-size:12px;font-style:italic;color:#666;white-space:nowrap}
+  .xp-co{font-size:12.5px;font-weight:600;color:#444;margin-top:2px}
+  .xp-desc{font-size:11.5px;line-height:1.6;margin-top:5px;color:#555}
+
+  .ref-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  .ref-card .rn{font-size:13px;font-weight:700;color:var(--ink)}
+  .ref-card .rr{font-size:11.5px;color:#666;margin-top:1px}
+  .ref-card .rl{font-size:11px;color:#555;margin-top:6px;line-height:1.5}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="sidebar">
+    <div class="photo-wrap">
+      <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v4h16v-4c0-2.66-5.33-4-8-4z"/></svg>
+    </div>
+
+    <div class="sb-sec">
+      <div class="sb-title" contenteditable="true">About Me</div>
+      <div class="about-text" contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sit amet quam rhoncus, egestas dui eget, malesuada justo.</div>
+      <div class="c-row"><span class="ic"><svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg></span><span contenteditable="true" data-f="phone">+123-456-7890</span></div>
+      <div class="c-row"><span class="ic"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></span><span contenteditable="true" data-f="email">hello@email.com</span></div>
+      <div class="c-row"><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg></span><span contenteditable="true" data-f="address">123 Anywhere St., Any City</span></div>
+    </div>
+
+    <div class="sb-sec">
+      <div class="sb-title" contenteditable="true">Education</div>
+      <div class="edu-item">
+        <div class="school" contenteditable="true">Borcelle Business School</div>
+        <div contenteditable="true">Bachelor of Business Management</div>
+        <div class="yr" contenteditable="true">2006 - 2008</div>
+      </div>
+      <div class="edu-item">
+        <div class="school" contenteditable="true">Larana Business School</div>
+        <div contenteditable="true">Certificate in Digital Marketing</div>
+        <div class="yr" contenteditable="true">2006 - 2008</div>
+      </div>
+    </div>
+
+    <div class="sb-sec">
+      <div class="sb-title" contenteditable="true">Skills</div>
+      <div class="skill-item" contenteditable="true">Management Skills</div>
+      <div class="skill-item" contenteditable="true">Creativity</div>
+      <div class="skill-item" contenteditable="true">Digital Marketing</div>
+      <div class="skill-item" contenteditable="true">Negotiation</div>
+      <div class="skill-item" contenteditable="true">Critical Thinking</div>
+      <div class="skill-item" contenteditable="true">Leadership</div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="name-band">
+      <div class="name-wrap" id="nameWrap"><span id="nameText" contenteditable="true" data-f="name">MARAIAH QUEEN <span class="last">ARCETA</span></span></div>
+      <div class="job" contenteditable="true" data-f="title">Business Consultant</div>
+    </div>
+
+    <div class="content">
+      <div class="sec-title" contenteditable="true">Experience</div>
+
+      <div class="xp-item">
+        <div class="xp-row"><span class="xp-role" contenteditable="true">Business Consultant</span><span class="xp-date" contenteditable="true">2020 – Present</span></div>
+        <div class="xp-co" contenteditable="true">Ginyard International Co.</div>
+        <div class="xp-desc" contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam pharetra dui. Donec libero eget est tempor, quis tempus arcu elementum. In elementum, mi at mattis convallis, mi neque nulla volutpat dolor.</div>
+      </div>
+
+      <div class="xp-item">
+        <div class="xp-row"><span class="xp-role" contenteditable="true">Junior/ Business Consultant</span><span class="xp-date" contenteditable="true">2015 – 2020</span></div>
+        <div class="xp-co" contenteditable="true">Ingoude Company</div>
+        <div class="xp-desc" contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam pharetra dui. Donec libero eget est tempor, quis tempus arcu elementum. In elementum, mi at mattis convallis, mi neque nulla volutpat dolor.</div>
+      </div>
+
+      <div class="xp-item">
+        <div class="xp-row"><span class="xp-role" contenteditable="true">Junior/ Business Consultant</span><span class="xp-date" contenteditable="true">2012 – 2015</span></div>
+        <div class="xp-co" contenteditable="true">Timmerman Industries</div>
+        <div class="xp-desc" contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam pharetra dui. Donec libero eget est tempor, quis tempus arcu elementum. In elementum, mi at mattis convallis, mi neque nulla volutpat dolor.</div>
+      </div>
+
+      <div class="xp-item">
+        <div class="xp-row"><span class="xp-role" contenteditable="true">Junior/ Business Consultant</span><span class="xp-date" contenteditable="true">2010 – 2012</span></div>
+        <div class="xp-co" contenteditable="true">Ingoude Company</div>
+        <div class="xp-desc" contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam pharetra dui. Donec libero eget est tempor, quis tempus arcu elementum. In elementum, mi at mattis convallis, mi neque nulla volutpat dolor.</div>
+      </div>
+
+      <div class="sec-title" contenteditable="true">References</div>
+      <div class="ref-grid">
+        <div class="ref-card">
+          <div class="rn" contenteditable="true">Bailey Dupont</div>
+          <div class="rr" contenteditable="true">Wardiere Inc. / CEO</div>
+          <div class="rl" contenteditable="true">Phone: 123-456-7890</div>
+          <div class="rl" contenteditable="true">Email: hello@email.com</div>
+        </div>
+        <div class="ref-card">
+          <div class="rn" contenteditable="true">Harumi Kobayashi</div>
+          <div class="rr" contenteditable="true">Wardiere Inc. / CEO</div>
+          <div class="rl" contenteditable="true">Phone: 123-456-7890</div>
+          <div class="rl" contenteditable="true">Email: hello@email.com</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var wrap=document.getElementById('nameWrap');
+  function fit(){
+    var size=30; wrap.style.fontSize=size+'px';
+    while(wrap.scrollWidth>wrap.clientWidth && size>16){ size-=1; wrap.style.fontSize=size+'px'; }
+  }
+  document.getElementById('nameText').addEventListener('input',fit);
+  window.addEventListener('load',fit); fit();
+})();
+</script>
+</body>
+</html>
