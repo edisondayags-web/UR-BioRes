@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=794, minimum-scale=0.1, maximum-scale=5, user-scalable=yes">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:#000}body{background:#000;font-family:Arial,Helvetica,sans-serif;color:#222;width:794px}
+[contenteditable="true"]:focus{background:#fff3cd;outline:1px dashed #999}
+.page{width:794px;min-height:1123px;background:#fff}
+.banner{display:flex;align-items:center;background:#C9A896;padding:24px 40px;min-height:150px}
+.avatar-circle{width:110px;height:110px;border-radius:50%;border:4px solid #fff;background:#d9d0c6 center/cover no-repeat;flex:none;margin-right:26px}
+.name{font-family:Georgia,'Times New Roman',serif;font-size:34px;font-weight:900;line-height:1.15;text-transform:uppercase;color:#1a1a1a}
+.tagbar{background:#B79680;padding:8px 40px;font-size:13px;font-weight:700;color:#1a1a1a}
+.cols{display:flex}
+.left{width:34%;padding:26px 22px}
+.right{width:66%;padding:26px 30px 26px 10px}
+.sh{display:flex;align-items:center;gap:8px;margin:18px 0 10px}
+.left .sh:first-child{margin-top:0}
+.sh .sq{width:9px;height:9px;background:#1a1a1a;flex:none}
+.sh span{font-size:14px;font-weight:900;letter-spacing:0.5px;text-transform:uppercase}
+.crow{display:flex;align-items:flex-start;gap:8px;font-size:12px;line-height:1.4;margin-bottom:8px}
+.crow .ic{width:14px;flex:none;text-align:center}
+.crow .val{word-break:break-word}
+.bl{position:relative;padding-left:14px;font-size:12.5px;line-height:1.5;margin-bottom:5px}
+.bl:before{content:'\2022';position:absolute;left:0}
+.refname{font-weight:700;font-size:13px;margin-top:2px}
+.refline{font-size:12px;line-height:1.5}
+.summary{font-size:13px;line-height:1.6;text-align:justify}
+.edu-t{font-weight:700;font-size:13.5px;margin-top:2px}
+.edu-s{font-size:12.5px;line-height:1.5}
+.pos{font-weight:700;font-size:14px;margin-top:2px}
+.co{font-weight:700;font-size:13px;margin-top:6px}
+.loc{font-size:12.5px}
+.dates{font-size:12.5px;font-style:italic;margin-bottom:8px}
+.explist .bl{margin-top:6px}
+</style></head><body>
+<div class="page">
+  <div class="banner">
+    <div class="avatar-circle"></div>
+    <div class="name" contenteditable="true" data-f="name">Lorem Ipsum<br>Dela</div>
+  </div>
+  <div class="tagbar" contenteditable="true" data-f="title">Lorem Ipsum</div>
+
+  <div class="cols">
+    <div class="left">
+      <div class="sh"><span class="sq"></span><span>Contact</span></div>
+      <div class="crow"><div class="ic">&#9742;&#xFE0E;</div><div class="val" contenteditable="true" data-f="phone">09XX-XXX-XXXX</div></div>
+      <div class="crow"><div class="ic">&#9993;&#xFE0E;</div><div class="val" contenteditable="true" data-f="email">loremipsum.sample@email.com</div></div>
+      <div class="crow"><div class="ic">&#9679;&#xFE0E;</div><div class="val" contenteditable="true" data-f="address">Lorem Ipsum</div></div>
+
+      <div class="sh"><span class="sq"></span><span>Core Competencies</span></div>
+      <div class="bl" contenteditable="true">Fast Learner</div>
+      <div class="bl" contenteditable="true">Attention to Detail</div>
+      <div class="bl" contenteditable="true">Time Management</div>
+      <div class="bl" contenteditable="true">Team Cooperation</div>
+      <div class="bl" contenteditable="true">Adaptability</div>
+      <div class="bl" contenteditable="true">Basic Computer Literacy</div>
+
+      <div class="sh"><span class="sq"></span><span>Skills</span></div>
+      <div class="bl" contenteditable="true">Basic Microsoft Word Encoding</div>
+      <div class="bl" contenteditable="true">Typing and Data Entry</div>
+      <div class="bl" contenteditable="true">Filing and Organizing Documents</div>
+      <div class="bl" contenteditable="true">Verbal Communication</div>
+
+      <div class="sh"><span class="sq"></span><span>Reference</span></div>
+      <div class="refname" contenteditable="true">Evelyn S. Alba</div>
+      <div class="refline" contenteditable="true">Position: Office Staff</div>
+      <div class="refline" contenteditable="true">Contact No.: 09XX-XXX-XXXX</div>
+    </div>
+
+    <div class="right">
+      <div class="sh"><span class="sq"></span><span>Summary</span></div>
+      <div class="summary" contenteditable="true">A highly motivated and responsible individual with strong dedication to assigned tasks. Known for being dependable, punctual, and eager to learn new skills. Able to work under minimal supervision and capable of adapting quickly to new environments and responsibilities. Possesses good communication skills and maintains a positive attitude toward work and teamwork.</div>
+
+      <div class="sh"><span class="sq"></span><span>Education</span></div>
+      <div class="edu-t" contenteditable="true">Bachelor of Science in Business Administration</div>
+      <div class="edu-s" contenteditable="true">Lorem Ipsum College of Technology</div>
+      <div class="edu-s" contenteditable="true">City of Consectetur, Philippines</div>
+      <div class="edu-s" contenteditable="true">2021 - 2023 (Undergraduate)</div>
+
+      <div class="sh"><span class="sq"></span><span>Work Experience</span></div>
+      <div class="pos" contenteditable="true">Production Worker</div>
+      <div class="co" contenteditable="true">Dolor Sit Manufacturing Corporation</div>
+      <div class="loc" contenteditable="true">Province of Adipiscing, Philippines</div>
+      <div class="dates" contenteditable="true">January 2021 - February 2022</div>
+      <div class="explist">
+        <div class="bl" contenteditable="true">Performed assigned tasks on the production line following supervisor instructions.</div>
+        <div class="bl" contenteditable="true">Inspected finished products to ensure quality and completeness.</div>
+        <div class="bl" contenteditable="true">Packed and labeled items carefully and accurately.</div>
+        <div class="bl" contenteditable="true">Maintained organized work area and followed workplace safety practices.</div>
+        <div class="bl" contenteditable="true">Achieved daily production targets within required time frame.</div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+function fitName(){
+  var el=document.querySelector('.name'); if(!el) return;
+  var s=34; el.style.fontSize=s+'px';
+  while(el.scrollWidth>el.parentElement.clientWidth-140 && s>16){ s-=1; el.style.fontSize=s+'px'; }
+}
+window.fitAll=fitName;
+window.addEventListener('load',fitName);
+document.addEventListener('input',function(e){
+  if(e.target.classList && e.target.classList.contains('name')) fitName();
+});
+</script>
+</body></html>
