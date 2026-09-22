@@ -27,7 +27,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 
-private enum class LayoutStyle { CLASSIC_TWO_COL, ATS_SINGLE_COL, SIDEBAR_BOLD, MINIMAL_MONO, HEADER_BLOCK, LIGHT_SIDEBAR, BLUE_ARCH, TEAL_BAND, PILL_HEADER, NAVY_PHOTO, SAGE_MOON, PINK_FRAME, NAVY_DIAGONAL, NAVY_PILL, BROWN_SPLIT, DIAMOND_SPLIT, LAVENDER_ARCH, ROSE_BANNER, DARK_PHOTO_SIDE }
+private enum class LayoutStyle { CLASSIC_TWO_COL, ATS_SINGLE_COL, SIDEBAR_BOLD, MINIMAL_MONO, HEADER_BLOCK, LIGHT_SIDEBAR, BLUE_ARCH, TEAL_BAND, PILL_HEADER, NAVY_PHOTO, SAGE_MOON, PINK_FRAME, NAVY_DIAGONAL, NAVY_PILL, BROWN_SPLIT, DIAMOND_SPLIT, LAVENDER_ARCH, ROSE_BANNER, DARK_PHOTO_SIDE, BLUSH_BLACK_BLOCK }
 
 private data class TemplateInfo(
     val id: String,
@@ -78,6 +78,7 @@ private val resumeTemplates = listOf(
     TemplateInfo("ai_template_more_13.html", "13", Color(0xFFC7CCF0), Color(0xFFD94C3D), LayoutStyle.LAVENDER_ARCH),
     TemplateInfo("ai_template_more_14.html", "14", Color(0xFFC9A896), Color(0xFFFFFFFF), LayoutStyle.ROSE_BANNER),
     TemplateInfo("ai_template_more_15.html", "15", Color(0xFF2B2B2B), Color(0xFFFFFFFF), LayoutStyle.DARK_PHOTO_SIDE),
+    TemplateInfo("ai_template_more_16.html", "16", Color(0xFFE8D9D3), Color(0xFF1A1A1A), LayoutStyle.BLUSH_BLACK_BLOCK),
 )
 
 
@@ -186,6 +187,7 @@ private fun TemplatePreview(accent: Color, bg: Color, layout: LayoutStyle, modif
         LayoutStyle.LAVENDER_ARCH -> LavenderArchPreview(modifier)
         LayoutStyle.ROSE_BANNER -> RoseBannerPreview(modifier)
         LayoutStyle.DARK_PHOTO_SIDE -> DarkPhotoSidePreview(modifier)
+        LayoutStyle.BLUSH_BLACK_BLOCK -> BlushBlackBlockPreview(modifier)
     }
 }
 
@@ -714,6 +716,42 @@ private fun DiamondSplitPreview(modifier: Modifier = Modifier) {
             repeat(3) {
                 Box(modifier = Modifier.fillMaxWidth().height(3.dp).background(gray))
                 Spacer(Modifier.height(6.dp))
+            }
+        }
+    }
+}
+
+@Composable
+private fun BlushBlackBlockPreview(modifier: Modifier = Modifier) {
+    val blush = Color(0xFFE8D9D3)
+    val gray = Color(0xFF9AA0B0)
+    Column(modifier = modifier.background(Color.White)) {
+        Row(modifier = Modifier.fillMaxWidth().height(58.dp)) {
+            Box(modifier = Modifier.width(46.dp).fillMaxHeight().background(blush), contentAlignment = Alignment.Center) {
+                Box(modifier = Modifier.size(32.dp).clip(CircleShape).background(Color(0xFFC9B8B0)).border(1.5.dp, Color.White, CircleShape))
+            }
+            Column(modifier = Modifier.weight(1f).fillMaxHeight().background(Color(0xFF1A1A1A)).padding(8.dp), verticalArrangement = Arrangement.Center) {
+                Box(modifier = Modifier.fillMaxWidth(0.6f).height(6.dp).background(Color.White))
+                Spacer(Modifier.height(5.dp))
+                Box(modifier = Modifier.fillMaxWidth(0.4f).height(3.dp).background(Color.White.copy(alpha = 0.8f)))
+            }
+        }
+        Row(modifier = Modifier.weight(1f)) {
+            Column(modifier = Modifier.width(46.dp).fillMaxHeight().background(blush).padding(6.dp)) {
+                repeat(3) {
+                    Box(modifier = Modifier.fillMaxWidth().height(2.dp).background(Color(0xFF1A1A1A)))
+                    Spacer(Modifier.height(5.dp))
+                }
+            }
+            Column(modifier = Modifier.weight(1f).padding(8.dp)) {
+                repeat(3) {
+                    Box(modifier = Modifier.fillMaxWidth(0.4f).height(3.dp).background(Color(0xFF1A1A1A)))
+                    Spacer(Modifier.height(4.dp))
+                    Box(modifier = Modifier.fillMaxWidth().height(2.dp).background(gray))
+                    Spacer(Modifier.height(2.dp))
+                    Box(modifier = Modifier.fillMaxWidth(0.8f).height(2.dp).background(gray))
+                    Spacer(Modifier.height(8.dp))
+                }
             }
         }
     }
