@@ -177,6 +177,7 @@ private fun TemplatePreview(accent: Color, bg: Color, layout: LayoutStyle, modif
         LayoutStyle.PINK_FRAME -> PinkFramePreview(modifier)
         LayoutStyle.NAVY_DIAGONAL -> NavyDiagonalPreview(modifier)
         LayoutStyle.NAVY_PILL -> NavyPillPreview(modifier)
+        LayoutStyle.BROWN_SPLIT -> PillHeaderPreview(modifier)
     }
 }
 
