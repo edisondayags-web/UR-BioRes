@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=794, minimum-scale=0.1, maximum-scale=5, user-scalable=yes">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:#000}body{background:#000;font-family:Arial,Helvetica,sans-serif;color:#222;width:794px}
+[contenteditable="true"]:focus{background:#fff3cd;outline:1px dashed #999}
+.page{width:794px;min-height:1123px;display:flex;background:#fff}
+.side{width:270px;background:#2b2b2b;color:#fff;padding:0 0 30px}
+.avatar-wrap{padding:36px 30px 20px;text-align:center}
+.avatar-circle{width:200px;height:200px;border-radius:50%;border:6px solid #fff;background:#555 center/cover no-repeat;margin:0 auto}
+.side-sec{padding:14px 26px}
+.side-h{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.side-h .ic{width:20px;text-align:center;font-size:16px}
+.side-h span{font-size:15px;font-weight:900;text-transform:uppercase}
+.about-text{font-size:11.5px;line-height:1.6;color:#ddd;text-align:justify}
+.crow{font-size:12px;line-height:1.5;margin-bottom:10px;display:flex;align-items:flex-start;gap:8px}
+.crow .ic{width:16px;flex:none;text-align:center}
+.slist li{font-size:12px;line-height:2;list-style:none}
+.main{flex:1;min-width:0;padding:44px 40px 30px}
+.name{font-size:40px;font-weight:900;line-height:1.05;text-transform:uppercase}
+.title{font-size:16px;color:#555;margin-top:8px;margin-bottom:26px}
+.sh{display:flex;align-items:center;gap:10px;margin:22px 0 14px}
+.sh:first-of-type{margin-top:0}
+.sh .ic{font-size:18px}
+.sh span{font-size:19px;font-weight:900;text-transform:uppercase}
+.tl{position:relative;padding-left:22px}
+.tl:before{content:'';position:absolute;left:5px;top:6px;bottom:6px;width:2px;background:#2b2b2b}
+.item{position:relative;padding-bottom:18px}
+.item:before{content:'';position:absolute;left:-22px;top:4px;width:10px;height:10px;border-radius:50%;background:#2b2b2b}
+.yrs{font-weight:700;font-size:13px;margin-bottom:3px}
+.org{font-weight:700;font-size:13.5px}
+.sub{font-size:12.5px;color:#444;margin:2px 0}
+.bl{position:relative;padding-left:14px;font-size:12.5px;line-height:1.5;margin-top:4px}
+.bl:before{content:'\2022';position:absolute;left:0}
+</style></head><body>
+<div class="page">
+  <div class="side">
+    <div class="avatar-wrap"><div class="avatar-circle"></div></div>
+
+    <div class="side-sec">
+      <div class="side-h"><span class="ic">&#128100;</span><span>About Me</span></div>
+      <div class="about-text" contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam pharetra in lorem at laoreet. Donec hendrerit libero eget est tempor, quis tempus arcu elementum.</div>
+    </div>
+
+    <div class="side-sec">
+      <div class="side-h"><span class="ic">&#128100;</span><span>Contact</span></div>
+      <div class="crow"><span class="ic">&#9742;&#xFE0E;</span><span contenteditable="true" data-f="phone">+123-456-7890</span></div>
+      <div class="crow"><span class="ic">&#9993;&#xFE0E;</span><span contenteditable="true" data-f="email">hello@reallygreatsite.com</span></div>
+      <div class="crow"><span class="ic">&#9679;&#xFE0E;</span><span contenteditable="true" data-f="address">123 Anywhere Street., Any City</span></div>
+    </div>
+
+    <div class="side-sec">
+      <div class="side-h"><span class="ic">&#9881;&#xFE0E;</span><span>Skills</span></div>
+      <ul class="slist">
+        <li contenteditable="true">Web Design</li>
+        <li contenteditable="true">Branding</li>
+        <li contenteditable="true">Graphic Design</li>
+        <li contenteditable="true">SEO</li>
+        <li contenteditable="true">Marketing</li>
+      </ul>
+    </div>
+
+    <div class="side-sec">
+      <div class="side-h"><span class="ic">A&#12876;</span><span>Language</span></div>
+      <ul class="slist">
+        <li contenteditable="true">English</li>
+        <li contenteditable="true">French</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="name" contenteditable="true" data-f="name">Maloi<br>Ricalde</div>
+    <div class="title" contenteditable="true" data-f="title">Graphics Designer</div>
+
+    <div class="sh"><span class="ic">&#127891;</span><span>Education</span></div>
+    <div class="tl">
+      <div class="item">
+        <div class="yrs" contenteditable="true">(2011 - 2015)</div>
+        <div class="org" contenteditable="true">Wardiere University</div>
+        <div class="sub" contenteditable="true">Bachelor of Design</div>
+        <div class="sub" contenteditable="true">3.65</div>
+      </div>
+      <div class="item">
+        <div class="yrs" contenteditable="true">(2014 - 2019)</div>
+        <div class="org" contenteditable="true">Wardiere University</div>
+        <div class="sub" contenteditable="true">Bachelor of Design</div>
+        <div class="sub" contenteditable="true">3.74</div>
+      </div>
+    </div>
+
+    <div class="sh"><span class="ic">&#128188;</span><span>Experience</span></div>
+    <div class="tl">
+      <div class="item">
+        <div class="yrs" contenteditable="true">(2020 - 2023)</div>
+        <div class="org" contenteditable="true">Senior Graphic Designer</div>
+        <div class="sub" contenteditable="true">Fauget studio</div>
+        <div class="bl" contenteditable="true">create more than 100 graphic designs for big companies</div>
+        <div class="bl" contenteditable="true">complete a lot of complicated work</div>
+      </div>
+      <div class="item">
+        <div class="yrs" contenteditable="true">(2017 - 2019)</div>
+        <div class="org" contenteditable="true">Senior Graphic Designer</div>
+        <div class="sub" contenteditable="true">Iarana, inc</div>
+        <div class="bl" contenteditable="true">create more than 100 graphic designs for big companies</div>
+        <div class="bl" contenteditable="true">complete a lot of complicated work</div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+function fitName(){
+  var el=document.querySelector('.name'); if(!el) return;
+  var s=40; el.style.fontSize=s+'px';
+  while(el.scrollWidth>el.parentElement.clientWidth+1 && s>20){ s-=1; el.style.fontSize=s+'px'; }
+}
+window.fitAll=fitName;
+window.addEventListener('load',fitName);
+document.addEventListener('input',function(e){
+  if(e.target.classList && e.target.classList.contains('name')) fitName();
+});
+</script>
+</body></html>
