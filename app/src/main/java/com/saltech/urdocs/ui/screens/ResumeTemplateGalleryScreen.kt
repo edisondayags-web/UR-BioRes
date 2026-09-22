@@ -27,7 +27,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 
-private enum class LayoutStyle { CLASSIC_TWO_COL, ATS_SINGLE_COL, SIDEBAR_BOLD, MINIMAL_MONO, HEADER_BLOCK, LIGHT_SIDEBAR, BLUE_ARCH, TEAL_BAND, PILL_HEADER, NAVY_PHOTO, SAGE_MOON, PINK_FRAME }
+private enum class LayoutStyle { CLASSIC_TWO_COL, ATS_SINGLE_COL, SIDEBAR_BOLD, MINIMAL_MONO, HEADER_BLOCK, LIGHT_SIDEBAR, BLUE_ARCH, TEAL_BAND, PILL_HEADER, NAVY_PHOTO, SAGE_MOON, PINK_FRAME, NAVY_DIAGONAL }
 
 private data class TemplateInfo(
     val id: String,
@@ -70,6 +70,7 @@ private val resumeTemplates = listOf(
     TemplateInfo("ai_template_more_05.html", "05", Color(0xFF10375F), Color(0xFFFFFFFF), LayoutStyle.NAVY_PHOTO),
     TemplateInfo("ai_template_more_06.html", "06", Color(0xFFA9C6C6), Color(0xFFFDF3A6), LayoutStyle.SAGE_MOON),
     TemplateInfo("ai_template_more_07.html", "07", Color(0xFFF5C8F0), Color(0xFFF7F5F6), LayoutStyle.PINK_FRAME),
+    TemplateInfo("ai_template_more_08.html", "08", Color(0xFF12294F), Color(0xFFFFFFFF), LayoutStyle.NAVY_DIAGONAL),
 )
 
 
@@ -171,6 +172,7 @@ private fun TemplatePreview(accent: Color, bg: Color, layout: LayoutStyle, modif
         LayoutStyle.NAVY_PHOTO -> NavyPhotoPreview(modifier)
         LayoutStyle.SAGE_MOON -> SageMoonPreview(modifier)
         LayoutStyle.PINK_FRAME -> PinkFramePreview(modifier)
+        LayoutStyle.NAVY_DIAGONAL -> NavyDiagonalPreview(modifier)
     }
 }
 
@@ -603,6 +605,34 @@ private fun PinkFramePreview(modifier: Modifier = Modifier) {
                     }
                 }
                 if (i == 0) Spacer(Modifier.width(6.dp))
+            }
+        }
+    }
+}
+
+@Composable
+private fun NavyDiagonalPreview(modifier: Modifier = Modifier) {
+    val navy = Color(0xFF12294F)
+    val gold = Color(0xFFC9A227)
+    val gray = Color(0xFF9AA0B0)
+    Column(modifier = modifier.background(Color.White)) {
+        Box(modifier = Modifier.fillMaxWidth().height(46.dp)) {
+            Box(modifier = Modifier.fillMaxWidth(0.6f).fillMaxHeight().background(navy))
+            Box(
+                modifier = Modifier.align(Alignment.TopEnd).padding(6.dp)
+                    .size(30.dp).clip(CircleShape).background(Color(0xFFDFE3F0)).border(2.dp, gold, CircleShape)
+            )
+        }
+        Column(modifier = Modifier.padding(8.dp)) {
+            Box(modifier = Modifier.fillMaxWidth(0.7f).height(7.dp).background(navy))
+            Spacer(Modifier.height(4.dp))
+            Box(modifier = Modifier.fillMaxWidth(0.4f).height(3.dp).background(gray))
+            Spacer(Modifier.height(10.dp))
+            repeat(3) {
+                Box(modifier = Modifier.fillMaxWidth(0.5f).height(3.dp).background(navy))
+                Spacer(Modifier.height(3.dp))
+                Box(modifier = Modifier.fillMaxWidth().height(2.dp).background(gray))
+                Spacer(Modifier.height(6.dp))
             }
         }
     }
