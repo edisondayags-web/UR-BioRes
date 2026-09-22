@@ -708,16 +708,8 @@ private fun DiamondSplitPreview(modifier: Modifier = Modifier) {
             Box(modifier = Modifier.fillMaxWidth(0.35f).height(3.dp).background(gray))
             Spacer(Modifier.height(10.dp))
             repeat(3) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Box(modifier = Modifier.size(5.dp).background(Color(0xFF1A1A1A)))
-                    Spacer(Modifier.width(3.dp))
-                    Box(modifier = Modifier.fillMaxWidth(0.4f).height(3.dp).background(Color(0xFF1A1A1A)))
-                }
-                Spacer(Modifier.height(4.dp))
-                Box(modifier = Modifier.fillMaxWidth(0.9f).height(2.dp).background(gray))
-                Spacer(Modifier.height(2.dp))
-                Box(modifier = Modifier.fillMaxWidth(0.7f).height(2.dp).background(gray))
-                Spacer(Modifier.height(8.dp))
+                Box(modifier = Modifier.fillMaxWidth().height(3.dp).background(gray))
+                Spacer(Modifier.height(6.dp))
             }
         }
     }
@@ -747,16 +739,8 @@ private fun LavenderArchPreview(modifier: Modifier = Modifier) {
             Box(modifier = Modifier.fillMaxWidth(0.3f).height(3.dp).background(lav))
             Spacer(Modifier.height(10.dp))
             repeat(3) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Box(modifier = Modifier.size(5.dp).clip(CircleShape).background(lav))
-                    Spacer(Modifier.width(3.dp))
-                    Box(modifier = Modifier.fillMaxWidth(0.4f).height(3.dp).background(Color(0xFF1A1A1A)))
-                }
-                Spacer(Modifier.height(4.dp))
-                Box(modifier = Modifier.fillMaxWidth(0.9f).height(2.dp).background(Color(0xFF9AA0B0)))
-                Spacer(Modifier.height(2.dp))
-                Box(modifier = Modifier.fillMaxWidth(0.7f).height(2.dp).background(Color(0xFF9AA0B0)))
-                Spacer(Modifier.height(8.dp))
+                Box(modifier = Modifier.fillMaxWidth().height(3.dp).background(Color(0xFF9AA0B0)))
+                Spacer(Modifier.height(6.dp))
             }
         }
     }
