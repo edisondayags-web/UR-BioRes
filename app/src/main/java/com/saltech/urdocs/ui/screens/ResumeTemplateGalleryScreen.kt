@@ -27,7 +27,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 
-private enum class LayoutStyle { CLASSIC_TWO_COL, ATS_SINGLE_COL, SIDEBAR_BOLD, MINIMAL_MONO, HEADER_BLOCK, LIGHT_SIDEBAR, BLUE_ARCH, TEAL_BAND, PILL_HEADER, NAVY_PHOTO, SAGE_MOON, PINK_FRAME, NAVY_DIAGONAL, NAVY_PILL, BROWN_SPLIT }
+private enum class LayoutStyle { CLASSIC_TWO_COL, ATS_SINGLE_COL, SIDEBAR_BOLD, MINIMAL_MONO, HEADER_BLOCK, LIGHT_SIDEBAR, BLUE_ARCH, TEAL_BAND, PILL_HEADER, NAVY_PHOTO, SAGE_MOON, PINK_FRAME, NAVY_DIAGONAL, NAVY_PILL, BROWN_SPLIT, DIAMOND_SPLIT }
 
 private data class TemplateInfo(
     val id: String,
@@ -74,6 +74,7 @@ private val resumeTemplates = listOf(
     TemplateInfo("ai_template_more_09.html", "09", Color(0xFF1B3A6B), Color(0xFFFFFFFF), LayoutStyle.NAVY_PILL),
     TemplateInfo("ai_template_more_10.html", "10", Color(0xFF8B6F5C), Color(0xFF2E2A26), LayoutStyle.BROWN_SPLIT),
     TemplateInfo("ai_template_more_11.html", "11", Color(0xFF2E332F), Color(0xFFF1ECF3), LayoutStyle.BROWN_SPLIT),
+    TemplateInfo("ai_template_more_12.html", "12", Color(0xFF2B2B2B), Color(0xFFFFFFFF), LayoutStyle.DIAMOND_SPLIT),
 )
 
 
@@ -178,6 +179,7 @@ private fun TemplatePreview(accent: Color, bg: Color, layout: LayoutStyle, modif
         LayoutStyle.NAVY_DIAGONAL -> NavyDiagonalPreview(modifier)
         LayoutStyle.NAVY_PILL -> NavyPillPreview(modifier)
         LayoutStyle.BROWN_SPLIT -> PillHeaderPreview(modifier)
+        LayoutStyle.DIAMOND_SPLIT -> DiamondSplitPreview(modifier)
     }
 }
 
@@ -675,6 +677,45 @@ private fun NavyPillPreview(modifier: Modifier = Modifier) {
                     Box(modifier = Modifier.fillMaxWidth().height(2.dp).background(gray))
                     Spacer(Modifier.height(3.dp))
                 }
+            }
+        }
+    }
+}
+
+@Composable
+private fun DiamondSplitPreview(modifier: Modifier = Modifier) {
+    val dark = Color(0xFF2B2B2B)
+    val gray = Color(0xFF9AA0B0)
+    Row(modifier = modifier.background(Color.White)) {
+        Column(modifier = Modifier.fillMaxHeight().width(38.dp).background(dark).padding(5.dp)) {
+            Box(modifier = Modifier.fillMaxWidth().height(40.dp).background(Color(0xFF4A4A4A)))
+            Spacer(Modifier.height(8.dp))
+            repeat(3) {
+                Box(modifier = Modifier.fillMaxWidth(0.8f).height(3.dp).background(Color.White))
+                Spacer(Modifier.height(3.dp))
+                repeat(2) {
+                    Box(modifier = Modifier.fillMaxWidth().height(2.dp).background(Color.White.copy(alpha = 0.55f)))
+                    Spacer(Modifier.height(2.dp))
+                }
+                Spacer(Modifier.height(8.dp))
+            }
+        }
+        Column(modifier = Modifier.weight(1f).padding(8.dp)) {
+            Box(modifier = Modifier.fillMaxWidth(0.5f).height(8.dp).background(Color(0xFF1A1A1A)))
+            Spacer(Modifier.height(3.dp))
+            Box(modifier = Modifier.fillMaxWidth(0.35f).height(3.dp).background(gray))
+            Spacer(Modifier.height(10.dp))
+            repeat(3) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Box(modifier = Modifier.size(5.dp).background(Color(0xFF1A1A1A)))
+                    Spacer(Modifier.width(3.dp))
+                    Box(modifier = Modifier.fillMaxWidth(0.4f).height(3.dp).background(Color(0xFF1A1A1A)))
+                }
+                Spacer(Modifier.height(4.dp))
+                Box(modifier = Modifier.fillMaxWidth(0.9f).height(2.dp).background(gray))
+                Spacer(Modifier.height(2.dp))
+                Box(modifier = Modifier.fillMaxWidth(0.7f).height(2.dp).background(gray))
+                Spacer(Modifier.height(8.dp))
             }
         }
     }
