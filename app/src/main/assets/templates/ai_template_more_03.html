@@ -41,19 +41,22 @@
   .entry{margin-bottom:12px}
   .e-h{font-size:13px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--ink);line-height:1.4}
   .e-t{font-size:13px;line-height:1.55;margin-top:2px}
+.quote{font-style:italic;font-size:13px;margin-top:20px;line-height:1.5;}
+  .cols{display:flex;gap:36px}
+  .col-l{flex:1.15;min-width:0}
+  .col-r{flex:1;min-width:0}
+  .lang-row{display:flex;justify-content:space-between;align-items:center;font-size:13px;margin-bottom:10px}
+  .dots{display:flex;gap:4px}
+  .dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.35)}
+  .dot.on{background:#fff}
+  .avail{font-size:13px;line-height:1.6}
 </style>
 </head>
 <body>
 <div class="page">
 
-  <!-- ========== SIDEBAR ========== -->
   <div class="side">
     <div class="photo-circle"></div>
-
-    <div class="s-sec">
-      <div class="s-title" contenteditable="true">Profile</div>
-      <div class="profile" contenteditable="true">Business administration student. I consider myself a responsible and orderly person. I am looking forward to my first work experience.</div>
-    </div>
 
     <div class="s-sec">
       <div class="s-title" contenteditable="true">Contact Me</div>
@@ -61,9 +64,29 @@
       <div class="c-row"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg><span contenteditable="true" data-f="email">hello@email.com</span></div>
       <div class="c-row"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg><span contenteditable="true" data-f="address">Barangay, City, Philippines</span></div>
     </div>
+
+    <div class="s-sec">
+      <div class="s-title" contenteditable="true">About Me</div>
+      <div class="profile" contenteditable="true">I am a hardworking and motivated student with a strong interest in learning, technology, and personal growth. I am eager to apply my skills, gain real-world experience, and contribute positively to any team.</div>
+    </div>
+
+    <div class="s-sec">
+      <div class="s-title" contenteditable="true">Languages</div>
+      <div class="lang-row"><span contenteditable="true">English</span><div class="dots"><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot"></span></div></div>
+      <div class="lang-row"><span contenteditable="true">Filipino</span><div class="dots"><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span></div></div>
+      <div class="lang-row"><span contenteditable="true">Spanish</span><div class="dots"><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot"></span><span class="dot"></span></div></div>
+    </div>
+
+    <div class="s-sec">
+      <div class="s-title" contenteditable="true">Availability</div>
+      <div class="avail" contenteditable="true">Flexible / Part-time. Available for internship, part-time, or entry-level opportunities.</div>
+    </div>
+
+    <div class="s-sec">
+      <div class="quote" contenteditable="true">"Small steps create big progress."</div>
+    </div>
   </div>
 
-  <!-- ========== MAIN ========== -->
   <div class="main">
     <div class="hero">
       <div class="name" id="nameText" contenteditable="true" data-f="name">Olivia Wilson</div>
@@ -71,35 +94,89 @@
     </div>
 
     <div class="content">
-      <div class="m-sec">
-        <div class="m-head"><span class="arrow"></span><div class="m-title" contenteditable="true">Education</div></div>
-        <div class="m-body">
-          <div class="entry"><div class="e-h" contenteditable="true">University Name</div><div class="e-t" contenteditable="true">Bachelor of Science in Business Administration</div><div class="e-t" contenteditable="true">2020 - 2024</div></div>
-          <div class="entry"><div class="e-h" contenteditable="true">Senior High School</div><div class="e-t" contenteditable="true">School Name</div><div class="e-t" contenteditable="true">2018 - 2020</div></div>
-        </div>
-      </div>
+      <div class="cols">
+        <div class="col-l">
+          <div class="m-sec">
+            <div class="m-head"><span class="arrow"></span><div class="m-title" contenteditable="true">Career Objective</div></div>
+            <div class="m-body">
+              <div class="e-t" contenteditable="true">To obtain an internship or entry-level position where I can apply my skills, learn from experienced professionals, and contribute to the growth of the organization while building my career in the digital and creative field.</div>
+            </div>
+          </div>
 
-      <div class="m-sec">
-        <div class="m-head"><span class="arrow"></span><div class="m-title" contenteditable="true">Language</div></div>
-        <div class="m-body">
-          <div class="e-t" contenteditable="true">Native: Filipino</div>
-          <div class="e-t" contenteditable="true">Advanced: English</div>
-        </div>
-      </div>
+          <div class="m-sec">
+            <div class="m-head"><span class="arrow"></span><div class="m-title" contenteditable="true">Education</div></div>
+            <div class="m-body">
+              <div class="entry"><div class="e-h" contenteditable="true">Bachelor of Science in Business Administration</div><div class="e-t" contenteditable="true">Fauget University</div><div class="e-t" contenteditable="true">2020 - 2024</div></div>
+              <div class="entry"><div class="e-h" contenteditable="true">Senior High School</div><div class="e-t" contenteditable="true">School Name</div><div class="e-t" contenteditable="true">2018 - 2020</div></div>
+            </div>
+          </div>
 
-      <div class="m-sec">
-        <div class="m-head"><span class="arrow"></span><div class="m-title" contenteditable="true">Computer Skills</div></div>
-        <div class="m-body">
-          <div class="e-t" contenteditable="true">Typing speed: 60 WPM</div>
-          <div class="e-t" contenteditable="true">Spreadsheet</div>
-          <div class="e-t" contenteditable="true">Slide presentations</div>
-        </div>
-      </div>
+          <div class="m-sec">
+            <div class="m-head"><span class="arrow"></span><div class="m-title" contenteditable="true">Volunteer Experience</div></div>
+            <div class="m-body">
+              <div class="entry"><div class="e-h" contenteditable="true">Organization Name</div><div class="e-t" contenteditable="true">Volunteer, 2022 - 2023</div><div class="e-t" contenteditable="true">Helped organize community activities and assisted with daily tasks of the team.</div></div>
+            </div>
+          </div>
 
-      <div class="m-sec">
-        <div class="m-head"><span class="arrow"></span><div class="m-title" contenteditable="true">Volunteer Experience</div></div>
-        <div class="m-body">
-          <div class="entry"><div class="e-h" contenteditable="true">Organization Name</div><div class="e-t" contenteditable="true">Volunteer, 2022 - 2023</div><div class="e-t" contenteditable="true">Helped organize community activities and assisted with daily tasks of the team.</div></div>
+          <div class="m-sec">
+            <div class="m-head"><span class="arrow"></span><div class="m-title" contenteditable="true">References</div></div>
+            <div class="m-body">
+              <div class="e-t" contenteditable="true">Available upon request.</div>
+              <div class="e-t" contenteditable="true">I can provide references from professors, mentors, or previous work/volunteer supervisors.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-r">
+          <div class="m-sec">
+            <div class="m-head"><span class="arrow"></span><div class="m-title" contenteditable="true">Relevant Skills</div></div>
+            <div class="m-body">
+              <div class="e-t" contenteditable="true">Communication</div>
+              <div class="e-t" contenteditable="true">Teamwork</div>
+              <div class="e-t" contenteditable="true">Problem Solving</div>
+              <div class="e-t" contenteditable="true">Time Management</div>
+              <div class="e-t" contenteditable="true">Adaptability</div>
+              <div class="e-t" contenteditable="true">Creative Thinking</div>
+            </div>
+          </div>
+
+          <div class="m-sec">
+            <div class="m-head"><span class="arrow"></span><div class="m-title" contenteditable="true">Computer Skills</div></div>
+            <div class="m-body">
+              <div class="e-t" contenteditable="true">Typing speed: 60 WPM</div>
+              <div class="e-t" contenteditable="true">MS Word / Excel / PowerPoint</div>
+              <div class="e-t" contenteditable="true">Google Workspace</div>
+              <div class="e-t" contenteditable="true">Basic Web Design</div>
+              <div class="e-t" contenteditable="true">Spreadsheet & Data Entry</div>
+            </div>
+          </div>
+
+          <div class="m-sec">
+            <div class="m-head"><span class="arrow"></span><div class="m-title" contenteditable="true">Certifications / Training</div></div>
+            <div class="m-body">
+              <div class="e-t" contenteditable="true">Google Digital Marketing Certification (Google)</div>
+              <div class="e-t" contenteditable="true">HubSpot Inbound Marketing Certification</div>
+              <div class="e-t" contenteditable="true">SEMrush SEO Fundamentals Certificate</div>
+              <div class="e-t" contenteditable="true">Basic Graphic Design (Online Course)</div>
+            </div>
+          </div>
+
+          <div class="m-sec">
+            <div class="m-head"><span class="arrow"></span><div class="m-title" contenteditable="true">Achievements / Activities</div></div>
+            <div class="m-body">
+              <div class="e-t" contenteditable="true">Dean's List (2022 - 2023)</div>
+              <div class="e-t" contenteditable="true">Completed a Digital Marketing Workshop</div>
+              <div class="e-t" contenteditable="true">Member, Student Organization (2021 - 2024)</div>
+              <div class="e-t" contenteditable="true">Top 10 in School Marketing Competition (2022)</div>
+            </div>
+          </div>
+
+          <div class="m-sec">
+            <div class="m-head"><span class="arrow"></span><div class="m-title" contenteditable="true">Career Availability</div></div>
+            <div class="m-body">
+              <div class="e-t" contenteditable="true">Open to internship, part-time, or full-time opportunities. Willing to learn, grow, and adapt to new challenges.</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -107,7 +184,6 @@
 </div>
 
 <script>
-/* Name wraps like the reference, but shrinks if it needs more than 3 lines */
 (function(){
   var n=document.getElementById('nameText');
   function fit(){
