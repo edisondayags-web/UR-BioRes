@@ -229,16 +229,8 @@ fun AiTemplateScreen(htmlFileName: String, onBack: () -> Unit = {}) {
 
     // Igitna ang page (light templates lang) para pantay ang itim sa taas at baba
     fun recenter(view: WebView) {
-        if (!(htmlFileName.startsWith("resume_light") || (htmlFileName.startsWith("ai_template_more_") && htmlFileName != "ai_template_more_02.html"))) { topShift = 0f; return }
-        view.evaluateJavascript(
-            "(function(){var e=document.querySelector('.page');return e?e.getBoundingClientRect().height:0;})()"
-        ) { r ->
-            val h = r?.replace("\"", "")?.toFloatOrNull() ?: 0f
-            @Suppress("DEPRECATION")
-            val sc = view.scale
-            val pageH = h * sc
-            topShift = if (h > 0f && sc > 0f && view.height > pageH) (view.height - pageH) / 2f else 0f
-        }
+        // Centering disabled — lahat top-aligned na kagaya ni Template 02
+        topShift = 0f
     }
 
     val photoPickerLauncher = rememberLauncherForActivityResult(
