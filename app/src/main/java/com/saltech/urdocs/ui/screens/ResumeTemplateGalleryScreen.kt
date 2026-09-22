@@ -27,7 +27,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 
-private enum class LayoutStyle { CLASSIC_TWO_COL, ATS_SINGLE_COL, SIDEBAR_BOLD, MINIMAL_MONO, HEADER_BLOCK, LIGHT_SIDEBAR, BLUE_ARCH, TEAL_BAND, PILL_HEADER, NAVY_PHOTO, SAGE_MOON, PINK_FRAME, NAVY_DIAGONAL, NAVY_PILL, BROWN_SPLIT, DIAMOND_SPLIT, LAVENDER_ARCH, ROSE_BANNER, DARK_PHOTO_SIDE, BLUSH_BLACK_BLOCK, CREAM_BROWN_SPLIT }
+private enum class LayoutStyle { CLASSIC_TWO_COL, ATS_SINGLE_COL, SIDEBAR_BOLD, MINIMAL_MONO, HEADER_BLOCK, LIGHT_SIDEBAR, BLUE_ARCH, TEAL_BAND, PILL_HEADER, NAVY_PHOTO, SAGE_MOON, PINK_FRAME, NAVY_DIAGONAL, NAVY_PILL, BROWN_SPLIT, DIAMOND_SPLIT, LAVENDER_ARCH, ROSE_BANNER, DARK_PHOTO_SIDE, BLUSH_BLACK_BLOCK, CREAM_BROWN_SPLIT, TOPBAR_SPLIT }
 
 private data class TemplateInfo(
     val id: String,
@@ -80,6 +80,7 @@ private val resumeTemplates = listOf(
     TemplateInfo("ai_template_more_15.html", "15", Color(0xFF2B2B2B), Color(0xFFFFFFFF), LayoutStyle.DARK_PHOTO_SIDE),
     TemplateInfo("ai_template_more_16.html", "16", Color(0xFFE8D9D3), Color(0xFF1A1A1A), LayoutStyle.BLUSH_BLACK_BLOCK),
     TemplateInfo("ai_template_more_17.html", "17", Color(0xFF5A3A2E), Color(0xFFF7F1ED), LayoutStyle.CREAM_BROWN_SPLIT),
+    TemplateInfo("ai_template_more_18.html", "18", Color(0xFF1A1A1A), Color(0xFFF7F4EE), LayoutStyle.TOPBAR_SPLIT),
 )
 
 
@@ -190,6 +191,7 @@ private fun TemplatePreview(accent: Color, bg: Color, layout: LayoutStyle, modif
         LayoutStyle.DARK_PHOTO_SIDE -> DarkPhotoSidePreview(modifier)
         LayoutStyle.BLUSH_BLACK_BLOCK -> BlushBlackBlockPreview(modifier)
         LayoutStyle.CREAM_BROWN_SPLIT -> CreamBrownSplitPreview(modifier)
+        LayoutStyle.TOPBAR_SPLIT -> TopbarSplitPreview(modifier)
     }
 }
 
@@ -718,6 +720,38 @@ private fun DiamondSplitPreview(modifier: Modifier = Modifier) {
             repeat(3) {
                 Box(modifier = Modifier.fillMaxWidth().height(3.dp).background(gray))
                 Spacer(Modifier.height(6.dp))
+            }
+        }
+    }
+}
+
+@Composable
+private fun TopbarSplitPreview(modifier: Modifier = Modifier) {
+    val cream = Color(0xFFF7F4EE)
+    val dark = Color(0xFF1A1A1A)
+    val gray = Color(0xFF9AA0B0)
+    Column(modifier = modifier.background(cream)) {
+        Row(modifier = Modifier.fillMaxWidth().height(16.dp).background(dark))
+        Row(modifier = Modifier.weight(1f)) {
+            Column(modifier = Modifier.weight(1f).padding(8.dp)) {
+                Box(modifier = Modifier.fillMaxWidth().height(24.dp).background(Color(0xFF555555)))
+                Spacer(Modifier.height(8.dp))
+                Box(modifier = Modifier.fillMaxWidth(0.4f).height(4.dp).background(Color(0xFF1A1A1A)))
+                Spacer(Modifier.height(5.dp))
+                repeat(2) {
+                    Box(modifier = Modifier.fillMaxWidth().height(2.dp).background(gray))
+                    Spacer(Modifier.height(2.dp))
+                }
+            }
+            Column(modifier = Modifier.weight(1f).background(dark).padding(8.dp)) {
+                Box(modifier = Modifier.fillMaxWidth(0.6f).height(12.dp).background(Color.White))
+                Spacer(Modifier.height(8.dp))
+                Box(modifier = Modifier.fillMaxWidth(0.5f).height(3.dp).background(Color.White))
+                Spacer(Modifier.height(5.dp))
+                repeat(2) {
+                    Box(modifier = Modifier.fillMaxWidth().height(2.dp).background(Color(0xFFBBBBBB)))
+                    Spacer(Modifier.height(2.dp))
+                }
             }
         }
     }

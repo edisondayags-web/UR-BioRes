@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=794, minimum-scale=0.1, maximum-scale=5, user-scalable=yes">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:#000}body{background:#000;font-family:Arial,Helvetica,sans-serif;color:#1a1a1a;width:794px}
+[contenteditable="true"]:focus{background:#fff3cd;outline:1px dashed #999}
+.page{width:794px;min-height:1123px;background:#F7F4EE;display:flex;flex-direction:column}
+.topbar{background:#1A1A1A;color:#fff;display:flex;justify-content:space-between;align-items:center;padding:14px 40px;font-size:13px;letter-spacing:1px}
+.cols{display:flex;flex:1}
+.left{width:50%;padding:38px 40px}
+.right{width:50%;background:#1A1A1A;color:#fff;padding:38px 40px;display:flex;flex-direction:column}
+.photo{width:100%;height:220px;background:#333 center/cover no-repeat;margin-bottom:26px}
+.sh-l{font-size:20px;font-weight:900;margin:22px 0 10px}
+.sh-l:first-of-type{margin-top:0}
+.about-text{font-size:12.5px;line-height:1.65;color:#444;text-align:justify}
+.edurow{display:flex;justify-content:space-between;align-items:baseline;margin-top:14px}
+.edu-org{font-size:13px;font-weight:700}
+.edu-yr{font-size:12px;color:#555}
+.edu-deg{font-size:12.5px;color:#333;margin-top:2px}
+.name{font-family:Georgia,'Times New Roman',serif;font-size:52px;line-height:1.05;margin-bottom:22px}
+.sh-r{font-size:18px;font-weight:900;margin:20px 0 12px}
+.sh-r:first-of-type{margin-top:0}
+.jobblk{margin-bottom:14px}
+.jobmeta{font-size:11.5px;color:#bbb}
+.jobmeta b{color:#fff;font-weight:700}
+.jobpos{font-size:12.5px;margin-top:2px}
+.bl{position:relative;padding-left:14px;font-size:11.5px;line-height:1.55;margin-top:5px;color:#ddd}
+.bl:before{content:'\2022';position:absolute;left:0}
+.pills{display:flex;flex-wrap:wrap;gap:8px}
+.pill{border:1px solid #666;border-radius:20px;padding:5px 16px;font-size:11.5px}
+.crow{font-size:12px;line-height:1.9}
+</style></head><body>
+<div class="page">
+  <div class="topbar">
+    <span contenteditable="true">Resume</span>
+    <span contenteditable="true" data-f="title">Graphic Designer</span>
+    <span contenteditable="true">2026</span>
+  </div>
+  <div class="cols">
+    <div class="left">
+      <div class="photo"></div>
+      <div class="sh-l">Profil</div>
+      <div class="about-text" contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus finibus efficitur dolor. Mauris rutrum arcu ut diam elementum, sit amet lacinia augue mollis. Sed lacinia ipsum a elementum. Cras nonummy nibh in nulla. Vestibulum aliquam, purus sed sollicitudin luctus, justo enim pulvinar condimentum. Curabitur id feugiat nunc, sed rutrum et neque tristique senectus et netus et malesuada fames ac turpis egestas.</div>
+
+      <div class="sh-l">Education</div>
+      <div class="edurow"><span class="edu-org" contenteditable="true">Borcelle University</span><span class="edu-yr" contenteditable="true">2020 - 2024</span></div>
+      <div class="edu-deg" contenteditable="true">Master of Design</div>
+
+      <div class="edurow" style="margin-top:16px"><span class="edu-org" contenteditable="true">Borcelle University</span><span class="edu-yr" contenteditable="true">2015 - 2019</span></div>
+      <div class="edu-deg" contenteditable="true">Bachelor of Design</div>
+
+      <div class="sh-l">Education</div>
+      <div class="edurow"><span class="edu-org" contenteditable="true">Borcelle University</span><span class="edu-yr" contenteditable="true">2020 - 2024</span></div>
+      <div class="edu-deg" contenteditable="true">Bachelor of Design</div>
+    </div>
+
+    <div class="right">
+      <div class="name" contenteditable="true" data-f="name">Estelle<br>Darcy</div>
+
+      <div class="sh-r">Work Experience</div>
+      <div class="jobblk">
+        <div class="jobmeta"><b contenteditable="true">2015 - 2017</b> | <span contenteditable="true">Studio Showde</span></div>
+        <div class="jobpos" contenteditable="true">Graphic Designer</div>
+        <div class="bl" contenteditable="true">Lorem ipsum dolor sit amet consectetur.</div>
+        <div class="bl" contenteditable="true">Vivamus finibus efficitur dolor.</div>
+      </div>
+      <div class="jobblk">
+        <div class="jobmeta"><b contenteditable="true">2015 - 2017</b> | <span contenteditable="true">Larana, Inc.</span></div>
+        <div class="jobpos" contenteditable="true">Graphic Designer</div>
+        <div class="bl" contenteditable="true">Lorem ipsum dolor sit amet consectetur.</div>
+        <div class="bl" contenteditable="true">Vivamus finibus efficitur dolor.</div>
+      </div>
+
+      <div class="sh-r">Skills</div>
+      <div class="pills">
+        <div class="pill" contenteditable="true">Graphic Design</div>
+        <div class="pill" contenteditable="true">Motion Design</div>
+        <div class="pill" contenteditable="true">Photography</div>
+        <div class="pill" contenteditable="true">Layout Design</div>
+      </div>
+
+      <div class="sh-r">Contact</div>
+      <div class="crow" contenteditable="true" data-f="phone">+123-456-7890</div>
+      <div class="crow" contenteditable="true" data-f="email">hello@reallygreatsite.com</div>
+      <div class="crow" contenteditable="true" data-f="address">123 Anywhere St., Any City</div>
+    </div>
+  </div>
+</div>
+<script>
+function fitName(){
+  var el=document.querySelector('.name'); if(!el) return;
+  var s=52; el.style.fontSize=s+'px';
+  while(el.scrollWidth>el.parentElement.clientWidth+1 && s>26){ s-=1; el.style.fontSize=s+'px'; }
+}
+window.fitAll=fitName;
+window.addEventListener('load',fitName);
+document.addEventListener('input',function(e){
+  if(e.target.classList && e.target.classList.contains('name')) fitName();
+});
+</script>
+</body></html>
