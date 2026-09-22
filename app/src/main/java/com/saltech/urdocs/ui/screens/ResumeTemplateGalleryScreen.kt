@@ -45,7 +45,6 @@ private val legacyDarkTemplates = listOf(
     TemplateInfo("resume_template_05", "05", Color(0xFF9B6FE0), Color(0xFF1A0E2B)),
     TemplateInfo("resume_template_06", "06", Color(0xFF2E7D6B), Color(0xFF0E2020)),
     TemplateInfo("resume_template_07", "07", Color(0xFFD4AF37), Color(0xFF0E0E0E)),
-    TemplateInfo("resume_template_08", "08", Color(0xFF2F4B7C), Color(0xFF0E1730)),
     TemplateInfo("resume_template_09", "09", Color(0xFFC9A227), Color(0xFF0E0E0E)),
     TemplateInfo("resume_template_10", "10", Color(0xFFCC2B2B), Color(0xFF2B0E0E)),
     TemplateInfo("resume_template_11", "11", Color(0xFF2E5E3E), Color(0xFF0E1E14)),
@@ -71,7 +70,6 @@ private val resumeTemplates = listOf(
     TemplateInfo("ai_template_more_05.html", "05", Color(0xFF10375F), Color(0xFFFFFFFF), LayoutStyle.NAVY_PHOTO),
     TemplateInfo("ai_template_more_06.html", "06", Color(0xFFA9C6C6), Color(0xFFFDF3A6), LayoutStyle.SAGE_MOON),
     TemplateInfo("ai_template_more_07.html", "07", Color(0xFFF5C8F0), Color(0xFFF7F5F6), LayoutStyle.PINK_FRAME),
-    TemplateInfo("resume_template_08", "08", Color(0xFFD4AF37), Color(0xFF0E1730), LayoutStyle.NAVY_PHOTO),
 )
 
 
