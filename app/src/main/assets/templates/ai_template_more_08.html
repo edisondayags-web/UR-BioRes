@@ -18,10 +18,9 @@
   [contenteditable]{outline:none}
   [contenteditable="true"]:focus{background:#fff3cd;outline:1px dashed #999}
 
-  .page{position:relative;width:794px;min-height:1123px;background:#fff;overflow:hidden}
+  .page{position:relative;width:794px;min-height:1123px;background:#fff;overflow:hidden;display:flex;flex-direction:column}
 
-  /* ---------- HEADER / DIAGONALS ---------- */
-  .header{position:relative;height:270px;padding:40px 48px 0 48px}
+  .header{position:relative;height:270px;padding:40px 48px 0 48px;flex:0 0 auto}
   .diag-navy{position:absolute;top:0;left:0;width:520px;height:230px;background:var(--navy);
     clip-path:polygon(0 0,78% 0,30% 100%,0 100%)}
   .diag-gold{position:absolute;top:0;left:0;width:560px;height:230px;background:var(--gold);
@@ -38,8 +37,7 @@
   .name-wrap{white-space:nowrap;overflow:hidden;font-weight:800;font-size:40px;color:var(--navy);letter-spacing:-.5px}
   .job{margin-top:4px;font-size:15px;font-weight:600;color:var(--text);letter-spacing:2px;text-transform:uppercase}
 
-  /* ---------- BODY (2 COLUMNS) ---------- */
-  .body{display:flex;padding:20px 48px 40px}
+  .body{display:flex;padding:20px 48px 20px;flex:1 0 auto}
   .col-left{flex:0 0 250px;padding-right:24px}
   .col-right{flex:1;min-width:0;padding-left:24px;border-left:1px solid #e3e6ee}
 
@@ -58,7 +56,10 @@
   .ref-name{font-size:13px;font-weight:700;color:var(--ink)}
   .ref-sub{font-size:12px}
 
-  .contact-item{font-size:12.5px;line-height:1.9}
+  .contact-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+  .contact-icon{flex:0 0 20px;width:20px;height:20px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center}
+  .contact-icon svg{width:11px;height:11px;fill:#fff}
+  .contact-item{font-size:12.5px;line-height:1.4}
 
   .r-quote{font-size:16px;font-weight:700;color:var(--ink);line-height:1.5;margin-bottom:14px}
   .r-summary{font-size:12.5px;line-height:1.7;margin-bottom:22px}
@@ -74,6 +75,12 @@
   .wexp-role{font-size:14px;font-weight:700;color:var(--ink);margin-top:2px}
   .wexp-co{font-size:12.5px;font-weight:600;color:var(--navy)}
   .wexp-desc{font-size:12.5px;line-height:1.6;margin-top:4px}
+
+  .footer{position:relative;height:56px;flex:0 0 auto;margin-top:auto}
+  .f-gold{position:absolute;bottom:0;left:0;width:100%;height:40px;background:var(--gold);
+    clip-path:polygon(0 60%,100% 10%,100% 100%,0 100%);opacity:.95}
+  .f-navy{position:absolute;bottom:0;left:0;width:100%;height:34px;background:var(--navy);
+    clip-path:polygon(0 70%,100% 20%,100% 100%,0 100%)}
 </style>
 </head>
 <body>
@@ -100,21 +107,24 @@
           <li contenteditable="true">Public relations</li>
           <li contenteditable="true">Customer service</li>
           <li contenteditable="true">Innovative thinking</li>
+          <li contenteditable="true">Excellent planning skills</li>
           <li contenteditable="true">Negotiation skills</li>
+          <li contenteditable="true">Ability to multi-task</li>
+          <li contenteditable="true">Work to deadlines</li>
         </ul>
       </div>
 
       <div class="l-sec">
         <div class="l-title" contenteditable="true">Education</div>
         <div class="edu-item">
+          <div class="edu-date" contenteditable="true">2005 - 2007</div>
+          <div class="edu-title" contenteditable="true">Certificate in Marketing and Advertising</div>
+          <div class="edu-sub" contenteditable="true">Fauget School of The Arts</div>
+        </div>
+        <div class="edu-item">
           <div class="edu-date" contenteditable="true">2008 - 2011</div>
           <div class="edu-title" contenteditable="true">Bachelor of Business</div>
           <div class="edu-sub" contenteditable="true">Borcelle University</div>
-        </div>
-        <div class="edu-item">
-          <div class="edu-date" contenteditable="true">2005 - 2007</div>
-          <div class="edu-title" contenteditable="true">Certificate in Marketing</div>
-          <div class="edu-sub" contenteditable="true">Fauget School of The Arts</div>
         </div>
       </div>
 
@@ -134,9 +144,18 @@
 
       <div class="l-sec">
         <div class="l-title" contenteditable="true">Contact</div>
-        <div class="contact-item" contenteditable="true" data-f="phone">+123-456-7890</div>
-        <div class="contact-item" contenteditable="true" data-f="email">hello@email.com</div>
-        <div class="contact-item" contenteditable="true" data-f="address">123 Anywhere St., Any City</div>
+        <div class="contact-row">
+          <div class="contact-icon"><svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg></div>
+          <div class="contact-item" contenteditable="true" data-f="phone">+123-456-7890</div>
+        </div>
+        <div class="contact-row">
+          <div class="contact-icon"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></div>
+          <div class="contact-item" contenteditable="true" data-f="email">hello@email.com</div>
+        </div>
+        <div class="contact-row">
+          <div class="contact-icon"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></div>
+          <div class="contact-item" contenteditable="true" data-f="address">123 Anywhere St., Any City</div>
+        </div>
       </div>
     </div>
 
@@ -147,10 +166,10 @@
       <div class="r-title" contenteditable="true">Work Experience</div>
 
       <div class="wexp-item">
-        <div class="wexp-date" contenteditable="true">2021 - current</div>
-        <div class="wexp-role" contenteditable="true">Account Executive</div>
-        <div class="wexp-co" contenteditable="true">Timmerman Industries</div>
-        <div class="wexp-desc" contenteditable="true">My role involves liaising with clients, planning, organising events, advertising and PR. I specialise in building lasting client relationships and developing effective strategies.</div>
+        <div class="wexp-date" contenteditable="true">2011 - 2015</div>
+        <div class="wexp-role" contenteditable="true">Junior Account Executive</div>
+        <div class="wexp-co" contenteditable="true">Studio Shodwe</div>
+        <div class="wexp-desc" contenteditable="true">My role involved liaising with clients, planning, organising events, advertising and PR. I specialise in building lasting client relationships and developing effective strategies.</div>
       </div>
       <div class="wexp-item">
         <div class="wexp-date" contenteditable="true">2016 - 2020</div>
@@ -159,12 +178,17 @@
         <div class="wexp-desc" contenteditable="true">My role involved liaising with clients, planning, organising events, advertising and PR. I specialise in building lasting client relationships and developing effective strategies.</div>
       </div>
       <div class="wexp-item">
-        <div class="wexp-date" contenteditable="true">2011 - 2015</div>
-        <div class="wexp-role" contenteditable="true">Junior Account Executive</div>
-        <div class="wexp-co" contenteditable="true">Studio Shodwe</div>
-        <div class="wexp-desc" contenteditable="true">My role involved liaising with clients, planning, organising events, advertising and PR. I specialise in building lasting client relationships and developing effective strategies.</div>
+        <div class="wexp-date" contenteditable="true">2021 - current</div>
+        <div class="wexp-role" contenteditable="true">Account Executive</div>
+        <div class="wexp-co" contenteditable="true">Timmerman Industries</div>
+        <div class="wexp-desc" contenteditable="true">My role involves liaising with clients, planning, organising events, advertising and PR. I specialise in building lasting client relationships and developing effective strategies.</div>
       </div>
     </div>
+  </div>
+
+  <div class="footer">
+    <div class="f-gold"></div>
+    <div class="f-navy"></div>
   </div>
 </div>
 
