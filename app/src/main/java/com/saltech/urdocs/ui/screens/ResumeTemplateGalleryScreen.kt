@@ -27,7 +27,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 
-private enum class LayoutStyle { CLASSIC_TWO_COL, ATS_SINGLE_COL, SIDEBAR_BOLD, MINIMAL_MONO, HEADER_BLOCK, LIGHT_SIDEBAR, BLUE_ARCH, TEAL_BAND, PILL_HEADER, NAVY_PHOTO, SAGE_MOON, PINK_FRAME, NAVY_DIAGONAL, NAVY_PILL }
+private enum class LayoutStyle { CLASSIC_TWO_COL, ATS_SINGLE_COL, SIDEBAR_BOLD, MINIMAL_MONO, HEADER_BLOCK, LIGHT_SIDEBAR, BLUE_ARCH, TEAL_BAND, PILL_HEADER, NAVY_PHOTO, SAGE_MOON, PINK_FRAME, NAVY_DIAGONAL, NAVY_PILL, BROWN_SPLIT }
 
 private data class TemplateInfo(
     val id: String,
@@ -72,6 +72,7 @@ private val resumeTemplates = listOf(
     TemplateInfo("ai_template_more_07.html", "07", Color(0xFFF5C8F0), Color(0xFFF7F5F6), LayoutStyle.PINK_FRAME),
     TemplateInfo("ai_template_more_08.html", "08", Color(0xFF12294F), Color(0xFFFFFFFF), LayoutStyle.NAVY_DIAGONAL),
     TemplateInfo("ai_template_more_09.html", "09", Color(0xFF1B3A6B), Color(0xFFFFFFFF), LayoutStyle.NAVY_PILL),
+    TemplateInfo("ai_template_more_10.html", "10", Color(0xFF8B6F5C), Color(0xFF2E2A26), LayoutStyle.BROWN_SPLIT),
 )
 
 

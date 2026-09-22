@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=794, minimum-scale=0.1, maximum-scale=5, user-scalable=yes">
+<style>
+  :root{
+    --brown:#8B6F5C;
+    --brown-dark:#5c4a3d;
+    --charcoal:#2E2A26;
+    --ink:#0b1533;
+    --text:#333a4d;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  html{background:#000}
+  body{background:#000;width:794px;font-family:'Roboto','Helvetica Neue',Arial,sans-serif;color:var(--text)}
+  [contenteditable]{outline:none}
+  [contenteditable="true"]:focus{background:#fff3cd;outline:1px dashed #999}
+  .header [contenteditable="true"]:focus{background:rgba(255,255,255,.22);outline:1px dashed #fff}
+
+  .page{position:relative;width:794px;min-height:1123px;background:#fff}
+
+  .header{display:flex;height:280px}
+  .header-left{flex:1;background:var(--brown);color:#fff;padding:24px;display:flex;flex-direction:column;justify-content:flex-end}
+  .name-wrap{white-space:nowrap;overflow:hidden;font-weight:800;font-size:32px;letter-spacing:1px}
+  .job{margin-top:6px;font-size:14px;opacity:.85}
+  .summary{margin-top:10px;font-size:11px;line-height:1.5;opacity:.9}
+  .header-right{flex:1;background:var(--charcoal);background-size:cover;background-position:center}
+  .header-right img{width:100%;height:100%;object-fit:cover}
+
+  .body-row{display:flex}
+  .col-left{width:38%;padding:20px}
+  .col-right{width:62%;padding:20px 24px}
+  .s-title{background:var(--brown);color:#fff;padding:8px 14px;font-size:14px;font-weight:700;letter-spacing:.5px;margin:20px 0 12px}
+  .s-title:first-child{margin-top:0}
+  .contact .v{font-size:12px;margin-bottom:10px}
+  .edu-item,.skill-item{font-size:12px;margin-bottom:10px;line-height:1.4}
+  .edu-item .school{font-weight:600}
+
+  .m-title{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:700;color:var(--charcoal);
+    margin:20px 0 14px;border-bottom:2px solid var(--brown);padding-bottom:6px}
+  .m-title:first-child{margin-top:0}
+  .item{margin-bottom:16px}
+  .it-title{font-weight:700;font-size:13px}
+  .it-meta{display:flex;justify-content:space-between;font-size:11px;color:#666;margin-bottom:4px}
+  .it-desc{font-size:11px;color:#444;line-height:1.5}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <div class="header-left">
+      <div class="name-wrap" id="nameWrap"><span id="nameText" contenteditable="true" data-f="name">JHENNY DOE</span></div>
+      <div class="job" contenteditable="true" data-f="title">Professional Graphic Designer</div>
+      <div class="summary" contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</div>
+    </div>
+    <div class="header-right"><img src="" alt=""></div>
+  </div>
+
+  <div class="body-row">
+    <div class="col-left">
+      <div class="s-title" contenteditable="true">Contact</div>
+      <div class="contact">
+        <div class="v" contenteditable="true" data-f="phone">0912 345 6789</div>
+        <div class="v" contenteditable="true" data-f="email">juan@email.com</div>
+        <div class="v" contenteditable="true" data-f="address">Barangay, City, Philippines</div>
+      </div>
+
+      <div class="s-title" contenteditable="true">Education</div>
+      <div class="edu-item">
+        <div class="school" contenteditable="true">Fauget High School, 2020</div>
+        <div contenteditable="true">Science major</div>
+      </div>
+      <div class="edu-item">
+        <div class="school" contenteditable="true">Borcelle University, 2024</div>
+        <div contenteditable="true">Bachelor of Visual Communication</div>
+      </div>
+
+      <div class="s-title" contenteditable="true">Skills</div>
+      <div class="skill-item" contenteditable="true">Illustration Design</div>
+      <div class="skill-item" contenteditable="true">Social Media Optimization</div>
+      <div class="skill-item" contenteditable="true">Creative Advertising Copywriting</div>
+    </div>
+
+    <div class="col-right">
+      <div class="m-title" contenteditable="true">Education</div>
+      <div class="item">
+        <div class="it-title" contenteditable="true">Bachelor of Business Management</div>
+        <div class="it-meta"><span contenteditable="true">Borcelle University</span><span contenteditable="true">2016 - 2020</span></div>
+        <div class="it-desc" contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
+      </div>
+
+      <div class="m-title" contenteditable="true">Experience</div>
+      <div class="item">
+        <div class="it-title" contenteditable="true">Product Design Manager</div>
+        <div class="it-meta"><span contenteditable="true">Arowwai Industries</span><span contenteditable="true">2016 - 2020</span></div>
+        <div class="it-desc" contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
+      </div>
+      <div class="item">
+        <div class="it-title" contenteditable="true">Marketing Manager</div>
+        <div class="it-meta"><span contenteditable="true">Arowwai Industries</span><span contenteditable="true">2019 - 2020</span></div>
+        <div class="it-desc" contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var wrap=document.getElementById('nameWrap');
+  function fit(){
+    var size=32; wrap.style.fontSize=size+'px';
+    while(wrap.scrollWidth>wrap.clientWidth && size>16){ size-=1; wrap.style.fontSize=size+'px'; }
+  }
+  document.getElementById('nameText').addEventListener('input',fit);
+  window.addEventListener('load',fit); fit();
+})();
+</script>
+</body>
+</html>
