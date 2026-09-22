@@ -211,7 +211,6 @@ fun ResumeTemplateFormScreen(
             "resume_template_05" -> ResumeTemplate05Screen(data, { data = it }, onBack)
             "resume_template_06" -> ResumeTemplate06Screen(data, { data = it }, onBack)
             "resume_template_07" -> ResumeTemplate07Screen(data, { data = it }, onBack)
-            "resume_template_08" -> ResumeTemplate08Screen(data, { data = it }, onBack)
             "resume_template_09" -> ResumeTemplate09Screen(data, { data = it }, onBack)
             "resume_template_10" -> ResumeTemplate10Screen(data, { data = it }, onBack)
             "resume_template_11" -> ResumeTemplate11Screen(data, { data = it }, onBack)
@@ -2504,8 +2503,6 @@ fun ResumeTemplate07Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTem
         onHomeOverride = onHome
     )
 }
-
-@Composable
 
 @Composable
 fun ResumeTemplate09Screen(data: ResumeTemplateFields, onFieldChange: (ResumeTemplateFields) -> Unit, onHome: () -> Unit = {}) {
