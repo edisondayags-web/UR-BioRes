@@ -64,7 +64,8 @@ fun ResumeTemplate08_PixelPerfect(
     exp5Position: String, exp5Company: String, exp5Dates: String, exp5Desc: String,
     refName: String, refPositionCompany: String, refPhone: String, refEmail: String, refAvatarUri: String,
     ref2Name: String, ref2PositionCompany: String, ref2Phone: String, ref2Email: String, ref2AvatarUri: String,
-    onFieldChange: (String, String) -> Unit
+    onFieldChange: (String, String) -> Unit,
+    onHomeOverride: () -> Unit = {}
 ) {
     Column(
         modifier = Modifier
@@ -152,13 +153,13 @@ fun ResumeTemplate08_PixelPerfect(
                     RefEntry08(refName, refPositionCompany, refPhone, refEmail,
                         onName = { onFieldChange("refName", it) },
                         onPos = { onFieldChange("refPositionCompany", it) },
-                        onPhone = { onFieldChange("refContact", it) },
+                        onPhone = { onFieldChange("refPhone", it) },
                         onEmail = { onFieldChange("refEmail", it) })
                     Spacer(Modifier.height(10.dp))
                     RefEntry08(ref2Name, ref2PositionCompany, ref2Phone, ref2Email,
                         onName = { onFieldChange("ref2Name", it) },
                         onPos = { onFieldChange("ref2PositionCompany", it) },
-                        onPhone = { onFieldChange("ref2Contact", it) },
+                        onPhone = { onFieldChange("ref2Phone", it) },
                         onEmail = { onFieldChange("ref2Email", it) })
 
                     Spacer(Modifier.height(18.dp))
