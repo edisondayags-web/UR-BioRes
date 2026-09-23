@@ -3,7 +3,6 @@ package com.saltech.urdocs.ui.screens
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
-import android.graphics.Matrix
 import android.net.Uri
 import android.util.Base64
 import android.view.View
@@ -21,6 +20,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,7 +39,43 @@ import com.saltech.urdocs.ui.templates.saveBitmapToGallery
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
+import org.json.JSONTokener
 import java.io.ByteArrayOutputStream
+import java.io.File
+
+// ---- Draft persistence: para hindi mawala ang edits pag na-recreate ang screen ----
+
+private fun draftFile(context: android.content.Context, htmlFileName: String): File {
+    val dir = File(context.filesDir, "draft_templates")
+    if (!dir.exists()) dir.mkdirs()
+    return File(dir, htmlFileName)
+}
+
+private fun loadDraftHtml(context: android.content.Context, htmlFileName: String): String? {
+    val f = draftFile(context, htmlFileName)
+    return if (f.exists()) {
+        try { f.readText() } catch (e: Exception) { null }
+    } else null
+}
+
+private fun saveDraftHtml(context: android.content.Context, htmlFileName: String, html: String) {
+    if (html.isBlank()) return
+    try {
+        draftFile(context, htmlFileName).writeText(html)
+    } catch (e: Exception) { }
+}
+
+private suspend fun getFullHtml(webView: WebView): String =
+    suspendCancellableCoroutine { cont ->
+        webView.evaluateJavascript("document.documentElement.outerHTML") { result ->
+            val html = try {
+                JSONTokener(result ?: "\"\"").nextValue() as? String ?: ""
+            } catch (e: Exception) {
+                ""
+            }
+            if (cont.isActive) cont.resume(html) { }
+        }
+    }
 
 private suspend fun shrinkOverflowingText(webView: WebView): Unit =
     suspendCancellableCoroutine { cont ->
@@ -233,6 +269,22 @@ fun AiTemplateScreen(htmlFileName: String, onBack: () -> Unit = {}) {
         topShift = 0f
     }
 
+    // Auto-save ng edits tuwing ilang segundo habang bukas ang screen -- para
+    // hindi mawala ang mga na-type na content kapag na-recreate ang WebView
+    // (bumalik sa screen, nag-rotate, na-kill ng system sa background, atbp.)
+    LaunchedEffect(htmlFileName) {
+        while (true) {
+            delay(4000)
+            val wv = webViewRef
+            if (wv != null) {
+                val html = getFullHtml(wv)
+                if (html.isNotBlank()) {
+                    saveDraftHtml(context, htmlFileName, html)
+                }
+            }
+        }
+    }
+
     val photoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
@@ -292,7 +344,18 @@ fun AiTemplateScreen(htmlFileName: String, onBack: () -> Unit = {}) {
                     settings.displayZoomControls = false
                     setBackgroundColor(android.graphics.Color.parseColor("#0A1931"))
                     setInitialScale(130)
-                    loadUrl("file:///android_asset/templates/$htmlFileName")
+                    val draft = loadDraftHtml(ctx, htmlFileName)
+                    if (draft != null) {
+                        loadDataWithBaseURL(
+                            "file:///android_asset/templates/$htmlFileName",
+                            draft,
+                            "text/html",
+                            "UTF-8",
+                            null
+                        )
+                    } else {
+                        loadUrl("file:///android_asset/templates/$htmlFileName")
+                    }
                     webViewRef = this
                 }
             }
@@ -318,6 +381,8 @@ fun AiTemplateScreen(htmlFileName: String, onBack: () -> Unit = {}) {
                         isDownloading = true
                         scope.launch {
                             try {
+                                val htmlNow = getFullHtml(wv)
+                                if (htmlNow.isNotBlank()) saveDraftHtml(context, htmlFileName, htmlNow)
                                 @Suppress("DEPRECATION")
                                 val pageScale = wv.scale.takeIf { it > 0f } ?: context.resources.displayMetrics.density
                                 val full = captureFullWebView(wv, pageScale)
