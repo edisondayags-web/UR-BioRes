@@ -86,6 +86,7 @@ private val resumeTemplates = listOf(
     TemplateInfo("ai_template_more_21.html", "21", Color(0xFF1C1C1C), Color(0xFFFFFFFF), LayoutStyle.HEADER_PHOTO_SPLIT),
     TemplateInfo("ai_template_more_22.html", "22", Color(0xFF1B3A5C), Color(0xFFFFFFFF), LayoutStyle.NAVY_EXEC),
     TemplateInfo("ai_template_more_23.html", "23", Color(0xFF1B2A4A), Color(0xFFFFFFFF), LayoutStyle.NAVY_SIDE_SIMPLE),
+    TemplateInfo("ai_template_more_24.html", "24", Color(0xFF1D5C4F), Color(0xFFFFFFFF), LayoutStyle.NAVY_SIDE_SIMPLE),
 )
 
 
