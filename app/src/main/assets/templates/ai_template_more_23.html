@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=794, minimum-scale=0.1, maximum-scale=5, user-scalable=yes">
+<style>
+  :root{--navy:#1B2A4A;--text:#333;--gray:#777}
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  html{background:#000}
+  body{background:#000;width:794px;font-family:'Poppins','Montserrat','Roboto','Helvetica Neue',Arial,sans-serif;color:var(--text)}
+  [contenteditable="true"]:focus{background:#fff3cd;outline:1px dashed #999}
+  .sidebar [contenteditable="true"]:focus{background:rgba(255,255,255,.2);outline:1px dashed #fff}
+
+  .page{width:794px;min-height:1123px;display:flex;background:#fff}
+
+  .sidebar{width:30%;background:var(--navy);color:#fff;padding:40px 24px 40px}
+  .photo-circle{width:130px;height:130px;border-radius:50%;margin:0 auto 24px;overflow:hidden;
+    background:#456 url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%23789' d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v4h16v-4c0-2.66-5.33-4-8-4z'/></svg>") center/cover no-repeat}
+  .photo-circle img{width:100%;height:100%;object-fit:cover}
+
+  .s-sec{margin-bottom:26px}
+  .s-title{font-size:13px;font-weight:800;letter-spacing:2px;margin-bottom:12px;color:#fff;text-transform:uppercase}
+  .c-row{display:flex;align-items:center;gap:9px;font-size:11.5px;line-height:1.5;margin-bottom:10px;color:#dde3ea;word-break:break-word}
+  .c-row svg{flex:0 0 13px;width:13px;height:13px;fill:#fff}
+  .lang-row{display:flex;justify-content:space-between;font-size:12px;margin-bottom:8px;color:#dde3ea}
+
+  .main{flex:1;padding:40px 40px 40px}
+  .h-name{font-size:26px;font-weight:800;color:#222}
+  .h-title{font-size:13px;color:var(--gray);margin-top:4px;font-weight:600}
+  .h-line{width:100%;height:1px;background:#ddd;margin:16px 0}
+
+  .m-sec{margin-bottom:26px}
+  .m-head{display:flex;align-items:center;gap:8px;margin-bottom:14px}
+  .m-icon{width:8px;height:8px;background:var(--navy);border-radius:50%}
+  .m-h{font-size:14px;font-weight:800;letter-spacing:1.5px;color:var(--navy);text-transform:uppercase}
+  .profile-text{font-size:12px;line-height:1.65;color:#444}
+  .job{margin-bottom:16px}
+  .job-t{font-size:12.5px;font-weight:800;color:#222}
+  .job-c{font-size:11.5px;color:var(--gray);margin-top:2px}
+  .job ul{padding-left:16px;margin-top:6px}
+  .job li{font-size:11.5px;line-height:1.55;color:#444;margin-bottom:3px}
+  .edu-item{margin-bottom:12px}
+  .edu-t{font-size:12.5px;font-weight:800;color:#222}
+  .edu-s{font-size:11.5px;color:var(--gray);margin-top:2px}
+  .skills-grid{display:grid;grid-template-columns:1fr 1fr;column-gap:20px}
+  .skill-item{font-size:11.5px;line-height:2;color:#444}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="sidebar">
+    <div class="photo-circle"></div>
+
+    <div class="s-sec">
+      <div class="s-title" contenteditable="true">Contact</div>
+      <div class="c-row"><svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg><span contenteditable="true" data-f="phone">+123-456-7890</span></div>
+      <div class="c-row"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg><span contenteditable="true" data-f="email">brian.wayne@mail.com</span></div>
+      <div class="c-row"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg><span contenteditable="true" data-f="address">Oakland, California, USA</span></div>
+    </div>
+
+    <div class="s-sec">
+      <div class="s-title" contenteditable="true">Languages</div>
+      <div class="lang-row"><span contenteditable="true">English</span><span contenteditable="true">Native</span></div>
+      <div class="lang-row"><span contenteditable="true">Spanish</span><span contenteditable="true">Fluent</span></div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="h-name" id="nameText" contenteditable="true" data-f="name">Brian T. Wayne</div>
+    <div class="h-title" contenteditable="true" data-f="title">Business Development Consultant</div>
+    <div class="h-line"></div>
+
+    <div class="m-sec">
+      <div class="m-head"><span class="m-icon"></span><span class="m-h" contenteditable="true">Profile</span></div>
+      <div class="profile-text" contenteditable="true">Dr. Brian Thomas Wayne is a highly resourceful, forward-thinking Business Development Consultant with an extensive track record in identifying growth opportunities and driving strategic partnerships across various industries.</div>
+    </div>
+
+    <div class="m-sec">
+      <div class="m-head"><span class="m-icon"></span><span class="m-h" contenteditable="true">Work Experience</span></div>
+      <div class="job">
+        <div class="job-t" contenteditable="true">Business Development Consultant</div>
+        <div class="job-c" contenteditable="true">AppFolio, Inc. | 2022 - Present</div>
+        <ul>
+          <li contenteditable="true">Identified and secured new strategic partnerships resulting in increased quarterly revenue.</li>
+          <li contenteditable="true">Led cross-functional teams to streamline client onboarding processes.</li>
+        </ul>
+      </div>
+      <div class="job">
+        <div class="job-t" contenteditable="true">Business Development Manager</div>
+        <div class="job-c" contenteditable="true">Alaska Airlines, Inc. | 2018 - 2022</div>
+        <ul>
+          <li contenteditable="true">Directed market expansion strategies for new regional routes.</li>
+          <li contenteditable="true">Built and maintained relationships with over 30 key corporate accounts.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="m-sec">
+      <div class="m-head"><span class="m-icon"></span><span class="m-h" contenteditable="true">Education</span></div>
+      <div class="edu-item">
+        <div class="edu-t" contenteditable="true">Master of Business Administration</div>
+        <div class="edu-s" contenteditable="true">University of California, Berkeley | 2016 - 2018</div>
+      </div>
+      <div class="edu-item">
+        <div class="edu-t" contenteditable="true">Bachelor of Science in Marketing</div>
+        <div class="edu-s" contenteditable="true">San Diego State University | 2012 - 2016</div>
+      </div>
+    </div>
+
+    <div class="m-sec">
+      <div class="m-head"><span class="m-icon"></span><span class="m-h" contenteditable="true">Skills</span></div>
+      <div class="skills-grid">
+        <div class="skill-item" contenteditable="true">Strategic Planning</div>
+        <div class="skill-item" contenteditable="true">Client Relationship Building</div>
+        <div class="skill-item" contenteditable="true">Market Research</div>
+        <div class="skill-item" contenteditable="true">Negotiation</div>
+        <div class="skill-item" contenteditable="true">Project Management</div>
+        <div class="skill-item" contenteditable="true">CRM Software</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var n=document.getElementById('nameText');
+  function fit(){
+    var s=26; n.style.fontSize=s+'px';
+    while(n.scrollHeight>s*1.2*2+2 && s>16){ s-=1; n.style.fontSize=s+'px'; }
+  }
+  n.addEventListener('input',fit);
+  window.addEventListener('load',fit); fit();
+})();
+</script>
+</body>
+</html>
