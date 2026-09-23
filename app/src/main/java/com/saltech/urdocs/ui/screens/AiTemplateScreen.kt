@@ -36,6 +36,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import com.saltech.urdocs.ml.BackgroundHelper
 import com.saltech.urdocs.ml.FaceCropHelper
 import com.saltech.urdocs.ui.templates.saveBitmapToGallery
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -76,6 +77,46 @@ private suspend fun getFullHtml(webView: WebView): String =
             if (cont.isActive) cont.resume(html) { }
         }
     }
+
+// ---- Auto-fit zoom: kinukuha totoong laki ng content (lapad at taas) pag natapos
+// mag-load, tapos kinukumpyut yung tamang zoom % para kumasya sa screen nang walang
+// scroll -- kahit maikli (Template 02) o mahaba (7+ sections) ang laman. Manual
+// pinch zoom pa rin gumagana pagkatapos ng auto-fit. ----
+
+private suspend fun autoFitZoom(webView: WebView) {
+    if (webView.width <= 0 || webView.height <= 0) return
+    val js = "JSON.stringify({w: document.body.scrollWidth, h: document.body.scrollHeight})"
+    val dims = suspendCancellableCoroutine<Pair<Float, Float>> { cont ->
+        webView.evaluateJavascript(js) { result ->
+            try {
+                val clean = result?.replace("\\", "")?.trim('"') ?: "{}"
+                val w = Regex(""""w":([0-9.]+)""").find(clean)?.groupValues?.get(1)?.toFloatOrNull() ?: 0f
+                val h = Regex(""""h":([0-9.]+)""").find(clean)?.groupValues?.get(1)?.toFloatOrNull() ?: 0f
+                if (cont.isActive) cont.resume(Pair(w, h)) { }
+            } catch (e: Exception) {
+                if (cont.isActive) cont.resume(Pair(0f, 0f)) { }
+            }
+        }
+    }
+    val (contentW, contentH) = dims
+    if (contentW <= 0f || contentH <= 0f) return
+
+    val density = webView.resources.displayMetrics.density
+    val viewWidthCss = webView.width / density
+    val viewHeightCss = webView.height / density
+    val scaleW = viewWidthCss / contentW
+    val scaleH = viewHeightCss / contentH
+    // fit both width AND height -- kunin yung mas maliit para walang lalagpas sa screen
+    val targetScale = minOf(scaleW, scaleH, 1.3f).coerceAtLeast(0.1f)
+
+    @Suppress("DEPRECATION")
+    val currentScale = webView.scale.takeIf { it > 0f } ?: 1f
+    val factor = targetScale / currentScale
+    if (factor in 0.01f..50f && kotlin.math.abs(factor - 1f) > 0.02f) {
+        @Suppress("DEPRECATION")
+        webView.zoomBy(factor)
+    }
+}
 
 private suspend fun shrinkOverflowingText(webView: WebView): Unit =
     suspendCancellableCoroutine { cont ->
@@ -330,7 +371,13 @@ fun AiTemplateScreen(htmlFileName: String, onBack: () -> Unit = {}) {
                 WebView(ctx).apply {
                     webViewClient = object : WebViewClient() {
                         override fun onPageFinished(view: WebView?, url: String?) {
-                            if (view != null) recenter(view)
+                            if (view != null) {
+                                recenter(view)
+                                scope.launch {
+                                    delay(60)
+                                    autoFitZoom(view)
+                                }
+                            }
                         }
                         override fun onScaleChanged(view: WebView?, oldScale: Float, newScale: Float) {
                             if (view != null) recenter(view)
@@ -343,7 +390,6 @@ fun AiTemplateScreen(htmlFileName: String, onBack: () -> Unit = {}) {
                     settings.builtInZoomControls = true
                     settings.displayZoomControls = false
                     setBackgroundColor(android.graphics.Color.parseColor("#0A1931"))
-                    setInitialScale(130)
                     val draft = loadDraftHtml(ctx, htmlFileName)
                     if (draft != null) {
                         loadDataWithBaseURL(
