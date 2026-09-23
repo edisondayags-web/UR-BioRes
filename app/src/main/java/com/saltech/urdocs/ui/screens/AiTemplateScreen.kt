@@ -374,7 +374,9 @@ fun AiTemplateScreen(htmlFileName: String, onBack: () -> Unit = {}) {
                             if (view != null) {
                                 recenter(view)
                                 scope.launch {
-                                    delay(60)
+                                    delay(250)
+                                    autoFitZoom(view)
+                                    delay(400)
                                     autoFitZoom(view)
                                 }
                             }
