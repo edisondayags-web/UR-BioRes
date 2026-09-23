@@ -228,7 +228,7 @@ private suspend fun captureFullWebView(webView: WebView, density: Float): Bitmap
     delay(50)
     val rawHeight = getDocumentHeightPx(webView, density).coerceAtLeast(1)
 
-    val targetHeight = (webView.width * 1.4142f).toInt().coerceAtLeast(1)
+    val targetHeight = (webView.width.toFloat() * webView.height / webView.width).toInt().coerceAtLeast(1)
     var docHeight = rawHeight
     if (rawHeight > targetHeight) {
         val zoom = targetHeight.toFloat() / rawHeight.toFloat()
