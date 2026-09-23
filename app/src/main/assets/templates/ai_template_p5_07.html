@@ -372,24 +372,5 @@
 })();
 </script>
 
-<!-- AUTO-FIT-SCALE -->
-<script>
-(function(){
-  function fitToScreen(){
-    var BUTTON_RESERVE = 160;
-    var availableHeight = window.innerHeight - BUTTON_RESERVE;
-    var contentHeight = document.body.scrollHeight;
-    var scale = Math.min(1, availableHeight / contentHeight);
-    if (scale < 0.5) scale = 0.5;
-    document.body.style.transformOrigin = 'top center';
-    document.body.style.width = '100%';
-    document.body.style.transform = 'scaleY(' + scale + ')';
-    document.documentElement.style.overflow = 'hidden';
-    document.body.style.overflow = 'hidden';
-  }
-  window.addEventListener('load', fitToScreen);
-  window.addEventListener('resize', fitToScreen);
-})();
-</script>
 </body>
 </html>
