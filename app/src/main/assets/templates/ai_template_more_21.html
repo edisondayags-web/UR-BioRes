@@ -33,15 +33,20 @@
   .ref-item{margin-bottom:12px}
   .ref-n{font-size:11.5px;font-weight:700;color:#fff}
   .ref-c{font-size:10px;color:#ccc;margin-top:1px}
+  .cert-item{margin-bottom:12px}
+  .cert-t{font-size:12px;font-weight:700;color:#fff;line-height:1.4}
+  .cert-s{font-size:10.5px;color:#ccc;margin-top:2px}
 
   .main{flex:1;padding:28px 40px 40px}
   .m-sec{margin-bottom:24px}
   .m-h{font-size:14px;font-weight:800;letter-spacing:1.5px;color:var(--black);text-transform:uppercase;margin-bottom:10px}
   .about-text{font-size:12px;line-height:1.6;color:#444}
-  .job{margin-bottom:14px}
+  .job{margin-bottom:16px}
   .job-t{font-size:12.5px;font-weight:700;color:var(--black)}
   .job-d{font-size:11px;color:var(--gray);margin-top:1px}
-  .job-desc{font-size:11.5px;line-height:1.5;color:#555;margin-top:3px}
+  .job-desc{font-size:11.5px;line-height:1.5;color:#555;margin-top:5px}
+  .job-desc ul{padding-left:16px}
+  .job-desc li{margin-bottom:3px}
   .skill-row{display:flex;justify-content:space-between;font-size:11.5px;margin-bottom:6px;color:#333}
   .lang-row{display:flex;justify-content:space-between;font-size:11.5px;margin-bottom:6px;color:#333}
 </style>
@@ -79,6 +84,18 @@
       </div>
 
       <div class="s-sec">
+        <div class="s-title" contenteditable="true">Certifications</div>
+        <div class="cert-item">
+          <div class="cert-t" contenteditable="true">Adobe Certified Expert (ACE)</div>
+          <div class="cert-s" contenteditable="true">Issued 2020</div>
+        </div>
+        <div class="cert-item">
+          <div class="cert-t" contenteditable="true">Google UX Design Certificate</div>
+          <div class="cert-s" contenteditable="true">Issued 2019</div>
+        </div>
+      </div>
+
+      <div class="s-sec">
         <div class="s-title" contenteditable="true">References</div>
         <div class="ref-item">
           <div class="ref-n" contenteditable="true">Darwin S. Magama</div>
@@ -98,7 +115,7 @@
     <div class="main">
       <div class="m-sec">
         <div class="m-h" contenteditable="true">About Me</div>
-        <div class="about-text" contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio praesent libero sed cursus ante dapibus diam sed nisi nulla quis sem at nibh elementum imperdiet.</div>
+        <div class="about-text" contenteditable="true">Creative and detail-oriented Graphic & Web Designer with over 10 years of experience crafting visual identities and user-friendly digital experiences. Skilled in blending design aesthetics with functional web development to deliver projects that engage audiences and support business goals.</div>
       </div>
 
       <div class="m-sec">
@@ -106,17 +123,33 @@
         <div class="job">
           <div class="job-t" contenteditable="true">Senior Web Designer (2018 - Present)</div>
           <div class="job-d" contenteditable="true">Creative Agency / Chicago</div>
-          <div class="job-desc" contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio praesent libero sed cursus ante dapibus diam.</div>
+          <div class="job-desc">
+            <ul>
+              <li contenteditable="true">Led the redesign of 15+ client websites, improving average page load speed by 40%.</li>
+              <li contenteditable="true">Collaborated with developers and marketing teams to deliver on-brand, responsive designs.</li>
+              <li contenteditable="true">Mentored junior designers on UI best practices and design systems.</li>
+            </ul>
+          </div>
         </div>
         <div class="job">
           <div class="job-t" contenteditable="true">Graphic Designer (2015 - 2018)</div>
           <div class="job-d" contenteditable="true">Creative Market / Chicago</div>
-          <div class="job-desc" contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio praesent libero sed cursus ante dapibus diam.</div>
+          <div class="job-desc">
+            <ul>
+              <li contenteditable="true">Designed print and digital marketing materials for over 30 clients across various industries.</li>
+              <li contenteditable="true">Developed brand identity packages including logos, color palettes, and style guides.</li>
+            </ul>
+          </div>
         </div>
         <div class="job">
           <div class="job-t" contenteditable="true">Marketing Manager (2012 - 2015)</div>
           <div class="job-d" contenteditable="true">Manufacturing Agency</div>
-          <div class="job-desc" contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio praesent libero sed cursus ante dapibus diam.</div>
+          <div class="job-desc">
+            <ul>
+              <li contenteditable="true">Managed marketing campaigns that increased brand visibility and lead generation by 25%.</li>
+              <li contenteditable="true">Oversaw creative production for print, web, and social media assets.</li>
+            </ul>
+          </div>
         </div>
       </div>
 
