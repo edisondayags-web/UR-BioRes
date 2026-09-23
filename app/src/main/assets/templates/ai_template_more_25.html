@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=794, minimum-scale=0.1, maximum-scale=5, user-scalable=yes">
+<style>
+  :root{--teal:#1D6B7A;--text:#333;--gray:#777}
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  html{background:#000}
+  body{background:#000;width:794px;font-family:'Poppins','Montserrat','Roboto','Helvetica Neue',Arial,sans-serif;color:var(--text)}
+  [contenteditable="true"]:focus{background:#fff3cd;outline:1px dashed #999}
+
+  .page{width:794px;min-height:1123px;background:#fff}
+
+  .head{display:flex;align-items:center;padding:36px 40px 18px}
+  .photo-circle{width:100px;height:100px;border-radius:50%;overflow:hidden;margin-right:22px;flex:0 0 100px;
+    background:#5aa6c7 url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%237ab' d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v4h16v-4c0-2.66-5.33-4-8-4z'/></svg>") center/cover no-repeat}
+  .photo-circle img{width:100%;height:100%;object-fit:cover}
+  .h-first{font-size:15px;letter-spacing:3px;color:#555;font-weight:600}
+  .h-last{font-size:34px;font-weight:800;color:#161616;line-height:1.1}
+  .job-bar{background:var(--teal);color:#fff;font-size:13px;font-weight:700;letter-spacing:3px;padding:10px 40px}
+
+  .cols{display:flex}
+  .side{width:32%;padding:24px 24px 24px 40px;border-right:1px solid #eee}
+  .s-title{font-size:13px;font-weight:800;color:var(--teal);letter-spacing:1px;margin-bottom:12px}
+  .c-row{display:flex;align-items:center;gap:8px;font-size:11px;line-height:1.6;margin-bottom:8px;color:#333;word-break:break-word}
+  .c-row svg{flex:0 0 12px;width:12px;height:12px;fill:var(--teal)}
+  .s-sec{margin-bottom:22px}
+  .profile-text{font-size:11px;line-height:1.55;color:#333}
+  .skill-row{display:flex;align-items:center;gap:8px;font-size:11px;line-height:1.9;color:#333}
+  .skill-row svg{flex:0 0 11px;width:11px;height:11px;fill:var(--teal)}
+  .lang-row{font-size:11px;line-height:1.9;color:#333}
+
+  .main{flex:1;padding:24px 34px 30px 26px}
+  .m-h{font-size:13px;font-weight:800;color:var(--teal);letter-spacing:1px;margin-bottom:14px}
+  .job{margin-bottom:14px}
+  .job-t{font-size:12.5px;font-weight:800;color:#161616}
+  .job-r{font-size:11px;color:#444;font-style:italic;margin-top:1px}
+  .job-d{font-size:10px;color:#888;margin:2px 0 5px}
+  .job ul{list-style:none;padding-left:0}
+  .job li{font-size:10.5px;line-height:1.55;color:#333;margin-bottom:3px;padding-left:14px;position:relative}
+  .job li:before{content:"\2713";position:absolute;left:0;color:var(--teal);font-weight:700}
+  .edu-item{margin-bottom:10px}
+  .edu-t{font-size:12.5px;font-weight:800;color:#161616}
+  .edu-s{font-size:10.5px;color:#888;margin-top:2px}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="head">
+    <div class="photo-circle"></div>
+    <div>
+      <div class="h-first" id="firstText" contenteditable="true" data-f="firstname">SALLY</div>
+      <div class="h-last" id="lastText" contenteditable="true" data-f="lastname">Branders</div>
+    </div>
+  </div>
+  <div class="job-bar" contenteditable="true" data-f="title">JOB TITLE</div>
+
+  <div class="cols">
+    <div class="side">
+      <div class="s-sec">
+        <div class="s-title" contenteditable="true">Contacto</div>
+        <div class="c-row"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg><span contenteditable="true" data-f="email">sally.branders@gmail.com</span></div>
+        <div class="c-row"><svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg><span contenteditable="true" data-f="phone">+232 555 55 55</span></div>
+        <div class="c-row"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg><span contenteditable="true" data-f="address">NY, USA</span></div>
+        <div class="c-row"><svg viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14zM8.34 18V9.75H5.67V18h2.67zM7 8.63c.86 0 1.4-.57 1.4-1.28-.02-.73-.54-1.28-1.38-1.28-.84 0-1.4.55-1.4 1.28 0 .71.54 1.28 1.36 1.28H7zM18.34 18v-4.7c0-2.5-1.34-3.67-3.12-3.67-1.44 0-2.08.8-2.44 1.35v-1.15h-2.7v8.17h2.7v-4.56c0-.24.02-.48.09-.65.2-.48.65-.99 1.4-.99.99 0 1.38.75 1.38 1.86V18h2.69z"/></svg><span contenteditable="true" data-f="linkedin">linkedin/sally.branders</span></div>
+      </div>
+
+      <div class="s-sec">
+        <div class="s-title" contenteditable="true">Profile Summary</div>
+        <div class="profile-text" contenteditable="true">Business development manager looking to obtain a challenging position in an organization, utilizing my proven track record in driving revenue growth and forging strategic partnerships to achieve business objectives.</div>
+      </div>
+
+      <div class="s-sec">
+        <div class="s-title" contenteditable="true">Skills</div>
+        <div class="skill-row"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg><span contenteditable="true">Excel</span></div>
+        <div class="skill-row"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg><span contenteditable="true">PowerPoint</span></div>
+        <div class="skill-row"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg><span contenteditable="true">CRM</span></div>
+        <div class="skill-row"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg><span contenteditable="true">Problem-Solving</span></div>
+        <div class="skill-row"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg><span contenteditable="true">Team Leadership</span></div>
+      </div>
+
+      <div class="s-sec">
+        <div class="s-title" contenteditable="true">Languages</div>
+        <div class="lang-row" contenteditable="true">English: Native</div>
+        <div class="lang-row" contenteditable="true">Spanish: Intermediate</div>
+        <div class="lang-row" contenteditable="true">French: Beginner</div>
+      </div>
+    </div>
+
+    <div class="main">
+      <div class="m-h" contenteditable="true">Professional Experience</div>
+      <div class="job">
+        <div class="job-t" contenteditable="true">XYZ Consulting Firm</div>
+        <div class="job-r" contenteditable="true">Business Development Manager</div>
+        <div class="job-d" contenteditable="true">NY, USA | 00/0000 - 00/0000</div>
+        <ul>
+          <li contenteditable="true">Developed and executed a comprehensive sales strategy, resulting in a 40% increase in annual revenue within one year.</li>
+          <li contenteditable="true">Identified and pursued new business opportunities through market research.</li>
+        </ul>
+      </div>
+      <div class="job">
+        <div class="job-t" contenteditable="true">ABC Corporation</div>
+        <div class="job-r" contenteditable="true">Sales Representative</div>
+        <div class="job-d" contenteditable="true">NY, USA | 00/0000 - 00/0000</div>
+        <ul>
+          <li contenteditable="true">Achieved consistent sales targets by successfully prospecting and closing new business in a competitive market.</li>
+          <li contenteditable="true">Conducted product demonstrations and presentations to potential clients.</li>
+        </ul>
+      </div>
+      <div class="job">
+        <div class="job-t" contenteditable="true">DEF Research Agency</div>
+        <div class="job-r" contenteditable="true">Market Research Analyst</div>
+        <div class="job-d" contenteditable="true">NY, USA | 00/0000 - 00/0000</div>
+        <ul>
+          <li contenteditable="true">Conducted in-depth market research and competitor analysis, providing valuable insights to guide strategic decision-making.</li>
+          <li contenteditable="true">Developed comprehensive market reports.</li>
+        </ul>
+      </div>
+
+      <div class="m-h" contenteditable="true" style="margin-top:8px">Education</div>
+      <div class="edu-item">
+        <div class="edu-t" contenteditable="true">Master of Business Administration</div>
+        <div class="edu-s" contenteditable="true">NYU | 20XX - 20XX</div>
+      </div>
+      <div class="edu-item">
+        <div class="edu-t" contenteditable="true">Bachelor of Commerce in Marketing</div>
+        <div class="edu-s" contenteditable="true">NYU | 20XX - 20XX</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var l=document.getElementById('lastText');
+  function fit(){
+    var s=34; l.style.fontSize=s+'px';
+    while(l.scrollWidth>240 && s>18){ s-=1; l.style.fontSize=s+'px'; }
+  }
+  l.addEventListener('input',fit);
+  window.addEventListener('load',fit); fit();
+})();
+</script>
+</body>
+</html>
