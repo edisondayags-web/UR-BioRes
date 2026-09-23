@@ -13,30 +13,31 @@
 
   .page{width:794px;min-height:1123px;display:flex;background:#fff}
 
-  .sidebar{width:30%;background:var(--navy);color:#fff;padding:40px 24px 40px}
-  .photo-circle{width:130px;height:130px;border-radius:50%;margin:0 auto 24px;overflow:hidden;
+  .sidebar{width:42%;background:var(--navy);color:#fff;padding:40px 32px 40px}
+  .h-name{font-family:Georgia,'Times New Roman',serif;font-size:30px;font-weight:800;color:#fff;line-height:1.2}
+  .h-title{font-size:14px;color:#dde3ea;margin-top:8px;font-weight:500}
+  .photo-circle{width:150px;height:150px;border-radius:50%;margin:24px 0 20px;overflow:hidden;
     background:#456 url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%23789' d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v4h16v-4c0-2.66-5.33-4-8-4z'/></svg>") center/cover no-repeat}
   .photo-circle img{width:100%;height:100%;object-fit:cover}
 
-  .s-sec{margin-bottom:26px}
-  .s-title{font-size:13px;font-weight:800;letter-spacing:2px;margin-bottom:12px;color:#fff;text-transform:uppercase}
+  .s-sec{margin-bottom:24px}
+  .s-title{font-size:13px;font-weight:800;letter-spacing:1px;margin-bottom:12px;padding:8px 14px;background:rgba(255,255,255,.08);color:#fff;text-transform:uppercase}
   .c-row{display:flex;align-items:center;gap:9px;font-size:11.5px;line-height:1.5;margin-bottom:10px;color:#dde3ea;word-break:break-word}
   .c-row svg{flex:0 0 13px;width:13px;height:13px;fill:#fff}
-  .lang-row{display:flex;justify-content:space-between;font-size:12px;margin-bottom:8px;color:#dde3ea}
-  .cert-item-side{margin-bottom:12px}
-  .cert-t-side{font-size:12px;font-weight:700;color:#fff;line-height:1.4}
-  .cert-s-side{font-size:10.5px;color:#9fb0c2;margin-top:2px}
+  .profile-text-side{font-size:11.5px;line-height:1.65;color:#dde3ea}
+  .lang-row{display:flex;justify-content:space-between;align-items:center;font-size:12px;margin-bottom:10px;color:#fff}
+  .stars{display:flex;gap:2px}
+  .star{width:11px;height:11px;fill:#f2b632}
+  .award-item{margin-bottom:14px}
+  .award-t{font-size:12px;font-weight:700;color:#fff;line-height:1.4}
+  .award-s{font-size:10.5px;color:#9fb0c2;margin-top:2px}
 
   .main{flex:1;padding:40px 40px 40px}
-  .h-name{font-size:26px;font-weight:800;color:#222}
-  .h-title{font-size:13px;color:var(--gray);margin-top:4px;font-weight:600}
-  .h-line{width:100%;height:1px;background:#ddd;margin:16px 0}
+  .h-line{width:100%;height:1px;background:#ddd;margin:0 0 16px}
 
   .m-sec{margin-bottom:26px}
-  .m-head{display:flex;align-items:center;gap:8px;margin-bottom:14px}
-  .m-icon{width:8px;height:8px;background:var(--navy);border-radius:50%}
-  .m-h{font-size:14px;font-weight:800;letter-spacing:1.5px;color:var(--navy);text-transform:uppercase}
-  .profile-text{font-size:12px;line-height:1.65;color:#444}
+  .m-head{display:flex;align-items:center;gap:8px;margin-bottom:14px;background:#eef0f4;padding:9px 14px}
+  .m-h{font-size:14px;font-weight:800;letter-spacing:1px;color:var(--navy);text-transform:uppercase}
   .job{margin-bottom:16px}
   .job-t{font-size:12.5px;font-weight:800;color:#222}
   .job-c{font-size:11.5px;color:var(--gray);margin-top:2px}
@@ -45,104 +46,104 @@
   .edu-item{margin-bottom:12px}
   .edu-t{font-size:12.5px;font-weight:800;color:#222}
   .edu-s{font-size:11.5px;color:var(--gray);margin-top:2px}
-  .skills-grid{display:grid;grid-template-columns:1fr 1fr;column-gap:20px}
-  .skill-item{font-size:11.5px;line-height:2;color:#444}
-  .ach-list{padding-left:16px}
-  .ach-list li{font-size:11.5px;line-height:1.7;color:#444;margin-bottom:5px}
+  .edu-x{font-size:11.5px;color:#444;margin-top:1px}
+  .skills-list{padding-left:16px}
+  .skills-list li{font-size:11.5px;line-height:2;color:#444}
 </style>
 </head>
 <body>
 <div class="page">
 
   <div class="sidebar">
+    <div class="h-name" id="nameText" contenteditable="true" data-f="name">Brian T. Wayne</div>
+    <div class="h-title" contenteditable="true" data-f="title">Business Development Consultant</div>
     <div class="photo-circle"></div>
 
     <div class="s-sec">
-      <div class="s-title" contenteditable="true">Contact</div>
-      <div class="c-row"><svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg><span contenteditable="true" data-f="phone">+123-456-7890</span></div>
-      <div class="c-row"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg><span contenteditable="true" data-f="email">brian.wayne@mail.com</span></div>
-      <div class="c-row"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg><span contenteditable="true" data-f="address">Oakland, California, USA</span></div>
+      <div class="c-row"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg><span contenteditable="true" data-f="email">brian@wayne.com</span></div>
+      <div class="c-row"><svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg><span contenteditable="true" data-f="phone">+1 (555) 123-4567</span></div>
+      <div class="c-row"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg><span contenteditable="true" data-f="address">1234 Business District, Makati, Metro Manila, 1200, PH</span></div>
+      <div class="c-row"><svg viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14zM8.34 18V9.75H5.67V18h2.67zM7 8.63c.86 0 1.4-.57 1.4-1.28-.02-.73-.54-1.28-1.38-1.28-.84 0-1.4.55-1.4 1.28 0 .71.54 1.28 1.36 1.28H7zM18.34 18v-4.7c0-2.5-1.34-3.67-3.12-3.67-1.44 0-2.08.8-2.44 1.35v-1.15h-2.7v8.17h2.7v-4.56c0-.24.02-.48.09-.65.2-.48.65-.99 1.4-.99.99 0 1.38.75 1.38 1.86V18h2.69z"/></svg><span contenteditable="true" data-f="linkedin">linkedin.com/in/brian-wayne</span></div>
+      <div class="c-row"><svg viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7C4.24 7 2 9.24 2 12s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg><span contenteditable="true" data-f="website">brianwayne.com</span></div>
+    </div>
+
+    <div class="s-sec">
+      <div class="s-title" contenteditable="true">Profile</div>
+      <div class="profile-text-side" contenteditable="true">I'm Brian, a Business Development Consultant with a passion for building strategic partnerships, driving revenue growth, and creating long-term value. I thrive in fast-paced environments where I can leverage my communication skills, market knowledge, and problem-solving mindset to help businesses expand and succeed.</div>
     </div>
 
     <div class="s-sec">
       <div class="s-title" contenteditable="true">Languages</div>
-      <div class="lang-row"><span contenteditable="true">English</span><span contenteditable="true">Native</span></div>
-      <div class="lang-row"><span contenteditable="true">Spanish</span><span contenteditable="true">Fluent</span></div>
+      <div class="lang-row"><span contenteditable="true">English</span><span class="stars">
+        <svg class="star" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg class="star" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg class="star" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg class="star" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg class="star" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+      </span></div>
+      <div class="lang-row"><span contenteditable="true">Spanish</span><span class="stars">
+        <svg class="star" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg class="star" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg class="star" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg class="star" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg class="star" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+      </span></div>
     </div>
 
     <div class="s-sec">
-      <div class="s-title" contenteditable="true">Certifications</div>
-      <div class="cert-item-side">
-        <div class="cert-t-side" contenteditable="true">Certified Business Development Professional (CBDP)</div>
-        <div class="cert-s-side" contenteditable="true">Issued 2021</div>
+      <div class="s-title" contenteditable="true">Awards</div>
+      <div class="award-item">
+        <div class="award-t" contenteditable="true">Outstanding Business Student Award</div>
+        <div class="award-s" contenteditable="true">University of Business, California, 2018</div>
       </div>
-      <div class="cert-item-side">
-        <div class="cert-t-side" contenteditable="true">Project Management Professional (PMP)</div>
-        <div class="cert-s-side" contenteditable="true">Issued 2019</div>
+      <div class="award-item">
+        <div class="award-t" contenteditable="true">Dean's List</div>
+        <div class="award-s" contenteditable="true">University of Business, Los Angeles, 2017-2018</div>
       </div>
     </div>
   </div>
 
   <div class="main">
-    <div class="h-name" id="nameText" contenteditable="true" data-f="name">Brian T. Wayne</div>
-    <div class="h-title" contenteditable="true" data-f="title">Business Development Consultant</div>
     <div class="h-line"></div>
 
     <div class="m-sec">
-      <div class="m-head"><span class="m-icon"></span><span class="m-h" contenteditable="true">Profile</span></div>
-      <div class="profile-text" contenteditable="true">Dr. Brian Thomas Wayne is a highly resourceful, forward-thinking Business Development Consultant with an extensive track record in identifying growth opportunities and driving strategic partnerships across various industries.</div>
-    </div>
-
-    <div class="m-sec">
-      <div class="m-head"><span class="m-icon"></span><span class="m-h" contenteditable="true">Work Experience</span></div>
+      <div class="m-head"><span class="m-h" contenteditable="true">Work Experience</span></div>
       <div class="job">
         <div class="job-t" contenteditable="true">Business Development Consultant</div>
-        <div class="job-c" contenteditable="true">AppFolio, Inc. | 2022 - Present</div>
+        <div class="job-c" contenteditable="true">Global Growth Solutions | 2019 - Present</div>
         <ul>
-          <li contenteditable="true">Identified and secured new strategic partnerships resulting in increased quarterly revenue.</li>
-          <li contenteditable="true">Led cross-functional teams to streamline client onboarding processes.</li>
+          <li contenteditable="true">Developed and implemented strategic plans resulting in a 30% increase in new business opportunities.</li>
+          <li contenteditable="true">Collaborated with cross-functional teams to grow existing accounts and maximize revenue.</li>
+          <li contenteditable="true">Identified and evaluated new markets and business opportunities, leading to a 20% increase in sales revenue.</li>
+          <li contenteditable="true">Conducted market research and analysis to identify potential growth areas, resulting in the successful launch of 4 new product lines.</li>
         </ul>
       </div>
       <div class="job">
-        <div class="job-t" contenteditable="true">Business Development Manager</div>
-        <div class="job-c" contenteditable="true">Alaska Airlines, Inc. | 2018 - 2022</div>
+        <div class="job-t" contenteditable="true">Intern</div>
+        <div class="job-c" contenteditable="true">Riverside Communications | June - August 2018 | New York, NY</div>
         <ul>
-          <li contenteditable="true">Directed market expansion strategies for new regional routes.</li>
-          <li contenteditable="true">Built and maintained relationships with over 30 key corporate accounts.</li>
+          <li contenteditable="true">Assisted in the development and implementation of social media & marketing campaigns.</li>
+          <li contenteditable="true">Built and managed social media presence to increase brand awareness and user loyalty.</li>
+          <li contenteditable="true">Contributed to the team's efforts in creating & posting content across multiple platforms, leading to a 15% increase in engagement and a 10% growth in followers over the internship period.</li>
         </ul>
       </div>
     </div>
 
     <div class="m-sec">
-      <div class="m-head"><span class="m-icon"></span><span class="m-h" contenteditable="true">Education</span></div>
+      <div class="m-head"><span class="m-h" contenteditable="true">Education</span></div>
       <div class="edu-item">
         <div class="edu-t" contenteditable="true">Master of Business Administration</div>
-        <div class="edu-s" contenteditable="true">University of California, Berkeley | 2016 - 2018</div>
+        <div class="edu-s" contenteditable="true">Riverside University | 2016 - 2018</div>
+        <div class="edu-x" contenteditable="true">MBA - Global Business</div>
       </div>
       <div class="edu-item">
-        <div class="edu-t" contenteditable="true">Bachelor of Science in Marketing</div>
-        <div class="edu-s" contenteditable="true">San Diego State University | 2012 - 2016</div>
+        <div class="edu-t" contenteditable="true">Bachelor of Business Administration</div>
+        <div class="edu-s" contenteditable="true">Riverside University | 2012 - 2016</div>
+        <div class="edu-x" contenteditable="true">BBA - Business Administration</div>
       </div>
     </div>
 
     <div class="m-sec">
-      <div class="m-head"><span class="m-icon"></span><span class="m-h" contenteditable="true">Skills</span></div>
-      <div class="skills-grid">
-        <div class="skill-item" contenteditable="true">Strategic Planning</div>
-        <div class="skill-item" contenteditable="true">Client Relationship Building</div>
-        <div class="skill-item" contenteditable="true">Market Research</div>
-        <div class="skill-item" contenteditable="true">Negotiation</div>
-        <div class="skill-item" contenteditable="true">Project Management</div>
-        <div class="skill-item" contenteditable="true">CRM Software</div>
-      </div>
-    </div>
-
-    <div class="m-sec">
-      <div class="m-head"><span class="m-icon"></span><span class="m-h" contenteditable="true">Key Achievements</span></div>
-      <ul class="ach-list">
-        <li contenteditable="true">Grew quarterly partnership revenue by 22% within first year at AppFolio, Inc.</li>
-        <li contenteditable="true">Expanded corporate account base by 30+ relationships, strengthening long-term client retention.</li>
-        <li contenteditable="true">Launched 3 new regional routes at Alaska Airlines, contributing to a measurable increase in market share.</li>
+      <div class="m-head"><span class="m-h" contenteditable="true">Skills</span></div>
+      <ul class="skills-list">
+        <li contenteditable="true">Strategic thinking and problem solving</li>
+        <li contenteditable="true">Communication and presentation</li>
+        <li contenteditable="true">Relationship building and networking</li>
+        <li contenteditable="true">Data analysis and business intelligence</li>
+        <li contenteditable="true">Project management and leadership</li>
+        <li contenteditable="true">Customer relationship building</li>
       </ul>
     </div>
   </div>
@@ -152,8 +153,8 @@
 (function(){
   var n=document.getElementById('nameText');
   function fit(){
-    var s=26; n.style.fontSize=s+'px';
-    while(n.scrollHeight>s*1.2*2+2 && s>16){ s-=1; n.style.fontSize=s+'px'; }
+    var s=30; n.style.fontSize=s+'px';
+    while(n.scrollHeight>s*1.2*2+2 && s>18){ s-=1; n.style.fontSize=s+'px'; }
   }
   n.addEventListener('input',fit);
   window.addEventListener('load',fit); fit();
