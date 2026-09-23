@@ -25,12 +25,16 @@ html{background:#000}body{background:#000;font-family:Arial,Helvetica,sans-serif
 .bar-pct{font-size:12px;color:#3a2620;width:32px}
 .crow{display:flex;align-items:center;gap:12px;font-size:13px;margin-bottom:14px}
 .crow .ic{width:30px;height:30px;border-radius:50%;background:#5A3A2E;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;flex:none}
+.cert-item{margin-bottom:12px}
+.cert-t{font-size:13px;font-weight:900;color:#3a2620}
+.cert-s{font-size:11.5px;color:#7a6a63;margin-top:2px}
+.lang-row{display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px;color:#3a2620}
 </style></head><body>
 <div class="page">
   <div class="col">
     <div class="name" contenteditable="true" data-f="name">Sheena<br>Catacutan</div>
     <div class="jobtitle" contenteditable="true" data-f="title">Digital Marketing Specialist</div>
-    <div class="intro" contenteditable="true">I'm Avery Davis, Digital Marketing Specialist with 4 years experience. I'm specialist in handling and managing day to day team operation with considerable experience to read trends</div>
+    <div class="intro" contenteditable="true">I'm Sheena Catacutan, a Digital Marketing Specialist with 4 years of experience. I specialize in handling and managing day-to-day team operations with considerable experience in reading market trends and driving results.</div>
 
     <div class="pill">Education</div>
     <div class="yr" contenteditable="true">2012 - 2015</div>
@@ -49,6 +53,16 @@ html{background:#000}body{background:#000;font-family:Arial,Helvetica,sans-serif
     <div class="org" contenteditable="true">Studio Shodwe</div>
     <div class="org" contenteditable="true" style="margin-top:4px">Digital Marketing Manager</div>
     <div class="bl" contenteditable="true">Managing oversees Company digital marketing strtegies to reach more client in website and social media.</div>
+
+    <div class="pill">Certifications</div>
+    <div class="cert-item">
+      <div class="cert-t" contenteditable="true">Google Digital Marketing & E-commerce</div>
+      <div class="cert-s" contenteditable="true">Issued 2021</div>
+    </div>
+    <div class="cert-item">
+      <div class="cert-t" contenteditable="true">HubSpot Content Marketing Certification</div>
+      <div class="cert-s" contenteditable="true">Issued 2020</div>
+    </div>
   </div>
 
   <div class="divider"></div>
@@ -77,6 +91,10 @@ html{background:#000}body{background:#000;font-family:Arial,Helvetica,sans-serif
       <div class="skill-lbl" contenteditable="true">Content Marketing</div>
       <div class="bar-row"><div class="bar-track"><div class="bar-fill" style="width:80%"></div></div><span class="bar-pct" contenteditable="true">80%</span></div>
     </div>
+
+    <div class="pill">Language</div>
+    <div class="lang-row"><span contenteditable="true">English</span><span contenteditable="true">Fluent</span></div>
+    <div class="lang-row"><span contenteditable="true">Filipino</span><span contenteditable="true">Native</span></div>
 
     <div class="pill">Contact</div>
     <div class="crow"><div class="ic">&#9742;&#xFE0E;</div><span contenteditable="true" data-f="phone">+123-456-7890</span></div>
@@ -109,7 +127,7 @@ document.addEventListener('input',function(e){
     if(actual >= target * 0.95) return;
     var deficit = target - actual;
     var candidates = Array.prototype.filter.call(page.querySelectorAll('*'), function(el){
-      return /-sec\b|\bjob\b|\bentry\b|\bitem\b|exp-item|side-block/i.test(el.className || '');
+      return /-sec\b|\bjob\b|\bentry\b|\bitem\b|exp-item|side-block|\bskill\b|\bcrow\b/i.test(el.className || '');
     });
     if(candidates.length === 0) return;
     var extra = Math.min(Math.floor(deficit / candidates.length), 40);
