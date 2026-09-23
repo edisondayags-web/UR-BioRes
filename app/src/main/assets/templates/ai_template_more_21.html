@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=794, minimum-scale=0.1, maximum-scale=5, user-scalable=yes">
+<style>
+  :root{--black:#1c1c1c;--gray:#888;--text:#333}
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  html{background:#000}
+  body{background:#000;width:794px;font-family:'Poppins','Montserrat','Roboto','Helvetica Neue',Arial,sans-serif;color:var(--text)}
+  [contenteditable="true"]:focus{background:#fff3cd;outline:1px dashed #999}
+  .sidebar [contenteditable="true"]:focus{background:rgba(255,255,255,.2);outline:1px dashed #fff}
+
+  .page{width:794px;min-height:1123px;background:#fff}
+
+  .header{display:flex;align-items:center;gap:24px;padding:36px 44px 24px}
+  .photo-circle{width:96px;height:96px;border-radius:50%;flex-shrink:0;overflow:hidden;
+    background:#ddd url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%23aaa' d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v4h16v-4c0-2.66-5.33-4-8-4z'/></svg>") center/cover no-repeat}
+  .photo-circle img{width:100%;height:100%;object-fit:cover}
+  .h-name{font-size:30px;font-weight:800;letter-spacing:2px;color:var(--black)}
+  .h-title{font-size:12.5px;font-weight:600;letter-spacing:2px;color:var(--gray);margin-top:4px;text-transform:uppercase}
+  .h-line{height:2px;background:var(--black);margin:0 44px}
+
+  .body-split{display:flex}
+  .sidebar{width:34%;background:var(--black);color:#fff;padding:28px 26px 40px}
+  .s-sec{margin-bottom:26px}
+  .s-title{font-size:13px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;color:#fff}
+  .c-row{display:flex;align-items:center;gap:8px;font-size:11px;line-height:1.5;margin-bottom:8px;color:#ddd;word-break:break-word}
+  .c-row svg{flex:0 0 12px;width:12px;height:12px;fill:#fff}
+  .edu-t{font-size:12px;font-weight:700;color:#fff}
+  .edu-s{font-size:10.5px;color:#ccc;margin-top:1px}
+  .edu-y{font-size:10px;color:#999;margin-top:1px}
+  .ref-item{margin-bottom:12px}
+  .ref-n{font-size:11.5px;font-weight:700;color:#fff}
+  .ref-c{font-size:10px;color:#ccc;margin-top:1px}
+
+  .main{flex:1;padding:28px 40px 40px}
+  .m-sec{margin-bottom:24px}
+  .m-h{font-size:14px;font-weight:800;letter-spacing:1.5px;color:var(--black);text-transform:uppercase;margin-bottom:10px}
+  .about-text{font-size:12px;line-height:1.6;color:#444}
+  .job{margin-bottom:14px}
+  .job-t{font-size:12.5px;font-weight:700;color:var(--black)}
+  .job-d{font-size:11px;color:var(--gray);margin-top:1px}
+  .job-desc{font-size:11.5px;line-height:1.5;color:#555;margin-top:3px}
+  .skill-row{display:flex;justify-content:space-between;font-size:11.5px;margin-bottom:6px;color:#333}
+  .lang-row{display:flex;justify-content:space-between;font-size:11.5px;margin-bottom:6px;color:#333}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <div class="photo-circle"></div>
+    <div>
+      <div class="h-name" id="nameText" contenteditable="true" data-f="name">Patrick Walker</div>
+      <div class="h-title" contenteditable="true" data-f="title">Graphic & Web Designer</div>
+    </div>
+  </div>
+  <div class="h-line"></div>
+
+  <div class="body-split">
+    <div class="sidebar">
+      <div class="s-sec">
+        <div class="s-title" contenteditable="true">Contact Me</div>
+        <div class="c-row"><svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg><span contenteditable="true" data-f="phone">+123-456-7890</span></div>
+        <div class="c-row"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg><span contenteditable="true" data-f="email">patrick@email.com</span></div>
+        <div class="c-row"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg><span contenteditable="true" data-f="address">759 Professor Street, Lincoln Park, MI 48146</span></div>
+      </div>
+
+      <div class="s-sec">
+        <div class="s-title" contenteditable="true">Education</div>
+        <div class="edu-t" contenteditable="true">Stanford University</div>
+        <div class="edu-s" contenteditable="true">Master Degree (Class of 09)</div>
+        <div class="edu-y" contenteditable="true">2005 - 2009</div>
+        <div style="height:10px"></div>
+        <div class="edu-t" contenteditable="true">University of Chicago</div>
+        <div class="edu-s" contenteditable="true">Bachelor Degree (Graduate)</div>
+        <div class="edu-y" contenteditable="true">2001 - 2005</div>
+      </div>
+
+      <div class="s-sec">
+        <div class="s-title" contenteditable="true">References</div>
+        <div class="ref-item">
+          <div class="ref-n" contenteditable="true">Darwin S. Magama</div>
+          <div class="ref-c" contenteditable="true">3720 Sudan Lane, Marion, OH</div>
+          <div class="ref-c" contenteditable="true">+123-456-7890</div>
+          <div class="ref-c" contenteditable="true">darwin@email.com</div>
+        </div>
+        <div class="ref-item">
+          <div class="ref-n" contenteditable="true">Robert J. Reyes</div>
+          <div class="ref-c" contenteditable="true">3720 Studio Lane, Marion, OH</div>
+          <div class="ref-c" contenteditable="true">+123-220-4230</div>
+          <div class="ref-c" contenteditable="true">robert@email.com</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="main">
+      <div class="m-sec">
+        <div class="m-h" contenteditable="true">About Me</div>
+        <div class="about-text" contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio praesent libero sed cursus ante dapibus diam sed nisi nulla quis sem at nibh elementum imperdiet.</div>
+      </div>
+
+      <div class="m-sec">
+        <div class="m-h" contenteditable="true">Job Experience</div>
+        <div class="job">
+          <div class="job-t" contenteditable="true">Senior Web Designer (2018 - Present)</div>
+          <div class="job-d" contenteditable="true">Creative Agency / Chicago</div>
+          <div class="job-desc" contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio praesent libero sed cursus ante dapibus diam.</div>
+        </div>
+        <div class="job">
+          <div class="job-t" contenteditable="true">Graphic Designer (2015 - 2018)</div>
+          <div class="job-d" contenteditable="true">Creative Market / Chicago</div>
+          <div class="job-desc" contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio praesent libero sed cursus ante dapibus diam.</div>
+        </div>
+        <div class="job">
+          <div class="job-t" contenteditable="true">Marketing Manager (2012 - 2015)</div>
+          <div class="job-d" contenteditable="true">Manufacturing Agency</div>
+          <div class="job-desc" contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio praesent libero sed cursus ante dapibus diam.</div>
+        </div>
+      </div>
+
+      <div class="m-sec">
+        <div class="m-h" contenteditable="true">Skills</div>
+        <div class="skill-row"><span contenteditable="true">Adobe Photoshop</span><span contenteditable="true">Microsoft Powerpoint</span></div>
+        <div class="skill-row"><span contenteditable="true">HTML/CSS/JS</span><span contenteditable="true">Microsoft Word</span></div>
+      </div>
+
+      <div class="m-sec">
+        <div class="m-h" contenteditable="true">Language</div>
+        <div class="lang-row"><span contenteditable="true">English</span><span contenteditable="true">Spanish</span></div>
+        <div class="lang-row"><span contenteditable="true">French</span><span contenteditable="true">German</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var n=document.getElementById('nameText');
+  function fit(){
+    var s=30; n.style.fontSize=s+'px';
+    while(n.scrollHeight>s*1.2*2+2 && s>16){ s-=1; n.style.fontSize=s+'px'; }
+  }
+  n.addEventListener('input',fit);
+  window.addEventListener('load',fit); fit();
+})();
+</script>
+</body>
+</html>
