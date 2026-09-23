@@ -27,7 +27,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 
-private enum class LayoutStyle { CLASSIC_TWO_COL, ATS_SINGLE_COL, SIDEBAR_BOLD, MINIMAL_MONO, HEADER_BLOCK, LIGHT_SIDEBAR, BLUE_ARCH, TEAL_BAND, PILL_HEADER, NAVY_PHOTO, SAGE_MOON, PINK_FRAME, NAVY_DIAGONAL, NAVY_PILL, BROWN_SPLIT, DIAMOND_SPLIT, LAVENDER_ARCH, ROSE_BANNER, DARK_PHOTO_SIDE, BLUSH_BLACK_BLOCK, CREAM_BROWN_SPLIT, TOPBAR_SPLIT }
+private enum class LayoutStyle { CLASSIC_TWO_COL, ATS_SINGLE_COL, SIDEBAR_BOLD, MINIMAL_MONO, HEADER_BLOCK, LIGHT_SIDEBAR, BLUE_ARCH, TEAL_BAND, PILL_HEADER, NAVY_PHOTO, SAGE_MOON, PINK_FRAME, NAVY_DIAGONAL, NAVY_PILL, BROWN_SPLIT, DIAMOND_SPLIT, LAVENDER_ARCH, ROSE_BANNER, DARK_PHOTO_SIDE, BLUSH_BLACK_BLOCK, CREAM_BROWN_SPLIT, TOPBAR_SPLIT, DARK_YELLOW_PILL }
 
 private data class TemplateInfo(
     val id: String,
@@ -81,6 +81,7 @@ private val resumeTemplates = listOf(
     TemplateInfo("ai_template_more_16.html", "16", Color(0xFFE8D9D3), Color(0xFF1A1A1A), LayoutStyle.BLUSH_BLACK_BLOCK),
     TemplateInfo("ai_template_more_17.html", "17", Color(0xFF5A3A2E), Color(0xFFF7F1ED), LayoutStyle.CREAM_BROWN_SPLIT),
     TemplateInfo("ai_template_more_18.html", "18", Color(0xFF1A1A1A), Color(0xFFF7F4EE), LayoutStyle.TOPBAR_SPLIT),
+    TemplateInfo("ai_template_more_19.html", "19", Color(0xFF1E1E1E), Color(0xFFF2C230), LayoutStyle.DARK_YELLOW_PILL),
 )
 
 
@@ -192,6 +193,7 @@ private fun TemplatePreview(accent: Color, bg: Color, layout: LayoutStyle, modif
         LayoutStyle.BLUSH_BLACK_BLOCK -> BlushBlackBlockPreview(modifier)
         LayoutStyle.CREAM_BROWN_SPLIT -> CreamBrownSplitPreview(modifier)
         LayoutStyle.TOPBAR_SPLIT -> TopbarSplitPreview(modifier)
+        LayoutStyle.DARK_YELLOW_PILL -> DarkYellowPillPreview(modifier)
     }
 }
 
@@ -485,6 +487,44 @@ private fun PillHeaderPreview(modifier: Modifier = Modifier) {
                     }
                     Spacer(Modifier.height(8.dp))
                 }
+            }
+        }
+    }
+}
+
+@Composable
+private fun DarkYellowPillPreview(modifier: Modifier = Modifier) {
+    val dark = Color(0xFF1E1E1E)
+    val yellow = Color(0xFFF2C230)
+    val gray = Color(0xFFB8B8B8)
+    Row(modifier = modifier.background(dark).padding(6.dp)) {
+        Column(modifier = Modifier.width(34.dp)) {
+            Box(modifier = Modifier.size(28.dp).background(Color(0xFF3A3A3A)))
+            Spacer(Modifier.height(6.dp))
+            repeat(3) {
+                Box(modifier = Modifier.width(26.dp).height(6.dp).background(yellow, RoundedCornerShape(50)))
+                Spacer(Modifier.height(3.dp))
+                repeat(2) {
+                    Box(modifier = Modifier.fillMaxWidth(0.8f).height(2.dp).background(gray))
+                    Spacer(Modifier.height(2.dp))
+                }
+                Spacer(Modifier.height(6.dp))
+            }
+        }
+        Spacer(Modifier.width(8.dp))
+        Column(modifier = Modifier.weight(1f)) {
+            Box(modifier = Modifier.width(50.dp).height(8.dp).background(Color.White))
+            Spacer(Modifier.height(3.dp))
+            Box(modifier = Modifier.width(36.dp).height(4.dp).background(yellow))
+            Spacer(Modifier.height(8.dp))
+            repeat(3) {
+                Box(modifier = Modifier.width(26.dp).height(6.dp).background(yellow, RoundedCornerShape(50)))
+                Spacer(Modifier.height(3.dp))
+                repeat(2) {
+                    Box(modifier = Modifier.fillMaxWidth().height(2.dp).background(gray))
+                    Spacer(Modifier.height(2.dp))
+                }
+                Spacer(Modifier.height(8.dp))
             }
         }
     }

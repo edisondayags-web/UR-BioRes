@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=794, minimum-scale=0.1, maximum-scale=5, user-scalable=yes">
+<style>
+  :root{--yellow:#F2C230;--dark:#1E1E1E;--darker:#161616;--text:#E4E4E4;--soft:#B8B8B8}
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  html{background:#000}
+  body{background:#000;width:794px;font-family:'Poppins','Montserrat','Roboto','Helvetica Neue',Arial,sans-serif;color:var(--text)}
+  [contenteditable="true"]:focus{background:rgba(242,194,48,.25);outline:1px dashed var(--yellow)}
+
+  .page{position:relative;width:794px;min-height:1123px;display:grid;grid-template-columns:262px 1fr;background:var(--dark);overflow:hidden}
+
+  .dashes{position:absolute;width:70px;height:70px;background:
+    repeating-linear-gradient(115deg, var(--yellow) 0 6px, transparent 6px 14px)}
+  .dashes.tl{top:0;left:0}
+  .dashes.br{bottom:0;right:0}
+
+  .left{padding:40px 26px;position:relative;z-index:1}
+  .photo-wrap{position:relative;width:170px;height:170px;margin-bottom:8px}
+  .photo-slot{width:100%;height:100%;background:#3a3a3a;border-radius:4px;overflow:hidden;
+    display:flex;align-items:center;justify-content:center;color:#888;font-size:12px}
+  .photo-slot img{width:100%;height:100%;object-fit:cover}
+  .photo-dash{position:absolute;top:-10px;left:-10px;width:40px;height:40px;
+    background:repeating-linear-gradient(135deg, var(--yellow) 0 5px, transparent 5px 11px);z-index:-1}
+
+  .pill{display:inline-block;background:var(--yellow);color:#1a1a1a;font-weight:800;
+    font-size:13px;letter-spacing:1px;padding:6px 18px;border-radius:20px;margin-bottom:10px}
+  .l-sec{margin-top:28px}
+  .l-body{font-size:12px;line-height:1.7;color:var(--soft)}
+  .l-body ul{padding-left:16px}
+  .edu-t{font-size:12.5px;font-weight:700;color:#fff}
+  .edu-s{font-size:11.5px;color:var(--soft);margin-top:2px}
+
+  .right{padding:40px 44px 40px 34px;position:relative;z-index:1}
+  .name{font-size:38px;font-weight:800;letter-spacing:1px;color:#fff;line-height:1.05;word-break:break-word}
+  .subtitle{font-size:14px;color:var(--yellow);letter-spacing:2px;font-weight:600;margin-top:6px;text-transform:uppercase}
+
+  .r-sec{margin-top:26px}
+  .r-body{font-size:12px;line-height:1.6;color:var(--text)}
+  .cw-item{margin-bottom:12px}
+  .cw-t{font-weight:700;font-size:12.5px;color:#fff}
+  .cw-d{font-size:11.5px;color:var(--soft);margin-top:2px}
+  .exp-item{margin-bottom:14px}
+  .exp-d{font-size:11.5px;color:var(--yellow);font-weight:700}
+  .exp-r{font-size:12px;color:#fff;margin-top:2px}
+  .exp-desc{font-size:11.5px;color:var(--soft);margin-top:3px;line-height:1.5}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="dashes tl"></div>
+  <div class="dashes br"></div>
+
+  <div class="left">
+    <div class="photo-wrap">
+      <div class="photo-dash"></div>
+      <div class="photo-slot">2x2 Photo</div>
+    </div>
+
+    <div class="l-sec">
+      <div class="pill" contenteditable="true">About Me</div>
+      <div class="l-body" contenteditable="true">Experienced marketing professional with a strong background in digital marketing and content creation. Skilled in executing and developing successful marketing campaigns across various platforms and search engine marketing.</div>
+    </div>
+
+    <div class="l-sec">
+      <div class="pill" contenteditable="true">Education</div>
+      <div class="l-body">
+        <div class="edu-t" contenteditable="true">University of XYZ City</div>
+        <div class="edu-s" contenteditable="true">Bachelor of Science in Business Administration, Marketing Concentration</div>
+        <div class="edu-s" contenteditable="true">Expected Graduation: May 2024</div>
+        <div class="edu-s" contenteditable="true">GPA: 3.5</div>
+      </div>
+    </div>
+
+    <div class="l-sec">
+      <div class="pill" contenteditable="true">Skills</div>
+      <div class="l-body">
+        <ul>
+          <li contenteditable="true">Proficient in Microsoft Office Suite</li>
+          <li contenteditable="true">Graphic Design</li>
+          <li contenteditable="true">Social media analytics tools</li>
+          <li contenteditable="true">Excellent written and verbal communication skills</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="right">
+    <div class="name" id="nameText" contenteditable="true" data-f="name">John Baldwin</div>
+    <div class="subtitle" contenteditable="true" data-f="title">Student College</div>
+
+    <div class="r-sec">
+      <div class="pill" contenteditable="true">Contact</div>
+      <div class="r-body">
+        <div contenteditable="true" data-f="email">email@yourwebsite.com</div>
+        <div contenteditable="true" data-f="phone">+123-812-2102</div>
+        <div contenteditable="true" data-f="address">2588 Melville Street Arlington</div>
+      </div>
+    </div>
+
+    <div class="r-sec">
+      <div class="pill" contenteditable="true">Relevant Coursework</div>
+      <div class="r-body">
+        <div class="cw-item">
+          <div class="cw-t" contenteditable="true">Marketing Principles (MKT 301)</div>
+          <div class="cw-d" contenteditable="true">Studied the fundamentals of marketing, including product development, pricing strategies, and promotional techniques.</div>
+        </div>
+        <div class="cw-item">
+          <div class="cw-t" contenteditable="true">Consumer Behavior (MKT 405)</div>
+          <div class="cw-d" contenteditable="true">Analyzed consumer behavior and market segmentation to develop effective marketing campaigns.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="r-sec">
+      <div class="pill" contenteditable="true">Experience</div>
+      <div class="r-body">
+        <div class="exp-item">
+          <div class="exp-d" contenteditable="true">September 2025 - Present</div>
+          <div class="exp-r" contenteditable="true">CS Representative | XYZ Corporation, Anytown, USA</div>
+          <div class="exp-desc" contenteditable="true">Assisted customers with inquiries and complaints via phone, email, and live chat.</div>
+        </div>
+        <div class="exp-item">
+          <div class="exp-d" contenteditable="true">June 2025 - August 2025</div>
+          <div class="exp-r" contenteditable="true">Marketing Intern | ABC Company, Anytown, USA</div>
+          <div class="exp-desc" contenteditable="true">Conducted market research and analyzed data to identify customer needs and preferences.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var n=document.getElementById('nameText');
+  function fit(){
+    var s=38; n.style.fontSize=s+'px';
+    while(n.scrollHeight>s*1.1*2+2 && s>20){ s-=1; n.style.fontSize=s+'px'; }
+  }
+  n.addEventListener('input',fit);
+  window.addEventListener('load',fit); fit();
+})();
+</script>
+</body>
+</html>
