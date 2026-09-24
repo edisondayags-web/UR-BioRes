@@ -107,7 +107,7 @@ private suspend fun autoFitZoom(webView: WebView) {
     val scaleW = viewWidthCss / contentW
     val scaleH = viewHeightCss / contentH
     // fit both width AND height -- kunin yung mas maliit para walang lalagpas sa screen
-    val targetScale = minOf(scaleW, scaleH, 1.3f).coerceAtLeast(0.1f)
+    val targetScale = minOf(scaleW, scaleH, 1.0f).coerceAtLeast(0.1f)
 
     @Suppress("DEPRECATION")
     val currentScale = webView.scale.takeIf { it > 0f } ?: 1f
