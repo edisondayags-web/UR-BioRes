@@ -11,7 +11,10 @@ import android.webkit.WebViewClient
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -103,7 +106,7 @@ private suspend fun autoFitZoom(webView: WebView) {
 
     val density = webView.resources.displayMetrics.density
     val viewWidthCss = webView.width / density
-    val viewHeightCss = (webView.height - 160 * density) / density
+    val viewHeightCss = webView.height / density
     val scaleW = viewWidthCss / contentW
     val scaleH = viewHeightCss / contentH
     // fit both width AND height -- kunin yung mas maliit para walang lalagpas sa screen
@@ -117,6 +120,51 @@ private suspend fun autoFitZoom(webView: WebView) {
         webView.zoomBy(factor)
     }
 }
+
+private suspend fun fitTextOneLine(webView: WebView): Unit =
+    suspendCancellableCoroutine { cont ->
+        val js = """
+            (function(){
+              var MIN = 0.7;
+              var els = document.querySelectorAll('body *');
+              for (var i=0; i<els.length; i++){
+                var el = els[i];
+                var tag = el.tagName;
+                if (tag==='SCRIPT'||tag==='STYLE') continue;
+                if (el.children.length > 0) continue;
+                if (!el.textContent || !el.textContent.trim()) continue;
+                if (el.hasAttribute('data-fit')) {
+                  el.style.fontSize = el.getAttribute('data-ofs');
+                  el.style.whiteSpace = el.getAttribute('data-ows');
+                  el.removeAttribute('data-fit');
+                }
+                var cs = window.getComputedStyle(el);
+                if (cs.display === 'inline') continue;
+                var fs = parseFloat(cs.fontSize);
+                var lh = parseFloat(cs.lineHeight);
+                if (isNaN(lh)) lh = fs * 1.25;
+                if (el.clientHeight < lh * 1.5) continue;
+                var ofs = el.style.fontSize;
+                var ows = el.style.whiteSpace;
+                var w0 = el.getBoundingClientRect().width;
+                el.style.whiteSpace = 'nowrap';
+                var tw = Math.max(el.scrollWidth, el.getBoundingClientRect().width);
+                var ratio = w0 / tw;
+                if (ratio >= MIN) {
+                  el.setAttribute('data-ofs', ofs);
+                  el.setAttribute('data-ows', ows);
+                  el.setAttribute('data-fit', '1');
+                  if (ratio < 1) el.style.fontSize = (fs * ratio * 0.98) + 'px';
+                } else {
+                  el.style.whiteSpace = ows;
+                }
+              }
+            })();
+        """.trimIndent()
+        webView.evaluateJavascript(js) {
+            if (cont.isActive) cont.resume(Unit) { }
+        }
+    }
 
 private suspend fun shrinkOverflowingText(webView: WebView): Unit =
     suspendCancellableCoroutine { cont ->
@@ -364,9 +412,9 @@ fun AiTemplateScreen(htmlFileName: String, onBack: () -> Unit = {}) {
         }
     }
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Column(modifier = Modifier.fillMaxSize().background(Color(0xFF0A1931))) {
         AndroidView(
-            modifier = Modifier.fillMaxSize().graphicsLayer { translationY = topShift },
+            modifier = Modifier.weight(1f).fillMaxWidth().graphicsLayer { translationY = topShift },
             factory = { ctx ->
                 WebView(ctx).apply {
                     webViewClient = object : WebViewClient() {
@@ -375,6 +423,7 @@ fun AiTemplateScreen(htmlFileName: String, onBack: () -> Unit = {}) {
                                 recenter(view)
                                 scope.launch {
                                     delay(250)
+                                    fitTextOneLine(view)
                                     autoFitZoom(view)
                                     delay(400)
                                     autoFitZoom(view)
@@ -411,9 +460,9 @@ fun AiTemplateScreen(htmlFileName: String, onBack: () -> Unit = {}) {
 
         Row(
             modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(20.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp, vertical = 12.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally)
         ) {
             Button(
                 onClick = { photoPickerLauncher.launch("image/*") },
